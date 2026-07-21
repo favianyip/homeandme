@@ -1,0 +1,105 @@
+.hnm-login {
+    // min-height: calc(100vh - 214px);
+    background-size: cover;
+    background-attachment: fixed;
+    // padding: $spacer-6 $spacer-0;
+    // display: flex;
+    // align-items: center;
+    // justify-content: flex-end;
+    .content-wrapper {
+        padding-top: $spacer-6;
+        padding-bottom: $spacer-6;
+        min-height: calc(100vh - 214px);
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+    .hnm-main-head {
+        margin-bottom: $spacer-5;
+        font-weight: $font-bold;
+    }
+    &__wrapper {
+        width: 100%;
+        max-width: 800px;
+        // margin-left: auto;
+        padding: $spacer-5 $spacer-4;
+        background-color: rgba(255, 255, 255, 0.7);
+    }
+    &__box {
+        max-width: 600px;
+        margin: $spacer-0 auto;
+    }
+    &__link {
+        color: $color-grey;
+        &:hover {
+            color: $color-grey;
+            text-decoration: underline;
+        }
+    }
+    &__btn-wrapper {
+        margin-top: $spacer-2;
+    }
+    &__btn-sec {
+        display: flex;
+        justify-content: space-between;
+        margin: $spacer-0 (-$spacer-2);
+    }
+    &__btn-left {
+        .hnm-btn {
+            margin-right: $spacer-2;
+            &:last-child {
+                margin-right: $spacer-0;
+            }
+        }
+    }
+    &__btn-right {
+        text-align: right;
+    }
+    &__btn-left,
+    &__btn-right {
+        padding: $spacer-2;
+    }
+    &--sign-up {
+        .hnm-login {
+            &__wrapper,
+            &__box {
+                max-width: 450px;
+            }
+        }
+    }
+}
+
+@include tablet {
+    .hnm-login {
+        .content-wrapper {
+            min-height: calc(100vh - 204px);
+        }
+    }
+}
+
+@include mobile {
+    .hnm-login {
+        .content-wrapper {
+            min-height: calc(100vh - 226px);
+        }
+        .hnm-main-head {
+            margin-bottom: $spacer-4;
+        }
+        &__wrapper {
+            padding: $spacer-3;
+        }
+        &__btn-sec {
+            display: block;
+        }
+        &__btn-right {
+            text-align: left;
+        }
+        &--sign-up {
+            .hnm-login {
+                &__btn-sec {
+                    display: flex;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,105 @@
+﻿<%@ master language="C#" autoeventwireup="true" codefile="DashboardMasterPage.master.cs" inherits="DashboardMasterPage" %>
+
+<%@ register src="~/Controls/Usercontrols/SideMenu.ascx" tagprefix="dx" tagname="SideMenu" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/slick.css">
+    <link rel="stylesheet" href="../assets/css/slick-theme.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <title>HNM</title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body id="MasterBody" runat="server">
+    <form id="form1" runat="server">
+        <header class="hnm-header">
+            <div class="content-wrapper">
+                <nav class="navbar navbar-expand-lg">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="hnm-header__humberger-line"></span>
+                        <span class="hnm-header__humberger-line"></span>
+                        <span class="hnm-header__humberger-line"></span>
+                    </button>
+                    <div class="hnm-header__fade"></div>
+                    <div class="navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="AboutUs.aspx">ABOUT US</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="Home.aspx">START YOUR RENOVATION</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="FaqAndHelp.aspx">FAQ & HELP</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="Contactus.aspx">CONTACT US</a>
+                            </li>
+                            <li class="nav-item" id="liMyAccount" runat="server">
+                                <a class="nav-link" href="MyProfile.aspx">MY ACCOUNT</a>
+                            </li>
+                            <li class="nav-item" id="liLogout" runat="server">
+                                <a class="nav-link" href="UserLogout.aspx">LOGOUT</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="navbar-toggler hnm-header__menu-close" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <img src="../assets/images/close-icon-white.svg" alt="x" class="hnm-header__close-img">
+                    </button>
+                    <a class="hnm-header__logo-link" href="Home.aspx">
+                        <img src="../assets/images/hnm-logo.png" alt="logo" class="hnm-header__logo">
+                    </a>
+                </nav>
+            </div>
+        </header>
+        <div class="hnm-dashboard">
+            <div class="content-wrapper">
+                <dx:sidemenu runat="server" id="SideMenu" />
+                <div class="hnm-dashboard__cnt-box">
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+            </div>
+        </div>
+        <footer class="hnm-footer">
+            <div class="hnm-footer__social">
+                <div class="content-wrapper hnm-footer__social-inner">
+                    <a href="https://www.facebook.com/Home-And-Me-101703522153545&sa=D&source=editors&ust=1655783011278885&usg=AOvVaw3LinZpHL1hZYGnUUJ6e65Z" class="hnm-footer__social-link" target="_blank">
+                        <img src="../assets/images/fb-icon.svg" alt="fb" class="hnm-footer__social-icon"></a>
+                    <a href="#" class="hnm-footer__social-link">
+                        <img src="../assets/images/linkedin-logo.svg" alt="linkedin" class="hnm-footer__social-icon"></a>
+                    <a href="#" class="hnm-footer__social-link">
+                        <img src="../assets/images/twitter-logo.svg" alt="twitter" class="hnm-footer__social-icon"></a>
+                    <a href="#" class="hnm-footer__social-link">
+                        <img src="../assets/images/ig-logo.svg" alt="instagram" class="hnm-footer__social-icon"></a>
+                    <a href="#" class="hnm-footer__social-link">
+                        <img src="../assets/images/youtube-logo.svg" alt="youtube" class="hnm-footer__social-icon"></a>
+                </div>
+            </div>
+            <div class="hnm-footer__quick">
+                <div class="content-wrapper hnm-footer__quick-wrapper">
+                    <div class="hnm-footer__quick-inner">
+                        <a href="PrivacyAndLegal.aspx" title="Privacy and legal" class="hnm-footer__quick-link" target="_blank">Privacy and legal</a>
+                        <a href="Terms.aspx" title="Terms" class="hnm-footer__quick-link" target="_blank">Terms</a>
+                        <a href="CookiePolicy.aspx" title="Cookie policy" class="hnm-footer__quick-link" target="_blank">Cookie policy</a>
+                        <a href="SiteMap.aspx" title="Sitemap" class="hnm-footer__quick-link" target="_blank">Sitemap</a>
+                    </div>
+                    <p class="hnm-footer__copyright">Copyright
+                        <script>document.write(new Date().getFullYear())</script>
+                        HOME&ME</p>
+                </div>
+            </div>
+        </footer>
+        <script src="../assets/js/jquery-3.5.1.slim.min.js"></script>
+        <script src="../assets/js/bootstrap.bundle.min.js"></script>
+        <script src="../assets/js/slick.min.js"></script>
+        <script src="../assets/js/script.js"></script>
+        <asp:Literal ID="LitDivPopUp" runat="server"></asp:Literal>
+    </form>
+</body>
+</html>

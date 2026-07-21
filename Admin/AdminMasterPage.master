@@ -1,0 +1,44 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="AdminMasterPage.master.cs" Inherits="Admin_AdminMasterPage" %>
+
+<%@ Register Src="~/Admin/Controls/AdminControls/SideMenu.ascx" TagPrefix="dx" TagName="SideMenu" %>
+<%@ Register Src="~/Admin/Controls/AdminControls/Footer.ascx" TagPrefix="dx" TagName="Footer" %>
+<%@ Register Src="~/Admin/Controls/AdminControls/SideMenuMobile.ascx" TagPrefix="dx" TagName="SideMenuMobile" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <meta charset="utf-8">
+    <link href="/Admin/images/hnm-logo.png" rel="shortcut icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Midone admin is super flexible, powerful, clean & modern responsive tailwind admin template with unlimited possibilities.">
+    <meta name="keywords" content="admin template, Midone admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="author" content="LEFT4CODE">
+    <title>HomeNMe</title>
+    <!-- BEGIN: CSS Assets-->
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="css/admin.css" rel="stylesheet" />
+    <!-- END: CSS Assets-->
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body class="app">
+    <form id="form1" runat="server">
+        <!-- BEGIN: Mobile Menu -->
+        <dx:SideMenuMobile runat="server" ID="SideMenuMobile" />
+        <!-- END: Mobile Menu -->
+        <div class="flex">
+            <dx:SideMenu runat="server" ID="SideMenu" />
+            <div class="content">
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+        </div>
+        <!-- BEGIN: JS Assets-->
+        <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=["your-google-map-api"]&libraries=places"></script>
+        <script src="js/app.js"></script>
+        <!-- END: JS Assets-->
+    </form>
+</body>
+</html>
+

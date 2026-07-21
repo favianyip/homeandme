@@ -1,0 +1,18 @@
+.hnm-input{
+    padding-bottom: $spacer-3;
+    &__text-label{
+        margin-bottom: $spacer-0;
+    }
+    &__text{
+        display: block;
+        width: 100%;
+        background-color: transparent;
+        margin-bottom: $spacer-1;
+        padding: $spacer-1 $spacer-0;
+        border: none;
+        border-bottom: 1px solid $color-grey;
+    }
+    &__error{
+        color: #FF0000;
+    }
+}

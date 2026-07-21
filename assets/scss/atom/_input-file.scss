@@ -1,0 +1,29 @@
+.hnm-file{
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    input[type="file"] {
+        display: none;
+    }
+    &__txt {
+        width: 100%;
+        max-width: 270px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding: $spacer-2 $spacer-3;
+        border: 2px solid $color-grey;
+        border-right: none;
+    }
+    .hnm-button{
+        cursor: pointer;
+    }
+}
+@include mobile{
+    .hnm-file{
+        .hnm-button,
+        &__txt{
+            padding: $spacer-2;
+        }
+    }
+}

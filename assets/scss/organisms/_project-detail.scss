@@ -1,0 +1,181 @@
+.hnm-project-detail {
+    &__box {
+        border: 1px solid $color-grey;
+        margin-bottom: $spacer-4;
+    }
+    &__head {
+        color: $color-white;
+        padding: $spacer-2 $spacer-4;
+        background-color: $color-grey;
+        @include font-oswald;
+        font-weight: $font-regular;
+        // display: flex;
+    }
+    &__col-1 {
+        // width: 40%;
+        padding-right: $spacer-3;
+        min-width: 210px;
+    }
+    // &__col-2 {
+    //     width: 20%;
+    //     text-align: right;
+    // }
+    &__row {
+        padding: $spacer-4;
+        display: flex;
+        // flex-wrap: wrap;
+        border-bottom: 1px solid $color-grey-border;
+        &:last-child {
+            border-bottom: 0;
+        }
+        .table-fontsize {
+            .dxgvTable .dxgvHeader {
+                font-size: 18px;
+                line-height: 22px;
+            }
+            .dxgvTable .dxgv {
+                font-size: 14px;
+                line-height: 18px;
+            }
+            &.small {
+                .dxgvTable .dxgvHeader {
+                    font-size: 14px;
+                    line-height: 18px;
+                }
+            }
+            .hnm-button {
+                color: #fff !important;
+                &:hover {
+                    color: $color-grey !important;
+                }
+            }
+        }
+    }
+    &__item-head {
+        color: $color-grey;
+        font-weight: $font-regular;
+        font-size: 22px;
+        line-height: 28px;
+        margin-bottom: $spacer-3;
+    }
+    &__item-link {
+        color: $color-grey;
+        @include font-oswald;
+        font-weight: $font-regular;
+        font-size: 14px;
+        line-height: 20px;
+        &:hover {
+            color: $color-grey;
+            text-decoration: underline;
+        }
+    }
+    &__custom-item {
+        display: flex;
+        flex-wrap: wrap;
+        margin: (-$spacer-3) (-$spacer-3) $spacer-0;
+        &.hide {
+            display: none;
+        }
+        .hnm-icon-round {
+            padding: $spacer-3;
+        }
+    }
+    &__cost {
+        color: $color-grey;
+        font-weight: $font-bold;
+        svg {
+            width: 20px;
+            height: auto;
+            margin-left: $spacer-2;
+            margin-top: -4px;
+        }
+    }
+    &__drop {
+        border: 1px solid $color-grey;
+        padding: $spacer-4;
+        // max-width: 1000px;
+        width: 100%;
+        // margin-left: auto;
+        // margin-top: $spacer-4;
+        // display: none;
+        position: relative;
+        // &.active {
+        //     display: block;
+        // }
+    }
+    &__close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+    &__close-icon {
+        width: 18px;
+        height: auto;
+    }
+    &__btn-sec {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: $spacer-4;
+        margin: $spacer-4 (-$spacer-2) $spacer-0;
+        .hnm-button {
+            margin: $spacer-0 $spacer-2;
+        }
+    }
+    &__accordion {
+        .hnm-accordion {
+            &__header {
+                padding: $spacer-2 $spacer-3;
+                cursor: default;
+                &::after {
+                    content: none;
+                }
+            }
+        }
+    }
+}
+
+@include mobile {
+    .hnm-project-detail {
+        &__head {
+            .hnm-project-detail__col-1 {
+                margin-bottom: $spacer-0;
+            }
+        }
+        &__row {
+            padding: $spacer-3;
+            flex-wrap: wrap;
+        }
+        &__col-1 {
+            width: 100%;
+            padding-right: $spacer-0;
+            margin-bottom: $spacer-3;
+        }
+        // &__col-2 {
+        //     width: 100%;
+        //     text-align: left;
+        // }
+        &__custom-item {
+            margin: $spacer-0 (-$spacer-2);
+            .hnm-icon-round {
+                padding: $spacer-2;
+            }
+        }
+        &__drop {
+            padding: $spacer-0;
+            border: 0;
+        }
+        &__btn-sec {
+            display: block;
+            margin-top: $spacer-3;
+            .hnm-button {
+                margin: 8px;
+            }
+        }
+        .hnm-amout-box__radio-sec {
+            margin-top: $spacer-1;
+            .hnm-radio-btn {
+                margin: $spacer-1 $spacer-3 $spacer-1 $spacer-0;
+            }
+        }
+    }
+}

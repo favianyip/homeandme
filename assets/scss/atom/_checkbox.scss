@@ -1,0 +1,40 @@
+.hnm-check-box {
+    .hnm-check-box__check {
+        width: 20px;
+        min-width: 20px;
+        height: 20px;
+        border: 1px solid $color-grey-2;
+        margin-right: $spacer-2;
+        position: relative;
+        display: block;
+        &::before {
+            content: '';
+            width: 12px;
+            height: 13px;
+            background-image: url("data:image/svg+xml,%3Csvg width='95' height='70' viewBox='0 0 95 70' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M78.3329 5.55558L31.3105 52.5781C28.2422 55.6463 28.2422 60.621 31.3105 63.6892C34.3787 66.7575 39.3534 66.7575 42.4216 63.6892L89.4441 16.6667C92.5124 13.5985 92.5124 8.62384 89.4441 5.55558C86.3758 2.48731 81.4012 2.48731 78.3329 5.55558Z' fill='%235A7E8A'/%3E%3Cpath d='M5.55536 38.0603L31.1866 63.6915C34.2549 66.7598 39.2295 66.7598 42.2978 63.6915C45.366 60.6233 45.366 55.6486 42.2978 52.5804L16.6665 26.9491C13.5983 23.8809 8.62363 23.8809 5.55536 26.9491C2.4871 30.0174 2.4871 34.992 5.55536 38.0603Z' fill='%235A7E8A'/%3E%3C/svg%3E%0A");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            left: 3px;
+            top: 2px;
+            display: none;
+        }
+    }
+    label {
+        display: flex;
+        cursor: pointer;
+        input[type="checkbox"] {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            &:checked {
+                &~.hnm-check-box__check {
+                    &::before {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}

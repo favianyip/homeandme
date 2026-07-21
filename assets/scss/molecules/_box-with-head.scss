@@ -1,0 +1,58 @@
+.hnm-box-head {
+    border: 1px solid $color-grey;
+    &--two-col {
+        display: flex;
+        .hnm-box-head {
+            &__inner {
+                width: 50%;
+            }
+        }
+    }
+    &__title {
+        padding: $spacer-2 $spacer-4;
+        background-color: $color-grey;
+        color: $color-white;
+        font-weight: $font-regular;
+        display: flex;
+        align-items: center;
+    }
+    &__edit-icon {
+        padding-left: $spacer-2;
+        img {
+            width: 20px;
+            height: 20px;
+        }
+    }
+    &__cnt {
+        padding: $spacer-4;
+    }
+    &--slider{
+        .hnm-box-head__cnt{
+            .slick-prev{
+                left: -12px;
+            }
+            .slick-next{
+                right: -12px;
+            }
+        }
+    }
+}
+
+@include mobile {
+    .hnm-box-head {
+        &--two-col {
+            flex-wrap: wrap;
+            .hnm-box-head {
+                &__inner {
+                    width: 100%;
+                }
+            }
+        }
+        &__title {
+            padding: $spacer-2 $spacer-3;
+        }
+        &__cnt {
+            padding: $spacer-3;
+        }
+    }
+}

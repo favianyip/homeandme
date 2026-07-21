@@ -1,0 +1,60 @@
+.hnm-amout-box {
+    border: 1px solid $color-grey-border;
+    padding: $spacer-2 $spacer-3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacer-3;
+    &:last-child{
+        margin-bottom: $spacer-0;
+    }
+    &__text {
+        @include font-oswald;
+        font-weight: $font-regular;
+        color: $color-grey;
+        font-size: 18px;
+        line-height: 24px;
+        padding-right: $spacer-3;
+        min-width: 120px;
+        &--flex{
+            display: flex;
+            align-items: center;
+            .hnm-tooltip-pop{
+                margin-left: $spacer-2
+            }
+        }
+    }
+    &__text-light{
+        @include font-lekton;
+    }
+    &__cost {
+        font-weight: $font-bold;
+        color: $color-grey;
+        font-size: 18px;
+        line-height: 24px;
+        text-align: right;
+    }
+    &__radio-sec{
+        display: flex;
+        flex-wrap: wrap;
+        .hnm-radio-btn{
+            margin-right: $spacer-3;
+            &:last-child{
+                margin-right: $spacer-0;
+            }
+        }
+    }
+}
+
+@include mobile {
+    .hnm-amout-box {
+        &__text,
+        &__cost {
+            font-size: 16px;
+            line-height: 22px;
+        }
+        &--wrap{
+            display: block;
+        }
+    }
+}

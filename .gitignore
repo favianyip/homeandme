@@ -1,0 +1,26 @@
+# ---- Build output ----
+Bin/
+bin/
+obj/
+*.dll
+*.pdb
+
+# ---- Sensitive config (excluded from backup) ----
+Web.config
+
+# ---- Uploaded / generated content (large, not source) ----
+UploadedFiles/
+ExtractedFiles/
+DownloadFiles/
+App_Data/
+
+# ---- Packages / deps ----
+packages/
+node_modules/
+
+# ---- IDE / OS ----
+.vs/
+*.user
+*.suo
+Thumbs.db
+.DS_Store

@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Lekton:wght@400;700&family=Oswald:wght@200;300;400;500;600;700&display=swap');
+html,
+body {
+    background-color: $color-white;
+    @include font-lekton;
+    color: $color-black;
+    font-weight: $font-regular;
+    font-size: 16px;
+    line-height: 22px;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    padding-top: 76px;
+}
+
+iframe {
+    width: 100%;
+}
+
+a,
+button,
+input {
+    outline: none;
+}
+
+a,
+a:hover {
+    color: inherit;
+    text-decoration: none;
+}
+
+p,
+li {
+    margin-bottom: $spacer-0;
+}
+
+button {
+    border: 0;
+    background-color: transparent;
+}
+
+*:focus {
+    outline: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @include font-oswald;
+}
+
+// Common spacing Start
+.hnm-r-pt-5 {
+    padding-top: $spacer-5;
+}
+
+.hnm-r-pb-5 {
+    padding-bottom: $spacer-5;
+}
+
+.hnm-r-pt-6 {
+    padding-top: $spacer-6;
+}
+
+.hnm-r-pb-6 {
+    padding-bottom: $spacer-6;
+}
+
+.hnm-r-mt-5 {
+    margin-top: $spacer-5;
+}
+
+.hnm-r-mb-5 {
+    margin-bottom: $spacer-5;
+}
+
+.hnm-r-mt-6 {
+    margin-top: $spacer-6;
+}
+
+.hnm-r-mb-6 {
+    margin-bottom: $spacer-6;
+}
+
+// Common spacing End
+.content-wrapper {
+    width: 100%;
+    padding-left: $spacer-5;
+    padding-right: $spacer-5;
+    max-width: 1404px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hnm-main-head,
+.hnm-sub-head {
+    @include font-oswald;
+    color: $color-grey;
+}
+
+.hnm-main-head {
+    font-size: 30px;
+    line-height: 36px;
+    font-weight: $font-regular;
+}
+
+.hnm-sub-head {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: $font-semi-bold;
+}
+
+// Slick settings
+.slick-track,
+.slick-list{
+    min-width: 100%;
+}
+.slick-next,
+.slick-prev {
+    width: 14px;
+    height: 24px;
+    z-index: 1;
+    &::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 1;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    &.slick-disabled::before {
+        opacity: 0.5;
+    }
+}
+
+.slick-next {
+    right: -12px;
+    &::before {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 215.03 361.83'%3E%3Cdefs%3E%3Cstyle%3E.cls-1%7Bfill:%235a7e8a;%7D%3C/style%3E%3C/defs%3E%3Ctitle%3EAsset 41q%3C/title%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cpath class='cls-1' d='M20,356,5.86,341.86a20,20,0,0,1,0-28.29L138.52,180.92,5.86,48.26A20,20,0,0,1,5.86,20L20,5.86a20,20,0,0,1,28.29,0L209.17,166.77a20,20,0,0,1,0,28.29L48.26,356A20,20,0,0,1,20,356Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+}
+
+.slick-prev {
+    left: -12px;
+    &::before {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 215.03 361.85'%3E%3Cdefs%3E%3Cstyle%3E.cls-1%7Bfill:%235a7e8a;%7D%3C/style%3E%3C/defs%3E%3Ctitle%3EAsset 21q%3C/title%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cg id='Layer_1-2-2' data-name='Layer 1-2'%3E%3Cpath class='cls-1' d='M195,5.85,209.17,20a20,20,0,0,1,0,28.28h0L76.51,180.93,209.17,313.59a20,20,0,0,1,0,28.26L195,356a20,20,0,0,1-28.28,0h0L5.86,195.08a20,20,0,0,1,0-28.29h0L166.77,5.85A20,20,0,0,1,195,5.85Z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+}
+
+@include mobile-tablet {
+    body {
+        padding-top: 66px;
+    }
+    .hide-mobile-tablet {
+        display: none;
+    }
+    .only-mobile-tablet {
+        display: block;
+    }
+}
+
+@include mobile {
+    // Common spacing Start
+    .hnm-r-pt-5 {
+        padding-top: $spacer-4;
+    }
+    .hnm-r-pb-5 {
+        padding-bottom: $spacer-4;
+    }
+    .hnm-r-pt-6 {
+        padding-top: $spacer-5;
+    }
+    .hnm-r-pb-6 {
+        padding-bottom: $spacer-5;
+    }
+    .hnm-r-mt-5 {
+        margin-top: $spacer-4;
+    }
+    .hnm-r-mb-5 {
+        margin-bottom: $spacer-4;
+    }
+    .hnm-r-mt-6 {
+        margin-top: $spacer-5;
+    }
+    .hnm-r-mb-6 {
+        margin-bottom: $spacer-5;
+    }
+    // Common spacing End
+    .content-wrapper {
+        padding-left: $spacer-3;
+        padding-right: $spacer-3;
+    }
+    .hnm-main-head {
+        font-size: 26px;
+        line-height: 32px;
+    }
+    .hnm-sub-head {
+        font-size: 20px;
+        line-height: 26px;
+    }
+    .slick-next,
+    .slick-prev {
+        width: 12px;
+        height: 21px;
+    }
+    .slick-prev{
+        left: -8px;
+    }
+    .slick-next{
+        right: -8px;
+    }
+}

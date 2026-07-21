@@ -1,0 +1,31 @@
+.hnm-checkout {
+    &__date {
+        .dateList {
+            border: 1px solid $color-grey-2;
+            margin-top: 0 !important;
+            width: 100%;
+            padding: $spacer-2 $spacer-3;
+        }
+        .dxeEditArea {
+            @include font-lekton;
+            font-size: 16px;
+            line-height: 20px;
+        }
+        .dxeButtonEditButton {
+            min-width: 20px;
+            height: 20px;
+            border: 1px solid $color-grey-2;
+        }
+        .dxpcDropDown.dxpc-ddSys {
+            left: auto !important;
+            right: 0 !important;
+            top: 39px !important;
+            .dxeButtonEditSys.dxeButtonEdit {
+                .dxic {
+                    vertical-align: middle;
+                    padding: $spacer-2;
+                }
+            }
+        }
+    }
+}
