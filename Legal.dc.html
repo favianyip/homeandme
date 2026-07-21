@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+@media (max-width: 900px) { [data-mq2] { grid-template-columns: 1fr !important; } #legalNav { position: static !important; } }
+</style>
+</helmet>
+<div style="min-width: 0;">
+  <header style="position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1);">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); height: 72px; display: flex; align-items: center; gap: 20px;">
+      <a href="Home Redesign v2.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 40px; width: auto;"></a>
+      <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c; border-left: 1px solid rgba(26,32,35,0.15); padding-left: 20px;">LEGAL &amp; POLICIES</span>
+      <a href="Home Redesign v2.dc.html" style="margin-left: auto; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; white-space: nowrap;">← BACK TO HOME</a>
+    </div>
+  </header>
+
+  <div data-mq2="1" style="max-width: 1100px; margin: 0 auto; padding: clamp(28px, 5vw, 56px) clamp(16px, 3vw, 32px); display: grid; grid-template-columns: 220px 1fr; gap: clamp(24px, 4vw, 56px); align-items: start;">
+    <nav id="legalNav" style="position: sticky; top: 96px; display: grid; gap: 14px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px;">
+      <a href="#privacy">PRIVACY AND LEGAL</a>
+      <a href="#terms">TERMS OF SERVICE</a>
+      <a href="#cookies">COOKIE POLICY</a>
+      <a href="#quickfixes">QUICK FIXES</a>
+      <a href="#partners">FOR PARTNERS</a>
+    </nav>
+    <div style="display: grid; gap: clamp(40px, 6vw, 64px); font-size: 17px; line-height: 1.75; color: #4a5350;">
+      <section id="privacy" style="scroll-margin-top: 96px;">
+        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 30px; margin: 0 0 16px; color: #1a2023;">Privacy and legal</h1>
+        <p style="margin: 0 0 14px;">Home &amp; Me collects only the information needed to set up and manage your renovation project — your contact details, property information and design selections.</p>
+        <p style="margin: 0 0 14px;">Your data is never sold to third parties. It is shared with our vetted contractors and partners only to the extent required to carry out your renovation.</p>
+        <p style="margin: 0;">You may request a copy of your data, or ask for it to be deleted, at any time via the <a href="ContactUs.dc.html" style="color: #5a7e8a;">contact form</a>.</p>
+      </section>
+      <section id="terms" style="scroll-margin-top: 96px; border-top: 1px solid rgba(26,32,35,0.12); padding-top: 36px;">
+        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 30px; margin: 0 0 16px; color: #1a2023;">Terms of service</h2>
+        <p style="margin: 0 0 14px;">Prices shown while designing are live, itemised estimates. Your final quote is confirmed at checkout and honoured for the works specified in it.</p>
+        <p style="margin: 0 0 14px;">Project timelines are indicative and may vary with site conditions, material availability and regulatory approvals.</p>
+        <p style="margin: 0;">By checking out you appoint Home &amp; Me to coordinate the specified works through our vetted contractors and partners, with payments released by milestone.</p>
+      </section>
+      <section id="cookies" style="scroll-margin-top: 96px; border-top: 1px solid rgba(26,32,35,0.12); padding-top: 36px;">
+        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 30px; margin: 0 0 16px; color: #1a2023;">Cookie policy</h2>
+        <p style="margin: 0 0 14px;">We use essential cookies to keep your project session alive while you design, and analytics cookies to understand how the platform is used.</p>
+        <p style="margin: 0;">No advertising or cross-site tracking cookies are set. You can clear cookies at any time in your browser without losing a saved project.</p>
+      </section>
+      <section id="quickfixes" style="scroll-margin-top: 96px; border-top: 1px solid rgba(26,32,35,0.12); padding-top: 36px;">
+        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 30px; margin: 0 0 16px; color: #1a2023;">Quick Fixes</h2>
+        <p style="margin: 0 0 14px;">Not every job is a full renovation. Quick Fixes covers smaller works — a leaking tap, new shelving, repainting a room, replacing tiles or fixtures.</p>
+        <p style="margin: 0;">Describe the job through the <a href="ContactUs.dc.html" style="color: #5a7e8a;">contact form</a> and we'll match you with a vetted handyman or specialist, with the same transparent, agreed-upfront pricing.</p>
+      </section>
+      <section id="partners" style="scroll-margin-top: 96px; border-top: 1px solid rgba(26,32,35,0.12); padding-top: 36px;">
+        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 30px; margin: 0 0 16px; color: #1a2023;">For partners</h2>
+        <p style="margin: 0 0 14px;">Home &amp; Me works with a curated network of contractors, carpenters and material suppliers who share our standard of transparent pricing and reliable delivery.</p>
+        <p style="margin: 0 0 14px;">Partners receive scoped, itemised job orders through the platform — no quoting wars, no chasing payments.</p>
+        <p style="margin: 0;">Interested in joining the network? <a href="ContactUs.dc.html" style="color: #5a7e8a;">Reach out</a> and our partnerships team will be in touch.</p>
+      </section>
+    </div>
+  </div>
+
+  <footer style="border-top: 1px solid rgba(26,32,35,0.1); padding: 28px clamp(16px, 3vw, 32px);">
+    <div style="max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #8a908c;">
+      <span>Copyright {{ year }} HOME&amp;ME</span>
+      <nav style="display: flex; gap: 18px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
+        <a href="Home Redesign v2.dc.html">HOME</a>
+        <a href="AboutUs.dc.html">ABOUT US</a>
+        <a href="ContactUs.dc.html">CONTACT US</a>
+      </nav>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return { year: new Date().getFullYear() };
+  }
+}
+</script>
+</body>
+</html>

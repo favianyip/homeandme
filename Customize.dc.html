@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+@media (max-width: 1080px) { [data-mq3] { grid-template-columns: 1fr !important; } }
+</style>
+</helmet>
+<div style="min-width: 0;">
+  <header style="position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1);">
+    <div style="max-width: 1400px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); height: 72px; display: flex; align-items: center; gap: 20px;">
+      <a href="Home Redesign v2.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 40px; width: auto;"></a>
+      <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c; border-left: 1px solid rgba(26,32,35,0.15); padding-left: 20px;">ROOM CUSTOMIZER · {{ crumb }}</span>
+      <div style="margin-left: auto; display: flex; align-items: center; gap: 18px;">
+        <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a;">{{ stepLabel }}</span>
+        <a href="{{ checkoutHref }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: #1a2023; color: #f6f4ef; padding: 12px 24px; border-radius: 999px; white-space: nowrap;" style-hover="background: #5a7e8a; color: #fff;">{{ checkoutLabel }}</a>
+      </div>
+    </div>
+  </header>
+
+  <sc-if value="{{ showVerify }}" hint-placeholder-val="{{ true }}">
+  <div data-mq3="1" style="max-width: 1180px; margin: 0 auto; padding: clamp(16px, 3vw, 40px); display: grid; grid-template-columns: 1fr 350px; gap: clamp(16px, 2.5vw, 28px); align-items: start;">
+    <section style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: clamp(20px, 3.5vw, 36px);">
+      <h1 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: 2.4px; margin: 0 0 8px;">VERIFY YOUR HOME FIRST</h1>
+      <p style="margin: 0 0 26px; font-size: 15px; color: #8a908c; max-width: 56ch;">Designs are matched to your exact floor plan. Tell us the property, pick the layout, and upload the plan — we verify the address and unlock the design themes that fit those rooms.</p>
+
+      <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 10px;">01 — PROPERTY TYPE</p>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 26px;">
+        <sc-for list="{{ propertyPills }}" as="pill" hint-placeholder-count="3">
+          <button type="button" onClick="{{ pill.go }}" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.8px; padding: 12px 22px; border-radius: 999px; cursor: pointer; border: 1px solid {{ pill.border }}; background: {{ pill.bg }}; color: {{ pill.color }};">{{ pill.label }}</button>
+        </sc-for>
+      </div>
+
+      <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 10px;">02 — FLOOR PLAN LAYOUT</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-bottom: 26px;">
+        <sc-for list="{{ layoutPills }}" as="lay" hint-placeholder-count="3">
+          <button type="button" onClick="{{ lay.go }}" style="text-align: left; padding: 14px; border-radius: 6px; cursor: pointer; border: 1px solid {{ lay.border }}; background: {{ lay.bg }};">
+            <span style="display: block; font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 1.8px; color: #1a2023;">{{ lay.label }}</span>
+            <span style="display: block; font-size: 12px; color: #8a908c; margin-top: 4px;">{{ lay.sub }}</span>
+          </button>
+        </sc-for>
+      </div>
+
+      <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 10px;">03 — LOCATION</p>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 8px;">
+        <input type="text" inputMode="numeric" maxLength="6" placeholder="Postal code" value="{{ postal }}" onChange="{{ onPostal }}" style="font-family: 'Oswald', sans-serif; font-size: 16px; letter-spacing: 3px; padding: 13px 18px; border-radius: 6px; border: 1px solid rgba(26,32,35,0.2); background: #f6f4ef; color: #1a2023; width: 170px; outline: none;" style-focus="border: 1px solid #5a7e8a;">
+        <span style="font-size: 13px; color: #5a7e8a;">{{ areaHint }}</span>
+      </div>
+      <p style="margin: 0 0 26px; font-size: 12px; color: #8a908c;">We check the postal sector against your property type — a condo plan won't verify at an HDB block.</p>
+
+      <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 10px;">04 — EXACT FLOOR PLAN</p>
+      <input id="planUpload" type="file" accept=".pdf,.jpg,.jpeg,.png" onChange="{{ onPlanFile }}" style="display: none;">
+      <sc-if value="{{ noPlan }}" hint-placeholder-val="{{ true }}">
+        <label for="planUpload" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border: 2px dashed rgba(90,126,138,0.5); border-radius: 8px; padding: 30px 20px; cursor: pointer; background: rgba(90,126,138,0.04); text-align: center;" style-hover="border: 2px dashed #5a7e8a; background: rgba(90,126,138,0.08);">
+          <span style="font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 2px; color: #1a2023;">UPLOAD YOUR FLOOR PLAN</span>
+          <span style="font-size: 13px; color: #8a908c;">PDF, JPG or PNG — the colour plan from HDB / your developer</span>
+        </label>
+        <div style="display: flex; justify-content: center; margin-top: 10px;">
+          <button type="button" onClick="{{ useSample }}" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; background: none; border: none; cursor: pointer; text-decoration: underline;">NO PLAN HANDY? USE A SAMPLE PLAN</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ hasPlan }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; align-items: center; gap: 14px; border: 1px solid rgba(90,126,138,0.4); border-radius: 8px; padding: 12px 16px; background: rgba(90,126,138,0.06);">
+          <img src="{{ planUrl }}" alt="Floor plan preview" style="width: 72px; height: 54px; object-fit: cover; border-radius: 4px; background: #fff; border: 1px solid rgba(26,32,35,0.1);">
+          <span style="flex: 1; min-width: 0;">
+            <span style="display: block; font-size: 14px; color: #1a2023; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ planName }}</span>
+            <span style="display: block; font-size: 12px; color: #5a7e8a; margin-top: 2px;">Ready to verify against {{ planTarget }}</span>
+          </span>
+          <label for="planUpload" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; cursor: pointer; white-space: nowrap;">REPLACE</label>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+        <p style="margin: 16px 0 0; font-size: 13px; color: #b4533a;">{{ verifyError }}</p>
+      </sc-if>
+      <button type="button" onClick="{{ verifyNow }}" style="margin-top: 22px; width: 100%; font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 17px 24px; border-radius: 999px; border: none; cursor: pointer; opacity: {{ verifyOpacity }};" style-hover="background: #5a7e8a;">{{ verifyLabel }}</button>
+    </section>
+
+    <aside style="background: #171d1f; color: #f6f4ef; border-radius: 8px; padding: 26px; position: sticky; top: 88px;">
+      <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8fb0bb; margin: 0 0 14px;">WHY THE FLOOR PLAN FIRST</p>
+      <p style="margin: 0 0 18px; font-size: 14px; line-height: 1.6; color: rgba(246,244,239,0.85);">Every theme is rendered per room layout. Without the exact plan, a "Scandinavian master bedroom" is a guess — with it, carpentry, tiling and pricing match your walls to the centimetre.</p>
+      <div style="display: grid; gap: 14px; border-top: 1px solid rgba(246,244,239,0.12); padding-top: 18px;">
+        <div style="display: flex; gap: 12px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 12px; color: #8fb0bb;">1</span><span style="font-size: 13px; color: rgba(246,244,239,0.75);">We verify the postal address is a real {{ propertyWord }} block.</span></div>
+        <div style="display: flex; gap: 12px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 12px; color: #8fb0bb;">2</span><span style="font-size: 13px; color: rgba(246,244,239,0.75);">Your plan is checked against the {{ layoutWord }} layout you picked.</span></div>
+        <div style="display: flex; gap: 12px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 12px; color: #8fb0bb;">3</span><span style="font-size: 13px; color: rgba(246,244,239,0.75);">Each verified room unlocks its own design themes — mix them freely.</span></div>
+      </div>
+      <p style="margin: 18px 0 0; font-size: 12px; color: rgba(246,244,239,0.5);">Files stay private to your project · Same formats as our upload portal (PDF / JPG / PNG)</p>
+    </aside>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showDesign }}" hint-placeholder-val="{{ false }}">
+  <div data-mq3="1" style="max-width: 1400px; margin: 0 auto; padding: clamp(16px, 3vw, 32px); display: grid; grid-template-columns: 230px 1fr 320px; gap: clamp(16px, 2.5vw, 28px); align-items: start;">
+    <aside style="display: grid; gap: 10px; align-content: start;">
+      <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 4px;">YOUR ROOMS</p>
+      <sc-for list="{{ roomTabs }}" as="tab" hint-placeholder-count="5">
+        <button type="button" onClick="{{ tab.go }}" style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 6px; cursor: pointer; text-align: left; border: 1px solid {{ tab.border }}; background: {{ tab.bg }};">
+          <img src="{{ tab.img }}" alt="{{ tab.label }}" style="width: 54px; height: 40px; object-fit: cover; border-radius: 4px; display: block;">
+          <span style="min-width: 0;">
+            <span style="display: block; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.6px; color: #1a2023;">{{ tab.label }}</span>
+            <span style="display: block; font-size: 12px; color: #8a908c; margin-top: 2px;">{{ tab.sub }}</span>
+          </span>
+        </button>
+      </sc-for>
+      <a href="Home Redesign v2.dc.html#walkthrough" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; margin-top: 10px;">← BACK TO SHOWROOM</a>
+    </aside>
+
+    <main style="min-width: 0;">
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 0 0 14px;">
+        <span style="display: inline-flex; align-items: center; gap: 8px; background: rgba(90,126,138,0.12); border: 1px solid rgba(90,126,138,0.4); border-radius: 999px; padding: 8px 16px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; color: #3d6270;">✓ {{ verifiedLine }}</span>
+        <button type="button" onClick="{{ goVerify }}" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #8a908c; background: none; border: none; cursor: pointer; text-decoration: underline;">CHANGE PLAN</button>
+      </div>
+      <div style="position: relative; border-radius: 8px; overflow: hidden; background: #e7e2d8;">
+        <img src="{{ previewImg }}" alt="Room preview" style="width: 100%; aspect-ratio: 16 / 9.6; object-fit: cover; display: block; transition: opacity 0.5s ease;">
+        <div style="position: absolute; top: 14px; left: 16px; display: flex; align-items: center; gap: 8px; background: rgba(26,32,35,0.55); backdrop-filter: blur(6px); border-radius: 999px; padding: 8px 16px;">
+          <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #fff;">{{ previewLabel }}</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 18px 0 22px;">
+        <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c; margin-right: 6px;">THEME — {{ activeRoomLabel }}</span>
+        <sc-for list="{{ themePills }}" as="pill" hint-placeholder-count="3">
+          <button type="button" onClick="{{ pill.go }}" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.8px; padding: 11px 20px; border-radius: 999px; cursor: pointer; border: 1px solid {{ pill.border }}; background: {{ pill.bg }}; color: {{ pill.color }};">{{ pill.label }}</button>
+        </sc-for>
+      </div>
+      <div style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: clamp(18px, 3vw, 28px);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px;">
+          <h2 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 16px; letter-spacing: 2.2px; margin: 0;">SCOPES OF WORK — {{ activeRoomLabel }}</h2>
+          <span style="font-family: 'Oswald', sans-serif; font-size: 13px; color: #5a7e8a;">{{ roomTotal }}</span>
+        </div>
+        <p style="margin: 0 0 14px; font-size: 14px; color: #8a908c;">Tick what this room needs — every line is priced live on this room's theme.</p>
+        <div style="border-top: 1px solid rgba(26,32,35,0.1);">
+          <sc-for list="{{ scopes }}" as="scope" hint-placeholder-count="5">
+            <label style="display: flex; align-items: center; gap: 14px; padding: 14px 4px; border-bottom: 1px solid rgba(26,32,35,0.08); cursor: pointer;">
+              <input type="checkbox" checked="{{ scope.on }}" onChange="{{ scope.toggle }}" style="width: 18px; height: 18px; accent-color: #5a7e8a; cursor: pointer;">
+              <span style="flex: 1; min-width: 0;">
+                <span style="display: block; font-size: 16px; color: #1a2023;">{{ scope.label }}</span>
+                <span style="display: block; font-size: 13px; color: #8a908c; margin-top: 2px;">{{ scope.desc }}</span>
+              </span>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 14px; color: {{ scope.priceColor }};">{{ scope.price }}</span>
+            </label>
+          </sc-for>
+        </div>
+      </div>
+    </main>
+
+    <aside style="background: #171d1f; color: #f6f4ef; border-radius: 8px; padding: 24px; position: sticky; top: 88px;">
+      <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8fb0bb; margin: 0 0 16px;">LIVE QUOTE — {{ quoteHeading }}</p>
+      <sc-for list="{{ quoteRows }}" as="row" hint-placeholder-count="5">
+        <div style="display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(246,244,239,0.12); font-size: 14px;">
+          <span style="min-width: 0;">
+            <span style="display: block; color: rgba(246,244,239,0.85);">{{ row.label }}</span>
+            <span style="display: block; font-size: 11px; color: #8fb0bb; letter-spacing: 1.4px; margin-top: 2px;">{{ row.theme }}</span>
+          </span>
+          <span style="font-family: 'Oswald', sans-serif; font-size: 13px; white-space: nowrap;">{{ row.amount }}</span>
+        </div>
+      </sc-for>
+      <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 16px 0 4px;">
+        <span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.4px;">TOTAL</span>
+        <span style="font-family: 'Oswald', sans-serif; font-size: 24px; color: #8fb0bb;">{{ grandTotal }}</span>
+      </div>
+      <p style="margin: 10px 0 18px; font-size: 12px; color: rgba(246,244,239,0.5);">Mix themes freely — each room is priced on its own theme. Final quote confirmed against your verified floor plan at checkout.</p>
+      <a href="Checkout.dc.html" style="display: block; text-align: center; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #f6f4ef; color: #1a2023; padding: 16px 24px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">PROCEED TO CHECKOUT →</a>
+      <p style="margin: 14px 0 0; font-size: 12px; color: rgba(246,244,239,0.5); text-align: center;">Demo pricing · Floor plan on file: {{ planNameShort }}</p>
+    </aside>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;skipVerification&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Demo&quot;}, &quot;defaultTheme&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;luxe&quot;, &quot;classic&quot;, &quot;scandi&quot;], &quot;default&quot;: &quot;luxe&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Demo&quot;}}">
+class Component extends DCLogic {
+  state = {
+    step: 'verify', property: 'hdb', layout: 'hdb4',
+    postal: '', plan: null, verifying: false, verified: false, area: '', verifyError: '',
+    room: 'living', themeByRoom: {}, on: {},
+  };
+
+  data() {
+    const imgs = {
+      luxe: { living: 'assets/renders/living-warm.jpg', kitchen: 'assets/renders/dining-warm.jpg', master: 'assets/renders/master-warm.jpg', common: 'assets/renders/study-warm.jpg', common2: 'assets/renders/study-warm.jpg', study: 'assets/renders/study-warm.jpg', bath: 'assets/images/master-bathroom.jpg', family: 'assets/renders/living-contemporary.jpg' },
+      classic: { living: 'assets/images/login-bg.jpg', kitchen: 'assets/images/modern-classic-kitchen_aboutus.jpg', master: 'assets/enhanced/design-config-img-1.png', common: 'assets/enhanced/design-config-img-1.png', common2: 'assets/enhanced/design-config-img-1.png', study: 'assets/enhanced/design-config-img-3.png', bath: 'assets/images/modern-classic-bathroom-1_aboutus.jpg', family: 'assets/images/home-bg.jpg' },
+      scandi: { living: 'assets/enhanced/design-config-img-2.png', kitchen: 'assets/enhanced/design-config-img-3.png', master: 'assets/renders/bedroom-scandinavian.jpg', common: 'assets/renders/bedroom-scandinavian.jpg', common2: 'assets/renders/bedroom-scandinavian.jpg', study: 'assets/renders/study-warm.jpg', bath: 'assets/images/master-bathroom.jpg', family: 'assets/enhanced/design-config-img-2.png' },
+    };
+    const ROOMS = {
+      living: { label: 'LIVING & DINING', scopes: [
+        { label: 'Flooring — porcelain tiles', desc: '60×60 tiles incl. screed', base: 4200 },
+        { label: 'Feature wall & TV console', desc: 'Stone-look feature wall, suspended console', base: 3800 },
+        { label: 'Ceiling & lighting works', desc: 'L-box, downlights, wiring', base: 2400 },
+        { label: 'Painting', desc: 'Walls + ceiling, low-VOC', base: 1100 },
+        { label: 'Curtains & blinds', desc: 'Day/night curtains', base: 900 },
+      ]},
+      kitchen: { label: 'KITCHEN', scopes: [
+        { label: 'Kitchen carpentry', desc: 'Top + bottom cabinets, soft-close', base: 5600 },
+        { label: 'Worktop & backsplash', desc: 'Quartz worktop, tiled backsplash', base: 2800 },
+        { label: 'Sink, tap & plumbing', desc: 'Undermount sink + mixer', base: 1200 },
+        { label: 'Electrical points', desc: 'Appliance points + lighting', base: 800 },
+      ]},
+      master: { label: 'MASTER BEDROOM', scopes: [
+        { label: 'Built-in wardrobe', desc: 'Full-height, 8ft, laminate', base: 3400 },
+        { label: 'Feature headboard wall', desc: 'Fluted panels + stone', base: 2200 },
+        { label: 'Flooring — vinyl', desc: 'Herringbone luxury vinyl', base: 1800 },
+        { label: 'Painting & lighting', desc: 'Walls + bedside pendants', base: 1300 },
+      ]},
+      common: { label: 'COMMON BEDROOM', scopes: [
+        { label: 'Built-in wardrobe', desc: 'Full-height, 6ft, laminate', base: 2400 },
+        { label: 'Study nook', desc: 'Desk + shelving carpentry', base: 1100 },
+        { label: 'Flooring — vinyl', desc: 'Luxury vinyl planks', base: 1400 },
+        { label: 'Painting', desc: 'Walls + ceiling', base: 800 },
+      ]},
+      common2: { label: 'COMMON BEDROOM 2', scopes: [
+        { label: 'Built-in wardrobe', desc: 'Full-height, 6ft, laminate', base: 2400 },
+        { label: 'Study nook', desc: 'Desk + shelving carpentry', base: 1100 },
+        { label: 'Flooring — vinyl', desc: 'Luxury vinyl planks', base: 1400 },
+        { label: 'Painting', desc: 'Walls + ceiling', base: 800 },
+      ]},
+      study: { label: 'STUDY', scopes: [
+        { label: 'Built-in desk & shelving', desc: 'Full-wall workstation', base: 2600 },
+        { label: 'Flooring — vinyl', desc: 'Herringbone luxury vinyl', base: 1200 },
+        { label: 'Painting & lighting', desc: 'Walls + track lights', base: 900 },
+      ]},
+      family: { label: 'FAMILY ROOM', scopes: [
+        { label: 'Media feature wall', desc: 'Panelled wall + concealed AV', base: 4200 },
+        { label: 'Flooring — engineered timber', desc: 'Incl. underlay', base: 2200 },
+        { label: 'Ceiling & lighting works', desc: 'Cove lighting + downlights', base: 1800 },
+        { label: 'Painting', desc: 'Walls + ceiling, low-VOC', base: 1200 },
+      ]},
+      bath: { label: 'BATHROOMS', scopes: [
+        { label: 'Wall & floor tiling', desc: 'Both bathrooms, incl. hacking', base: 5200 },
+        { label: 'Vanity & mirror cabinet', desc: 'Wall-hung vanity, LED mirror', base: 1900 },
+        { label: 'Shower screen & fittings', desc: 'Tempered glass + rain shower', base: 1700 },
+        { label: 'Plumbing & waterproofing', desc: 'Full re-piping + membrane', base: 2600 },
+      ]},
+    };
+    const LANDED_ROOMS = ['living', 'kitchen', 'master', 'common', 'common2', 'study', 'family', 'bath'];
+    return {
+      imgs, ROOMS,
+      themes: [
+        { id: 'luxe', label: 'MODERN LUXE', mult: 1.15 },
+        { id: 'classic', label: 'MODERN CLASSIC', mult: 1.0 },
+        { id: 'scandi', label: 'SCANDINAVIAN', mult: 0.9 },
+      ],
+      properties: [
+        { id: 'hdb', label: 'HDB FLAT', word: 'HDB', layouts: [
+          { id: 'hdb3', label: '3-ROOM', sqm: 68, rooms: ['living', 'kitchen', 'master', 'common', 'bath'] },
+          { id: 'hdb4', label: '4-ROOM', sqm: 92, rooms: ['living', 'kitchen', 'master', 'common', 'common2', 'bath'] },
+          { id: 'hdb5', label: '5-ROOM', sqm: 110, rooms: ['living', 'kitchen', 'master', 'common', 'common2', 'study', 'bath'] },
+        ]},
+        { id: 'condo', label: 'CONDOMINIUM', word: 'condominium', layouts: [
+          { id: 'c2', label: '2-BEDROOM', sqm: 72, rooms: ['living', 'kitchen', 'master', 'common', 'bath'] },
+          { id: 'c3', label: '3-BEDROOM', sqm: 95, rooms: ['living', 'kitchen', 'master', 'common', 'common2', 'bath'] },
+          { id: 'cp', label: 'PENTHOUSE', sqm: 150, rooms: ['living', 'kitchen', 'master', 'common', 'common2', 'study', 'family', 'bath'] },
+        ]},
+        { id: 'landed', label: 'LANDED', word: 'landed', layouts: [
+          { id: 'l1', label: 'TERRACE', sqm: 180, rooms: LANDED_ROOMS },
+          { id: 'l2', label: 'SEMI-DETACHED', sqm: 250, rooms: LANDED_ROOMS },
+          { id: 'l3', label: 'BUNGALOW', sqm: 400, rooms: LANDED_ROOMS },
+        ]},
+      ],
+    };
+  }
+
+  prop() { const d = this.data(); return d.properties.find((p) => p.id === this.state.property); }
+  layoutObj() { return this.prop().layouts.find((l) => l.id === this.state.layout); }
+  themeFor(roomId) { return this.state.themeByRoom[roomId] || (this.props.defaultTheme ?? 'luxe'); }
+  getOn(roomId) { const d = this.data(); return this.state.on[roomId] ?? d.ROOMS[roomId].scopes.map((_, i) => i); }
+  fmt(n) { return 'S$ ' + Math.round(n).toLocaleString('en-SG'); }
+
+  areaFor(postal) {
+    const map = { '01': 'Raffles Place', '05': 'Pasir Panjang', '09': 'Orchard', '10': 'Bukit Timah', '12': 'Toa Payoh', '14': 'Geylang', '16': 'Bedok', '20': 'Bishan', '26': 'Upper Thomson', '31': 'Toa Payoh', '38': 'Kallang', '46': 'Bedok', '52': 'Ang Mo Kio', '56': 'Bishan', '57': 'Bishan', '60': 'Jurong East', '65': 'Bukit Batok', '68': 'Choa Chu Kang', '73': 'Woodlands', '76': 'Yishun', '79': 'Sengkang', '82': 'Punggol' };
+    return map[postal.slice(0, 2)] || 'Singapore';
+  }
+
+  persist() {
+    try {
+      const s = this.state;
+      localStorage.setItem('hnm_customize_v2', JSON.stringify({
+        property: s.property, layout: s.layout, postal: s.postal, area: s.area,
+        verified: s.verified, themeByRoom: s.themeByRoom, on: s.on,
+        planName: s.plan ? s.plan.name : '',
+      }));
+    } catch (e) {}
+  }
+
+  componentDidMount() {
+    if (this.props.skipVerification) {
+      this.setState({ verified: true, step: 'design', postal: '570512', area: 'Bishan', plan: { name: 'sample-floorplan.png', url: 'assets/images/sample-floorplan.png' } });
+      return;
+    }
+    try {
+      const saved = JSON.parse(localStorage.getItem('hnm_customize_v2') || 'null');
+      if (saved && saved.verified) {
+        this.setState({
+          property: saved.property, layout: saved.layout, postal: saved.postal, area: saved.area,
+          verified: true, step: 'design', themeByRoom: saved.themeByRoom || {}, on: saved.on || {},
+          plan: { name: saved.planName || 'floor-plan.pdf', url: 'assets/images/sample-floorplan.png' },
+          room: this.prop().layouts.find((l) => l.id === saved.layout) ? this.data().properties.find((p) => p.id === saved.property).layouts.find((l) => l.id === saved.layout).rooms[0] : 'living',
+        });
+      }
+    } catch (e) {}
+  }
+
+  verifyNow() {
+    const s = this.state;
+    if (!/^\d{6}$/.test(s.postal)) { this.setState({ verifyError: 'Enter a valid 6-digit Singapore postal code.' }); return; }
+    if (!s.plan) { this.setState({ verifyError: 'Upload your exact floor plan (or use the sample) before verifying.' }); return; }
+    this.setState({ verifyError: '', verifying: true });
+    setTimeout(() => {
+      const area = this.areaFor(this.state.postal);
+      this.setState({ verifying: false, verified: true, area, step: 'design', room: this.layoutObj().rooms[0] }, () => this.persist());
+    }, 1300);
+  }
+
+  renderVals() {
+    const s = this.state;
+    const d = this.data();
+    const prop = this.prop();
+    const layout = this.layoutObj();
+    const themeObj = (id) => d.themes.find((t) => t.id === id);
+    const roomSum = (roomId) => {
+      const mult = themeObj(this.themeFor(roomId)).mult;
+      return d.ROOMS[roomId].scopes.reduce((sum, sc, i) => sum + (this.getOn(roomId).includes(i) ? sc.base * mult : 0), 0);
+    };
+    const total = layout.rooms.reduce((sum, r) => sum + roomSum(r), 0);
+    const activeRoom = d.ROOMS[s.room] ? s.room : layout.rooms[0];
+    const activeTheme = themeObj(this.themeFor(activeRoom));
+    return {
+      crumb: s.verified ? `${layout.label} ${prop.word.toUpperCase()} · ${s.area.toUpperCase()}` : 'FLOOR PLAN VERIFICATION',
+      stepLabel: s.step === 'verify' ? 'STEP 1 OF 3 — VERIFY' : 'STEP 2 OF 3 — DESIGN',
+      checkoutHref: s.verified ? 'Checkout.dc.html' : '#',
+      checkoutLabel: s.verified ? `CHECK OUT · ${this.fmt(total)}` : 'VERIFY TO UNLOCK',
+      showVerify: s.step === 'verify',
+      showDesign: s.step === 'design',
+
+      propertyPills: d.properties.map((p) => ({
+        label: p.label,
+        border: s.property === p.id ? '#5a7e8a' : 'rgba(26,32,35,0.2)',
+        bg: s.property === p.id ? '#5a7e8a' : 'transparent',
+        color: s.property === p.id ? '#fff' : '#1a2023',
+        go: () => this.setState({ property: p.id, layout: p.layouts[0].id, verified: false }),
+      })),
+      layoutPills: prop.layouts.map((l) => ({
+        label: l.label,
+        sub: `~${l.sqm} sqm · ${l.rooms.length} rooms`,
+        border: s.layout === l.id ? '#5a7e8a' : 'rgba(26,32,35,0.12)',
+        bg: s.layout === l.id ? 'rgba(90,126,138,0.08)' : '#fff',
+        go: () => this.setState({ layout: l.id, verified: false }),
+      })),
+      postal: s.postal,
+      onPostal: (e) => this.setState({ postal: e.target.value.replace(/\D/g, '').slice(0, 6), verified: false }),
+      areaHint: /^\d{6}$/.test(s.postal) ? `Sector ${s.postal.slice(0, 2)} — ${this.areaFor(s.postal)}` : 'Enter your 6-digit postal code',
+      noPlan: !s.plan, hasPlan: !!s.plan,
+      planName: s.plan ? s.plan.name : '',
+      planUrl: s.plan ? s.plan.url : '',
+      planTarget: `${layout.label} ${prop.word} (~${layout.sqm} sqm)`,
+      onPlanFile: (e) => {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        if (/\.pdf$/i.test(f.name)) { this.setState({ plan: { name: f.name, url: 'assets/images/sample-floorplan.png' }, verified: false, verifyError: '' }); return; }
+        const rd = new FileReader();
+        rd.onload = () => this.setState({ plan: { name: f.name, url: rd.result }, verified: false, verifyError: '' });
+        rd.readAsDataURL(f);
+      },
+      useSample: () => this.setState({ plan: { name: 'HNM-sample-floorplan.png', url: 'assets/images/sample-floorplan.png' }, verifyError: '' }),
+      hasError: !!s.verifyError, verifyError: s.verifyError,
+      verifyLabel: s.verifying ? 'VERIFYING FLOOR PLAN…' : 'VERIFY & UNLOCK DESIGNS →',
+      verifyOpacity: s.verifying ? 0.6 : 1,
+      verifyNow: () => this.verifyNow(),
+      propertyWord: prop.word, layoutWord: layout.label.toLowerCase(),
+
+      verifiedLine: `VERIFIED — ${layout.label} ${prop.word.toUpperCase()} · ${s.area.toUpperCase()} ${s.postal}`,
+      goVerify: () => this.setState({ step: 'verify' }),
+      roomTabs: layout.rooms.map((rid) => ({
+        label: d.ROOMS[rid].label,
+        sub: `${this.getOn(rid).length} of ${d.ROOMS[rid].scopes.length} scopes · ${this.fmt(roomSum(rid))}`,
+        img: d.imgs[this.themeFor(rid)][rid],
+        border: activeRoom === rid ? '#5a7e8a' : 'rgba(26,32,35,0.12)',
+        bg: activeRoom === rid ? 'rgba(90,126,138,0.08)' : '#fff',
+        go: () => this.setState({ room: rid }),
+      })),
+      themePills: d.themes.map((t) => ({
+        label: t.label,
+        border: activeTheme.id === t.id ? '#5a7e8a' : 'rgba(26,32,35,0.2)',
+        bg: activeTheme.id === t.id ? '#5a7e8a' : 'transparent',
+        color: activeTheme.id === t.id ? '#fff' : '#1a2023',
+        go: () => this.setState({ themeByRoom: { ...s.themeByRoom, [activeRoom]: t.id } }, () => this.persist()),
+      })),
+      previewImg: d.imgs[activeTheme.id][activeRoom],
+      previewLabel: `${d.ROOMS[activeRoom].label} — ${activeTheme.label}`,
+      activeRoomLabel: d.ROOMS[activeRoom].label,
+      roomTotal: this.fmt(roomSum(activeRoom)),
+      scopes: d.ROOMS[activeRoom].scopes.map((sc, i) => {
+        const on = this.getOn(activeRoom).includes(i);
+        return {
+          label: sc.label, desc: sc.desc, on,
+          price: this.fmt(sc.base * activeTheme.mult),
+          priceColor: on ? '#5a7e8a' : '#c0c5c1',
+          toggle: () => {
+            const cur = this.getOn(activeRoom);
+            const next = on ? cur.filter((x) => x !== i) : [...cur, i];
+            this.setState({ on: { ...s.on, [activeRoom]: next } }, () => this.persist());
+          },
+        };
+      }),
+      quoteHeading: `${layout.label} · ${layout.rooms.length} ROOMS`,
+      quoteRows: layout.rooms.map((rid) => ({
+        label: d.ROOMS[rid].label,
+        theme: themeObj(this.themeFor(rid)).label,
+        amount: this.fmt(roomSum(rid)),
+      })),
+      grandTotal: this.fmt(total),
+      planNameShort: s.plan ? s.plan.name : '—',
+    };
+  }
+}
+</script>
+</body>
+</html>
