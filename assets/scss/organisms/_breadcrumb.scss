@@ -1,0 +1,46 @@
+.hnm-breadcrumb{
+    background-color: $color-grey-dark;
+    padding: $spacer-2 $spacer-0;
+    &__wrapper{
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: $spacer-0 (-$spacer-3);
+    }
+    &__item{
+        font-size: 14px;
+        display: inline-block;
+        color: $color-white;
+        text-transform: uppercase;
+        opacity: 0.6;
+        white-space: nowrap;
+        margin: $spacer-1 $spacer-3;
+        transition: 0.3s;
+        position: relative;
+        &:hover,
+        &.active{
+            color: $color-white;
+            opacity: 1;
+        }
+        &.active{
+            font-weight: $font-bold;
+            pointer-events: none;
+        }
+        &::before{
+            content: '';
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 7 11' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath opacity='0.6' d='M1 0.5L6 5.5L1 10.5' stroke='white'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 7px;
+            height: 15px;
+            position: absolute;
+            top: 50%;
+            right: -18px;
+            transform: translateY(-50%);
+        }
+        &:last-child::before{
+            content: none;
+        }
+    }
+}

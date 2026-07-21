@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+#navLinks a { white-space: nowrap; }
+@keyframes hnmRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 1160px) {
+  #navLinks { display: none !important; }
+  #navBurger { display: flex !important; }
+  [data-mq2] { grid-template-columns: 1fr !important; }
+}
+</style>
+</helmet>
+<div style="min-width: 0;">
+  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: rgba(246,244,239,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1);">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); height: 76px; display: flex; align-items: center;">
+      <a href="Home AI.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 44px; width: auto;"></a>
+      <nav id="navLinks" style="display: flex; gap: 28px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; font-weight: 400;">
+        <a href="Home AI.dc.html">HOME</a>
+        <a href="AboutUs.dc.html">ABOUT US</a>
+        <a href="Home AI.dc.html#portfolio">SHOWROOM</a>
+        <a href="Customize.dc.html">THEMES</a>
+        <a href="FaqAndHelp.dc.html" style="color: #5a7e8a; border-bottom: 1px solid #5a7e8a; padding-bottom: 3px;">FAQ &amp; HELP</a>
+        <a href="ContactUs.dc.html">CONTACT US</a>
+        <a href="Login.dc.html" style="color: #5a7e8a;">LOGIN</a>
+        <a href="Journey.html" style="background: #1a2023; color: #f6f4ef; padding: 12px 26px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START YOUR RENOVATION</a>
+      </nav>
+      <button id="navBurger" type="button" onClick="{{ toggleMenu }}" style="display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid rgba(26,32,35,0.25); border-radius: 999px; background: none; cursor: pointer; font-size: 17px; color: #1a2023;">{{ menuIcon }}</button>
+    </div>
+  </header>
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 55; background: #f6f4ef; padding: 110px clamp(24px, 6vw, 48px) 40px; overflow: auto;">
+      <nav style="display: grid; gap: 22px; font-family: 'Oswald', sans-serif; font-size: 22px; letter-spacing: 2.4px;">
+        <a href="Home AI.dc.html">HOME</a>
+        <a href="AboutUs.dc.html">ABOUT US</a>
+        <a href="Home AI.dc.html#portfolio">VIRTUAL SHOWROOM</a>
+        <a href="FaqAndHelp.dc.html" style="color: #5a7e8a;">FAQ &amp; HELP</a>
+        <a href="ContactUs.dc.html">CONTACT US</a>
+        <a href="Login.dc.html">LOGIN</a>
+        <a href="Journey.html" style="margin-top: 12px; justify-self: start; background: #1a2023; color: #f6f4ef; padding: 16px 32px; border-radius: 999px; font-size: 15px;">START YOUR RENOVATION</a>
+      </nav>
+    </div>
+  </sc-if>
+
+  <section style="padding: clamp(140px, 18vw, 180px) clamp(20px, 4vw, 40px) clamp(48px, 6vw, 64px); text-align: center;">
+    <div style="max-width: 800px; margin: 0 auto; animation: hnmRise 0.9s ease both;">
+      <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 20px;">FAQ &amp; HELP</p>
+      <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(38px, 5.5vw, 56px); line-height: 1.1; margin: 0 0 20px;">How can we help?</h1>
+      <p style="font-size: 18px; line-height: 1.7; color: #4a5350; margin: 0;">Everything about designing, pricing and renovating with Home &amp; Me. Can't find your answer? <a href="ContactUs.dc.html" style="color: #5a7e8a; border-bottom: 1px solid rgba(90,126,138,0.4);">Contact us</a>.</p>
+    </div>
+  </section>
+
+  <section style="padding: 0 clamp(20px, 4vw, 40px) clamp(88px, 12vw, 120px);">
+    <div style="max-width: 860px; margin: 0 auto;">
+      <sc-for list="{{ groups }}" as="group" hint-placeholder-count="3">
+        <div style="margin-bottom: 44px;">
+          <h2 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 2.6px; color: #5a7e8a; margin: 0 0 6px;">{{ group.title }}</h2>
+          <div style="border-top: 1px solid rgba(26,32,35,0.12);">
+            <sc-for list="{{ group.items }}" as="item" hint-placeholder-count="3">
+              <div style="border-bottom: 1px solid rgba(26,32,35,0.12);">
+                <button type="button" onClick="{{ item.toggle }}" style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 24px; background: none; border: none; cursor: pointer; padding: 22px 6px; text-align: left; min-height: 44px;">
+                  <span style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 18px; letter-spacing: 0.6px; color: #1a2023;">{{ item.q }}</span>
+                  <span style="font-family: 'Oswald', sans-serif; font-size: 22px; color: #5a7e8a; font-weight: 300;">{{ item.mark }}</span>
+                </button>
+                <sc-if value="{{ item.open }}" hint-placeholder-val="{{ false }}">
+                  <p style="margin: 0; padding: 0 6px 24px; font-size: 17px; line-height: 1.7; color: #4a5350;">{{ item.a }}</p>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+      <div style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: clamp(24px, 4vw, 40px); display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
+        <div>
+          <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 20px; letter-spacing: 1.4px; margin: 0 0 8px;">STILL HAVE A QUESTION?</h3>
+          <p style="margin: 0; font-size: 16px; color: #4a5350;">Write to us and we'll get back within one working day.</p>
+        </div>
+        <a href="ContactUs.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #5a7e8a; color: #fff; padding: 15px 32px; border-radius: 999px;" style-hover="background: #1a2023; color: #fff;">CONTACT US →</a>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid rgba(26,32,35,0.1); padding: 40px clamp(20px, 4vw, 40px);">
+    <div style="max-width: 1320px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 38px; width: auto;">
+      <nav style="display: flex; gap: 24px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; flex-wrap: wrap;">
+        <a href="Home AI.dc.html">HOME</a>
+        <a href="AboutUs.dc.html">ABOUT US</a>
+        <a href="ContactUs.dc.html">CONTACT US</a>
+        <a href="Login.dc.html">LOGIN</a>
+      </nav>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <a href="https://www.facebook.com/share/19EwNzh3n5/?mibextid=wwXIfr" target="_blank" aria-label="Facebook" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;"><img src="assets/images/fb-icon-teal.svg" alt="Facebook" style="height: 16px;"></a>
+        <a href="https://www.instagram.com/homeandme2017?igsh=dXF5cnNjYjI3dWZn&amp;utm_source=qr" target="_blank" aria-label="Instagram" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 17px;"></a>
+      </div>
+      <span style="font-size: 13px; color: #8a908c;">Copyright {{ year }} HOME&amp;ME</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { menuOpen: false, open: 'g0-0' };
+
+  faqGroups() {
+    return [
+      { title: 'GETTING STARTED', items: [
+        { q: 'Do I need to sign up to start designing?', a: 'No. You can configure your home, pick a theme and design every room without an account. You only sign up at checkout, so your project is saved to you.' },
+        { q: 'What do I need to prepare?', a: 'A soft copy of your floor plan or layout plan. You upload it at checkout so our partners can confirm site measurements before work begins.' },
+        { q: 'Which property types do you cover?', a: 'HDB flats, condominiums and landed homes — new or resale. The configurator adapts scopes and pricing to your property type.' },
+      ]},
+      { title: 'PRICING & PAYMENT', items: [
+        { q: 'How accurate is the pricing?', a: 'Every scope of work you select is priced live and itemised — hacking, masonry, carpentry, plumbing, electrical and finishes. The total you see at checkout is the price you pay.' },
+        { q: 'Are there hidden costs?', a: 'No. Your quote lists every line item before you commit. If site conditions genuinely require a change, it is re-quoted transparently for your approval first.' },
+        { q: 'How do payments work?', a: 'You pay a deposit at checkout and the balance in milestones as work is completed and verified. Payments are made securely through the platform.' },
+      ]},
+      { title: 'DURING YOUR RENOVATION', items: [
+        { q: 'Who carries out the renovation?', a: 'Vetted contractors and partners on the Home & Me platform. They are assigned to your project and managed through the platform, and you track milestones from your dashboard.' },
+        { q: 'Can I change my design after checkout?', a: 'Yes — speak with your assigned project coordinator. Changes are re-quoted transparently as itemised additions or reductions before you approve them.' },
+        { q: 'How do I track progress?', a: 'Your project dashboard shows every milestone from hacking to handover, with updates as each stage is completed.' },
+      ]},
+    ];
+  }
+
+  renderVals() {
+    const s = this.state;
+    return {
+      menuOpen: s.menuOpen,
+      menuIcon: s.menuOpen ? '✕' : '☰',
+      toggleMenu: () => this.setState({ menuOpen: !s.menuOpen }),
+      groups: this.faqGroups().map((g, gi) => ({
+        title: g.title,
+        items: g.items.map((it, i) => {
+          const id = `g${gi}-${i}`;
+          return {
+            q: it.q, a: it.a,
+            open: s.open === id,
+            mark: s.open === id ? '−' : '+',
+            toggle: () => this.setState({ open: s.open === id ? null : id }),
+          };
+        }),
+      })),
+      year: new Date().getFullYear(),
+    };
+  }
+}
+</script>
+</body>
+</html>

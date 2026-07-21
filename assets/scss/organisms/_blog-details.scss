@@ -1,0 +1,257 @@
+.blog-details {
+    .grey-box--centered{
+        .hnm-main-head{
+            margin-bottom: $spacer-0;
+        }
+    }
+    &__banner-img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    &__wrapper {
+        display: flex;
+    }
+    &__main-sec {
+        width: 70%;
+        margin-right: $spacer-5;
+    }
+    &__banner-img-sec {
+        max-height: 450px;
+        margin-bottom: $spacer-3;
+        overflow: hidden;
+    }
+    &__source {
+        display: flex;
+        margin-bottom: $spacer-3;
+        justify-content: space-between;
+    }
+    &__publish-txt {
+        color: $color-grey;
+        font-weight: $font-bold;
+    }
+    &__share-options {
+        display: flex;
+        align-items: center;
+    }
+    &__social-link {
+        min-width: 15px;
+        text-align: center;
+        height: 20px;
+        margin-left: $spacer-3;
+        display: block;
+        &:hover {
+            transform: scale(1.1);
+            transition: 0.3s;
+        }
+    }
+    &__share-icon {
+        width: auto;
+        height: 20px;
+    }
+    &__content-sec {
+        margin-top: $spacer-5;
+    }
+    &__content {
+        margin-bottom: $spacer-3;
+        &:last-child {
+            margin-bottom: $spacer-0;
+        }
+    }
+    &__comment-sec {
+        margin-top: $spacer-5;
+    }
+    &__comment-head,
+    &__suggested-tiles-head {
+        font-size: 22px;
+        line-height: 26px;
+        margin-bottom: $spacer-4;
+        color: $color-grey;
+    }
+    &__comment-box {
+        border: 1px solid $color-grey;
+        padding: $spacer-4 $spacer-3;
+        margin-bottom: $spacer-5;
+    }
+    &__comment-split {
+        display: flex;
+        .hnm-input {
+            width: 50%;
+            &:last-child {
+                margin-left: $spacer-3;
+            }
+        }
+    }
+    &__comment-sent {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: $spacer-4;
+        .hnm-check-box {
+            width: 75%;
+            color: $color-grey-3;
+        }
+        .hnm-check-box .hnm-check-box__check {
+            min-width: 20px;
+            max-width: 20px;
+        }
+        .hnm-button {
+            margin-left: $spacer-3;
+        }
+    }
+    &__suggested-tiles-inner {
+        display: flex;
+        flex-wrap: wrap;
+        margin: $spacer-0 -16px;
+    }
+    &__suggested-tile {
+        width: calc(50% - 32px);
+        margin: 0px 16px 32px;
+        display: block;
+        &:hover {
+            .blog-details__suggested-img {
+                transform: scale(1.1);
+            }
+        }
+    }
+    &__suggested-img-div {
+        width: 100%;
+        max-height: 280px;
+        overflow: hidden;
+    }
+    &__suggested-img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        transition: 0.3s;
+    }
+    &__suggested-content {
+        background-color: $color-grey;
+        padding: $spacer-3;
+        color: $color-white;
+    }
+    &__suggested-bold {
+        font-weight: $font-bold;
+    }
+    &__suggested-tile-head {
+        @include font-oswald;
+        font-weight: $font-regular;
+        margin-top: $spacer-2;
+    }
+    // &__suggested-tile-link {
+    //     position: absolute;
+    //     width: 100%;
+    //     height: 100%;
+    //     top: 0;
+    //     left: 0;
+    // }
+    &__posted {
+        font-weight: $font-regular;
+    }
+    &__right-sec {
+        width: 30%;
+    }
+    &__grey-bg {
+        background-color: $color-grey-light;
+        border: 1px solid #5A7E8A33;
+    }
+    &__right-content-head {
+        background-color: $color-grey;
+        padding: $spacer-2 $spacer-3;
+        color: $color-white;
+        margin-left: -1px;
+        margin-right: -1px;
+    }
+    &__inner-content {
+        padding: $spacer-4 $spacer-3;
+    }
+    &__ul-style {
+        padding-left: $spacer-5;
+        li {
+            margin-bottom: $spacer-2;
+            position: relative;
+            &::before {
+                content: "";
+                position: absolute;
+                left: -30px;
+                top: 5px;
+                width: 10px;
+                height: 10px;
+                background-color: $color-grey;
+                border-radius: 20px;
+            }
+        }
+    }
+}
+
+@include tablet {
+    .blog-details {
+        &__comment-sent {
+            flex-direction: column;
+            align-items: flex-end;
+            .hnm-button {
+                max-width: 150px;
+            }
+            .hnm-check-box {
+                width: 100%;
+                margin-bottom: $spacer-3;
+            }
+        }
+        &__inner-content {
+            padding: $spacer-3 $spacer-2;
+        }
+    }
+}
+
+@include mobile {
+    .blog-details {
+        &__wrapper {
+            flex-direction: column;
+            margin-bottom: $spacer-5;
+        }
+        &__main-sec {
+            width: 100%;
+            margin-right: $spacer-0;
+        }
+        &__comment-sent {
+            flex-direction: column;
+            align-items: flex-end;
+            .hnm-check-box {
+                width: 100%;
+                margin-bottom: $spacer-3;
+            }
+            .hnm-button {
+                text-align: center;
+                margin-left: $spacer-0;
+            }
+        }
+        &__right-sec {
+            width: 100%;
+        }
+        &__suggested-tiles-inner {
+            flex-direction: column;
+            margin: $spacer-0;
+        }
+        &__suggested-tile {
+            width: 100%;
+            margin: $spacer-0 $spacer-0 $spacer-5;
+        }
+        &__comment-head,
+        &__suggested-tiles-head {
+            font-size: 20px;
+            line-height: 24px;
+        }
+        &__suggested-img-div {
+            max-height: 250px;
+        }
+        &__inner-content {
+            padding: $spacer-3 $spacer-2;
+        }
+        &__suggested-content {
+            padding: $spacer-3 $spacer-2;
+        }
+        &__social-link {
+            margin-left: $spacer-2;
+        }
+    }
+}

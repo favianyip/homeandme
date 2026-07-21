@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+#navLinks a { white-space: nowrap; }
+@keyframes hnmRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 1160px) {
+  #navLinks { display: none !important; }
+  #navBurger { display: flex !important; }
+  [data-mq2] { grid-template-columns: 1fr !important; }
+  [data-mq2] figure { transform: none !important; }
+}
+</style>
+</helmet>
+<div style="min-width: 0;">
+  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: rgba(246,244,239,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1);">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); height: 76px; display: flex; align-items: center;">
+      <a href="Home AI.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 44px; width: auto;"></a>
+      <nav id="navLinks" style="display: flex; gap: 28px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; font-weight: 400;">
+        <a href="Home AI.dc.html">HOME</a>
+        <a href="AboutUs.dc.html" style="color: #5a7e8a; border-bottom: 1px solid #5a7e8a; padding-bottom: 3px;">ABOUT US</a>
+        <a href="Home AI.dc.html#portfolio">SHOWROOM</a>
+        <a href="Customize.dc.html">THEMES</a>
+        <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+        <a href="ContactUs.dc.html">CONTACT US</a>
+        <a href="Login.dc.html" style="color: #5a7e8a;">LOGIN</a>
+        <a href="Journey.html" style="background: #1a2023; color: #f6f4ef; padding: 12px 26px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START YOUR RENOVATION</a>
+      </nav>
+      <button id="navBurger" type="button" onClick="{{ toggleMenu }}" style="display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid rgba(26,32,35,0.25); border-radius: 999px; background: none; cursor: pointer; font-size: 17px; color: #1a2023;">{{ menuIcon }}</button>
+    </div>
+  </header>
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 55; background: #f6f4ef; padding: 110px clamp(24px, 6vw, 48px) 40px; overflow: auto;">
+      <nav style="display: grid; gap: 22px; font-family: 'Oswald', sans-serif; font-size: 22px; letter-spacing: 2.4px;">
+        <a href="Home AI.dc.html">HOME</a>
+        <a href="AboutUs.dc.html" style="color: #5a7e8a;">ABOUT US</a>
+        <a href="Home AI.dc.html#portfolio">VIRTUAL SHOWROOM</a>
+        <a href="Customize.dc.html">DESIGN THEMES</a>
+        <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+        <a href="ContactUs.dc.html">CONTACT US</a>
+        <a href="Login.dc.html">LOGIN</a>
+        <a href="Journey.html" style="margin-top: 12px; justify-self: start; background: #1a2023; color: #f6f4ef; padding: 16px 32px; border-radius: 999px; font-size: 15px;">START YOUR RENOVATION</a>
+      </nav>
+    </div>
+  </sc-if>
+
+  <section style="padding: clamp(140px, 18vw, 190px) clamp(20px, 4vw, 40px) clamp(56px, 8vw, 88px);">
+    <div style="max-width: 900px; margin: 0 auto; text-align: center; animation: hnmRise 0.9s ease both;">
+      <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 20px;">ABOUT US</p>
+      <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(38px, 5.5vw, 60px); line-height: 1.1; margin: 0 0 24px;">Renovation, made honest</h1>
+      <p style="font-size: clamp(17px, 2vw, 20px); line-height: 1.7; color: #4a5350; margin: 0 auto; max-width: 640px; text-wrap: pretty;">Home &amp; Me is Singapore's online renovation studio — design every room, tour photoreal renders, and check out with one itemised, transparent price.</p>
+    </div>
+  </section>
+
+  <section style="padding: 0 clamp(20px, 4vw, 40px);">
+    <div data-mq2="1" style="max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;">
+      <figure style="margin: 0;">
+        <div style="overflow: hidden; border-radius: 4px;"><img src="assets/renders/living-luxe-dark.jpg" alt="Living room render" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block;"></div>
+      </figure>
+      <figure style="margin: 0; transform: translateY(44px);">
+        <div style="overflow: hidden; border-radius: 4px;"><img src="assets/renders/kitchen-mono.jpg" alt="Kitchen render" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block;"></div>
+      </figure>
+      <figure style="margin: 0;">
+        <div style="overflow: hidden; border-radius: 4px;"><img src="assets/renders/bedroom-wood-master.jpg" alt="Master bedroom render" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block;"></div>
+      </figure>
+    </div>
+  </section>
+
+  <section style="padding: clamp(88px, 12vw, 130px) clamp(20px, 4vw, 40px);">
+    <div data-mq2="1" style="max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: clamp(32px, 5vw, 80px);">
+      <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 40px); line-height: 1.2; margin: 0;">We started with a simple frustration</h2>
+      <div style="font-size: 18px; line-height: 1.8; color: #4a5350;">
+        <p style="margin: 0 0 18px; text-wrap: pretty;">Renovating in Singapore meant juggling quotes you couldn't compare, prices that moved after you signed, and designs you couldn't see until they were built. Homeowners were expected to commit tens of thousands of dollars on faith.</p>
+        <p style="margin: 0 0 18px; text-wrap: pretty;">So we put the entire journey online. Configure your home in under a minute. Explore curated design themes specified down to the last tile. Walk through photoreal renders of your actual selections. And before you pay a cent, see every line item — hacking, masonry, carpentry, plumbing, finishes — priced live.</p>
+        <p style="margin: 0; text-wrap: pretty;">The work itself is carried out by vetted contractors and partners, assigned and managed through the platform, with every milestone tracked from deposit to handover.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: #171d1f; color: #f6f4ef; padding: clamp(72px, 10vw, 110px) clamp(20px, 4vw, 40px);">
+    <div style="max-width: 1320px; margin: 0 auto;">
+      <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #8fb0bb; margin: 0 0 44px;">WHAT WE STAND FOR</p>
+      <div data-mq2="1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 4vw, 48px);">
+        <div style="border-top: 1px solid rgba(246,244,239,0.25); padding-top: 22px;">
+          <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 19px; letter-spacing: 1.6px; margin: 0 0 12px;">COST TRANSPARENCY</h3>
+          <p style="margin: 0; font-size: 16px; line-height: 1.7; color: rgba(246,244,239,0.72);">Every scope itemised and priced live. The total at checkout is the total you pay — no surprises mid-project.</p>
+        </div>
+        <div style="border-top: 1px solid rgba(246,244,239,0.25); padding-top: 22px;">
+          <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 19px; letter-spacing: 1.6px; margin: 0 0 12px;">DESIGN YOU CAN SEE</h3>
+          <p style="margin: 0; font-size: 16px; line-height: 1.7; color: rgba(246,244,239,0.72);">Photoreal renders of your exact selections — not mood boards — so you know what you're building before it's built.</p>
+        </div>
+        <div style="border-top: 1px solid rgba(246,244,239,0.25); padding-top: 22px;">
+          <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 19px; letter-spacing: 1.6px; margin: 0 0 12px;">ACCOUNTABLE DELIVERY</h3>
+          <p style="margin: 0; font-size: 16px; line-height: 1.7; color: rgba(246,244,239,0.72);">Vetted contractors, milestones tracked online, and one team answerable for the whole project.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: clamp(72px, 10vw, 110px) clamp(20px, 4vw, 40px); text-align: center;">
+    <div style="max-width: 760px; margin: 0 auto;">
+      <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(28px, 4vw, 40px); margin: 0 0 28px;">Ready to complete your home with us?</h2>
+      <a href="Journey.html" style="display: inline-block; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #5a7e8a; color: #fff; padding: 17px 38px; border-radius: 999px;" style-hover="background: #1a2023; color: #fff;">START YOUR RENOVATION</a>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid rgba(26,32,35,0.1); padding: 40px clamp(20px, 4vw, 40px);">
+    <div style="max-width: 1320px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 38px; width: auto;">
+      <nav style="display: flex; gap: 24px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; flex-wrap: wrap;">
+        <a href="Home AI.dc.html">HOME</a>
+        <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+        <a href="ContactUs.dc.html">CONTACT US</a>
+        <a href="Login.dc.html">LOGIN</a>
+      </nav>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <a href="https://www.facebook.com/share/19EwNzh3n5/?mibextid=wwXIfr" target="_blank" aria-label="Facebook" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;"><img src="assets/images/fb-icon-teal.svg" alt="Facebook" style="height: 16px;"></a>
+        <a href="https://www.instagram.com/homeandme2017?igsh=dXF5cnNjYjI3dWZn&amp;utm_source=qr" target="_blank" aria-label="Instagram" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 17px;"></a>
+      </div>
+      <span style="font-size: 13px; color: #8a908c;">Copyright {{ year }} HOME&amp;ME</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { menuOpen: false };
+  renderVals() {
+    return {
+      menuOpen: this.state.menuOpen,
+      menuIcon: this.state.menuOpen ? '✕' : '☰',
+      toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen }),
+      year: new Date().getFullYear(),
+    };
+  }
+}
+</script>
+</body>
+</html>

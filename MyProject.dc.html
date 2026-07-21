@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+@media (max-width: 1020px) { [data-mq2] { grid-template-columns: 1fr !important; } }
+</style>
+</helmet>
+<div style="min-width: 0; min-height: 100vh; display: flex; flex-direction: column;">
+  <header style="position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1);">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); height: 72px; display: flex; align-items: center; gap: 20px;">
+      <a href="Home AI.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 40px; width: auto;"></a>
+      <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c; border-left: 1px solid rgba(26,32,35,0.15); padding-left: 20px;">MY ACCOUNT</span>
+      <nav style="margin-left: auto; display: flex; gap: 22px; align-items: center; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
+        <a href="Customize.dc.html">CUSTOMIZER</a>
+        <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+        <a href="Login.dc.html" style="color: #5a7e8a;">LOG OUT</a>
+      </nav>
+    </div>
+  </header>
+
+  <div style="max-width: 1200px; width: 100%; margin: 0 auto; padding: clamp(20px, 3.5vw, 40px) clamp(16px, 3vw, 32px); flex: 1;">
+    <div style="display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(22px, 3.5vw, 36px);">
+      <div>
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 10px;">WELCOME BACK</p>
+        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(28px, 4vw, 38px); margin: 0;">My projects</h1>
+      </div>
+      <span style="font-size: 14px; color: #8a908c;">demo@homeandme.sg · <a href="ContactUs.dc.html" style="color: #5a7e8a;">Need help?</a></span>
+    </div>
+
+    <div data-mq2="1" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(20px, 3.5vw, 40px); align-items: start;">
+      <div style="display: grid; gap: 20px;">
+        <div style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; overflow: hidden;">
+          <div style="position: relative;">
+            <img src="assets/renders/living-luxe-dark.jpg" alt="Project render" style="width: 100%; aspect-ratio: 16 / 6.5; object-fit: cover; display: block;">
+            <span style="position: absolute; top: 14px; left: 16px; font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 2px; background: rgba(26,32,35,0.6); color: #fff; padding: 8px 14px; border-radius: 999px; backdrop-filter: blur(6px);">HNM-2026-0147 · IN PROGRESS</span>
+          </div>
+          <div style="padding: clamp(18px, 3vw, 28px);">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px;">
+              <h2 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 18px; letter-spacing: 1.8px; margin: 0;">4-ROOM HDB · RESALE · MODERN LUXE</h2>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 15px; color: #5a7e8a;">S$ 44,505</span>
+            </div>
+            <p style="margin: 0 0 20px; font-size: 14px; color: #8a908c;">Deposit paid · Balance billed by milestone · Est. completion 14 Oct 2026</p>
+            <div style="display: grid; gap: 0;">
+              <sc-for list="{{ milestones }}" as="ms" hint-placeholder-count="5">
+                <div style="display: flex; gap: 14px; align-items: flex-start;">
+                  <span style="display: flex; flex-direction: column; align-items: center;">
+                    <span style="width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-family: 'Oswald', sans-serif; background: {{ ms.bg }}; color: {{ ms.color }}; border: 1px solid {{ ms.border }};">{{ ms.mark }}</span>
+                    <span style="width: 1px; height: 26px; background: rgba(26,32,35,0.15); display: {{ ms.lineDisplay }};"></span>
+                  </span>
+                  <span style="padding-bottom: 10px;">
+                    <span style="display: block; font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 1.8px; color: #1a2023;">{{ ms.label }}</span>
+                    <span style="display: block; font-size: 13px; color: #8a908c; margin-top: 2px;">{{ ms.sub }}</span>
+                  </span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 16px;">
+              <a href="Customize.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: #1a2023; color: #f6f4ef; padding: 13px 26px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">VIEW DESIGN</a>
+              <a href="Home AI.dc.html#portfolio" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; border: 1px solid rgba(26,32,35,0.25); color: #1a2023; padding: 13px 26px; border-radius: 999px;">WALK THROUGH RENDERS</a>
+            </div>
+          </div>
+        </div>
+        <a href="Customize.dc.html" style="border: 1px dashed rgba(90,126,138,0.5); border-radius: 8px; padding: 24px; text-align: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: #5a7e8a; background: rgba(90,126,138,0.04);" style-hover="background: rgba(90,126,138,0.1); color: #3f5c66;">+ START A NEW PROJECT</a>
+      </div>
+
+      <div style="display: grid; gap: 20px;">
+        <div style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: 24px;">
+          <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 16px;">PAYMENTS</p>
+          <div style="display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 14px;"><span>Deposit (30%)</span><span style="font-family: 'Oswald', sans-serif; font-size: 13px; color: #5a7e8a;">PAID ✓</span></div>
+          <div style="display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 14px;"><span>Milestone 1 — Hacking &amp; masonry</span><span style="font-family: 'Oswald', sans-serif; font-size: 13px; color: #5a7e8a;">PAID ✓</span></div>
+          <div style="display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 14px;"><span>Milestone 2 — Carpentry</span><span style="font-family: 'Oswald', sans-serif; font-size: 13px; color: #8a908c;">DUE ON COMPLETION</span></div>
+          <div style="display: flex; justify-content: space-between; padding: 9px 0; font-size: 14px;"><span>Final — Handover</span><span style="font-family: 'Oswald', sans-serif; font-size: 13px; color: #8a908c;">—</span></div>
+        </div>
+        <div style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: 24px;">
+          <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 16px;">MY PROFILE</p>
+          <div style="display: grid; gap: 10px; font-size: 14px;">
+            <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8a908c;">Name</span><span>Demo User</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8a908c;">Email</span><span>demo@homeandme.sg</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8a908c;">Mobile</span><span>+65 9123 4567</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8a908c;">Site address</span><span>Blk 123 Serangoon Ave 3</span></div>
+          </div>
+          <a href="ContactUs.dc.html" style="display: inline-block; margin-top: 16px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; border-bottom: 1px solid rgba(90,126,138,0.4); padding-bottom: 2px;">REQUEST A CHANGE →</a>
+        </div>
+        <div style="background: #171d1f; color: #f6f4ef; border-radius: 8px; padding: 24px;">
+          <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8fb0bb; margin: 0 0 10px;">YOUR COORDINATOR</p>
+          <p style="margin: 0 0 4px; font-size: 15px;">Sarah Lim · Project Coordinator</p>
+          <p style="margin: 0 0 16px; font-size: 13px; color: rgba(246,244,239,0.6);">Replies within 1 working day</p>
+          <a href="ContactUs.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: #f6f4ef; color: #1a2023; padding: 12px 24px; border-radius: 999px; display: inline-block;" style-hover="background: #5a7e8a; color: #fff;">MESSAGE →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="border-top: 1px solid rgba(26,32,35,0.1); padding: 28px clamp(16px, 3vw, 32px);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #8a908c;">
+      <span>Copyright {{ year }} HOME&amp;ME</span>
+      <nav style="display: flex; gap: 18px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
+        <a href="Home AI.dc.html">HOME</a>
+        <a href="Legal.dc.html#privacy">PRIVACY</a>
+        <a href="Legal.dc.html#terms">TERMS</a>
+      </nav>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const done = { bg: '#5a7e8a', color: '#fff', border: '#5a7e8a', mark: '✓' };
+    const active = { bg: 'rgba(90,126,138,0.12)', color: '#5a7e8a', border: '#5a7e8a', mark: '●' };
+    const todo = { bg: 'transparent', color: '#8a908c', border: 'rgba(26,32,35,0.25)', mark: '' };
+    const data = [
+      { label: 'DEPOSIT & SITE MEASUREMENT', sub: 'Completed 02 Jul 2026', st: done },
+      { label: 'HACKING & MASONRY', sub: 'Completed 15 Jul 2026', st: done },
+      { label: 'TILING & WET WORKS', sub: 'In progress — est. done 04 Aug', st: active },
+      { label: 'CARPENTRY INSTALLATION', sub: 'Scheduled 18 Aug 2026', st: todo },
+      { label: 'PAINTING, CLEANING & HANDOVER', sub: 'Est. 14 Oct 2026', st: todo },
+    ];
+    return {
+      milestones: data.map((m, i) => ({
+        label: m.label, sub: m.sub,
+        bg: m.st.bg, color: m.st.color, border: m.st.border,
+        mark: m.st.mark || String(i + 1),
+        lineDisplay: i < data.length - 1 ? 'block' : 'none',
+      })),
+      year: new Date().getFullYear(),
+    };
+  }
+}
+</script>
+</body>
+</html>

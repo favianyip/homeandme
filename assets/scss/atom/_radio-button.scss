@@ -1,0 +1,25 @@
+.hnm-radio-btn {
+    &__radio {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1px solid $color-grey-2;
+        margin-right: $spacer-2;
+        position: relative;
+        display: block;
+    }
+    label {
+        display: flex;
+        cursor: pointer;
+        input[type="radio"] {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            &:checked {
+                & ~ .hnm-radio-btn__radio {
+                    background-color: $color-grey;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,44 @@
+.hnm-custom-tab {
+    &__outer {
+        display: flex;
+        flex-wrap: wrap;
+        // margin: $spacer-0 (-$spacer-3);
+    }
+    .grey-box {
+        &__title {
+            margin-bottom: $spacer-0;
+        }
+    }
+    .hnm-icon-round {
+        margin: $spacer-3;
+        cursor: pointer;
+        &__img {
+            width: 65px;
+            height: 65px;
+        }
+    }
+    &__slider{
+        display: block;
+        padding: $spacer-0 $spacer-2;
+        .slick-list{
+            margin: $spacer-0 (-$spacer-4);
+        }
+    }
+}
+
+@include mobile {
+    .hnm-custom-tab {
+        .hnm-icon-round {
+            margin: $spacer-3 $spacer-2;
+            &__img {
+                width: 55px;
+                height: 55px;
+            }
+        }
+        &__slider{
+            .slick-list{
+                margin: $spacer-0 (-$spacer-2);
+            }
+        }
+    }
+}

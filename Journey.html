@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home &amp; Me — 3D Project Journey</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  three-d-stage:not(:defined){visibility:hidden}
+  body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+  .os { font-family: 'Oswald', sans-serif; }
+  header { position: fixed; top: 0; left: 0; right: 0; z-index: 40; height: 64px; display: flex; align-items: center; gap: 18px; padding: 0 22px; background: rgba(246,244,239,0.94); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(26,32,35,0.1); }
+  header img { height: 36px; }
+  .crumb { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #8a908c; border-left: 1px solid rgba(26,32,35,0.15); padding-left: 16px; }
+  #totalPill { margin-left: auto; font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 1.6px; background: #171d1f; color: #8fb0bb; border-radius: 999px; padding: 10px 20px; white-space: nowrap; }
+  #backLink { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; white-space: nowrap; }
+  main { position: fixed; inset: 64px 0 0 0; display: grid; grid-template-columns: 210px 1fr 400px; }
+  /* rail */
+  #rail { border-right: 1px solid rgba(26,32,35,0.1); padding: 26px 18px; display: flex; flex-direction: column; gap: 6px; background: #f6f4ef; }
+  .station { display: flex; gap: 12px; align-items: baseline; padding: 12px 10px; border-radius: 6px; cursor: default; opacity: 0.42; transition: opacity .4s, background .4s; }
+  .station .n { font-family: 'Oswald', sans-serif; font-size: 12px; color: #5a7e8a; width: 22px; white-space: nowrap; }
+  .station .t { font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.8px; }
+  .station .s { display: block; font-size: 11.5px; color: #8a908c; letter-spacing: 0; margin-top: 3px; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  .station.done { opacity: 0.75; cursor: pointer; }
+  .station.done .n::after { content: " ✓"; }
+  .station.active { opacity: 1; background: #fff; box-shadow: 0 1px 0 rgba(26,32,35,0.08); }
+  .rail-note { margin-top: auto; font-size: 11.5px; line-height: 1.6; color: #8a908c; }
+  /* stage */
+  #stageWrap { position: relative; min-width: 0; }
+  #stageWrap three-d-stage { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #stageHint { position: absolute; left: 50%; transform: translateX(-50%); bottom: 14px; font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 2.2px; color: rgba(26,32,35,0.45); pointer-events: none; }
+  #stageTag { position: absolute; top: 14px; left: 16px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #fff; background: rgba(26,32,35,0.55); backdrop-filter: blur(6px); border-radius: 999px; padding: 8px 16px; }
+  /* step panel */
+  #panel { border-left: 1px solid rgba(26,32,35,0.1); background: #fff; overflow-y: auto; }
+  .card { display: none; padding: 30px 28px 40px; animation: rise .5s ease both; }
+  .card.active { display: block; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .kicker { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.8px; color: #5a7e8a; margin: 0 0 10px; }
+  h2 { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 24px; letter-spacing: 1.4px; margin: 0 0 10px; }
+  .lede { font-size: 14.5px; line-height: 1.65; color: #4a5350; margin: 0 0 22px; text-wrap: pretty; }
+  .pills { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 20px; }
+  .pill { font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.6px; padding: 11px 18px; border-radius: 999px; border: 1px solid rgba(26,32,35,0.2); background: none; color: #1a2023; cursor: pointer; transition: all .25s; }
+  .pill:hover { border-color: #5a7e8a; }
+  .pill.sel { background: #5a7e8a; border-color: #5a7e8a; color: #fff; }
+  .cards { display: grid; gap: 10px; margin-bottom: 20px; }
+  .laycard { text-align: left; padding: 14px 16px; border-radius: 6px; border: 1px solid rgba(26,32,35,0.14); background: #fff; cursor: pointer; transition: all .25s; }
+  .laycard:hover { border-color: #5a7e8a; }
+  .laycard.sel { border-color: #5a7e8a; background: rgba(90,126,138,0.07); }
+  .laycard .t { font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 1.8px; }
+  .laycard .s { font-size: 12px; color: #8a908c; margin-top: 4px; }
+  .drop { display: flex; flex-direction: column; align-items: center; gap: 8px; border: 2px dashed rgba(90,126,138,0.5); border-radius: 8px; padding: 34px 18px; cursor: pointer; background: rgba(90,126,138,0.04); text-align: center; transition: all .25s; }
+  .drop:hover, .drop.over { border-color: #5a7e8a; background: rgba(90,126,138,0.09); }
+  .drop .t { font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 2px; }
+  .drop .s { font-size: 12.5px; color: #8a908c; }
+  .linkbtn { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+  .field { font-family: 'Oswald', sans-serif; font-size: 16px; letter-spacing: 3px; padding: 13px 16px; border-radius: 6px; border: 1px solid rgba(26,32,35,0.2); background: #f6f4ef; width: 160px; outline: none; }
+  .field:focus { border-color: #5a7e8a; }
+  .hint { font-size: 13px; color: #5a7e8a; }
+  .err { font-size: 13px; color: #b4533a; margin: 10px 0 0; min-height: 17px; }
+  .cta { display: block; width: 100%; margin-top: 18px; font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 16px 22px; border-radius: 999px; border: none; cursor: pointer; transition: background .3s; text-align: center; }
+  .cta:hover { background: #5a7e8a; color: #fff; }
+  .cta[disabled] { opacity: 0.35; pointer-events: none; }
+  .cta.ghost { background: none; color: #1a2023; border: 1px solid rgba(26,32,35,0.25); }
+  .cta.ghost:hover { border-color: #5a7e8a; color: #5a7e8a; }
+  .preview { border-radius: 6px; overflow: hidden; border: 1px solid rgba(26,32,35,0.1); margin-bottom: 14px; }
+  .preview img { width: 100%; aspect-ratio: 16 / 9.5; object-fit: cover; display: block; }
+  .preview .cap { display: flex; justify-content: space-between; padding: 9px 12px; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.8px; color: #8a908c; background: #fbfaf7; }
+  .rowline { display: flex; justify-content: space-between; gap: 10px; padding: 10px 2px; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 14px; }
+  .rowline .r { font-family: 'Oswald', sans-serif; font-size: 13px; white-space: nowrap; }
+  .muted { color: #8a908c; }
+  .total { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 2px 0; }
+  .total .amt { font-family: 'Oswald', sans-serif; font-size: 26px; color: #5a7e8a; }
+  .qr { text-align: center; border: 1px solid rgba(26,32,35,0.14); border-radius: 8px; padding: 18px; margin-top: 14px; background: #fbfaf7; }
+  .qr img { width: 170px; height: 170px; object-fit: contain; }
+  .qr .ref { font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2px; color: #5a7e8a; margin-top: 8px; }
+  .planthumb { display: flex; align-items: center; gap: 12px; border: 1px solid rgba(90,126,138,0.4); border-radius: 8px; padding: 10px 14px; background: rgba(90,126,138,0.06); margin-bottom: 14px; }
+  .planthumb .img { width: 64px; height: 48px; border-radius: 4px; background: #fff center/cover no-repeat; border: 1px solid rgba(26,32,35,0.1); }
+  .planthumb .n { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .planthumb .ok { font-size: 12px; color: #5a7e8a; }
+  @media (max-width: 1060px) {
+    body { overflow: auto; }
+    main { position: static; margin-top: 64px; display: block; }
+    #rail { flex-direction: row; overflow-x: auto; padding: 12px; gap: 4px; border-right: none; border-bottom: 1px solid rgba(26,32,35,0.1); }
+    .station .s, .rail-note { display: none; }
+    #stageWrap { height: 44vh; position: relative; }
+    #panel { border-left: none; }
+  }
+  @media (max-width: 700px) {
+    #stageTag { top: auto; bottom: 12px; left: 12px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <a href="Home AI.dc.html"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me"></a>
+  <span class="crumb">3D PROJECT JOURNEY</span>
+  <span id="totalPill">S$ 0</span>
+  <a id="backLink" href="Home AI.dc.html">EXIT ↗</a>
+</header>
+<main>
+  <aside id="rail"></aside>
+  <section id="stageWrap">
+    <three-d-stage id="stage" name="homeandme-flat" background="#eceade"></three-d-stage>
+    <span id="stageTag">YOUR HOME — LIVE MODEL</span>
+  </section>
+  <section id="panel">
+    <div class="card" data-step="1">
+      <p class="kicker">STATION 01 — FLOOR PLAN</p>
+      <h2>Start with your exact plan</h2>
+      <p class="lede">Drop in the colour floor plan from HDB or your developer. It becomes the foundation of your live 3D model — and later, the input our AI uses to render your actual rooms.</p>
+      <div id="planDrop" class="drop">
+        <span class="t">UPLOAD FLOOR PLAN</span>
+        <span class="s">PDF, JPG or PNG — drag &amp; drop or click</span>
+      </div>
+      <input id="planFile" type="file" accept=".pdf,.jpg,.jpeg,.png" style="display:none">
+      <div style="display:flex; justify-content:center; margin-top:10px;"><button class="linkbtn" id="useSample">NO PLAN HANDY? USE A SAMPLE</button></div>
+      <div id="planThumb" class="planthumb" style="display:none; margin-top:14px;">
+        <div class="img"></div>
+        <div style="flex:1; min-width:0;"><div class="n"></div><div class="ok">On the table — see it in 3D</div></div>
+        <button class="linkbtn" id="replacePlan">REPLACE</button>
+      </div>
+      <button class="cta" id="cta1" disabled>CONTINUE — VERIFY PROPERTY →</button>
+    </div>
+    <div class="card" data-step="2">
+      <p class="kicker">STATION 02 — VERIFY</p>
+      <h2>Confirm the property</h2>
+      <p class="lede">We match your postal sector to the property type so the layouts and pricing that follow are the right ones.</p>
+      <p class="kicker" style="color:#8a908c;">PROPERTY TYPE</p>
+      <div class="pills" id="propPills"></div>
+      <p class="kicker" style="color:#8a908c;">LOCATION</p>
+      <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <input id="postal" class="field" inputmode="numeric" maxlength="6" placeholder="Postal code">
+        <span class="hint" id="areaHint">Enter your 6-digit postal code</span>
+      </div>
+      <div id="geoBox" style="display: none; margin-top: 14px;">
+        <div id="geoAddr" style="font-size: 13.5px; color: #1a2023; margin-bottom: 8px;"></div>
+        <div style="overflow: hidden; border-radius: 6px; border: 1px solid rgba(26,32,35,0.14);">
+          <iframe id="geoMap" title="Detected location map" loading="lazy" style="width: 100%; aspect-ratio: 16 / 7; border: 0; display: block;"></iframe>
+        </div>
+        <div style="font-size: 11.5px; color: #8a908c; margin-top: 6px;">Location resolved via OneMap (Singapore Land Authority)</div>
+      </div>
+      <p class="err" id="verifyErr"></p>
+      <button class="cta" id="cta2">VERIFY &amp; UNLOCK LAYOUTS →</button>
+    </div>
+    <div class="card" data-step="3">
+      <p class="kicker">STATION 03 — LAYOUT</p>
+      <h2>Watch your walls rise</h2>
+      <p class="lede">Pick the layout that matches your plan — the model builds itself room by room. Orbit it, check the flow, change your mind freely.</p>
+      <div class="cards" id="layCards"></div>
+      <button class="cta" id="cta3" disabled>CONTINUE — DRESS THE ROOMS →</button>
+    </div>
+    <div class="card" data-step="4">
+      <p class="kicker">STATION 04 — DESIGN</p>
+      <h2>Dress every room</h2>
+      <p class="lede">Give each room its own theme — mix freely. The model tints as you go and every choice is priced live.</p>
+      <div class="pills" id="roomChips"></div>
+      <div class="preview"><img id="previewImg" src="assets/renders/living-luxe-dark.jpg" alt="Room render"><div class="cap"><span id="prevRoom">LIVING &amp; DINING</span><span id="prevTheme" style="color:#5a7e8a;">MODERN LUXE</span></div></div>
+      <div class="pills" id="themePills"></div>
+      <div class="rowline"><span class="muted">This room</span><span class="r" id="roomAmt">S$ 0</span></div>
+      <button class="cta" id="cta4">CONTINUE — QUOTE &amp; PAY →</button>
+    </div>
+    <div class="card" data-step="5">
+      <p class="kicker">STATION 05 — QUOTE &amp; PAY</p>
+      <h2>Your renovation, specified</h2>
+      <p class="lede">This spec — floor plan, layout, themes, budget — is exactly what our designers (and soon, our AI renderer) work from. Lock it in with a PayNow or card deposit, or send it to us first.</p>
+      <div id="specRows"></div>
+      <div class="total"><span class="os" style="font-size:12px; letter-spacing:2.4px;">ESTIMATED TOTAL</span><span class="amt" id="grandAmt">S$ 0</span></div>
+      <p class="lede" style="font-size:12.5px; color:#8a908c; margin-top:8px;">Final quote confirmed against your verified floor plan before works begin.</p>
+      <div style="display: flex; gap: 10px;">
+        <button class="cta" id="payBtn" style="flex: 1;">DEPOSIT — PAYNOW QR</button>
+        <a class="cta" href="Checkout.dc.html" style="flex: 1;">DEPOSIT — CARD →</a>
+      </div>
+      <div class="qr" id="qrBox" style="display:none;">
+        <img src="assets/images/qr-img.png" alt="PayNow QR">
+        <div class="ref" id="payRef"></div>
+        <div style="font-size:12.5px; color:#8a908c; margin-top:6px;">Scan with your banking app · UEN HOME AND ME PTE. LTD.</div>
+      </div>
+      <a class="cta ghost" id="emailBtn" href="#">EMAIL THE FULL SPEC</a>
+      <a class="cta ghost" id="waBtn" href="#" target="_blank">WHATSAPP +65 9423 5227</a>
+      <div style="display:flex; justify-content:space-between; gap:10px; margin-top:16px;">
+        <button class="linkbtn" id="dlSpec">DOWNLOAD SPEC (JSON)</button>
+        <a class="linkbtn" href="Checkout.dc.html">FULL CHECKOUT ↗</a>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="three-d-stage.js"></script>
+<script type="module">
+const $ = (s) => document.querySelector(s);
+const THEMES = [
+  { id: 'luxe', label: 'MODERN LUXE', mult: 1.15, color: 0xb08a5e },
+  { id: 'classic', label: 'MODERN CLASSIC', mult: 1.0, color: 0x7f97a0 },
+  { id: 'scandi', label: 'SCANDINAVIAN', mult: 0.9, color: 0xcfc5b0 },
+];
+const ROOMS = {
+  living: { label: 'LIVING & DINING', w: 2.2, row: 0, base: 12400 },
+  kitchen: { label: 'KITCHEN', w: 1.4, row: 0, base: 10400 },
+  family: { label: 'FAMILY ROOM', w: 1.8, row: 0, base: 9400 },
+  master: { label: 'MASTER BEDROOM', w: 1.6, row: 1, base: 8700 },
+  common: { label: 'COMMON BEDROOM', w: 1.3, row: 1, base: 5700 },
+  common2: { label: 'COMMON BEDROOM 2', w: 1.3, row: 1, base: 5700 },
+  study: { label: 'STUDY', w: 1.0, row: 1, base: 4700 },
+  bath: { label: 'BATHROOMS', w: 1.2, row: 1, base: 11400 },
+};
+const IMGS = {
+  luxe: { living: 'assets/renders/living-luxe-dark.jpg', kitchen: 'assets/renders/dining-stone.jpg', master: 'assets/renders/bedroom-luxe-marble.jpg', common: 'assets/renders/bedroom-wood-master.jpg', common2: 'assets/renders/bedroom-dark-panel.jpg', study: 'assets/renders/bedroom-common-study.jpg', bath: 'assets/images/master-bathroom.jpg', family: 'assets/renders/living-tv-dark.jpg' },
+  classic: { living: 'assets/renders/living-classic-bright.jpg', kitchen: 'assets/renders/kitchen-mono.jpg', master: 'assets/renders/bedroom-cream.jpg', common: 'assets/renders/bedroom-beige-wardrobe.jpg', common2: 'assets/renders/bedroom-wood-master.jpg', study: 'assets/renders/bedroom-common-study.jpg', bath: 'assets/renders/bathroom-stone.jpg', family: 'assets/images/login-bg.jpg' },
+  scandi: { living: 'assets/enhanced/design-config-img-2.png', kitchen: 'assets/enhanced/design-config-img-3.png', master: 'assets/renders/bedroom-scandinavian.jpg', common: 'assets/renders/bedroom-cream.jpg', common2: 'assets/renders/bedroom-beige-wardrobe.jpg', study: 'assets/renders/bedroom-common-study.jpg', bath: 'assets/renders/bathroom-geometric.jpg', family: 'assets/renders/family-lounge.jpg' },
+};
+const PROPS = [
+  { id: 'hdb', label: 'HDB FLAT' }, { id: 'condo', label: 'CONDOMINIUM' }, { id: 'landed', label: 'LANDED' },
+];
+const LANDED = ['living', 'kitchen', 'family', 'master', 'common', 'common2', 'study', 'bath'];
+const LAYOUTS = [
+  { id: 'hdb3', prop: 'hdb', label: '3-ROOM', sqm: 68, rooms: ['living', 'kitchen', 'master', 'common', 'bath'] },
+  { id: 'hdb4', prop: 'hdb', label: '4-ROOM', sqm: 92, rooms: ['living', 'kitchen', 'master', 'common', 'common2', 'bath'] },
+  { id: 'hdb5', prop: 'hdb', label: '5-ROOM', sqm: 110, rooms: ['living', 'kitchen', 'master', 'common', 'common2', 'study', 'bath'] },
+  { id: 'c2', prop: 'condo', label: '2-BEDROOM', sqm: 72, rooms: ['living', 'kitchen', 'master', 'common', 'bath'] },
+  { id: 'c3', prop: 'condo', label: '3-BEDROOM', sqm: 95, rooms: ['living', 'kitchen', 'master', 'common', 'common2', 'bath'] },
+  { id: 'cp', prop: 'condo', label: 'PENTHOUSE', sqm: 150, rooms: ['living', 'kitchen', 'family', 'master', 'common', 'common2', 'study', 'bath'] },
+  { id: 'l1', prop: 'landed', label: 'TERRACE · 2-STOREY', sqm: 180, rooms: LANDED },
+  { id: 'l2', prop: 'landed', label: 'SEMI-D · 3-STOREY', sqm: 250, rooms: LANDED },
+  { id: 'l3', prop: 'landed', label: 'BUNGALOW · 4-STOREY', sqm: 400, rooms: LANDED },
+];
+const AREAS = { '01': 'Raffles Place', '05': 'Pasir Panjang', '09': 'Orchard', '10': 'Bukit Timah', '12': 'Toa Payoh', '14': 'Geylang', '16': 'Bedok', '20': 'Bishan', '26': 'Upper Thomson', '31': 'Toa Payoh', '38': 'Kallang', '46': 'Bedok', '52': 'Ang Mo Kio', '56': 'Bishan', '57': 'Bishan', '60': 'Jurong East', '65': 'Bukit Batok', '68': 'Choa Chu Kang', '73': 'Woodlands', '76': 'Yishun', '79': 'Sengkang', '82': 'Punggol' };
+const STATIONS = [
+  ['01', 'FLOOR PLAN', 'Upload your exact plan'],
+  ['02', 'VERIFY', 'Property + postal check'],
+  ['03', 'LAYOUT', 'Walls rise in 3D'],
+  ['04', 'DESIGN', 'Theme every room'],
+  ['05', 'QUOTE & PAY', 'PayNow deposit'],
+];
+const EMAIL = 'homeandme25@gmail.com', WA = '6594235227';
+const fmt = (n) => 'S$ ' + Math.round(n).toLocaleString('en-SG');
+
+const state = { step: 1, planUrl: null, planName: '', property: 'hdb', postal: '', area: '', verified: false, layoutId: null, themes: {}, room: null };
+try { const s = JSON.parse(localStorage.getItem('hnm_journey_v1') || 'null'); if (s) Object.assign(state, s, { planUrl: s.planUrl || null }); } catch (e) {}
+function persist() { try { const { planUrl, ...rest } = state; localStorage.setItem('hnm_journey_v1', JSON.stringify({ ...rest, planUrl: planUrl && planUrl.length < 200000 ? planUrl : null })); } catch (e) {} }
+
+const layout = () => LAYOUTS.find((l) => l.id === state.layoutId) || null;
+const themeFor = (r) => state.themes[r] || 'luxe';
+const roomAmt = (r) => ROOMS[r].base * THEMES.find((t) => t.id === themeFor(r)).mult;
+const total = () => (layout() ? layout().rooms.reduce((s, r) => s + roomAmt(r), 0) : 0);
+
+/* ---------- 3D ---------- */
+const stage = $('#stage');
+const { THREE } = await stage.ready;
+let group = null, tweens = [];
+function tween(obj, key, to, ms, delay = 0) { tweens.push({ obj, key, from: obj[key], to, t0: performance.now() + delay, ms }); }
+(function loop(now) { requestAnimationFrame(loop); tweens = tweens.filter((tw) => { const k = (performance.now() - tw.t0) / tw.ms; if (k < 0) return true; const e = k >= 1 ? 1 : 1 - Math.pow(1 - k, 3); tw.obj[tw.key] = tw.from + (tw.to - tw.from) * e; return k < 1; }); })(performance.now());
+
+const { createModel } = await import('./journey-3d.js');
+const { buildModel, markActive, tintRoom } = createModel({ THREE, stage, state, tween, THEMES, ROOMS, themeFor, layout });
+
+/* ---------- UI ---------- */
+const rail = $('#rail');
+STATIONS.forEach(([n, t, s], i) => {
+  const d = document.createElement('div'); d.className = 'station'; d.dataset.i = i + 1;
+  d.innerHTML = `<span class="n">${n}</span><span><span class="t">${t}</span><span class="s">${s}</span></span>`;
+  d.onclick = () => { if (i + 1 < state.step) go(i + 1); };
+  rail.appendChild(d);
+});
+const note = document.createElement('p'); note.className = 'rail-note';
+note.textContent = 'Your progress is saved on this device. Every choice feeds the spec our team — and soon our AI renderer — builds from.';
+rail.appendChild(note);
+
+function go(n) {
+  state.step = n; persist();
+  document.querySelectorAll('.card').forEach((c) => c.classList.toggle('active', +c.dataset.step === n));
+  document.querySelectorAll('.station').forEach((s) => { const i = +s.dataset.i; s.classList.toggle('active', i === n); s.classList.toggle('done', i < n); });
+  if (n === 4) renderDesign();
+  if (n === 5) renderSpec();
+  updateTotal();
+}
+function updateTotal() { $('#totalPill').textContent = fmt(total()); }
+
+/* Station 1 */
+const planDrop = $('#planDrop'), planFile = $('#planFile');
+planDrop.onclick = () => planFile.click();
+$('#replacePlan').onclick = () => planFile.click();
+['dragover', 'dragleave', 'drop'].forEach((ev) => planDrop.addEventListener(ev, (e) => { e.preventDefault(); planDrop.classList.toggle('over', ev === 'dragover'); if (ev === 'drop' && e.dataTransfer.files[0]) planPicked(e.dataTransfer.files[0]); }));
+planFile.onchange = () => planFile.files[0] && planPicked(planFile.files[0]);
+function planPicked(f) {
+  if (/\.pdf$/i.test(f.name)) return planSet('assets/images/sample-floorplan.png', f.name);
+  const rd = new FileReader(); rd.onload = () => planSet(rd.result, f.name); rd.readAsDataURL(f);
+}
+$('#useSample').onclick = () => planSet('assets/images/sample-floorplan.png', 'HNM-sample-floorplan.png');
+function planSet(url, name) {
+  state.planUrl = url; state.planName = name; persist();
+  const th = $('#planThumb'); th.style.display = 'flex'; th.querySelector('.img').style.backgroundImage = `url('${url}')`; th.querySelector('.n').textContent = name;
+  $('#cta1').disabled = false; buildModel();
+}
+$('#cta1').onclick = () => go(2);
+
+/* Station 2 */
+const propPills = $('#propPills');
+PROPS.forEach((p) => { const b = document.createElement('button'); b.className = 'pill'; b.textContent = p.label; b.onclick = () => { state.property = p.id; state.layoutId = null; drawProps(); drawLayouts(); persist(); }; propPills.appendChild(b); });
+function drawProps() { [...propPills.children].forEach((b, i) => b.classList.toggle('sel', PROPS[i].id === state.property)); }
+let geoLast = '';
+async function geoLookup(postal) {
+  if (geoLast === postal) return; geoLast = postal;
+  try {
+    const res = await fetch(`https://www.onemap.gov.sg/api/common/elastic/search?searchVal=${postal}&returnGeom=Y&getAddrDetails=Y&pageNum=1`);
+    const data = await res.json();
+    const hit = data && data.results && data.results.find((r) => r.POSTAL === postal);
+    if (!hit || state.postal !== postal) { if (!hit) $('#geoBox').style.display = 'none'; return; }
+    const lat = parseFloat(hit.LATITUDE), lng = parseFloat(hit.LONGITUDE);
+    state.addr = hit.ADDRESS.replace(/ SINGAPORE \d{6}$/, '');
+    state.area = (hit.BUILDING !== 'NIL' && hit.BUILDING ? hit.BUILDING : hit.ROAD_NAME) || state.area;
+    persist();
+    $('#areaHint').textContent = 'Exact location found \u2713';
+    $('#geoAddr').textContent = state.addr;
+    $('#geoMap').src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.004}%2C${lat - 0.003}%2C${lng + 0.004}%2C${lat + 0.003}&layer=mapnik&marker=${lat}%2C${lng}`;
+    $('#geoBox').style.display = 'block';
+  } catch (e) { /* offline or blocked \u2014 sector fallback already shown */ }
+}
+$('#postal').oninput = (e) => {
+  state.postal = e.target.value.replace(/\D/g, '').slice(0, 6); e.target.value = state.postal;
+  const full = /^\d{6}$/.test(state.postal);
+  $('#areaHint').textContent = full ? `Sector ${state.postal.slice(0, 2)} — ${AREAS[state.postal.slice(0, 2)] || 'Singapore'}` : 'Enter your 6-digit postal code';
+  if (full) geoLookup(state.postal); else { $('#geoBox').style.display = 'none'; state.addr = ''; geoLast = ''; }
+};
+$('#cta2').onclick = () => {
+  if (!/^\d{6}$/.test(state.postal)) { $('#verifyErr').textContent = 'Enter a valid 6-digit Singapore postal code.'; return; }
+  $('#verifyErr').textContent = ''; $('#cta2').textContent = 'VERIFYING…';
+  setTimeout(() => { if (!state.addr) state.area = AREAS[state.postal.slice(0, 2)] || 'Singapore'; state.verified = true; persist(); $('#cta2').textContent = 'VERIFIED ✓'; setTimeout(() => go(3), 500); }, 1100);
+};
+
+/* Station 3 */
+const layCards = $('#layCards');
+function drawLayouts() {
+  layCards.innerHTML = '';
+  LAYOUTS.filter((l) => l.prop === state.property).forEach((l) => {
+    const b = document.createElement('button'); b.className = 'laycard' + (state.layoutId === l.id ? ' sel' : '');
+    b.innerHTML = `<div class="t">${l.label}</div><div class="s">~${l.sqm} sqm · ${l.rooms.length} rooms</div>`;
+    b.onclick = () => { state.layoutId = l.id; state.room = l.rooms[0]; persist(); drawLayouts(); buildModel(); $('#cta3').disabled = false; updateTotal(); };
+    layCards.appendChild(b);
+  });
+}
+$('#cta3').onclick = () => go(4);
+
+/* Station 4 */
+function renderDesign() {
+  const l = layout(); if (!l) return go(3);
+  if (!state.room || !l.rooms.includes(state.room)) state.room = l.rooms[0];
+  const chips = $('#roomChips'); chips.innerHTML = '';
+  l.rooms.forEach((r) => { const b = document.createElement('button'); b.className = 'pill' + (state.room === r ? ' sel' : ''); b.textContent = ROOMS[r].label; b.onclick = () => { state.room = r; persist(); renderDesign(); markActive(); }; chips.appendChild(b); });
+  const tp = $('#themePills'); tp.innerHTML = '';
+  THEMES.forEach((t) => { const b = document.createElement('button'); b.className = 'pill' + (themeFor(state.room) === t.id ? ' sel' : ''); b.textContent = t.label; b.onclick = () => { state.themes[state.room] = t.id; persist(); tintRoom(state.room); renderDesign(); updateTotal(); }; tp.appendChild(b); });
+  $('#previewImg').src = IMGS[themeFor(state.room)][state.room];
+  $('#prevRoom').textContent = ROOMS[state.room].label;
+  $('#prevTheme').textContent = THEMES.find((t) => t.id === themeFor(state.room)).label;
+  $('#roomAmt').textContent = fmt(roomAmt(state.room));
+  markActive();
+}
+$('#cta4').onclick = () => go(5);
+
+/* Station 5 */
+function specText() {
+  const l = layout();
+  const lines = ['HOME&ME RENOVATION SPEC', `Property: ${l.label} ${PROPS.find((p) => p.id === state.property).label} · ~${l.sqm} sqm`, `Location: ${state.addr ? state.addr + ' S(' + state.postal + ')' : state.area + ' ' + state.postal}`, `Floor plan: ${state.planName || '—'}`, '',
+    ...l.rooms.map((r) => `${ROOMS[r].label} — ${THEMES.find((t) => t.id === themeFor(r)).label} — ${fmt(roomAmt(r))}`), '', `ESTIMATED TOTAL: ${fmt(total())}`];
+  return lines.join('\n');
+}
+function renderSpec() {
+  const l = layout(); if (!l) return go(3);
+  const rows = $('#specRows'); rows.innerHTML = '';
+  const head = document.createElement('div'); head.className = 'rowline';
+  head.innerHTML = `<span class="muted">${l.label} · ${state.area} ${state.postal} · plan: ${state.planName || '—'}</span>`; rows.appendChild(head);
+  l.rooms.forEach((r) => { const d = document.createElement('div'); d.className = 'rowline'; d.innerHTML = `<span>${ROOMS[r].label} <span class="muted" style="font-size:12px;">· ${THEMES.find((t) => t.id === themeFor(r)).label}</span></span><span class="r">${fmt(roomAmt(r))}</span>`; rows.appendChild(d); });
+  $('#grandAmt').textContent = fmt(total());
+  const body = encodeURIComponent(specText() + '\n\nSent from the Home&Me 3D Journey');
+  $('#emailBtn').href = `mailto:${EMAIL}?subject=${encodeURIComponent('Renovation enquiry — ' + l.label + ' ' + state.postal)}&body=${body}`;
+  $('#waBtn').href = `https://wa.me/${WA}?text=${body}`;
+}
+$('#payBtn').onclick = () => { $('#qrBox').style.display = 'block'; $('#payRef').textContent = `REF: HNM-${state.postal || '000000'}-${Date.now().toString().slice(-5)} · DEPOSIT ${fmt(total() * 0.05)}`; };
+$('#dlSpec').onclick = () => {
+  const l = layout();
+  const spec = { version: '1.0', generatedAt: new Date().toISOString(), customer: { postal: state.postal, area: state.area }, property: { type: state.property, layoutId: l.id, layoutLabel: l.label, sqm: l.sqm }, floorPlan: { fileName: state.planName }, rooms: l.rooms.map((r) => ({ id: r, label: ROOMS[r].label, theme: themeFor(r), budgetSGD: Math.round(roomAmt(r)) })), totalSGD: Math.round(total()), currency: 'SGD', contact: { email: EMAIL, whatsapp: '+65 9423 5227' } };
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(spec, null, 2)], { type: 'application/json' })); a.download = 'homeandme-spec.json'; a.click();
+};
+
+/* boot */
+drawProps(); drawLayouts();
+if (state.planUrl) planSet(state.planUrl, state.planName || 'floor-plan');
+else if (state.planName) { $('#planThumb').style.display = 'flex'; $('#planThumb .n') && ($('#planThumb').querySelector('.n').textContent = state.planName); }
+buildModel();
+if (state.postal) { $('#postal').value = state.postal; $('#postal').dispatchEvent(new Event('input')); }
+if (state.layoutId) $('#cta3').disabled = false;
+go(Math.min(state.step || 1, 5));
+</script>
+</body>
+</html>

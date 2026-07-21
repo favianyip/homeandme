@@ -1,0 +1,27 @@
+.hnm-modal {
+    &--upload-docs{
+        .hnm-modal{
+            &__desc{
+                margin-bottom: $spacer-2;
+            }
+            &__btn{
+                display: flex;
+                justify-content: flex-end;
+                .hnm-button{
+                    margin-left: $spacer-3;
+                }
+            }
+            &__upload-box{
+                background-color: $color-grey-light;
+                margin: $spacer-3 (-$spacer-3);
+                padding: $spacer-3;
+                &:first-child{
+                    margin-top: $spacer-0;
+                }
+            }
+            &__text-grey{
+                margin-bottom: $spacer-3;
+            }
+        }
+    }
+}

@@ -1,0 +1,213 @@
+.hnm-sidebar {
+    &__project {
+        background: $color-white;
+        text-transform: uppercase;
+        color: $color-grey;
+        @include font-oswald;
+        position: relative;
+        margin-bottom: $spacer-3;
+        z-index: 1;
+    }
+    &__project-drop {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s;
+        &.active {
+            max-height: 500px;
+        }
+    }
+    &__project-select {
+        padding: $spacer-2 $spacer-3;
+        width: 100%;
+        text-align: left;
+        color: $color-grey;
+        border-bottom: 1px solid $color-grey;
+        position: relative;
+        &::after {
+            content: '';
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 54 104' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M53.5805 51.9997L0.644731 0.904914L0.645657 103.095L53.5805 51.9997Z' fill='%235A7E8A'/%3E%3C/svg%3E");
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            width: 15px;
+            height: 15px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: all 0.3s;
+        }
+        &.active {
+            &::after {
+                transform: rotate( 90deg);
+            }
+        }
+    }
+    select.hnm-sidebar__project-select{
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background: transparent;
+        border: 0px;
+        border-radius: 0px;
+        padding: $spacer-2 $spacer-5 $spacer-2 $spacer-3;
+        position: relative;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 54 104' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M53.5805 51.9997L0.644731 0.904914L0.645657 103.095L53.5805 51.9997Z' fill='%235A7E8A'/%3E%3C/svg%3E");
+        background-size: 20px 15px;
+        background-repeat: no-repeat;
+        background-position-x: calc(100% - 8px);
+        background-position-y: 50%;
+        cursor: pointer;
+        option {
+            color: $color-grey;
+        }
+    }
+    &__project-item {
+        padding: $spacer-2 $spacer-3;
+        color: $color-grey;
+        display: block;
+        width: 100%;
+        transition: all 0.3s;
+        text-align: left;
+        &:hover {
+            background-color: #364C53;
+            color: $color-white;
+        }
+        &.active {
+            background-color: #364C53;
+            color: $color-white;
+        }
+    }
+    &__menu {
+        background-color: $color-white;
+        @include font-oswald;
+        padding: $spacer-2 $spacer-0;
+        margin-bottom: $spacer-5;
+        z-index: 1;
+        position: relative;
+    }
+    &__quick-link-label {
+        font-weight: $font-bold;
+        width: 100%;
+        padding: $spacer-3 $spacer-0;
+        margin: $spacer-0;
+    }
+    &__quick-link-check {
+        display: none;
+    }
+    &__quick-link {
+        display: block;
+        border-bottom: 1px solid $color-grey;
+        padding-bottom: $spacer-1;
+        margin-bottom: $spacer-3;
+        &:last-child {
+            margin-bottom: $spacer-0;
+        }
+    }
+    &__menu-select {
+        padding: $spacer-2 $spacer-3;
+        color: $color-grey;
+        width: 100%;
+        text-align: left;
+        border-bottom: 1px solid $color-grey;
+        position: relative;
+        display: none;
+        &::after {
+            content: '';
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 54 104' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M53.5805 51.9997L0.644731 0.904914L0.645657 103.095L53.5805 51.9997Z' fill='%235A7E8A'/%3E%3C/svg%3E");
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            width: 15px;
+            height: 15px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: all 0.3s;
+        }
+        &.active {
+            &::after {
+                transform: rotate( 90deg);
+            }
+        }
+    }
+    &__link {
+        padding: $spacer-2 $spacer-3;
+        color: $color-grey;
+        display: block;
+        width: 100%;
+        transition: all 0.3s;
+        text-align: left;
+        &:hover {
+            background-color: #364C53;
+            color: $color-white;
+        }
+        &.active {
+            background-color: #364C53;
+            color: $color-white;
+        }
+    }
+    &__quick-link-outer {
+        color: $color-grey;
+        background-color: $color-white;
+        padding: $spacer-0 $spacer-3 $spacer-3;
+        @include font-oswald;
+        z-index: 1;
+        position: relative;
+    }
+}
+
+@include mobile {
+    .hnm-sidebar {
+        &__menu {
+            padding: $spacer-0;
+            margin-bottom: $spacer-3;
+        }
+        &__menu-select {
+            display: block;
+        }
+        &__link-area {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+            &.active {
+                max-height: 5000px;
+            }
+        }
+        &__quick-link-outer {
+            padding-bottom: $spacer-0;
+        }
+        &__quick-link-label {
+            position: relative;
+            padding: $spacer-2 $spacer-0;
+            &::after {
+                content: '';
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 54 104' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M53.5805 51.9997L0.644731 0.904914L0.645657 103.095L53.5805 51.9997Z' fill='%235A7E8A'/%3E%3C/svg%3E");
+                position: absolute;
+                right: -7px;
+                top: 10px;
+                width: 15px;
+                height: 15px;
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+                transition: all 0.3s;
+            }
+            &:hover {
+                &::after {
+                    transform: rotate(90deg);
+                }
+            }
+        }
+        &__quick-link-box {
+            max-height: 0;
+            overflow: hidden;
+        }
+        &__quick-link-check {
+            &:checked {
+                ~.hnm-sidebar__quick-link-box {
+                    max-height: 5000px;
+                    padding: $spacer-2 $spacer-0 $spacer-3;
+                }
+            }
+        }
+    }
+}

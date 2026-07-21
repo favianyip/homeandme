@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+@keyframes hnmRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 980px) { [data-mq2] { grid-template-columns: 1fr !important; } #loginHero { display: none !important; } }
+</style>
+</helmet>
+<div data-mq2="1" style="min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;">
+  <div id="loginHero" style="position: relative; overflow: hidden;">
+    <img src="assets/images/login-bg.jpg" alt="Modern Classic living room" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,17,18,0.7), rgba(13,17,18,0.05) 55%);"></div>
+    <div style="position: absolute; left: 36px; bottom: 34px; right: 36px; color: #fff;">
+      <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; margin: 0 0 10px; color: rgba(255,255,255,0.7);">MODERN CLASSIC · 4-ROOM HDB</p>
+      <p style="font-family: 'Oswald', sans-serif; font-weight: 300; font-size: clamp(22px, 2.4vw, 30px); line-height: 1.3; margin: 0;">"Design every room, see every dollar — before you commit."</p>
+    </div>
+  </div>
+  <div style="display: flex; flex-direction: column; padding: clamp(24px, 4vw, 48px);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: clamp(40px, 8vh, 80px);">
+      <a href="Home AI.dc.html"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 44px; width: auto;"></a>
+      <a href="Home AI.dc.html" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: #5a7e8a;">← BACK TO HOME</a>
+    </div>
+    <div style="max-width: 400px; width: 100%; margin: 0 auto; animation: hnmRise 0.7s ease both;">
+      <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 14px;">WELCOME BACK</p>
+        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 34px; margin: 0 0 26px;">Log in to Home &amp; Me</h1>
+        <div style="display: grid; gap: 14px; margin-bottom: 20px;">
+          <input value="{{ email }}" onChange="{{ setEmail }}" placeholder="Email address" style="font-family: inherit; font-size: 16px; padding: 15px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fff; outline-color: #5a7e8a;">
+          <input type="password" placeholder="Password" style="font-family: inherit; font-size: 16px; padding: 15px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fff; outline-color: #5a7e8a;">
+        </div>
+        <sc-if value="{{ loggedIn }}" hint-placeholder-val="{{ false }}">
+          <p style="margin: 0 0 18px; font-size: 15px; line-height: 1.6; color: #1a2023; border: 1px solid rgba(90,126,138,0.35); background: rgba(90,126,138,0.07); border-radius: 6px; padding: 14px;">Logged in as {{ emailShown }} — <a href="MyProject.dc.html" style="color: #5a7e8a;">continue to your project →</a></p>
+        </sc-if>
+        <button type="button" onClick="{{ doLogin }}" style="width: 100%; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #5a7e8a; color: #fff; padding: 16px 32px; border-radius: 999px; border: none; cursor: pointer; margin-bottom: 20px;" style-hover="background: #1a2023;">LOG IN</button>
+        <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 15px;">
+          <a href="javascript:void(0)" onClick="{{ toSignup }}" style="color: #5a7e8a;">Create an account</a>
+          <a href="javascript:void(0)" onClick="{{ toForgot }}" style="color: #8a908c;">Forgot password?</a>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isSignup }}" hint-placeholder-val="{{ false }}">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 14px;">JOIN HOME &amp; ME</p>
+        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 34px; margin: 0 0 26px;">Create your account</h1>
+        <div style="display: grid; gap: 14px; margin-bottom: 20px;">
+          <input placeholder="Full name" style="font-family: inherit; font-size: 16px; padding: 15px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fff; outline-color: #5a7e8a;">
+          <input value="{{ email }}" onChange="{{ setEmail }}" placeholder="Email address" style="font-family: inherit; font-size: 16px; padding: 15px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fff; outline-color: #5a7e8a;">
+          <input type="password" placeholder="Password" style="font-family: inherit; font-size: 16px; padding: 15px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fff; outline-color: #5a7e8a;">
+        </div>
+        <button type="button" onClick="{{ doLogin }}" style="width: 100%; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #5a7e8a; color: #fff; padding: 16px 32px; border-radius: 999px; border: none; cursor: pointer; margin-bottom: 20px;" style-hover="background: #1a2023;">CREATE ACCOUNT</button>
+        <div style="font-size: 15px;"><a href="javascript:void(0)" onClick="{{ toLogin }}" style="color: #5a7e8a;">Already have an account? Log in</a></div>
+      </sc-if>
+      <sc-if value="{{ isForgot }}" hint-placeholder-val="{{ false }}">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 14px;">RESET PASSWORD</p>
+        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 34px; margin: 0 0 26px;">Forgot your password?</h1>
+        <sc-if value="{{ resetNotSent }}" hint-placeholder-val="{{ true }}">
+          <div style="display: grid; gap: 14px; margin-bottom: 20px;">
+            <input value="{{ email }}" onChange="{{ setEmail }}" placeholder="Email address" style="font-family: inherit; font-size: 16px; padding: 15px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fff; outline-color: #5a7e8a;">
+          </div>
+          <button type="button" onClick="{{ sendReset }}" style="width: 100%; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #5a7e8a; color: #fff; padding: 16px 32px; border-radius: 999px; border: none; cursor: pointer; margin-bottom: 20px;" style-hover="background: #1a2023;">SEND RESET LINK</button>
+        </sc-if>
+        <sc-if value="{{ resetSent }}" hint-placeholder-val="{{ false }}">
+          <p style="margin: 0 0 20px; font-size: 15px; line-height: 1.6; border: 1px solid rgba(90,126,138,0.35); background: rgba(90,126,138,0.07); border-radius: 6px; padding: 14px;">If that email is registered, a reset link is on its way.</p>
+        </sc-if>
+        <div style="font-size: 15px;"><a href="javascript:void(0)" onClick="{{ toLogin }}" style="color: #5a7e8a;">← Back to login</a></div>
+      </sc-if>
+      <p style="margin: 28px 0 0; font-size: 14px; color: #8a908c;">Demo — any details will work. Social login (Facebook / Google) from the original site can be wired in later.</p>
+    </div>
+    <div style="margin-top: auto; padding-top: 32px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #8a908c;">
+      <span>Copyright {{ year }} HOME&amp;ME</span>
+      <nav style="display: flex; gap: 18px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
+        <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+        <a href="ContactUs.dc.html">CONTACT US</a>
+      </nav>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { mode: 'login', email: '', loggedIn: false, resetSent: false };
+  renderVals() {
+    const s = this.state;
+    return {
+      isLogin: s.mode === 'login', isSignup: s.mode === 'signup', isForgot: s.mode === 'forgot',
+      toLogin: () => this.setState({ mode: 'login', resetSent: false }),
+      toSignup: () => this.setState({ mode: 'signup' }),
+      toForgot: () => this.setState({ mode: 'forgot', resetSent: false }),
+      email: s.email,
+      emailShown: s.email || 'demo@homeandme.sg',
+      setEmail: (e) => this.setState({ email: e.target.value }),
+      doLogin: () => this.setState({ loggedIn: true, mode: 'login' }),
+      loggedIn: s.loggedIn,
+      sendReset: () => this.setState({ resetSent: true }),
+      resetSent: s.resetSent, resetNotSent: !s.resetSent,
+      year: new Date().getFullYear(),
+    };
+  }
+}
+</script>
+</body>
+</html>

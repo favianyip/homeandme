@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+@media (max-width: 1020px) { [data-mq2] { grid-template-columns: 1fr !important; } }
+</style>
+</helmet>
+<div style="min-width: 0; min-height: 100vh; display: flex; flex-direction: column;">
+  <header style="position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1);">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); height: 72px; display: flex; align-items: center; gap: 20px;">
+      <a href="Home AI.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 40px; width: auto;"></a>
+      <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c; border-left: 1px solid rgba(26,32,35,0.15); padding-left: 20px;">SECURE CHECKOUT · 4-ROOM HDB · RESALE</span>
+      <a href="Customize.dc.html" style="margin-left: auto; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; white-space: nowrap;">← BACK TO CUSTOMIZER</a>
+    </div>
+  </header>
+
+  <div style="max-width: 1200px; width: 100%; margin: 0 auto; padding: clamp(20px, 3.5vw, 40px) clamp(16px, 3vw, 32px); flex: 1;">
+    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: clamp(24px, 4vw, 40px); flex-wrap: wrap;">
+      <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+        <span style="display: flex; align-items: center; gap: 8px;">
+          <span style="width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Oswald', sans-serif; font-size: 12px; background: {{ st.bg }}; color: {{ st.color }}; border: 1px solid {{ st.border }};">{{ st.n }}</span>
+          <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: {{ st.labelColor }};">{{ st.label }}</span>
+          <span style="width: 28px; height: 1px; background: rgba(26,32,35,0.2); display: {{ st.lineDisplay }};"></span>
+        </span>
+      </sc-for>
+    </div>
+
+    <div data-mq2="1" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(20px, 3.5vw, 44px); align-items: start;">
+      <div style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: clamp(20px, 3.5vw, 36px);">
+
+        <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ true }}">
+          <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 26px; margin: 0 0 6px;">Site address &amp; contact</h1>
+          <p style="margin: 0 0 22px; font-size: 15px; color: #8a908c;">Where the renovation happens, and how we reach you.</p>
+          <div style="display: grid; gap: 16px;">
+            <div data-mq2="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <input value="{{ fName }}" onChange="{{ setFName }}" placeholder="Full name" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fbfaf7; outline-color: #5a7e8a;">
+              <input value="{{ fMobile }}" onChange="{{ setFMobile }}" placeholder="Mobile number" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fbfaf7; outline-color: #5a7e8a;">
+            </div>
+            <input value="{{ fAddress }}" onChange="{{ setFAddress }}" placeholder="Address (block, street, unit)" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fbfaf7; outline-color: #5a7e8a;">
+            <div data-mq2="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <input value="{{ fPostal }}" onChange="{{ setFPostal }}" placeholder="Postal code" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fbfaf7; outline-color: #5a7e8a;">
+              <input value="{{ fKeys }}" onChange="{{ setFKeys }}" placeholder="Key collection date (if new)" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fbfaf7; outline-color: #5a7e8a;">
+            </div>
+            <div style="border: 1px dashed rgba(90,126,138,0.5); border-radius: 6px; padding: 18px; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; background: rgba(90,126,138,0.04);">
+              <div>
+                <p style="margin: 0 0 4px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2px; color: #5a7e8a;">FLOOR PLAN UPLOAD</p>
+                <p style="margin: 0; font-size: 14px; color: #4a5350;">{{ planStatus }}</p>
+              </div>
+              <button type="button" onClick="{{ attachPlan }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: none; border: 1px solid #5a7e8a; color: #5a7e8a; padding: 12px 22px; border-radius: 999px; cursor: pointer;">{{ planBtn }}</button>
+            </div>
+            <sc-if value="{{ s1Err }}" hint-placeholder-val="{{ false }}">
+              <p style="margin: 0; color: #b0532f; font-size: 15px;">Please fill in your name, mobile and address to continue.</p>
+            </sc-if>
+            <div>
+              <button type="button" onClick="{{ toStep2 }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 16px 36px; border-radius: 999px; border: none; cursor: pointer;" style-hover="background: #5a7e8a;">CONTINUE TO REVIEW →</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ false }}">
+          <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 26px; margin: 0 0 6px;">Review your quote</h1>
+          <p style="margin: 0 0 20px; font-size: 15px; color: #8a908c;">Every line item, before you pay anything.</p>
+          <sc-for list="{{ reviewGroups }}" as="grp" hint-placeholder-count="4">
+            <div style="margin-bottom: 18px;">
+              <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: #5a7e8a; margin: 0 0 4px;">{{ grp.room }}</p>
+              <div style="border-top: 1px solid rgba(26,32,35,0.1);">
+                <sc-for list="{{ grp.items }}" as="it" hint-placeholder-count="3">
+                  <div style="display: flex; justify-content: space-between; gap: 12px; padding: 10px 2px; border-bottom: 1px solid rgba(26,32,35,0.06); font-size: 15px;">
+                    <span>{{ it.label }}</span>
+                    <span style="font-family: 'Oswald', sans-serif; font-size: 13px;">{{ it.amount }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 24px;">
+            <button type="button" onClick="{{ toStep1 }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: none; border: 1px solid rgba(26,32,35,0.25); color: #1a2023; padding: 14px 26px; border-radius: 999px; cursor: pointer;">← BACK</button>
+            <button type="button" onClick="{{ toStep3 }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 14px 34px; border-radius: 999px; border: none; cursor: pointer;" style-hover="background: #5a7e8a;">CONTINUE TO PAYMENT →</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
+          <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 26px; margin: 0 0 6px;">Payment — 30% deposit</h1>
+          <p style="margin: 0 0 20px; font-size: 15px; color: #8a908c;">Pay {{ deposit }} now; the balance is billed by milestone as work completes.</p>
+          <div style="display: flex; gap: 10px; margin-bottom: 22px;">
+            <button type="button" onClick="{{ payCard }}" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.8px; padding: 12px 22px; border-radius: 999px; cursor: pointer; border: 1px solid {{ cardBorder }}; background: {{ cardBg }}; color: {{ cardColor }};">CARD</button>
+            <button type="button" onClick="{{ payQr }}" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.8px; padding: 12px 22px; border-radius: 999px; cursor: pointer; border: 1px solid {{ qrBorder }}; background: {{ qrBg }}; color: {{ qrColor }};">PAYNOW QR</button>
+          </div>
+          <sc-if value="{{ isCard }}" hint-placeholder-val="{{ true }}">
+            <div style="display: grid; gap: 16px; max-width: 460px;">
+              <input placeholder="Name on card" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fbfaf7; outline-color: #5a7e8a;">
+              <input placeholder="Card number" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fbfaf7; outline-color: #5a7e8a;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <input placeholder="MM / YY" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fbfaf7; outline-color: #5a7e8a;">
+                <input placeholder="CVC" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fbfaf7; outline-color: #5a7e8a;">
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ isQr }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; gap: 22px; align-items: center; flex-wrap: wrap;">
+              <img src="assets/images/qr-img.png" alt="PayNow QR" style="width: 150px; height: 150px; border: 1px solid rgba(26,32,35,0.15); border-radius: 8px; background: #fff; padding: 8px;">
+              <p style="margin: 0; font-size: 15px; color: #4a5350; max-width: 300px; line-height: 1.6;">Scan with your banking app to pay the {{ deposit }} deposit via PayNow. Reference: HNM-2026-0147.</p>
+            </div>
+          </sc-if>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 26px;">
+            <button type="button" onClick="{{ toStep2 }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: none; border: 1px solid rgba(26,32,35,0.25); color: #1a2023; padding: 14px 26px; border-radius: 999px; cursor: pointer;">← BACK</button>
+            <button type="button" onClick="{{ toStep4 }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #5a7e8a; color: #fff; padding: 14px 34px; border-radius: 999px; border: none; cursor: pointer;" style-hover="background: #1a2023;">PAY {{ deposit }} →</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isStep4 }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align: center; padding: 28px 10px;">
+            <span style="display: inline-flex; width: 64px; height: 64px; border-radius: 50%; background: rgba(90,126,138,0.12); color: #5a7e8a; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 18px;">✓</span>
+            <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 28px; margin: 0 0 10px;">Payment successful</h1>
+            <p style="margin: 0 0 8px; font-size: 16px; color: #4a5350;">Project <strong>HNM-2026-0147</strong> is confirmed. Deposit of {{ deposit }} received.</p>
+            <p style="margin: 0 0 26px; font-size: 15px; color: #8a908c;">Your project coordinator will contact you within 2 working days to schedule site measurement.</p>
+            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+              <a href="MyProject.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 15px 32px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">TRACK MY PROJECT →</a>
+              <a href="Home AI.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; border: 1px solid rgba(26,32,35,0.25); color: #1a2023; padding: 15px 32px; border-radius: 999px;">BACK TO HOME</a>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <aside style="background: #171d1f; color: #f6f4ef; border-radius: 8px; padding: 24px; position: sticky; top: 88px;">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8fb0bb; margin: 0 0 16px;">ORDER SUMMARY</p>
+        <sc-for list="{{ summaryRows }}" as="row" hint-placeholder-count="4">
+          <div style="display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid rgba(246,244,239,0.12); font-size: 14px;">
+            <span style="color: rgba(246,244,239,0.85);">{{ row.label }}</span>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 13px;">{{ row.amount }}</span>
+          </div>
+        </sc-for>
+        <div style="display: flex; justify-content: space-between; padding: 14px 0 2px;">
+          <span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.4px;">TOTAL</span>
+          <span style="font-family: 'Oswald', sans-serif; font-size: 22px; color: #8fb0bb;">{{ total }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+          <span style="font-size: 13px; color: rgba(246,244,239,0.6);">Deposit due today (30%)</span>
+          <span style="font-family: 'Oswald', sans-serif; font-size: 14px;">{{ deposit }}</span>
+        </div>
+        <p style="margin: 14px 0 0; font-size: 12px; color: rgba(246,244,239,0.5);">Demo checkout — no real payment is taken. Stripe / PayPal from the original site wire in here.</p>
+      </aside>
+    </div>
+  </div>
+
+  <footer style="border-top: 1px solid rgba(26,32,35,0.1); padding: 28px clamp(16px, 3vw, 32px);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #8a908c;">
+      <span>Copyright {{ year }} HOME&amp;ME</span>
+      <nav style="display: flex; gap: 18px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
+        <a href="Legal.dc.html#privacy">PRIVACY</a>
+        <a href="Legal.dc.html#terms">TERMS</a>
+        <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+      </nav>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    step: 1, pay: 'card', plan: false, s1Err: false,
+    fName: '', fMobile: '', fAddress: '', fPostal: '', fKeys: '',
+  };
+
+  quote() {
+    return [
+      { room: 'LIVING & DINING', items: [
+        { label: 'Flooring — porcelain tiles', amount: 4830 },
+        { label: 'Feature wall & TV console', amount: 4370 },
+        { label: 'Ceiling & lighting works', amount: 2760 },
+        { label: 'Painting', amount: 1265 },
+      ]},
+      { room: 'KITCHEN', items: [
+        { label: 'Kitchen carpentry', amount: 6440 },
+        { label: 'Worktop & backsplash', amount: 3220 },
+      ]},
+      { room: 'MASTER BEDROOM', items: [
+        { label: 'Built-in wardrobe', amount: 3910 },
+        { label: 'Feature headboard wall', amount: 2530 },
+        { label: 'Flooring — vinyl', amount: 2070 },
+      ]},
+      { room: 'BATHROOMS', items: [
+        { label: 'Wall & floor tiling', amount: 5980 },
+        { label: 'Vanity & mirror cabinet', amount: 2185 },
+        { label: 'Shower screen & fittings', amount: 1955 },
+        { label: 'Plumbing & waterproofing', amount: 2990 },
+      ]},
+    ];
+  }
+
+  fmt(n) { return 'S$ ' + Math.round(n).toLocaleString('en-SG'); }
+
+  renderVals() {
+    const s = this.state;
+    const q = this.quote();
+    const total = q.reduce((t, g) => t + g.items.reduce((x, i) => x + i.amount, 0), 0);
+    const stepDefs = [[1, 'ADDRESS'], [2, 'REVIEW'], [3, 'PAYMENT'], [4, 'DONE']];
+    return {
+      steps: stepDefs.map(([n, label], i) => ({
+        n: s.step > n ? '✓' : String(n),
+        label,
+        bg: s.step >= n ? '#5a7e8a' : 'transparent',
+        color: s.step >= n ? '#fff' : '#8a908c',
+        border: s.step >= n ? '#5a7e8a' : 'rgba(26,32,35,0.25)',
+        labelColor: s.step >= n ? '#1a2023' : '#8a908c',
+        lineDisplay: i < stepDefs.length - 1 ? 'inline-block' : 'none',
+      })),
+      isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3, isStep4: s.step === 4,
+      toStep1: () => this.setState({ step: 1 }),
+      toStep2: () => {
+        if (s.step === 1 && (!s.fName.trim() || !s.fMobile.trim() || !s.fAddress.trim())) { this.setState({ s1Err: true }); return; }
+        this.setState({ step: 2, s1Err: false });
+      },
+      toStep3: () => this.setState({ step: 3 }),
+      toStep4: () => this.setState({ step: 4 }),
+      fName: s.fName, fMobile: s.fMobile, fAddress: s.fAddress, fPostal: s.fPostal, fKeys: s.fKeys,
+      setFName: (e) => this.setState({ fName: e.target.value }),
+      setFMobile: (e) => this.setState({ fMobile: e.target.value }),
+      setFAddress: (e) => this.setState({ fAddress: e.target.value }),
+      setFPostal: (e) => this.setState({ fPostal: e.target.value }),
+      setFKeys: (e) => this.setState({ fKeys: e.target.value }),
+      s1Err: s.s1Err,
+      plan: s.plan,
+      planStatus: s.plan ? 'floor-plan.pdf attached ✓' : 'PDF or image of your floor / layout plan.',
+      planBtn: s.plan ? 'REPLACE' : 'ATTACH FILE',
+      attachPlan: () => this.setState({ plan: true }),
+      reviewGroups: q.map((g) => ({ room: g.room, items: g.items.map((i) => ({ label: i.label, amount: this.fmt(i.amount) })) })),
+      summaryRows: q.map((g) => ({ label: g.room, amount: this.fmt(g.items.reduce((x, i) => x + i.amount, 0)) })),
+      total: this.fmt(total),
+      deposit: this.fmt(total * 0.3),
+      isCard: s.pay === 'card', isQr: s.pay === 'qr',
+      payCard: () => this.setState({ pay: 'card' }),
+      payQr: () => this.setState({ pay: 'qr' }),
+      cardBorder: s.pay === 'card' ? '#5a7e8a' : 'rgba(26,32,35,0.2)', cardBg: s.pay === 'card' ? '#5a7e8a' : 'transparent', cardColor: s.pay === 'card' ? '#fff' : '#1a2023',
+      qrBorder: s.pay === 'qr' ? '#5a7e8a' : 'rgba(26,32,35,0.2)', qrBg: s.pay === 'qr' ? '#5a7e8a' : 'transparent', qrColor: s.pay === 'qr' ? '#fff' : '#1a2023',
+      year: new Date().getFullYear(),
+    };
+  }
+}
+</script>
+</body>
+</html>

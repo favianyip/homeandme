@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Home &amp; Me — Singapore's AI-first renovation platform. Upload your floor plan, explore photoreal designs of your exact home, get a live itemised quote, and start with a PayNow deposit.">
+<meta property="og:title" content="Home &amp; Me — AI-First Renovation, Singapore">
+<meta property="og:description" content="Upload your floor plan. See your home designed in 3D. Pay only when you're convinced.">
+<meta property="og:image" content="assets/images/login-bg.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HomeAndConstructionBusiness","name":"HOME AND ME PTE. LTD.","telephone":"+65 9423 5227","email":"homeandme25@gmail.com","address":{"@type":"PostalAddress","streetAddress":"21 Toh Guan Road East #03-02 Toh Guan Centre","addressCountry":"SG","postalCode":"608609"},"geo":{"@type":"GeoCoordinates","latitude":1.33761,"longitude":103.75472},"sameAs":["https://www.instagram.com/homeandme2017","https://www.facebook.com/share/19EwNzh3n5/"]}
+</script>
+<style>
+:root { --bg: #f6f4ef; --bg2: #efece4; --card: #ffffff; --ink: #1a2023; --ink2: #4a5350; --mut: #8a908c; --line: rgba(26,32,35,0.12); --accent: #5a7e8a; --accent-ink: #ffffff; --dark: #171d1f; --dark-ink: #f6f4ef; --logo-filter: none; }
+[data-theme="dark"] { --bg: #14191b; --bg2: #101416; --card: #1c2326; --ink: #f0eee7; --ink2: #c4c8c2; --mut: #8a938e; --line: rgba(240,238,231,0.14); --dark: #0d1112; --dark-ink: #f6f4ef; --logo-filter: brightness(0) invert(1); }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; transition: background 0.5s ease, color 0.5s ease; }
+a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); }
+@keyframes hnmRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes hnmKen { from { transform: scale(1); } to { transform: scale(1.05); } }
+@keyframes hnmPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+#nv a { white-space: nowrap; }
+@media (max-width: 1180px) { #nv { display: none !important; } #bg { display: flex !important; } [data-mq2] { grid-template-columns: 1fr !important; } [data-mq3] { grid-template-columns: 1fr 1fr !important; } }
+@media (max-width: 720px) { [data-mq3] { grid-template-columns: 1fr !important; } }
+</style>
+</helmet>
+<div data-theme="{{ themeMode }}" style="min-width: 0; background: var(--bg); color: var(--ink); --accent: {{ accent }};">
+  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(16px); border-bottom: 1px solid var(--line);">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); height: 74px; display: flex; align-items: center; gap: 22px;">
+      <a href="#top" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 42px; width: auto; filter: var(--logo-filter);"></a>
+      <nav id="nv" style="display: flex; gap: 26px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px;">
+        <a href="#assistant">AI ASSISTANT</a>
+        <a href="#portfolio">PORTFOLIO</a>
+        <a href="#process">PROCESS</a>
+        <a href="#pricing">PRICING</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">CONTACT</a>
+        <a href="Login.dc.html">LOGIN</a>
+        <button type="button" onClick="{{ toggleTheme }}" aria-label="Toggle dark mode" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: none; color: var(--ink); cursor: pointer; font-size: 15px;">{{ themeIcon }}</button>
+        <a href="Journey.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: var(--accent); color: var(--accent-ink); padding: 13px 24px; border-radius: 999px; min-height: 44px; display: inline-flex; align-items: center;" style-hover="background: var(--ink); color: var(--bg);">START DESIGNING MY HOME</a>
+      </nav>
+      <button id="bg" type="button" onClick="{{ toggleMenu }}" style="display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid var(--line); border-radius: 999px; background: none; cursor: pointer; font-size: 17px; color: var(--ink);">{{ menuIcon }}</button>
+    </div>
+  </header>
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 55; background: var(--bg); padding: 110px clamp(24px, 6vw, 48px) 40px; overflow: auto;">
+      <nav style="display: grid; gap: 20px; font-family: 'Oswald', sans-serif; font-size: 21px; letter-spacing: 2.4px;">
+        <a href="#assistant" onClick="{{ closeMenu }}">AI ASSISTANT</a>
+        <a href="#portfolio" onClick="{{ closeMenu }}">PORTFOLIO</a>
+        <a href="#process" onClick="{{ closeMenu }}">PROCESS</a>
+        <a href="#pricing" onClick="{{ closeMenu }}">PRICING</a>
+        <a href="#faq" onClick="{{ closeMenu }}">FAQ</a>
+        <a href="#contact" onClick="{{ closeMenu }}">CONTACT</a>
+        <a href="Login.dc.html">LOGIN</a>
+        <a href="Journey.html" style="margin-top: 10px; justify-self: start; background: var(--accent); color: var(--accent-ink); padding: 16px 30px; border-radius: 999px; font-size: 15px;">START DESIGNING MY HOME</a>
+      </nav>
+    </div>
+  </sc-if>
+
+  <section id="top" style="position: relative; min-height: 92vh; display: flex; align-items: flex-end; overflow: hidden;">
+    <img src="assets/images/login-bg.jpg" alt="Modern classic living room by Home &amp; Me" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: hnmKen 14s linear infinite alternate;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(13,17,18,0.72), rgba(13,17,18,0.18) 68%), linear-gradient(to top, rgba(13,17,18,0.86) 0%, rgba(13,17,18,0.25) 55%, rgba(13,17,18,0.35) 100%);"></div>
+    <div style="position: relative; width: 100%; max-width: 1360px; margin: 0 auto; padding: 140px clamp(20px, 4vw, 40px) clamp(48px, 7vw, 84px); color: #f6f4ef;">
+      <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.6px; color: #8fb0bb; margin: 0 0 18px;">SINGAPORE'S AI-FIRST RENOVATION PLATFORM · EST. 2017</p>
+      <h1 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(38px, 6vw, 74px); line-height: 1.06; margin: 0 0 20px; max-width: 13ch;">Your home, designed before you pay a cent</h1>
+      <p data-reveal="1" style="font-size: clamp(16px, 2vw, 19px); line-height: 1.65; color: rgba(246,244,239,0.85); margin: 0 0 34px; max-width: 52ch; text-wrap: pretty;">Upload your floor plan. Watch your exact rooms take shape in 3D, dressed in photoreal designs, priced line by line — then lock it in with PayNow or card.</p>
+      <div data-reveal="1" style="display: flex; align-items: center; gap: 22px; flex-wrap: wrap;">
+        <a href="Journey.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: var(--accent); color: #fff; padding: 19px 38px; border-radius: 999px;" style-hover="background: #f6f4ef; color: #1a2023;">START DESIGNING MY HOME →</a>
+        <a href="#portfolio" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; color: #f6f4ef; border-bottom: 1px solid rgba(246,244,239,0.5); padding-bottom: 4px; min-height: 24px;">EXPLORE DESIGNS ↓</a>
+      </div>
+      <div style="display: flex; gap: clamp(20px, 4vw, 48px); flex-wrap: wrap; margin-top: clamp(36px, 5vw, 56px); border-top: 1px solid rgba(246,244,239,0.2); padding-top: 22px;">
+        <span style="font-size: 13.5px; color: rgba(246,244,239,0.75);">HDB · Condo · Landed</span>
+        <span style="font-size: 13.5px; color: rgba(246,244,239,0.75);">Itemised live pricing</span>
+        <span style="font-size: 13.5px; color: rgba(246,244,239,0.75);">3D walkthrough of your unit</span>
+        <span style="font-size: 13.5px; color: rgba(246,244,239,0.75);">Toh Guan Centre, Singapore</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="assistant" style="padding: clamp(72px, 10vw, 116px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
+    <div data-mq2="1" style="max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 84px); align-items: center;">
+      <div data-reveal="1">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 16px;">AI RENOVATION ASSISTANT</p>
+        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 20px; line-height: 1.12;">One upload. The whole renovation, planned.</h2>
+        <p style="margin: 0 0 26px; font-size: 17px; line-height: 1.7; color: var(--ink2); text-wrap: pretty;">Our platform reads your floor plan, verifies the property, and builds a live 3D model of your rooms. You dress each one, the quote itemises itself — and soon, our AI renders photoreal previews of <em>your</em> flat, not a showflat.</p>
+        <div style="display: grid; gap: 14px;">
+          <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 5px 12px;">LIVE</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">3D floor-plan journey — walls rise from your plan, orbit freely</p></div>
+          <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 5px 12px;">LIVE</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">Room-by-room themes with live itemised pricing</p></div>
+          <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 4px 11px;">SOON</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">AI photoreal renders generated from your uploaded plan</p></div>
+          <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 4px 11px;">SOON</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">Project dashboard — milestones, payments and site photos</p></div>
+        </div>
+        <p style="margin: 22px 0 0; font-size: 13.5px; line-height: 1.65; color: var(--mut); max-width: 52ch;">Your floor plan and confirmed measurements will be used as the foundation for the proposed design. Final site measurements are always verified before renovation or construction.</p>
+        <a href="Journey.html" style="display: inline-block; margin-top: 22px; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: var(--ink); color: var(--bg); padding: 16px 32px; border-radius: 999px; min-height: 44px;" style-hover="background: var(--accent); color: var(--accent-ink);">START DESIGNING MY HOME →</a>
+      </div>
+      <div data-reveal="1" style="background: var(--dark); color: var(--dark-ink); border-radius: 10px; padding: clamp(22px, 3vw, 32px); box-shadow: 0 40px 80px -48px rgba(0,0,0,0.55);">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(246,244,239,0.14); padding-bottom: 14px; margin-bottom: 18px;">
+          <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8fb0bb;">HOME&amp;ME ASSISTANT</span>
+          <span style="display: flex; align-items: center; gap: 7px; font-size: 12px; color: rgba(246,244,239,0.6);"><span style="width: 7px; height: 7px; border-radius: 50%; background: #7fb069; animation: hnmPulse 2.2s infinite;"></span>Online</span>
+        </div>
+        <div style="display: grid; gap: 12px;">
+          <div style="justify-self: end; max-width: 85%; background: var(--accent); color: #fff; border-radius: 12px 12px 3px 12px; padding: 12px 16px; font-size: 14.5px; line-height: 1.55;">4-room resale in Bishan, Scandinavian look, around S$50k?</div>
+          <div style="justify-self: start; max-width: 90%; background: rgba(246,244,239,0.08); border-radius: 12px 12px 12px 3px; padding: 12px 16px; font-size: 14.5px; line-height: 1.6; color: rgba(246,244,239,0.9);">Plan received ✓ — 6 rooms detected on your 92 sqm layout. Scandinavian fits S$46-49k with full carpentry. Want to see your living room in 3D first?</div>
+          <div style="justify-self: start; display: flex; gap: 8px; flex-wrap: wrap;">
+            <a href="Journey.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">SEE MY 3D MODEL</a>
+            <a href="Customize.dc.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">ITEMISE MY QUOTE</a>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 18px; border-top: 1px solid rgba(246,244,239,0.14); padding-top: 16px;">
+          <span style="flex: 1; font-size: 13.5px; color: rgba(246,244,239,0.45); border: 1px solid rgba(246,244,239,0.18); border-radius: 999px; padding: 12px 18px;">Conversational AI connects here — Hermes backend</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio" style="background: var(--bg2); padding: clamp(72px, 10vw, 116px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
+    <div style="max-width: 1360px; margin: 0 auto;">
+      <div data-reveal="1" style="display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 44px;">
+        <div>
+          <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 14px;">PORTFOLIO</p>
+          <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0; line-height: 1.12;">Rooms we've already made real</h2>
+        </div>
+        <a href="Journey.html" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 4px; min-height: 24px;">APPLY ANY OF THESE TO YOUR PLAN →</a>
+      </div>
+      <p style="margin: -18px 0 32px; font-size: 12.5px; color: var(--mut);">All images are Home &amp; Me interior concepts and 3D renders — not photographs of completed customer homes.</p>
+      <div>
+      </div>
+      <div data-mq3="1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;">
+        <sc-for list="{{ portfolio }}" as="p" hint-placeholder-count="6">
+          <figure data-reveal="1" style="margin: 0;">
+            <div style="position: relative; overflow: hidden; border-radius: 5px;"><img src="{{ p.src }}" alt="{{ p.alt }}" loading="lazy" style="width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"><span style="position: absolute; top: 10px; left: 10px; font-family: 'Oswald', sans-serif; font-size: 9px; letter-spacing: 1.6px; background: rgba(20,25,27,0.72); color: #f6f4ef; border-radius: 999px; padding: 5px 10px;">INTERIOR CONCEPT</span></div>
+            <figcaption style="display: flex; justify-content: space-between; gap: 10px; padding-top: 11px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--mut);"><span>{{ p.room }}</span><span style="color: var(--accent);">{{ p.theme }}</span></figcaption>
+          </figure>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="process" style="padding: clamp(72px, 10vw, 116px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
+    <div style="max-width: 1360px; margin: 0 auto;">
+      <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 14px; text-align: center;">RENOVATION PROCESS</p>
+      <h2 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 54px; text-align: center; line-height: 1.12;">From floor plan to keys-in-hand</h2>
+      <div data-mq3="1" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px;">
+        <sc-for list="{{ steps }}" as="st" hint-placeholder-count="5">
+          <a data-reveal="1" href="{{ st.href }}" style="display: block; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 24px 20px 26px; transition: transform 0.35s ease, border-color 0.35s ease;" style-hover="transform: translateY(-5px); border-color: var(--accent);">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 13px; color: var(--accent);">{{ st.n }}</span>
+            <span style="display: block; font-family: 'Oswald', sans-serif; font-size: 15px; letter-spacing: 1.8px; margin: 10px 0 8px; color: var(--ink);">{{ st.t }}</span>
+            <span style="display: block; font-size: 13.5px; line-height: 1.6; color: var(--mut);">{{ st.d }}</span>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews" style="background: var(--dark); color: var(--dark-ink); padding: clamp(72px, 10vw, 116px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
+    <div style="max-width: 1360px; margin: 0 auto;">
+      <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #8fb0bb; margin: 0 0 14px;">CUSTOMER REVIEWS</p>
+      <h2 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 48px; line-height: 1.12;">Convinced before they paid</h2>
+      <div data-mq3="1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;">
+        <sc-for list="{{ reviews }}" as="rv" hint-placeholder-count="3">
+          <blockquote data-reveal="1" style="margin: 0; border: 1px solid rgba(246,244,239,0.16); border-radius: 8px; padding: 26px 24px; display: flex; flex-direction: column; gap: 16px;">
+            <span style="font-family: 'Oswald', sans-serif; letter-spacing: 3px; color: var(--accent); font-size: 13px;">★★★★★</span>
+            <p style="margin: 0; font-size: 15.5px; line-height: 1.7; color: rgba(246,244,239,0.88); flex: 1;">{{ rv.quote }}</p>
+            <footer style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: rgba(246,244,239,0.55);">{{ rv.who }}</footer>
+          </blockquote>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" style="padding: clamp(72px, 10vw, 116px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
+    <div style="max-width: 1360px; margin: 0 auto;">
+      <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 14px; text-align: center;">PRICING</p>
+      <h2 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 16px; text-align: center; line-height: 1.12;">Whole-home themes, honest numbers</h2>
+      <p data-reveal="1" style="margin: 0 auto 52px; font-size: 16px; color: var(--mut); text-align: center; max-width: 56ch;">Guide prices for a full 4-room HDB renovation — every line itemises live in the customizer before you commit.</p>
+      <div data-mq3="1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: stretch;">
+        <sc-for list="{{ plans }}" as="pl" hint-placeholder-count="3">
+          <div data-reveal="1" style="background: var(--card); border: 1px solid {{ pl.border }}; border-radius: 10px; padding: 30px 26px; display: flex; flex-direction: column; gap: 14px; position: relative;">
+            <sc-if value="{{ pl.tag }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: -12px; left: 24px; font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.8px; background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 6px 14px;">MOST POPULAR</span></sc-if>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: 2.2px; color: var(--ink);">{{ pl.name }}</span>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 34px; color: var(--accent);">{{ pl.price }}</span>
+            <span style="font-size: 12.5px; color: var(--mut); margin-top: -8px;">from · 4-room whole home · materials + labour</span>
+            <div style="border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 9px;">
+              <sc-for list="{{ pl.feats }}" as="f" hint-placeholder-count="4">
+                <span style="font-size: 14px; line-height: 1.55; color: var(--ink2);">— {{ f }}</span>
+              </sc-for>
+            </div>
+            <a href="Journey.html" style="margin-top: auto; text-align: center; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 12px; background: {{ pl.btnBg }}; color: {{ pl.btnInk }}; border: 1px solid var(--accent); padding: 15px 20px; border-radius: 999px;" style-hover="background: var(--ink); color: var(--bg); border-color: var(--ink);">PRICE MY PLAN →</a>
+          </div>
+        </sc-for>
+      </div>
+      <p data-reveal="1" style="margin: 26px 0 0; font-size: 13px; color: var(--mut); text-align: center;">Mix themes room by room — pricing follows each room's theme. PayNow deposit locks your slot.</p>
+    </div>
+  </section>
+
+  <section id="faq" style="background: var(--bg2); padding: clamp(72px, 10vw, 116px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
+    <div style="max-width: 880px; margin: 0 auto;">
+      <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 14px; text-align: center;">FAQ</p>
+      <h2 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 44px; text-align: center; line-height: 1.12;">Questions, answered</h2>
+      <div data-reveal="1" style="border-top: 1px solid var(--line);">
+        <sc-for list="{{ faqs }}" as="item" hint-placeholder-count="5">
+          <div style="border-bottom: 1px solid var(--line);">
+            <button type="button" onClick="{{ item.toggle }}" style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 24px; background: none; border: none; cursor: pointer; padding: 21px 6px; text-align: left; min-height: 44px;">
+              <span style="font-family: 'Oswald', sans-serif; font-size: 17px; letter-spacing: 0.6px; color: var(--ink);">{{ item.q }}</span>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 22px; color: var(--accent); font-weight: 300;">{{ item.mark }}</span>
+            </button>
+            <sc-if value="{{ item.open }}" hint-placeholder-val="{{ false }}">
+              <p style="margin: 0; padding: 0 6px 22px; font-size: 16px; line-height: 1.7; color: var(--ink2); max-width: 720px;">{{ item.a }}</p>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="padding: clamp(72px, 10vw, 116px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
+    <div data-mq2="1" style="max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 84px);">
+      <div data-reveal="1">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 16px;">CONTACT</p>
+        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 22px; line-height: 1.12;">Talk to a human, any time</h2>
+        <div style="display: grid; gap: 16px; margin-bottom: 30px;">
+          <div style="display: flex; gap: 14px; align-items: center;"><span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--mut); width: 92px;">CALL / TEXT</span><a href="tel:+6594235227" style="font-size: 16px;">+65 9423 5227</a><a href="https://wa.me/6594235227" target="_blank" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 8px 14px;" style-hover="background: var(--accent); color: var(--accent-ink);">WHATSAPP</a></div>
+          <div style="display: flex; gap: 14px; align-items: center;"><span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--mut); width: 92px;">EMAIL</span><a href="mailto:homeandme25@gmail.com" style="font-size: 16px;">homeandme25@gmail.com</a></div>
+          <div style="display: flex; gap: 14px; align-items: start;"><span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--mut); width: 92px; padding-top: 2px;">VISIT</span><span style="font-size: 16px; line-height: 1.6;">21 Toh Guan Road East, #03-02<br>Toh Guan Centre, Singapore 608609</span></div>
+          <div style="display: flex; gap: 14px; align-items: center;"><span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--mut); width: 92px;">FOLLOW</span>
+            <a href="https://www.facebook.com/share/19EwNzh3n5/?mibextid=wwXIfr" target="_blank" aria-label="Facebook" style="width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center;" style-hover="border-color: var(--accent);"><img src="assets/images/fb-icon-teal.svg" alt="Facebook" style="height: 16px;"></a>
+            <a href="https://www.instagram.com/homeandme2017?igsh=dXF5cnNjYjI3dWZn&amp;utm_source=qr" target="_blank" aria-label="Instagram" style="width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center;" style-hover="border-color: var(--accent);"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 17px;"></a>
+          </div>
+        </div>
+        <div style="overflow: hidden; border-radius: 6px; border: 1px solid var(--line);">
+          <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=103.74872%2C1.33361%2C103.76072%2C1.34161&amp;layer=mapnik&amp;marker=1.33761%2C103.75472" title="Map — 21 Toh Guan Road East, Toh Guan Centre" loading="lazy" style="width: 100%; aspect-ratio: 16 / 8; border: 0; display: block;"></iframe>
+        </div>
+        <a href="https://maps.google.com/?q=21+Toh+Guan+Road+East+%2303-02+Toh+Guan+Centre+Singapore+608609" target="_blank" style="display: inline-block; margin-top: 10px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 3px;">OPEN IN GOOGLE MAPS →</a>
+      </div>
+      <div data-reveal="1" style="background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: clamp(24px, 4vw, 38px); align-self: start;">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px; color: var(--mut); margin: 0 0 20px;">SEND AN ENQUIRY</p>
+        <div style="display: grid; gap: 16px;">
+          <input value="{{ cName }}" onChange="{{ setCName }}" placeholder="Your name" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); color: var(--ink); outline-color: var(--accent);">
+          <input value="{{ cPhone }}" onChange="{{ setCPhone }}" placeholder="Mobile (for WhatsApp reply)" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); color: var(--ink); outline-color: var(--accent);">
+          <textarea value="{{ cMsg }}" onChange="{{ setCMsg }}" placeholder="Tell us about your home — property type, timeline, budget" rows="5" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); color: var(--ink); outline-color: var(--accent); resize: vertical;"></textarea>
+          <a href="{{ mailtoHref }}" style="text-align: center; font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: var(--accent); color: var(--accent-ink); padding: 17px 24px; border-radius: 999px;" style-hover="background: var(--ink); color: var(--bg);">EMAIL US THIS ENQUIRY →</a>
+          <a href="{{ waHref }}" target="_blank" style="text-align: center; font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; border: 1px solid var(--accent); color: var(--accent); padding: 16px 24px; border-radius: 999px;" style-hover="background: var(--accent); color: var(--accent-ink);">OR WHATSAPP IT INSTEAD</a>
+          <p style="margin: 0; font-size: 12.5px; color: var(--mut); text-align: center;">Opens your mail or WhatsApp app with the message pre-filled — we reply within one working day.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid var(--line); padding: 40px clamp(20px, 4vw, 40px) 48px;">
+    <div style="max-width: 1360px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 36px; filter: var(--logo-filter);">
+        <span style="font-size: 13px; color: var(--mut);">© {{ year }} HOME AND ME PTE. LTD. · Singapore</span>
+      </div>
+      <nav style="display: flex; gap: 20px; flex-wrap: wrap; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
+        <a href="Home Redesign v2.dc.html">CLASSIC SITE</a>
+        <a href="Journey.html">3D JOURNEY</a>
+        <a href="Customize.dc.html">CUSTOMIZER</a>
+        <a href="MyProject.dc.html">MY PROJECT</a>
+        <a href="FaqAndHelp.dc.html">HELP</a>
+        <a href="Legal.dc.html">PRIVACY &amp; LEGAL</a>
+      </nav>
+    </div>
+  </footer>
+  <div style="display: none;" data-owner-confirmation-required="not shown to visitors">
+    OWNER CONFIRMATION REQUIRED —
+    (1) Official WhatsApp number: site uses +65 9423 5227; alternative on record +65 8919 0776.
+    (2) Official email: homeandme25@gmail.com — confirm as public enquiry address.
+    (3) Company UEN for footer.
+    (4) Address confirmed: 21 Toh Guan Road East #03-02 Toh Guan Centre S(608609).
+    (5) Deposit percentage and payment structure (Journey shows 5% PayNow — confirm).
+    (6) Which AI functions are live vs in development (assistant chat is a preview).
+    (7) Replace the three sample reviews with verified customer reviews.
+    (8) Confirm which portfolio images are completed projects vs concept renders.
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;light&quot;, &quot;dark&quot;], &quot;default&quot;: &quot;light&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Appearance&quot;}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;options&quot;: [&quot;#5a7e8a&quot;, &quot;#b08a5e&quot;, &quot;#7f97a0&quot;, &quot;#3d6270&quot;], &quot;default&quot;: &quot;#5a7e8a&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Appearance&quot;}, &quot;animations&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Appearance&quot;}}">
+class Component extends DCLogic {
+  state = { mode: null, menuOpen: false, faqOpen: 0, cName: '', cPhone: '', cMsg: '' };
+
+  _show(el) {
+    el.dataset.revealed = '1';
+    el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+    el.style.opacity = '1'; el.style.transform = 'none';
+    if (this._io) this._io.unobserve(el);
+  }
+  _revealPass() {
+    if (this.props.animations === false || !this._io) return;
+    document.querySelectorAll('[data-reveal]').forEach((el) => {
+      if (el.dataset.revealed === '1') { el.style.opacity = '1'; el.style.transform = 'none'; return; }
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.9 && r.bottom > 0) { this._show(el); return; }
+      el.style.opacity = '0'; el.style.transform = 'translateY(20px)';
+      this._io.observe(el);
+    });
+  }
+  componentDidMount() {
+    if (this.props.animations === false) return;
+    this._io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) this._show(e.target); }), { threshold: 0.15 });
+    this._revealPass();
+  }
+  componentDidUpdate() { requestAnimationFrame(() => this._revealPass()); }
+  componentWillUnmount() { if (this._io) this._io.disconnect(); }
+
+  renderVals() {
+    const s = this.state;
+    const mode = s.mode ?? (this.props.theme ?? 'light');
+    const body = encodeURIComponent([`Name: ${s.cName || '-'}`, `Mobile: ${s.cPhone || '-'}`, '', s.cMsg || 'Hi Home&Me, I would like a renovation quote.'].join('\n'));
+    return {
+      themeMode: mode,
+      themeIcon: mode === 'dark' ? '☀' : '◐',
+      toggleTheme: () => this.setState({ mode: mode === 'dark' ? 'light' : 'dark' }),
+      accent: this.props.accent ?? '#5a7e8a',
+      menuOpen: s.menuOpen,
+      menuIcon: s.menuOpen ? '✕' : '☰',
+      toggleMenu: () => this.setState({ menuOpen: !s.menuOpen }),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      year: new Date().getFullYear(),
+      portfolio: [
+        { src: 'assets/renders/living-luxe-dark.jpg', room: 'LIVING & DINING', theme: 'MODERN LUXE', alt: 'Dark luxe living and dining room' },
+        { src: 'assets/renders/bedroom-scandinavian.jpg', room: 'MASTER BEDROOM', theme: 'SCANDINAVIAN', alt: 'Scandinavian master bedroom' },
+        { src: 'assets/renders/kitchen-mono.jpg', room: 'KITCHEN', theme: 'MONOCHROME', alt: 'Monochrome kitchen' },
+        { src: 'assets/renders/dining-classic-wood.jpg', room: 'DINING', theme: 'WOOD CLASSIC', alt: 'Wood classic dining' },
+        { src: 'assets/renders/bedroom-luxe-marble.jpg', room: 'MASTER BEDROOM', theme: 'LUXE MARBLE', alt: 'Luxe marble master bedroom' },
+        { src: 'assets/renders/bathroom-stone.jpg', room: 'BATHROOM', theme: 'GREY STONE', alt: 'Grey stone bathroom' },
+      ],
+      steps: [
+        { n: '01', t: 'UPLOAD YOUR PLAN', d: 'PDF, JPG or PNG — the colour plan from HDB or your developer.', href: 'Journey.html' },
+        { n: '02', t: 'VERIFY & LAYOUT', d: 'Postal check, then your walls rise in a live 3D model.', href: 'Journey.html' },
+        { n: '03', t: 'DESIGN IN 3D', d: 'Theme every room, mix freely, priced line by line.', href: 'Journey.html' },
+        { n: '04', t: 'PAYNOW DEPOSIT', d: '5% locks your slot and your quote. Card also accepted.', href: 'Checkout.dc.html' },
+        { n: '05', t: 'RENOVATE & TRACK', d: 'Vetted contractors; milestones tracked in your dashboard.', href: 'MyProject.dc.html' },
+      ],
+      reviews: [
+        { quote: 'We saw our actual flat in 3D before signing anything. The quote never changed from what the customizer showed.', who: 'SAMPLE REVIEW — REPLACE WITH GOOGLE REVIEW' },
+        { quote: 'Uploaded our floor plan on a Tuesday, walked through three themes that night, paid the deposit by Friday.', who: 'SAMPLE REVIEW — REPLACE WITH GOOGLE REVIEW' },
+        { quote: 'The itemised pricing ended the quote-comparison nightmare. Every dollar was accounted for.', who: 'SAMPLE REVIEW — REPLACE WITH GOOGLE REVIEW' },
+      ],
+      plans: this.plansData().map((p) => ({
+        ...p,
+        border: p.tag ? 'var(--accent)' : 'var(--line)',
+        btnBg: p.tag ? 'var(--accent)' : 'transparent',
+        btnInk: p.tag ? 'var(--accent-ink)' : 'var(--accent)',
+      })),
+      faqs: this.faqData().map((f, i) => ({
+        q: f.q, a: f.a,
+        open: s.faqOpen === i,
+        mark: s.faqOpen === i ? '−' : '+',
+        toggle: () => this.setState({ faqOpen: s.faqOpen === i ? -1 : i }),
+      })),
+      cName: s.cName, setCName: (e) => this.setState({ cName: e.target.value }),
+      cPhone: s.cPhone, setCPhone: (e) => this.setState({ cPhone: e.target.value }),
+      cMsg: s.cMsg, setCMsg: (e) => this.setState({ cMsg: e.target.value }),
+      mailtoHref: `mailto:homeandme25@gmail.com?subject=${encodeURIComponent('Renovation enquiry — homeandme.sg')}&body=${body}`,
+      waHref: `https://wa.me/6594235227?text=${body}`,
+    };
+  }
+
+  plansData() {
+    return [
+      { name: 'ESSENTIAL', price: 'S$32,800', tag: false, feats: ['Scandinavian theme, whole home', 'Flooring, painting & wet works', 'Kitchen + 2 bathroom packages', 'Basic carpentry (wardrobe + TV console)'] },
+      { name: 'SIGNATURE', price: 'S$44,800', tag: true, feats: ['Modern Classic theme, whole home', 'Full carpentry throughout', 'Feature walls + designer lighting', 'Dedicated project manager'] },
+      { name: 'LUXE', price: 'S$56,800', tag: false, feats: ['Modern Luxe theme, whole home', 'Marble & brass feature finishes', 'Custom joinery, every room', 'Priority scheduling + styling session'] },
+    ];
+  }
+
+  faqData() {
+    return [
+      { q: 'What happens after I upload my floor plan?', a: 'The journey verifies your postal district and property type, builds a live 3D model of your layout, and lets you dress every room in a theme. You end with an itemised quote you can lock in with a PayNow deposit — no site visit needed to get real numbers.' },
+      { q: 'When do the AI photoreal renders arrive?', a: 'Our AI rendering engine is in private testing. Once live, every design you pick will be re-rendered photorealistically onto your actual floor plan — same rooms, your windows, your walls. Everything you configure today carries over automatically.' },
+      { q: 'What file formats do you accept for floor plans?', a: 'PDF, JPG or PNG — the colour plan from HDB, your developer brochure, or even a clear photo of the printed plan.' },
+      { q: 'Is the deposit refundable?', a: 'The 5% PayNow deposit reserves your renovation slot and locks your quoted pricing for 60 days. It is fully refundable within 7 days if you change your mind.' },
+      { q: 'Can I mix themes between rooms?', a: 'Yes — every room is themed independently. A Scandinavian master bedroom next to a Modern Luxe living room is normal; pricing follows each room\u2019s theme.' },
+    ];
+  }
+}
+</script>
+</body>
+</html>
