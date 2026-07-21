@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+select { appearance: none; -webkit-appearance: none; }
+[data-anim="paused"], [data-anim="paused"] * { animation-play-state: paused !important; }
+@keyframes hnmPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+@keyframes hnmRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes hnmKen { from { transform: scale(1); } to { transform: scale(1.04); } }
+#navLinks a { white-space: nowrap; }
+@media (max-width: 1160px) {
+  #navLinks { display: none !important; }
+  #navBurger { display: flex !important; }
+  [data-mq2] { grid-template-columns: 1fr !important; }
+  [data-mq2] figure { transform: none !important; }
+}
+</style>
+</helmet>
+<div data-anim="{{ animState }}" style="min-width: 0;">
+  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: rgba(246,244,239,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1);">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); height: 76px; display: flex; align-items: center;">
+      <a href="#top" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 44px; width: auto;"></a>
+      <nav id="navLinks" style="display: flex; gap: 28px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; font-weight: 400;">
+        <a href="AboutUs.dc.html">ABOUT US</a>
+        <a href="#how">HOW IT WORKS</a>
+        <a href="#themes">THEMES</a>
+        <a href="#walkthrough">SHOWROOM</a>
+        <a href="#pricing">PRICING</a>
+        <a href="FaqAndHelp.dc.html">FAQ</a>
+        <a href="ContactUs.dc.html">CONTACT</a>
+        <sc-if value="{{ loggedOut }}" hint-placeholder-val="{{ true }}">
+          <a href="Login.dc.html" style="color: #5a7e8a;">LOGIN</a>
+        </sc-if>
+        <sc-if value="{{ loggedIn }}" hint-placeholder-val="{{ false }}">
+          <a href="javascript:void(0)" onClick="{{ openAccount }}" style="color: #5a7e8a;">MY ACCOUNT</a>
+          <a href="javascript:void(0)" onClick="{{ logout }}">LOGOUT</a>
+        </sc-if>
+        <a href="#start" style="background: #1a2023; color: #f6f4ef; padding: 12px 26px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START YOUR RENOVATION</a>
+      </nav>
+      <button id="navBurger" type="button" onClick="{{ toggleMenu }}" style="display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid rgba(26,32,35,0.25); border-radius: 999px; background: none; cursor: pointer; font-size: 17px; color: #1a2023;">{{ menuIcon }}</button>
+    </div>
+  </header>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 55; background: #f6f4ef; padding: 110px clamp(24px, 6vw, 48px) 40px; overflow: auto;">
+      <nav style="display: grid; gap: 22px; font-family: 'Oswald', sans-serif; font-size: 22px; letter-spacing: 2.4px;">
+        <a href="AboutUs.dc.html">ABOUT US</a>
+        <a href="#how" onClick="{{ closeMenu }}">HOW IT WORKS</a>
+        <a href="#themes" onClick="{{ closeMenu }}">DESIGN THEMES</a>
+        <a href="#walkthrough" onClick="{{ closeMenu }}">VIRTUAL SHOWROOM</a>
+        <a href="#pricing" onClick="{{ closeMenu }}">PRICING</a>
+        <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+        <a href="ContactUs.dc.html">CONTACT US</a>
+        <sc-if value="{{ loggedOut }}" hint-placeholder-val="{{ true }}">
+          <a href="Login.dc.html" style="color: #5a7e8a;">LOGIN / SIGN UP</a>
+        </sc-if>
+        <sc-if value="{{ loggedIn }}" hint-placeholder-val="{{ false }}">
+          <a href="javascript:void(0)" onClick="{{ openAccountFromMenu }}" style="color: #5a7e8a;">MY ACCOUNT</a>
+          <a href="javascript:void(0)" onClick="{{ logoutFromMenu }}">LOGOUT</a>
+        </sc-if>
+        <a href="#start" onClick="{{ closeMenu }}" style="margin-top: 12px; justify-self: start; background: #1a2023; color: #f6f4ef; padding: 16px 32px; border-radius: 999px; font-size: 15px;">START YOUR RENOVATION</a>
+      </nav>
+      <div style="display: flex; gap: 16px; margin-top: 40px;">
+        <a href="https://www.facebook.com/share/19EwNzh3n5/?mibextid=wwXIfr" target="_blank" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;"><img src="assets/images/fb-icon-teal.svg" alt="Facebook" style="height: 18px;"></a>
+        <a href="https://www.instagram.com/homeandme2017?utm_source=qr" target="_blank" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 20px;"></a>
+      </div>
+    </div>
+  </sc-if>
+
+  <section id="top" style="position: relative; padding: clamp(120px, 16vw, 165px) clamp(20px, 4vw, 40px) clamp(48px, 7vw, 64px);">
+    <div data-mq2="1" style="max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 1.02fr 1fr; gap: clamp(32px, 5vw, 64px); align-items: center;">
+      <div style="min-width: 0; animation: hnmRise 0.9s ease both;">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 24px; display: flex; align-items: center; gap: 12px;"><span style="width: 34px; height: 1px; background: #5a7e8a;"></span>ONLINE RENOVATION STUDIO · SINGAPORE</p>
+        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(42px, 6.4vw, 72px); line-height: 1.04; letter-spacing: 1px; margin: 0 0 26px; color: #1a2023;">COMPLETING HOME<br><span style="color: #5a7e8a;">WITH ME.</span></h1>
+        <p style="font-size: clamp(17px, 2vw, 20px); line-height: 1.65; color: #4a5350; margin: 0 0 34px; max-width: 460px; text-wrap: pretty;">Design every room, tour photoreal renders of your exact selections, and see what it costs — before you commit a single dollar.</p>
+        <div style="display: flex; align-items: center; gap: 26px; flex-wrap: wrap;">
+          <a href="#start" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #5a7e8a; color: #fff; padding: 17px 34px; border-radius: 999px; transition: background 0.25s;" style-hover="background: #1a2023; color: #fff;">START YOUR RENOVATION</a>
+          <a href="#how" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; border-bottom: 1px solid rgba(26,32,35,0.4); padding-bottom: 4px;">SEE HOW IT WORKS ↓</a>
+        </div>
+      </div>
+      <div style="min-width: 0; animation: hnmRise 0.9s ease 0.15s both;">
+        <div style="background: linear-gradient(160deg, #ffffff, #f0ede6); border: 1px solid rgba(26,32,35,0.1); border-radius: 6px; padding: 10px; box-shadow: 0 30px 60px -34px rgba(26,32,35,0.4);">
+          <div style="position: relative; border-radius: 4px; overflow: hidden; aspect-ratio: 4 / 3; background: #e7e2d8;">
+            <sc-for list="{{ slides }}" as="slide" hint-placeholder-count="0">
+              <img src="{{ slide.src }}" alt="{{ slide.caption }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 1.4s ease; opacity: {{ slide.op }}; animation: hnmKen 11s linear infinite alternate;">
+            </sc-for>
+            <div style="position: absolute; top: 16px; left: 18px; display: flex; align-items: center; gap: 8px; background: rgba(26,32,35,0.55); backdrop-filter: blur(6px); border-radius: 999px; padding: 8px 16px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #7fd8a8; animation: hnmPulse 2.4s ease-in-out infinite;"></span>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #fff;">RENDER PREVIEW</span>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 12px 8px;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #6d746f;">{{ slideCaption }}</span>
+            <div style="display: flex; gap: 6px;">
+              <sc-for list="{{ dots }}" as="dot" hint-placeholder-count="4">
+                <button type="button" onClick="{{ dot.go }}" aria-label="Show render" style="width: 26px; height: 4px; border: none; border-radius: 2px; cursor: pointer; padding: 0; background: {{ dot.bg }};"></button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="start" style="border-top: 1px solid rgba(26,32,35,0.1); border-bottom: 1px solid rgba(26,32,35,0.1); background: #fff; padding: clamp(48px, 7vw, 72px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
+    <div style="max-width: 1000px; margin: 0 auto; text-align: center;">
+      <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 28px;">BEGIN YOUR PROJECT</p>
+      <div style="font-size: clamp(22px, 3.2vw, 30px); line-height: 2; color: #1a2023; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; column-gap: 12px;">
+        <span>I am renovating my</span>
+        <select value="{{ property }}" onChange="{{ setProperty }}" style="font-family: 'Oswald', sans-serif; font-size: clamp(17px, 2.2vw, 20px); color: #5a7e8a; border: none; border-bottom: 1px solid #5a7e8a; background: transparent; padding: 2px 6px; outline: none; cursor: pointer;">
+          <option>HDB flat</option>
+          <option>condominium</option>
+          <option>landed home</option>
+        </select>
+        <span>— a</span>
+        <select value="{{ rooms }}" onChange="{{ setRooms }}" style="font-family: 'Oswald', sans-serif; font-size: clamp(17px, 2.2vw, 20px); color: #5a7e8a; border: none; border-bottom: 1px solid #5a7e8a; background: transparent; padding: 2px 6px; outline: none; cursor: pointer;">
+          <option>2-room</option>
+          <option>3-room</option>
+          <option>4-room</option>
+          <option>5-room</option>
+        </select>
+        <select value="{{ unit }}" onChange="{{ setUnit }}" style="font-family: 'Oswald', sans-serif; font-size: clamp(17px, 2.2vw, 20px); color: #5a7e8a; border: none; border-bottom: 1px solid #5a7e8a; background: transparent; padding: 2px 6px; outline: none; cursor: pointer;">
+          <option>resale</option>
+          <option>new</option>
+        </select>
+        <span>unit.</span>
+      </div>
+      <div style="margin-top: 32px; display: flex; flex-direction: column; align-items: center; gap: 14px;">
+        <a href="javascript:void(0)" onClick="{{ openReminder }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 17px 40px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">PROCEED TO NEXT →</a>
+        <span style="font-size: 14px; color: #8a908c;">Free to design — no sign-up needed until checkout.</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" style="padding: clamp(72px, 10vw, 110px) clamp(20px, 4vw, 40px) 0; scroll-margin-top: 76px;">
+    <div data-mq2="1" style="max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center;">
+      <div>
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 16px;">ABOUT US</p>
+        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 44px); margin: 0 0 20px; line-height: 1.15;">Renovation, made honest</h2>
+        <p style="margin: 0 0 16px; font-size: 17px; line-height: 1.75; color: #4a5350; text-wrap: pretty;">Home &amp; Me began with a simple frustration: renovating in Singapore meant juggling quotes you couldn't compare, prices that moved after you signed, and designs you couldn't see until they were built.</p>
+        <p style="margin: 0 0 28px; font-size: 17px; line-height: 1.75; color: #4a5350; text-wrap: pretty;">So we put the entire journey online — curated design themes, photoreal renders of your actual selections, itemised live pricing and vetted contractors — so every homeowner can complete their home with confidence.</p>
+        <a href="AboutUs.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; border-bottom: 1px solid rgba(26,32,35,0.4); padding-bottom: 4px;">READ OUR FULL STORY →</a>
+      </div>
+      <div style="overflow: hidden; border-radius: 4px;">
+        <img src="assets/images/modern-classic-bathroom_aboutus.jpg" alt="Modern classic interior" style="width: 100%; aspect-ratio: 4 / 3.2; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.04);">
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: clamp(56px, 8vw, 88px) clamp(20px, 4vw, 40px) 0;">
+    <div data-mq2="1" style="max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;">
+      <figure style="margin: 0;">
+        <div style="overflow: hidden; border-radius: 4px;"><img src="assets/images/modern-classic-bathroom-1_aboutus.jpg" alt="Modern classic bathroom" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"></div>
+        <figcaption style="display: flex; justify-content: space-between; padding-top: 12px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c;"><span>MASTER BATHROOM</span><span>Nº 01</span></figcaption>
+      </figure>
+      <figure style="margin: 0; transform: translateY(44px);">
+        <div style="overflow: hidden; border-radius: 4px;"><img src="assets/images/modern-classic-kitchen_aboutus.jpg" alt="Modern classic kitchen" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"></div>
+        <figcaption style="display: flex; justify-content: space-between; padding-top: 12px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c;"><span>KITCHEN</span><span>Nº 02</span></figcaption>
+      </figure>
+      <figure style="margin: 0;">
+        <div style="overflow: hidden; border-radius: 4px;"><img src="assets/images/master-bathroom.jpg" alt="Bathroom detail" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"></div>
+        <figcaption style="display: flex; justify-content: space-between; padding-top: 12px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c;"><span>EN-SUITE</span><span>Nº 03</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="walkthrough" style="background: #171d1f; color: #f6f4ef; padding: clamp(72px, 10vw, 110px) clamp(20px, 4vw, 40px); margin-top: clamp(72px, 10vw, 110px); scroll-margin-top: 76px;">
+    <div style="max-width: 1320px; margin: 0 auto;">
+      <div style="display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; margin-bottom: 48px;">
+        <div>
+          <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #8fb0bb; margin: 0 0 16px;">VIRTUAL SHOWROOM</p>
+          <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 44px); margin: 0; line-height: 1.15;">Walk into a finished project</h2>
+        </div>
+        <p style="max-width: 400px; margin: 0; font-size: 17px; line-height: 1.65; color: rgba(246,244,239,0.72);">Pick a project and step through it room by room — pan around each render and click anywhere to look closer.</p>
+      </div>
+      <div data-mq2="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px;">
+        <a href="javascript:void(0)" onClick="{{ openWalk0 }}" style="display: block; color: inherit; position: relative; border-radius: 6px; overflow: hidden;">
+          <img src="assets/renders/living-warm.jpg" alt="Modern Luxe project" style="width: 100%; aspect-ratio: 16 / 9.5; object-fit: cover; display: block; transition: transform 0.9s ease;" style-hover="transform: scale(1.04);">
+          <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,17,18,0.82), rgba(13,17,18,0) 55%); pointer-events: none;"></div>
+          <div style="position: absolute; left: 24px; right: 24px; bottom: 22px; display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap;">
+            <div>
+              <p style="font-family: 'Oswald', sans-serif; font-size: 18px; letter-spacing: 1.8px; margin: 0 0 6px; color: #fff;">MODERN LUXE</p>
+              <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; margin: 0; color: rgba(255,255,255,0.65);">4-ROOM HDB · 4 ROOMS TO EXPLORE</p>
+            </div>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; background: rgba(246,244,239,0.94); color: #1a2023; padding: 12px 22px; border-radius: 999px;">WALK IN →</span>
+          </div>
+        </a>
+        <a href="javascript:void(0)" onClick="{{ openWalk1 }}" style="display: block; color: inherit; position: relative; border-radius: 6px; overflow: hidden;">
+          <img src="assets/images/login-bg.jpg" alt="Modern Classic project" style="width: 100%; aspect-ratio: 16 / 9.5; object-fit: cover; display: block; transition: transform 0.9s ease;" style-hover="transform: scale(1.04);">
+          <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,17,18,0.82), rgba(13,17,18,0) 55%); pointer-events: none;"></div>
+          <div style="position: absolute; left: 24px; right: 24px; bottom: 22px; display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap;">
+            <div>
+              <p style="font-family: 'Oswald', sans-serif; font-size: 18px; letter-spacing: 1.8px; margin: 0 0 6px; color: #fff;">MODERN CLASSIC</p>
+              <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; margin: 0; color: rgba(255,255,255,0.65);">4-ROOM HDB · 4 ROOMS TO EXPLORE</p>
+            </div>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; background: rgba(246,244,239,0.94); color: #1a2023; padding: 12px 22px; border-radius: 999px;">WALK IN →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" style="padding: clamp(88px, 12vw, 130px) clamp(20px, 4vw, 40px) clamp(72px, 10vw, 110px); scroll-margin-top: 76px;">
+    <div style="max-width: 1320px; margin: 0 auto;">
+      <div data-mq2="1" style="display: grid; grid-template-columns: 1fr 2fr; gap: 32px; margin-bottom: 26px;">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 6px 0 0;">HOW IT WORKS</p>
+        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 44px); line-height: 1.15; margin: 0; max-width: 620px;">From floor plan to finished home, without the guesswork</h2>
+      </div>
+      <div style="border-top: 1px solid rgba(26,32,35,0.12);">
+        <div data-mq2="1" style="display: grid; grid-template-columns: 100px 1fr 1.4fr; gap: clamp(10px, 2vw, 32px); padding: 30px 8px; border-bottom: 1px solid rgba(26,32,35,0.12); align-items: baseline; transition: background 0.3s;" style-hover="background: rgba(90,126,138,0.05);">
+          <span style="font-family: 'Oswald', sans-serif; font-weight: 300; font-size: 30px; color: rgba(90,126,138,0.55);">01</span>
+          <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 20px; letter-spacing: 1.6px; margin: 0;">CONFIGURE YOUR HOME</h3>
+          <p style="margin: 0; font-size: 17px; line-height: 1.65; color: #4a5350;">Tell us your property type, number of rooms and whether it is a new or resale unit. Under a minute, no account needed.</p>
+        </div>
+        <div data-mq2="1" style="display: grid; grid-template-columns: 100px 1fr 1.4fr; gap: clamp(10px, 2vw, 32px); padding: 30px 8px; border-bottom: 1px solid rgba(26,32,35,0.12); align-items: baseline; transition: background 0.3s;" style-hover="background: rgba(90,126,138,0.05);">
+          <span style="font-family: 'Oswald', sans-serif; font-weight: 300; font-size: 30px; color: rgba(90,126,138,0.55);">02</span>
+          <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 20px; letter-spacing: 1.6px; margin: 0;">DESIGN &amp; PREVIEW IN PHOTOREAL 3D</h3>
+          <p style="margin: 0; font-size: 17px; line-height: 1.65; color: #4a5350;">Choose a curated theme, tailor it room by room, and tour photoreal renders of your exact selections before a single tile is laid.</p>
+        </div>
+        <div data-mq2="1" style="display: grid; grid-template-columns: 100px 1fr 1.4fr; gap: clamp(10px, 2vw, 32px); padding: 30px 8px; border-bottom: 1px solid rgba(26,32,35,0.12); align-items: baseline; transition: background 0.3s;" style-hover="background: rgba(90,126,138,0.05);">
+          <span style="font-family: 'Oswald', sans-serif; font-weight: 300; font-size: 30px; color: rgba(90,126,138,0.55);">03</span>
+          <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 20px; letter-spacing: 1.6px; margin: 0;">RENOVATE WITH CONFIDENCE</h3>
+          <p style="margin: 0; font-size: 17px; line-height: 1.65; color: #4a5350;">Check out with a fully itemised quote, then track your project from hacking to handover with our vetted partners.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="themes" style="background: #fff; border-top: 1px solid rgba(26,32,35,0.1); padding: clamp(72px, 10vw, 110px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
+    <div style="max-width: 1320px; margin: 0 auto;">
+      <div style="display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; margin-bottom: 52px;">
+        <div>
+          <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 16px;">DESIGN THEMES</p>
+          <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 44px); margin: 0; line-height: 1.15;">Curated looks, specified<br>to the last tile</h2>
+        </div>
+        <p style="max-width: 380px; margin: 0; font-size: 17px; line-height: 1.65; color: #4a5350;">Every theme is a complete, buildable specification — materials, carpentry and finishes, not just a mood board.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px;">
+        <a href="javascript:void(0)" onClick="{{ openThemeMC }}" style="display: block; color: inherit;">
+          <div style="overflow: hidden; border-radius: 4px;">
+            <img src="assets/enhanced/design-config-img-1.png" alt="Modern Oriental" style="width: 100%; aspect-ratio: 3 / 2.6; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.02);">
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 18px 2px 6px;">
+            <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 19px; letter-spacing: 1.6px; margin: 0;">MODERN ORIENTAL</h3>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #5a7e8a;">VIEW →</span>
+          </div>
+          <p style="margin: 0; padding: 0 2px; font-size: 16px; line-height: 1.6; color: #4a5350;">Lattice screens, dark stone feature walls and warm woods.</p>
+        </a>
+        <a href="javascript:void(0)" onClick="{{ openThemeSC }}" style="display: block; color: inherit;">
+          <div style="overflow: hidden; border-radius: 4px;">
+            <img src="assets/enhanced/design-config-img-2.png" alt="Scandinavian" style="width: 100%; aspect-ratio: 3 / 2.6; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.02);">
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 18px 2px 6px;">
+            <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 19px; letter-spacing: 1.6px; margin: 0;">SCANDINAVIAN</h3>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #5a7e8a;">VIEW →</span>
+          </div>
+          <p style="margin: 0; padding: 0 2px; font-size: 16px; line-height: 1.6; color: #4a5350;">Light oak, soft neutrals and honest textures for calm, bright rooms.</p>
+        </a>
+        <a href="javascript:void(0)" onClick="{{ openThemeCL }}" style="display: block; color: inherit;">
+          <div style="overflow: hidden; border-radius: 4px;">
+            <img src="assets/enhanced/design-config-img-3.png" alt="Contemporary" style="width: 100%; aspect-ratio: 3 / 2.6; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.02);">
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 18px 2px 6px;">
+            <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 19px; letter-spacing: 1.6px; margin: 0;">CONTEMPORARY</h3>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #5a7e8a;">VIEW →</span>
+          </div>
+          <p style="margin: 0; padding: 0 2px; font-size: 16px; line-height: 1.6; color: #4a5350;">Light stone, white brick and confident teal upholstery.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" style="background: #171d1f; color: #f6f4ef; padding: clamp(72px, 10vw, 110px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
+    <div data-mq2="1" style="max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 80px); align-items: center;">
+      <div>
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #8fb0bb; margin: 0 0 16px;">COST TRANSPARENCY</p>
+        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 44px); margin: 0 0 22px; line-height: 1.15;">Know exactly what you are paying for</h2>
+        <p style="margin: 0 0 32px; font-size: 17px; line-height: 1.7; color: rgba(246,244,239,0.72); text-wrap: pretty;">Renovation shouldn't be a black box. Every scope of work you select is priced live, line by line, before you commit to anything.</p>
+        <div style="display: grid; gap: 16px; font-size: 17px;">
+          <div style="display: flex; gap: 16px; align-items: baseline;"><span style="color: #8fb0bb; font-family: 'Oswald', sans-serif;">—</span><p style="margin: 0; line-height: 1.6;">Itemised pricing for every scope — hacking, tiling, carpentry, plumbing.</p></div>
+          <div style="display: flex; gap: 16px; align-items: baseline;"><span style="color: #8fb0bb; font-family: 'Oswald', sans-serif;">—</span><p style="margin: 0; line-height: 1.6;">No hidden costs. The price at checkout is the price you pay.</p></div>
+          <div style="display: flex; gap: 16px; align-items: baseline;"><span style="color: #8fb0bb; font-family: 'Oswald', sans-serif;">—</span><p style="margin: 0; line-height: 1.6;">Vetted contractors, assigned and managed through the platform.</p></div>
+          <div style="display: flex; gap: 16px; align-items: baseline;"><span style="color: #8fb0bb; font-family: 'Oswald', sans-serif;">—</span><p style="margin: 0; line-height: 1.6;">Track every milestone online, from deposit to handover.</p></div>
+        </div>
+      </div>
+      <div style="background: #f6f4ef; color: #1a2023; border-radius: 6px; padding: clamp(24px, 4vw, 38px); box-shadow: 0 40px 80px -40px rgba(0,0,0,0.6);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid rgba(26,32,35,0.15); padding-bottom: 16px; margin-bottom: 8px; gap: 12px; flex-wrap: wrap;">
+          <span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px;">SAMPLE ESTIMATE</span>
+          <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c;">{{ projectLabel }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 16px;"><span>Hacking &amp; disposal</span><span style="font-family: 'Oswald', sans-serif; font-size: 15px;">S$ 3,800</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 16px;"><span>Masonry &amp; tiling</span><span style="font-family: 'Oswald', sans-serif; font-size: 15px;">S$ 9,600</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 16px;"><span>Carpentry</span><span style="font-family: 'Oswald', sans-serif; font-size: 15px;">S$ 12,400</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 16px;"><span>Plumbing &amp; electrical</span><span style="font-family: 'Oswald', sans-serif; font-size: 15px;">S$ 4,900</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 13px 0; font-size: 16px;"><span>Painting &amp; finishes</span><span style="font-family: 'Oswald', sans-serif; font-size: 15px;">S$ 2,700</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 18px 0 4px; border-top: 1px solid #1a2023; margin-top: 6px;">
+          <span style="font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 2.6px;">ESTIMATED TOTAL</span>
+          <span style="font-family: 'Oswald', sans-serif; font-size: 22px; color: #5a7e8a;">S$ 33,400</span>
+        </div>
+        <p style="margin: 14px 0 0; font-size: 13px; color: #8a908c;">Illustrative only — your quote is itemised live as you design.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" style="padding: clamp(72px, 10vw, 110px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
+    <div style="max-width: 900px; margin: 0 auto;">
+      <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 16px; text-align: center;">FAQ &amp; HELP</p>
+      <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 44px); margin: 0 0 48px; text-align: center;">Questions, answered</h2>
+      <div style="border-top: 1px solid rgba(26,32,35,0.12);">
+        <sc-for list="{{ faqs }}" as="item" hint-placeholder-count="5">
+          <div style="border-bottom: 1px solid rgba(26,32,35,0.12);">
+            <button type="button" onClick="{{ item.toggle }}" style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 24px; background: none; border: none; cursor: pointer; padding: 22px 6px; text-align: left; min-height: 44px;">
+              <span style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 18px; letter-spacing: 0.6px; color: #1a2023;">{{ item.q }}</span>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 22px; color: #5a7e8a; font-weight: 300;">{{ item.mark }}</span>
+            </button>
+            <sc-if value="{{ item.open }}" hint-placeholder-val="{{ false }}">
+              <p style="margin: 0; padding: 0 6px 24px; font-size: 17px; line-height: 1.7; color: #4a5350; max-width: 760px;">{{ item.a }}</p>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="background: #fff; border-top: 1px solid rgba(26,32,35,0.1); padding: clamp(72px, 10vw, 110px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
+    <div data-mq2="1" style="max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 80px);">
+      <div>
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 16px;">CONTACT US</p>
+        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 44px); margin: 0 0 22px; line-height: 1.15;">Talk to us about your home</h2>
+        <p style="margin: 0 0 28px; font-size: 17px; line-height: 1.7; color: #4a5350; text-wrap: pretty;">Whether you're comparing quotes or already holding your keys, we'll help you plan the renovation — write to us and we'll get back within one working day.</p>
+        <div style="display: flex; gap: 14px;">
+          <a href="https://www.facebook.com/share/19EwNzh3n5/?mibextid=wwXIfr" target="_blank" aria-label="Facebook" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center; transition: background 0.25s;" style-hover="background: rgba(90,126,138,0.1);"><img src="assets/images/fb-icon-teal.svg" alt="Facebook" style="height: 18px;"></a>
+          <a href="https://www.instagram.com/homeandme2017?utm_source=qr" target="_blank" aria-label="Instagram" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center; transition: background 0.25s;" style-hover="background: rgba(90,126,138,0.1);"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 20px;"></a>
+        </div>
+      </div>
+      <div>
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <div style="display: grid; gap: 18px;">
+            <div data-mq2="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+              <input value="{{ cName }}" onChange="{{ setCName }}" placeholder="Your name" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fbfaf7; outline-color: #5a7e8a;">
+              <input value="{{ cEmail }}" onChange="{{ setCEmail }}" placeholder="Email address" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fbfaf7; outline-color: #5a7e8a;">
+            </div>
+            <textarea value="{{ cMsg }}" onChange="{{ setCMsg }}" placeholder="Tell us about your home and what you'd like to do…" rows="5" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fbfaf7; outline-color: #5a7e8a; resize: vertical;"></textarea>
+            <sc-if value="{{ cErr }}" hint-placeholder-val="{{ false }}">
+              <p style="margin: 0; color: #b0532f; font-size: 15px;">Please fill in your name, email and a short message.</p>
+            </sc-if>
+            <div>
+              <button type="button" onClick="{{ submitContact }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 16px 38px; border-radius: 999px; border: none; cursor: pointer;">SEND MESSAGE →</button>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ cSent }}" hint-placeholder-val="{{ false }}">
+          <div style="border: 1px solid rgba(90,126,138,0.35); background: rgba(90,126,138,0.07); border-radius: 6px; padding: 40px; text-align: center;">
+            <p style="font-family: 'Oswald', sans-serif; letter-spacing: 2.6px; font-size: 14px; color: #5a7e8a; margin: 0 0 12px;">MESSAGE SENT</p>
+            <p style="margin: 0; font-size: 17px; line-height: 1.6; color: #1a2023;">Thank you, {{ cName }} — we'll reply to {{ cEmail }} within one working day.</p>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background: #f6f4ef; border-top: 1px solid rgba(26,32,35,0.1); padding: clamp(48px, 7vw, 72px) clamp(20px, 4vw, 40px) 40px;">
+    <div style="max-width: 1320px; margin: 0 auto;">
+      <div style="display: flex; justify-content: space-between; gap: 48px; flex-wrap: wrap; margin-bottom: 48px;">
+        <div style="max-width: 300px;">
+          <img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 44px; width: auto; margin-bottom: 16px;">
+          <p style="margin: 0 0 20px; line-height: 1.7; font-size: 14px; color: #4a5350;">Completing home with me — Singapore's online renovation platform with full cost transparency.</p>
+          <div style="display: flex; gap: 12px;">
+            <a href="https://www.facebook.com/share/19EwNzh3n5/?mibextid=wwXIfr" target="_blank" aria-label="Facebook" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;" style-hover="background: rgba(90,126,138,0.1);"><img src="assets/images/fb-icon-teal.svg" alt="Facebook" style="height: 17px;"></a>
+            <a href="https://www.instagram.com/homeandme2017?utm_source=qr" target="_blank" aria-label="Instagram" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;" style-hover="background: rgba(90,126,138,0.1);"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 19px;"></a>
+          </div>
+        </div>
+        <div style="display: flex; gap: clamp(32px, 5vw, 72px); flex-wrap: wrap;">
+          <div style="display: grid; gap: 12px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2px; align-content: start;">
+            <p style="margin: 0 0 4px; color: #8a908c;">EXPLORE</p>
+            <a href="#top">HOME</a>
+            <a href="AboutUs.dc.html">ABOUT US</a>
+            <a href="#how">HOW IT WORKS</a>
+            <a href="#themes">DESIGN THEMES</a>
+            <a href="#walkthrough">VIRTUAL SHOWROOM</a>
+            <a href="#pricing">PRICING</a>
+          </div>
+          <div style="display: grid; gap: 12px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2px; align-content: start;">
+            <p style="margin: 0 0 4px; color: #8a908c;">SUPPORT</p>
+            <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+            <a href="ContactUs.dc.html">CONTACT US</a>
+            <a href="Legal.dc.html#quickfixes">QUICK FIXES</a>
+            <a href="Legal.dc.html#partners">FOR PARTNERS</a>
+          </div>
+          <div style="display: grid; gap: 12px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2px; align-content: start;">
+            <p style="margin: 0 0 4px; color: #8a908c;">ACCOUNT</p>
+            <a href="Login.dc.html">LOGIN</a>
+            <a href="Login.dc.html">SIGN UP</a>
+            <a href="MyProject.dc.html">MY PROJECTS</a>
+          </div>
+          <div style="display: grid; gap: 12px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2px; align-content: start;">
+            <p style="margin: 0 0 4px; color: #8a908c;">LEGAL</p>
+            <a href="Legal.dc.html#privacy">PRIVACY AND LEGAL</a>
+            <a href="Legal.dc.html#terms">TERMS</a>
+            <a href="Legal.dc.html#cookies">COOKIE POLICY</a>
+          </div>
+        </div>
+      </div>
+      <div style="border-top: 1px solid rgba(26,32,35,0.12); padding-top: 22px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #8a908c;">
+        <span>Copyright {{ year }} HOME&amp;ME · All rights reserved</span>
+        <span>Made in Singapore</span>
+      </div>
+    </div>
+  </footer>
+
+  <sc-if value="{{ showReminder }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 100; background: rgba(23,29,31,0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px;" onClick="{{ closeOverlay }}">
+      <div style="background: #f6f4ef; border-radius: 8px; max-width: 540px; width: 100%; padding: clamp(28px, 5vw, 46px); animation: hnmRise 0.4s ease both;" onClick="{{ stop }}">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 14px;">BEFORE YOU BEGIN</p>
+        <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 28px; margin: 0 0 18px;">One thing to prepare</h3>
+        <p style="margin: 0 0 14px; font-size: 17px; line-height: 1.65; color: #4a5350;">Have a soft copy of your floor plan or layout plan ready — you'll upload it at checkout.</p>
+        <p style="margin: 0 0 26px; font-size: 17px; line-height: 1.65; color: #4a5350;">No sign-up is needed to start designing. You'll create an account at checkout so your project is saved.</p>
+        <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+          <a href="Customize.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #5a7e8a; color: #fff; padding: 15px 32px; border-radius: 999px;" style-hover="background: #1a2023; color: #fff;">PROCEED TO NEXT →</a>
+          <button type="button" onClick="{{ closeOverlay }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 12px; background: none; border: none; cursor: pointer; color: #8a908c;">CANCEL</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showProject }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 100; background: rgba(23,29,31,0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px;" onClick="{{ closeOverlay }}">
+      <div style="background: #f6f4ef; border-radius: 8px; max-width: 560px; width: 100%; padding: clamp(28px, 5vw, 46px); animation: hnmRise 0.4s ease both;" onClick="{{ stop }}">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 14px;">PROJECT CREATED</p>
+        <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 28px; margin: 0 0 8px;">{{ projectLabel }}</h3>
+        <p style="margin: 0 0 24px; font-size: 17px; line-height: 1.65; color: #4a5350;">Your project has been set up. In the full product this takes you straight into the room customizer to pick a theme and design room by room.</p>
+        <div style="border: 1px solid rgba(26,32,35,0.15); border-radius: 6px; padding: 20px 24px; margin-bottom: 26px; display: grid; gap: 10px; font-size: 16px;">
+          <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8a908c;">Property</span><span style="font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: 1px;">{{ propertyUpper }}</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8a908c;">Layout</span><span style="font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: 1px;">{{ roomsUpper }}</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8a908c;">Unit</span><span style="font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: 1px;">{{ unitUpper }}</span></div>
+        </div>
+        <button type="button" onClick="{{ closeOverlay }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 15px 32px; border-radius: 999px; border: none; cursor: pointer;">DONE</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showAuth }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 100; background: rgba(23,29,31,0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px;" onClick="{{ closeOverlay }}">
+      <div style="background: #f6f4ef; border-radius: 8px; max-width: 440px; width: 100%; padding: clamp(28px, 5vw, 46px); animation: hnmRise 0.4s ease both;" onClick="{{ stop }}">
+        <sc-if value="{{ isLoginMode }}" hint-placeholder-val="{{ true }}">
+          <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 14px;">WELCOME BACK</p>
+          <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 28px; margin: 0 0 22px;">Log in to Home &amp; Me</h3>
+          <div style="display: grid; gap: 14px; margin-bottom: 20px;">
+            <input placeholder="Email address" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fff; outline-color: #5a7e8a;">
+            <input type="password" placeholder="Password" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fff; outline-color: #5a7e8a;">
+          </div>
+          <button type="button" onClick="{{ doLogin }}" style="width: 100%; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #5a7e8a; color: #fff; padding: 16px 32px; border-radius: 999px; border: none; cursor: pointer; margin-bottom: 18px;">LOG IN</button>
+          <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 15px;">
+            <a href="javascript:void(0)" onClick="{{ toSignup }}" style="color: #5a7e8a;">Create an account</a>
+            <a href="javascript:void(0)" onClick="{{ toForgot }}" style="color: #8a908c;">Forgot password?</a>
+          </div>
+        </sc-if>
+        <sc-if value="{{ isSignupMode }}" hint-placeholder-val="{{ false }}">
+          <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 14px;">JOIN HOME &amp; ME</p>
+          <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 28px; margin: 0 0 22px;">Create your account</h3>
+          <div style="display: grid; gap: 14px; margin-bottom: 20px;">
+            <input placeholder="Full name" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fff; outline-color: #5a7e8a;">
+            <input placeholder="Email address" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fff; outline-color: #5a7e8a;">
+            <input type="password" placeholder="Password" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fff; outline-color: #5a7e8a;">
+          </div>
+          <button type="button" onClick="{{ doLogin }}" style="width: 100%; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #5a7e8a; color: #fff; padding: 16px 32px; border-radius: 999px; border: none; cursor: pointer; margin-bottom: 18px;">CREATE ACCOUNT</button>
+          <div style="font-size: 15px;"><a href="javascript:void(0)" onClick="{{ toLogin }}" style="color: #5a7e8a;">Already have an account? Log in</a></div>
+        </sc-if>
+        <sc-if value="{{ isForgotMode }}" hint-placeholder-val="{{ false }}">
+          <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 14px;">RESET PASSWORD</p>
+          <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 28px; margin: 0 0 22px;">Forgot your password?</h3>
+          <sc-if value="{{ resetNotSent }}" hint-placeholder-val="{{ true }}">
+            <div style="display: grid; gap: 14px; margin-bottom: 20px;">
+              <input placeholder="Email address" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid rgba(26,32,35,0.2); border-radius: 4px; background: #fff; outline-color: #5a7e8a;">
+            </div>
+            <button type="button" onClick="{{ sendReset }}" style="width: 100%; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #5a7e8a; color: #fff; padding: 16px 32px; border-radius: 999px; border: none; cursor: pointer; margin-bottom: 18px;">SEND RESET LINK</button>
+          </sc-if>
+          <sc-if value="{{ resetSent }}" hint-placeholder-val="{{ false }}">
+            <p style="margin: 0 0 18px; font-size: 16px; line-height: 1.6; color: #4a5350; border: 1px solid rgba(90,126,138,0.35); background: rgba(90,126,138,0.07); border-radius: 6px; padding: 16px;">If that email is registered, a reset link is on its way.</p>
+          </sc-if>
+          <div style="font-size: 15px;"><a href="javascript:void(0)" onClick="{{ toLogin }}" style="color: #5a7e8a;">← Back to login</a></div>
+        </sc-if>
+        <p style="margin: 20px 0 0; text-align: center; font-size: 14px; color: #8a908c;">Demo — any details will work.</p>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showAccount }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 100; background: rgba(23,29,31,0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px;" onClick="{{ closeOverlay }}">
+      <div style="background: #f6f4ef; border-radius: 8px; max-width: 620px; width: 100%; padding: clamp(28px, 5vw, 46px); max-height: 86vh; overflow: auto; animation: hnmRise 0.4s ease both;" onClick="{{ stop }}">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 14px;">MY ACCOUNT</p>
+        <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 28px; margin: 0 0 6px;">Welcome back</h3>
+        <p style="margin: 0 0 24px; font-size: 15px; color: #8a908c;">demo@homeandme.sg · <a href="javascript:void(0)" onClick="{{ logout }}" style="color: #5a7e8a;">Log out</a></p>
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 12px;">MY PROJECTS</p>
+        <div style="border: 1px solid rgba(26,32,35,0.15); border-radius: 6px; padding: 22px 24px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 15px; letter-spacing: 1.4px;">{{ projectLabel }}</span>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; border: 1px solid rgba(90,126,138,0.4); border-radius: 999px; padding: 6px 14px;">DESIGN IN PROGRESS</span>
+          </div>
+          <p style="margin: 0 0 16px; font-size: 15px; color: #4a5350;">Modern Oriental theme · 3 of 5 rooms designed · Estimate S$ 33,400</p>
+          <div style="display: flex; gap: 18px; flex-wrap: wrap;">
+            <a href="Customize.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: #1a2023; color: #f6f4ef; padding: 12px 24px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">CONTINUE DESIGNING</a>
+            <a href="Checkout.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; border: 1px solid rgba(26,32,35,0.25); color: #1a2023; padding: 12px 24px; border-radius: 999px;">REVIEW &amp; CHECK OUT</a>
+          </div>
+        </div>
+        <p style="margin: 0; font-size: 14px; color: #8a908c;">Demo dashboard — in the full product this lists every saved project with its checkout and payment status.</p>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showTheme }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 100; background: rgba(23,29,31,0.65); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px;" onClick="{{ closeOverlay }}">
+      <div data-mq2="1" style="background: #f6f4ef; border-radius: 8px; max-width: 920px; width: 100%; overflow: auto; max-height: 88vh; display: grid; grid-template-columns: 1.1fr 1fr; animation: hnmRise 0.4s ease both;" onClick="{{ stop }}">
+        <img src="{{ themeImg }}" alt="{{ themeName }}" style="width: 100%; height: 100%; object-fit: cover; display: block; min-height: 260px;">
+        <div style="padding: clamp(26px, 4vw, 44px);">
+          <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 14px;">DESIGN THEME</p>
+          <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 30px; margin: 0 0 16px;">{{ themeName }}</h3>
+          <p style="margin: 0 0 22px; font-size: 17px; line-height: 1.65; color: #4a5350;">{{ themeDesc }}</p>
+          <div style="border-top: 1px solid rgba(26,32,35,0.12); margin-bottom: 26px;">
+            <sc-for list="{{ themeSpecs }}" as="spec" hint-placeholder-count="4">
+              <div style="display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 16px; align-items: baseline;">
+                <span style="color: #5a7e8a; font-family: 'Oswald', sans-serif; font-size: 12px;">◆</span>
+                <span>{{ spec.text }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+            <a href="Customize.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 15px 30px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START WITH THIS THEME</a>
+            <button type="button" onClick="{{ closeOverlay }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 12px; background: none; border: none; cursor: pointer; color: #8a908c;">CLOSE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showLegal }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 100; background: rgba(23,29,31,0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px;" onClick="{{ closeOverlay }}">
+      <div style="background: #f6f4ef; border-radius: 8px; max-width: 640px; width: 100%; padding: clamp(28px, 5vw, 46px); max-height: 84vh; overflow: auto; animation: hnmRise 0.4s ease both;" onClick="{{ stop }}">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 14px;">HOME &amp; ME</p>
+        <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 28px; margin: 0 0 18px;">{{ legalTitle }}</h3>
+        <sc-for list="{{ legalParas }}" as="para" hint-placeholder-count="3">
+          <p style="margin: 0 0 16px; font-size: 17px; line-height: 1.7; color: #4a5350;">{{ para.text }}</p>
+        </sc-for>
+        <button type="button" onClick="{{ closeOverlay }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 14px 30px; border-radius: 999px; border: none; cursor: pointer; margin-top: 8px;">CLOSE</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showViewer }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 120; background: #0d1112; overflow: hidden;">
+      <div ref="{{ zoomRef }}" onPointerMove="{{ viewerMove }}" onPointerLeave="{{ viewerLeave }}" onClick="{{ viewerClick }}" style="position: absolute; inset: 0; transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); cursor: {{ viewerCursor }}; will-change: transform;">
+        <sc-for list="{{ viewerRooms }}" as="room" hint-placeholder-count="0">
+          <img src="{{ room.src }}" alt="{{ room.label }}" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; user-select: none; transition: opacity 1s ease, transform 1.8s cubic-bezier(0.22, 1, 0.36, 1); opacity: {{ room.op }}; transform: {{ room.tf }};">
+        </sc-for>
+      </div>
+      <div style="position: absolute; top: 0; left: 0; right: 0; padding: 18px clamp(16px, 3vw, 32px); display: flex; justify-content: space-between; align-items: center; gap: 16px; background: linear-gradient(to bottom, rgba(13,17,18,0.75), rgba(13,17,18,0)); pointer-events: none;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 36px; width: auto; filter: brightness(0) invert(1);">
+          <span style="font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 2.6px; color: #fff;">{{ viewerTitle }}</span>
+        </div>
+        <button type="button" onClick="{{ closeOverlay }}" style="pointer-events: auto; width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.35); background: rgba(13,17,18,0.4); color: #fff; font-size: 17px; cursor: pointer;">✕</button>
+      </div>
+      <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 72px clamp(16px, 3vw, 32px) 22px; background: linear-gradient(to top, rgba(13,17,18,0.88), rgba(13,17,18,0));">
+        <div style="display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap;">
+          <div style="min-width: 0;">
+            <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: rgba(255,255,255,0.6); margin: 0 0 8px;">{{ roomCounter }} · {{ zoomHint }}</p>
+            <p style="font-family: 'Oswald', sans-serif; font-size: clamp(20px, 3vw, 28px); letter-spacing: 2px; color: #fff; margin: 0 0 14px;">{{ roomLabel }}</p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <sc-for list="{{ viewerThumbs }}" as="thumb" hint-placeholder-count="0">
+                <button type="button" onClick="{{ thumb.go }}" style="padding: 0; border-radius: 4px; overflow: hidden; cursor: pointer; background: none; border: 2px solid {{ thumb.border }}; opacity: {{ thumb.op }}; transition: opacity 0.3s;">
+                  <img src="{{ thumb.src }}" alt="{{ thumb.label }}" style="width: 86px; height: 54px; object-fit: cover; display: block;">
+                </button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <button type="button" onClick="{{ prevRoom }}" aria-label="Previous room" style="width: 52px; height: 52px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.35); background: rgba(13,17,18,0.4); color: #fff; font-size: 18px; cursor: pointer;">←</button>
+            <button type="button" onClick="{{ nextRoom }}" aria-label="Next room" style="width: 52px; height: 52px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.35); background: rgba(13,17,18,0.4); color: #fff; font-size: 18px; cursor: pointer;">→</button>
+            <a href="Customize.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 12px; background: #f6f4ef; color: #1a2023; padding: 16px 26px; border-radius: 999px; margin-left: 8px;" style-hover="background: #5a7e8a; color: #fff;">USE THIS LOOK</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behaviour&quot;}}">
+class Component extends DCLogic {
+  state = {
+    overlay: null, theme: null, legal: null, authMode: 'login', resetSent: false,
+    loggedIn: false, menuOpen: false, faqOpen: 0, slideI: 0,
+    walkP: 0, roomI: 0, zoomed: false,
+    property: 'HDB flat', rooms: '4-room', unit: 'resale',
+    cName: '', cEmail: '', cMsg: '', cSent: false, cErr: false,
+  };
+
+  componentDidMount() {
+    this.onKey = (e) => {
+      if (e.key === 'Escape') { this.resetZoom(); this.setState({ overlay: null, menuOpen: false, zoomed: false }); }
+      if (this.state.overlay === 'viewer') {
+        if (e.key === 'ArrowRight') this.stepRoom(1);
+        if (e.key === 'ArrowLeft') this.stepRoom(-1);
+      }
+    };
+    window.addEventListener('keydown', this.onKey);
+    this.timer = setInterval(() => {
+      if ((this.props.motion ?? true) && !this.state.overlay) {
+        this.setState((s) => ({ slideI: (s.slideI + 1) % 4 }));
+      }
+    }, 5200);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onKey);
+    clearInterval(this.timer);
+  }
+
+  projectsData() {
+    return [
+      { title: 'MODERN LUXE · 4-ROOM HDB', rooms: [
+        { src: 'assets/renders/living-warm.jpg', label: 'LIVING ROOM' },
+        { src: 'assets/renders/dining-warm.jpg', label: 'DINING & ENTRY' },
+        { src: 'assets/renders/master-warm.jpg', label: 'MASTER BEDROOM' },
+        { src: 'assets/renders/study-warm.jpg', label: 'STUDY' },
+      ]},
+      { title: 'MODERN CLASSIC · 4-ROOM HDB', rooms: [
+        { src: 'assets/images/login-bg.jpg', label: 'LIVING & DINING' },
+        { src: 'assets/images/modern-classic-kitchen_aboutus.jpg', label: 'KITCHEN' },
+        { src: 'assets/images/master-bathroom.jpg', label: 'MASTER BATHROOM' },
+        { src: 'assets/images/modern-classic-bathroom-1_aboutus.jpg', label: 'EN-SUITE' },
+      ]},
+    ];
+  }
+
+  resetZoom() {
+    if (this._zw) { this._zw.style.transform = ''; this._zw.style.transformOrigin = '50% 50%'; }
+  }
+
+  stepRoom(d) {
+    const rooms = this.projectsData()[this.state.walkP].rooms;
+    this.resetZoom();
+    this.setState((s) => ({ roomI: (s.roomI + d + rooms.length) % rooms.length, zoomed: false }));
+  }
+
+  slideData() {
+    return [
+      { src: 'assets/images/login-bg.jpg', caption: 'LIVING & DINING — MODERN LUXE' },
+      { src: 'assets/images/master-bathroom.jpg', caption: 'MASTER BATHROOM — MODERN CLASSIC' },
+      { src: 'assets/renders/living-contemporary.jpg', caption: 'LIVING ROOM — CONTEMPORARY' },
+      { src: 'assets/images/modern-classic-bathroom-1_aboutus.jpg', caption: 'EN-SUITE — MODERN CLASSIC' },
+    ];
+  }
+
+  themeData() {
+    return {
+      mc: { name: 'MODERN ORIENTAL', img: 'assets/images/design-config-img-1.jpg',
+        desc: 'Lattice screens, dark stone feature walls and warm woods — a serene take on heritage detailing.',
+        specs: ['Fluted timber and lattice screens', 'Dark stone feature wall', 'Warm oak flooring', 'Brass and linen accents'] },
+      sc: { name: 'SCANDINAVIAN', img: 'assets/images/design-config-img-2.jpg',
+        desc: 'Light woods, soft neutrals and honest textures — calm, bright spaces built around everyday living.',
+        specs: ['Light oak platform and shelving', 'White laminate carpentry', 'Matt black fixtures', 'Soft linen and bouclé textures'] },
+      cl: { name: 'CONTEMPORARY', img: 'assets/images/design-config-img-3.jpg',
+        desc: 'Light stone surfaces, white brick and confident teal upholstery for spaces with a fresher point of view.',
+        specs: ['Light stone-look tiles', 'White brick feature wall', 'Teal fabric upholstery', 'Matt black and wood details'] },
+    };
+  }
+
+  legalData() {
+    return {
+      privacy: { title: 'Privacy and legal', paras: [
+        'Home & Me collects only the information needed to set up and manage your renovation project — your contact details, property information and design selections.',
+        'Your data is never sold to third parties. It is shared with our vetted contractors and partners only to the extent required to carry out your renovation.',
+        'You may request a copy of your data, or ask for it to be deleted, at any time by contacting us.'] },
+      terms: { title: 'Terms of service', paras: [
+        'Prices shown while designing are live, itemised estimates. Your final quote is confirmed at checkout and honoured for the works specified in it.',
+        'Project timelines are indicative and may vary with site conditions, material availability and regulatory approvals.',
+        'By checking out you appoint Home & Me to coordinate the specified works through our vetted contractors and partners.'] },
+      cookies: { title: 'Cookie policy', paras: [
+        'We use essential cookies to keep your project session alive while you design, and analytics cookies to understand how the platform is used.',
+        'No advertising or cross-site tracking cookies are set. You can clear cookies at any time in your browser without losing a saved project.'] },
+      quickfixes: { title: 'Quick Fixes', paras: [
+        'Not every job is a full renovation. Quick Fixes covers smaller works — a leaking tap, new shelving, repainting a room, replacing tiles or fixtures.',
+        'Describe the job through our contact form and we\u2019ll match you with a vetted handyman or specialist, with the same transparent, agreed-upfront pricing.'] },
+      partners: { title: 'For partners', paras: [
+        'Home & Me works with a curated network of contractors, carpenters and material suppliers who share our standard of transparent pricing and reliable delivery.',
+        'Partners receive scoped, itemised job orders through the platform — no quoting wars, no chasing payments.',
+        'Interested in joining the network? Reach out through the contact form and our partnerships team will be in touch.'] },
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const themes = this.themeData();
+    const legals = this.legalData();
+    const t = s.theme ? themes[s.theme] : null;
+    const l = s.legal ? legals[s.legal] : null;
+    const slides = this.slideData();
+    const faqData = [
+      { q: 'Do I need to sign up to start designing?', a: 'No. You can configure your home, pick a theme and design every room without an account. You only sign up at checkout, so your project is saved to you.' },
+      { q: 'How accurate is the pricing?', a: 'Every scope of work you select is priced live and itemised — hacking, masonry, carpentry, plumbing, electrical and finishes. The total you see at checkout is the price you pay.' },
+      { q: 'Who carries out the renovation?', a: 'Vetted contractors and partners on the Home & Me platform. They are assigned to your project and managed through the platform, and you track milestones from your dashboard.' },
+      { q: 'What do I need to prepare?', a: 'A soft copy of your floor plan or layout plan. You upload it at checkout so our partners can confirm site measurements before work begins.' },
+      { q: 'Can I change my design after checkout?', a: 'Yes — speak with your assigned project coordinator. Changes are re-quoted transparently as itemised additions or reductions before you approve them.' },
+    ];
+    const projectLabel = `${s.rooms.toUpperCase()} ${s.property.toUpperCase()} · ${s.unit.toUpperCase()}`;
+    const close = () => this.setState({ overlay: null });
+    return {
+      animState: (this.props.motion ?? true) ? 'on' : 'paused',
+      slides: slides.map((sl, i) => ({ src: sl.src, caption: sl.caption, op: s.slideI === i ? 1 : 0 })),
+      slideCaption: slides[s.slideI].caption,
+      dots: slides.map((sl, i) => ({
+        bg: s.slideI === i ? '#5a7e8a' : 'rgba(26,32,35,0.15)',
+        go: () => this.setState({ slideI: i }),
+      })),
+      menuOpen: s.menuOpen, menuIcon: s.menuOpen ? '✕' : '☰',
+      toggleMenu: () => this.setState({ menuOpen: !s.menuOpen }),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      loggedIn: s.loggedIn, loggedOut: !s.loggedIn,
+      openLogin: () => this.setState({ overlay: 'auth', authMode: 'login', resetSent: false }),
+      openSignup: () => this.setState({ overlay: 'auth', authMode: 'signup' }),
+      openLoginFromMenu: () => this.setState({ overlay: 'auth', authMode: 'login', menuOpen: false, resetSent: false }),
+      openAccount: () => this.setState({ overlay: 'account' }),
+      openAccountFromMenu: () => this.setState({ overlay: 'account', menuOpen: false }),
+      openAccountOrLogin: () => this.setState({ overlay: s.loggedIn ? 'account' : 'auth', authMode: 'login', resetSent: false }),
+      doLogin: () => this.setState({ loggedIn: true, overlay: 'account' }),
+      logout: () => this.setState({ loggedIn: false, overlay: null }),
+      logoutFromMenu: () => this.setState({ loggedIn: false, menuOpen: false }),
+      toLogin: () => this.setState({ authMode: 'login', resetSent: false }),
+      toSignup: () => this.setState({ authMode: 'signup' }),
+      toForgot: () => this.setState({ authMode: 'forgot', resetSent: false }),
+      sendReset: () => this.setState({ resetSent: true }),
+      isLoginMode: s.authMode === 'login', isSignupMode: s.authMode === 'signup', isForgotMode: s.authMode === 'forgot',
+      resetSent: s.resetSent, resetNotSent: !s.resetSent,
+      openReminder: () => this.setState({ overlay: 'reminder' }),
+      proceedToProject: () => this.setState({ overlay: 'project' }),
+      openThemeMC: () => this.setState({ overlay: 'theme', theme: 'mc' }),
+      openThemeSC: () => this.setState({ overlay: 'theme', theme: 'sc' }),
+      openThemeCL: () => this.setState({ overlay: 'theme', theme: 'cl' }),
+      openPrivacy: () => this.setState({ overlay: 'legal', legal: 'privacy' }),
+      openTerms: () => this.setState({ overlay: 'legal', legal: 'terms' }),
+      openCookies: () => this.setState({ overlay: 'legal', legal: 'cookies' }),
+      openQuickFixes: () => this.setState({ overlay: 'legal', legal: 'quickfixes' }),
+      openPartners: () => this.setState({ overlay: 'legal', legal: 'partners' }),
+      closeOverlay: close,
+      stop: (e) => e.stopPropagation(),
+      showReminder: s.overlay === 'reminder', showProject: s.overlay === 'project',
+      showAuth: s.overlay === 'auth', showAccount: s.overlay === 'account',
+      showTheme: s.overlay === 'theme', showLegal: s.overlay === 'legal',
+      themeName: t ? t.name : '', themeImg: t ? t.img : '', themeDesc: t ? t.desc : '',
+      themeSpecs: t ? t.specs.map((x) => ({ text: x })) : [],
+      legalTitle: l ? l.title : '', legalParas: l ? l.paras.map((x) => ({ text: x })) : [],
+      property: s.property, rooms: s.rooms, unit: s.unit,
+      propertyUpper: s.property.toUpperCase(), roomsUpper: s.rooms.toUpperCase(), unitUpper: s.unit.toUpperCase(),
+      projectLabel,
+      setProperty: (e) => this.setState({ property: e.target.value }),
+      setRooms: (e) => this.setState({ rooms: e.target.value }),
+      setUnit: (e) => this.setState({ unit: e.target.value }),
+      faqs: faqData.map((f, i) => ({
+        q: f.q, a: f.a, open: s.faqOpen === i, mark: s.faqOpen === i ? '−' : '+',
+        toggle: () => this.setState({ faqOpen: s.faqOpen === i ? -1 : i }),
+      })),
+      cName: s.cName, cEmail: s.cEmail, cMsg: s.cMsg, cSent: s.cSent, notSent: !s.cSent, cErr: s.cErr,
+      setCName: (e) => this.setState({ cName: e.target.value }),
+      setCEmail: (e) => this.setState({ cEmail: e.target.value }),
+      setCMsg: (e) => this.setState({ cMsg: e.target.value }),
+      submitContact: () => {
+        if (!s.cName.trim() || !s.cEmail.trim() || !s.cMsg.trim()) { this.setState({ cErr: true }); return; }
+        this.setState({ cSent: true, cErr: false });
+      },
+      ...this.viewerVals(),
+      year: new Date().getFullYear(),
+    };
+  }
+
+  viewerVals() {
+    const s = this.state;
+    const project = this.projectsData()[s.walkP];
+    const rooms = project.rooms;
+    return {
+      showViewer: s.overlay === 'viewer',
+      openWalk0: () => { this.resetZoom(); this.setState({ overlay: 'viewer', walkP: 0, roomI: 0, zoomed: false }); },
+      openWalk1: () => { this.resetZoom(); this.setState({ overlay: 'viewer', walkP: 1, roomI: 0, zoomed: false }); },
+      viewerTitle: project.title,
+      viewerRooms: rooms.map((r, i) => ({
+        src: r.src, label: r.label,
+        op: s.roomI === i ? 1 : 0,
+        tf: s.roomI === i ? 'scale(1)' : 'scale(1.14)',
+      })),
+      viewerThumbs: rooms.map((r, i) => ({
+        src: r.src, label: r.label,
+        border: s.roomI === i ? '#f6f4ef' : 'rgba(255,255,255,0.25)',
+        op: s.roomI === i ? 1 : 0.6,
+        go: (e) => { e.stopPropagation(); this.resetZoom(); this.setState({ roomI: i, zoomed: false }); },
+      })),
+      roomLabel: rooms[s.roomI].label,
+      roomCounter: `ROOM ${s.roomI + 1} OF ${rooms.length}`,
+      zoomHint: s.zoomed ? 'MOVE TO PAN · CLICK TO ZOOM OUT' : 'MOVE TO LOOK AROUND · CLICK TO LOOK CLOSER',
+      viewerCursor: s.zoomed ? 'zoom-out' : 'zoom-in',
+      nextRoom: (e) => { if (e) e.stopPropagation(); this.stepRoom(1); },
+      prevRoom: (e) => { if (e) e.stopPropagation(); this.stepRoom(-1); },
+      zoomRef: (node) => { this._zw = node; },
+      viewerMove: (e) => {
+        const node = this._zw; if (!node) return;
+        const r = node.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        if (this.state.zoomed) {
+          node.style.transformOrigin = `${(x * 100).toFixed(1)}% ${(y * 100).toFixed(1)}%`;
+        } else {
+          node.style.transform = `perspective(1200px) rotateY(${((x - 0.5) * 4).toFixed(2)}deg) rotateX(${((0.5 - y) * 4).toFixed(2)}deg) scale(1.06)`;
+        }
+      },
+      viewerLeave: () => { if (!this.state.zoomed) this.resetZoom(); },
+      viewerClick: (e) => {
+        const node = this._zw; if (!node) return;
+        const r = node.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width * 100).toFixed(1);
+        const y = ((e.clientY - r.top) / r.height * 100).toFixed(1);
+        if (this.state.zoomed) {
+          node.style.transform = '';
+          node.style.transformOrigin = '50% 50%';
+          this.setState({ zoomed: false });
+        } else {
+          node.style.transformOrigin = `${x}% ${y}%`;
+          node.style.transform = 'scale(2.2)';
+          this.setState({ zoomed: true });
+        }
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>
