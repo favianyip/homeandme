@@ -1,0 +1,52 @@
+name: verify-public-site
+
+on:
+  pull_request:
+  push:
+    branches: [main, feature/hermes-floorplan-render-e2e]
+
+permissions:
+  contents: read
+
+jobs:
+  static-site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript contracts
+        run: |
+          node --check config.js
+          node --check journey-api.js
+          node --check three-d-stage.js
+          node --test tests/journey-api.test.mjs
+      - name: Inline module syntax
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, subprocess
+          for name in ('Journey.html', 'MyProject.dc.html'):
+              source = Path(name).read_text()
+              modules = re.findall(r'<script\b[^>]*\btype\s*=\s*["\x27]module["\x27][^>]*>(.*?)</script\s*>', source, re.I | re.S)
+              if not modules:
+                  raise RuntimeError(f'No inline module found in {name}')
+              for index, module in enumerate(modules):
+                  target = Path('/tmp') / f'{name.replace(".", "-")}-{index}.mjs'
+                  target.write_text(module)
+                  subprocess.run(['node', '--check', str(target)], check=True)
+          PY
+      - name: Reject backend files from public Pages source
+        run: |
+          if git ls-files | grep -E '\.(aspx|ashx|asmx|cs|config)$|^App_Code/|^App_Data/' ; then
+            echo 'Server/backend files must not be published from this repository.' >&2
+            exit 1
+          fi
+      - name: Secret scan
+        uses: trufflesecurity/trufflehog@v3.95.9
+        with:
+          path: ./
+          extra_args: --results=verified,unknown

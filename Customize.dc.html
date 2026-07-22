@@ -20,7 +20,7 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
 <div style="min-width: 0;">
   <header style="position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1);">
     <div style="max-width: 1400px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); height: 72px; display: flex; align-items: center; gap: 20px;">
-      <a href="Home Redesign v2.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 40px; width: auto;"></a>
+      <a href="Home AI.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 40px; width: auto;"></a>
       <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c; border-left: 1px solid rgba(26,32,35,0.15); padding-left: 20px;">ROOM CUSTOMIZER · {{ crumb }}</span>
       <div style="margin-left: auto; display: flex; align-items: center; gap: 18px;">
         <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a;">{{ stepLabel }}</span>
@@ -72,7 +72,7 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
       </sc-if>
       <sc-if value="{{ hasPlan }}" hint-placeholder-val="{{ false }}">
         <div style="display: flex; align-items: center; gap: 14px; border: 1px solid rgba(90,126,138,0.4); border-radius: 8px; padding: 12px 16px; background: rgba(90,126,138,0.06);">
-          <img src="{{ planUrl }}" alt="Floor plan preview" style="width: 72px; height: 54px; object-fit: cover; border-radius: 4px; background: #fff; border: 1px solid rgba(26,32,35,0.1);">
+          <div aria-label="Floor plan preview" style="width: 72px; height: 54px; border-radius: 4px; background-color: #fff; background-image: url('{{ planUrl }}'); background-size: cover; background-position: center; border: 1px solid rgba(26,32,35,0.1);"></div>
           <span style="flex: 1; min-width: 0;">
             <span style="display: block; font-size: 14px; color: #1a2023; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ planName }}</span>
             <span style="display: block; font-size: 12px; color: #5a7e8a; margin-top: 2px;">Ready to verify against {{ planTarget }}</span>
@@ -113,7 +113,7 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
           </span>
         </button>
       </sc-for>
-      <a href="Home Redesign v2.dc.html#walkthrough" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; margin-top: 10px;">← BACK TO SHOWROOM</a>
+      <a href="Home AI.dc.html#portfolio" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; margin-top: 10px;">← BACK TO SHOWROOM</a>
     </aside>
 
     <main style="min-width: 0;">
@@ -187,9 +187,9 @@ class Component extends DCLogic {
 
   data() {
     const imgs = {
-      luxe: { living: 'assets/renders/living-warm.jpg', kitchen: 'assets/renders/dining-warm.jpg', master: 'assets/renders/master-warm.jpg', common: 'assets/renders/study-warm.jpg', common2: 'assets/renders/study-warm.jpg', study: 'assets/renders/study-warm.jpg', bath: 'assets/images/master-bathroom.jpg', family: 'assets/renders/living-contemporary.jpg' },
-      classic: { living: 'assets/images/login-bg.jpg', kitchen: 'assets/images/modern-classic-kitchen_aboutus.jpg', master: 'assets/enhanced/design-config-img-1.png', common: 'assets/enhanced/design-config-img-1.png', common2: 'assets/enhanced/design-config-img-1.png', study: 'assets/enhanced/design-config-img-3.png', bath: 'assets/images/modern-classic-bathroom-1_aboutus.jpg', family: 'assets/images/home-bg.jpg' },
-      scandi: { living: 'assets/enhanced/design-config-img-2.png', kitchen: 'assets/enhanced/design-config-img-3.png', master: 'assets/renders/bedroom-scandinavian.jpg', common: 'assets/renders/bedroom-scandinavian.jpg', common2: 'assets/renders/bedroom-scandinavian.jpg', study: 'assets/renders/study-warm.jpg', bath: 'assets/images/master-bathroom.jpg', family: 'assets/enhanced/design-config-img-2.png' },
+      luxe: { living: 'assets/renders/living-luxe-dark.jpg', kitchen: 'assets/renders/dining-stone.jpg', master: 'assets/renders/bedroom-luxe-marble.jpg', common: 'assets/renders/bedroom-wood-master.jpg', common2: 'assets/renders/bedroom-dark-panel.jpg', study: 'assets/renders/bedroom-common-study.jpg', bath: 'assets/images/master-bathroom.jpg', family: 'assets/renders/living-tv-dark.jpg' },
+      classic: { living: 'assets/renders/living-classic-bright.jpg', kitchen: 'assets/renders/kitchen-mono.jpg', master: 'assets/renders/bedroom-cream.jpg', common: 'assets/renders/bedroom-beige-wardrobe.jpg', common2: 'assets/renders/bedroom-wood-master.jpg', study: 'assets/renders/bedroom-common-study.jpg', bath: 'assets/renders/bathroom-stone.jpg', family: 'assets/images/login-bg.jpg' },
+      scandi: { living: 'assets/enhanced/design-config-img-2.png', kitchen: 'assets/enhanced/design-config-img-3.png', master: 'assets/renders/bedroom-scandinavian.jpg', common: 'assets/renders/bedroom-cream.jpg', common2: 'assets/renders/bedroom-beige-wardrobe.jpg', study: 'assets/renders/bedroom-common-study.jpg', bath: 'assets/renders/bathroom-geometric.jpg', family: 'assets/renders/family-lounge.jpg' },
     };
     const ROOMS = {
       living: { label: 'LIVING & DINING', scopes: [

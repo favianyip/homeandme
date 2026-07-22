@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/images/hnm-logo.png" type="image/png">
+<script src="./config.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -12,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+* { box-sizing: border-box; }
 body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
 a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
 @media (max-width: 1020px) { [data-mq2] { grid-template-columns: 1fr !important; } }
@@ -20,7 +23,7 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
 <div style="min-width: 0; min-height: 100vh; display: flex; flex-direction: column;">
   <header style="position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1);">
     <div style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); height: 72px; display: flex; align-items: center; gap: 20px;">
-      <a href="Home Redesign v2.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 40px; width: auto;"></a>
+      <a href="Home AI.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 40px; width: auto;"></a>
       <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c; border-left: 1px solid rgba(26,32,35,0.15); padding-left: 20px;">MY ACCOUNT</span>
       <nav style="margin-left: auto; display: flex; gap: 22px; align-items: center; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
         <a href="Customize.dc.html">CUSTOMIZER</a>
@@ -36,23 +39,23 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
         <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 10px;">WELCOME BACK</p>
         <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(28px, 4vw, 38px); margin: 0;">My projects</h1>
       </div>
-      <span style="font-size: 14px; color: #8a908c;">demo@homeandme.sg · <a href="ContactUs.dc.html" style="color: #5a7e8a;">Need help?</a></span>
+      <span id="accountSummary" style="font-size: 14px; color: #8a908c;">DEMO PROJECT · <a href="ContactUs.dc.html" style="color: #5a7e8a;">Need help?</a></span>
     </div>
 
     <div data-mq2="1" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(20px, 3.5vw, 40px); align-items: start;">
       <div style="display: grid; gap: 20px;">
         <div style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; overflow: hidden;">
           <div style="position: relative;">
-            <img src="assets/renders/living-warm.jpg" alt="Project render" style="width: 100%; aspect-ratio: 16 / 6.5; object-fit: cover; display: block;">
-            <span style="position: absolute; top: 14px; left: 16px; font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 2px; background: rgba(26,32,35,0.6); color: #fff; padding: 8px 14px; border-radius: 999px; backdrop-filter: blur(6px);">HNM-2026-0147 · IN PROGRESS</span>
+            <img id="projectHero" src="assets/renders/living-luxe-dark.jpg" alt="Project render" style="width: 100%; aspect-ratio: 16 / 6.5; object-fit: cover; display: block;">
+            <span id="projectBadge" style="position: absolute; top: 14px; left: 16px; font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 2px; background: rgba(26,32,35,0.6); color: #fff; padding: 8px 14px; border-radius: 999px; backdrop-filter: blur(6px);">DEMO · NOT A CUSTOMER PROJECT</span>
           </div>
           <div style="padding: clamp(18px, 3vw, 28px);">
             <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px;">
-              <h2 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 18px; letter-spacing: 1.8px; margin: 0;">4-ROOM HDB · RESALE · MODERN LUXE</h2>
-              <span style="font-family: 'Oswald', sans-serif; font-size: 15px; color: #5a7e8a;">S$ 44,505</span>
+              <h2 id="projectTitle" style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 18px; letter-spacing: 1.8px; margin: 0;">4-ROOM HDB · RESALE · MODERN LUXE</h2>
+              <span id="projectTotal" style="font-family: 'Oswald', sans-serif; font-size: 15px; color: #5a7e8a;">S$ 44,505</span>
             </div>
-            <p style="margin: 0 0 20px; font-size: 14px; color: #8a908c;">Deposit paid · Balance billed by milestone · Est. completion 14 Oct 2026</p>
-            <div style="display: grid; gap: 0;">
+            <p id="projectSummary" style="margin: 0 0 20px; font-size: 14px; color: #8a908c;">Static visual example — no payment or project record is attached.</p>
+            <div id="projectMilestones" style="display: grid; gap: 0;">
               <sc-for list="{{ milestones }}" as="ms" hint-placeholder-count="5">
                 <div style="display: flex; gap: 14px; align-items: flex-start;">
                   <span style="display: flex; flex-direction: column; align-items: center;">
@@ -68,7 +71,7 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
             </div>
             <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 16px;">
               <a href="Customize.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: #1a2023; color: #f6f4ef; padding: 13px 26px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">VIEW DESIGN</a>
-              <a href="Home Redesign v2.dc.html#walkthrough" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; border: 1px solid rgba(26,32,35,0.25); color: #1a2023; padding: 13px 26px; border-radius: 999px;">WALK THROUGH RENDERS</a>
+              <a href="Home AI.dc.html#portfolio" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; border: 1px solid rgba(26,32,35,0.25); color: #1a2023; padding: 13px 26px; border-radius: 999px;">WALK THROUGH RENDERS</a>
             </div>
           </div>
         </div>
@@ -76,14 +79,14 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
       </div>
 
       <div style="display: grid; gap: 20px;">
-        <div style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: 24px;">
+        <div id="paymentsPanel" style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: 24px;">
           <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 16px;">PAYMENTS</p>
           <div style="display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 14px;"><span>Deposit (30%)</span><span style="font-family: 'Oswald', sans-serif; font-size: 13px; color: #5a7e8a;">PAID ✓</span></div>
           <div style="display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 14px;"><span>Milestone 1 — Hacking &amp; masonry</span><span style="font-family: 'Oswald', sans-serif; font-size: 13px; color: #5a7e8a;">PAID ✓</span></div>
           <div style="display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 14px;"><span>Milestone 2 — Carpentry</span><span style="font-family: 'Oswald', sans-serif; font-size: 13px; color: #8a908c;">DUE ON COMPLETION</span></div>
           <div style="display: flex; justify-content: space-between; padding: 9px 0; font-size: 14px;"><span>Final — Handover</span><span style="font-family: 'Oswald', sans-serif; font-size: 13px; color: #8a908c;">—</span></div>
         </div>
-        <div style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: 24px;">
+        <div id="profilePanel" style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: 24px;">
           <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 16px;">MY PROFILE</p>
           <div style="display: grid; gap: 10px; font-size: 14px;">
             <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8a908c;">Name</span><span>Demo User</span></div>
@@ -93,7 +96,7 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
           </div>
           <a href="ContactUs.dc.html" style="display: inline-block; margin-top: 16px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; border-bottom: 1px solid rgba(90,126,138,0.4); padding-bottom: 2px;">REQUEST A CHANGE →</a>
         </div>
-        <div style="background: #171d1f; color: #f6f4ef; border-radius: 8px; padding: 24px;">
+        <div id="coordinatorPanel" style="background: #171d1f; color: #f6f4ef; border-radius: 8px; padding: 24px;">
           <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8fb0bb; margin: 0 0 10px;">YOUR COORDINATOR</p>
           <p style="margin: 0 0 4px; font-size: 15px;">Sarah Lim · Project Coordinator</p>
           <p style="margin: 0 0 16px; font-size: 13px; color: rgba(246,244,239,0.6);">Replies within 1 working day</p>
@@ -107,7 +110,7 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
     <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #8a908c;">
       <span>Copyright {{ year }} HOME&amp;ME</span>
       <nav style="display: flex; gap: 18px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
-        <a href="Home Redesign v2.dc.html">HOME</a>
+        <a href="Home AI.dc.html">HOME</a>
         <a href="Legal.dc.html#privacy">PRIVACY</a>
         <a href="Legal.dc.html#terms">TERMS</a>
       </nav>
@@ -138,6 +141,81 @@ class Component extends DCLogic {
       year: new Date().getFullYear(),
     };
   }
+}
+</script>
+<script type="module">
+import { HomeAndMeProjectApi, journeyConfig } from './journey-api.js';
+
+const runtime = journeyConfig();
+if (runtime.flags.AI_ANALYSIS_ENABLED) {
+  window.addEventListener('load', async () => {
+    const api = new HomeAndMeProjectApi({ baseUrl: runtime.apiBaseUrl });
+    const terminalStates = new Set(['PAID', 'FAILED', 'CANCELLED']);
+    let timer = null;
+    let inFlight = false;
+    async function loadProject() {
+      if (inFlight) return;
+      inFlight = true;
+      clearTimeout(timer);
+      try {
+        const project = await api.project();
+        document.querySelector('#accountSummary').textContent = `SECURE GUEST PROJECT · ${project.projectId}`;
+        document.querySelector('#projectBadge').textContent = `${project.projectId} · ${project.state.replaceAll('_', ' ')}`;
+        document.querySelector('#projectTitle').textContent = `${project.propertyType.toUpperCase()} · DESIGN VERSION ${project.approvedDesignVersion || 'PENDING'}`;
+        document.querySelector('#projectTotal').textContent = project.quote ? `S$ ${(project.quote.totalMinor / 100).toLocaleString('en-SG')}` : 'QUOTE PENDING';
+        document.querySelector('#projectSummary').textContent = project.paymentStatus === 'paid' ? `Deposit verified server-side · receipt ${project.receipt.receiptId}` : `Payment ${project.paymentStatus} · project data saved ${new Date(project.updatedAt).toLocaleString('en-SG')}`;
+        const milestoneData = [
+          ['FLOOR PLAN ANALYSIS', Boolean(project.geometryVersion)],
+          ['GEOMETRY APPROVAL', Boolean(project.approvedGeometryVersion)],
+          ['LAYOUT APPROVAL', Boolean(project.approvedLayoutVersion)],
+          ['MODEL & RENDERS', Boolean(project.renderVersion)],
+          ['DESIGN APPROVAL', Boolean(project.approvedDesignVersion)],
+          ['DEPOSIT CONFIRMATION', project.paymentStatus === 'paid'],
+        ];
+        const milestones = document.querySelector('#projectMilestones'); milestones.innerHTML = '';
+        milestoneData.forEach(([name, complete], index) => {
+          const item = document.createElement('div'); item.style.cssText = 'display:flex;gap:14px;align-items:center;padding:7px 0';
+          const mark = document.createElement('span'); mark.style.cssText = `width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;background:${complete ? '#5a7e8a' : 'transparent'};color:${complete ? '#fff' : '#8a908c'};border:1px solid ${complete ? '#5a7e8a' : 'rgba(26,32,35,.25)'}`; mark.textContent = complete ? '✓' : String(index + 1);
+          const text = document.createElement('span'); text.style.cssText = "font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:1.8px"; text.textContent = name;
+          item.append(mark, text); milestones.appendChild(item);
+        });
+        const profile = document.querySelector('#profilePanel'); profile.innerHTML = '';
+        const profileTitle = document.createElement('p'); profileTitle.style.cssText = "font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:2.6px;color:#8a908c;margin:0 0 16px"; profileTitle.textContent = 'PROJECT DETAILS';
+        const profileText = document.createElement('p'); profileText.style.cssText = 'font-size:14px;line-height:1.7;margin:0'; profileText.textContent = `${project.propertyType.toUpperCase()} · ${project.postalCode || 'postal code pending'} · ${project.levels} level(s) · secure guest access`;
+        profile.append(profileTitle, profileText);
+        const coordinator = document.querySelector('#coordinatorPanel'); coordinator.innerHTML = '';
+        const coordinatorTitle = document.createElement('p'); coordinatorTitle.style.cssText = "font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:2.6px;color:#8fb0bb;margin:0 0 10px"; coordinatorTitle.textContent = 'HOME & ME SUPPORT';
+        const coordinatorText = document.createElement('p'); coordinatorText.style.cssText = 'font-size:14px;margin:0 0 14px'; coordinatorText.textContent = 'Coordinator assignment and official contact details will appear after Home & Me review.';
+        const contact = document.createElement('a'); contact.href = 'ContactUs.dc.html'; contact.style.cssText = "font-family:'Oswald',sans-serif;letter-spacing:2px;font-size:12px;background:#f6f4ef;color:#1a2023;padding:12px 24px;border-radius:999px;display:inline-block"; contact.textContent = 'CONTACT HOME & ME →';
+        coordinator.append(coordinatorTitle, coordinatorText, contact);
+        const panel = document.querySelector('#paymentsPanel'); panel.innerHTML = '';
+        const title = document.createElement('p'); title.style.cssText = "font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:2.6px;color:#8a908c;margin:0 0 16px"; title.textContent = 'PAYMENTS'; panel.appendChild(title);
+        const row = document.createElement('div'); row.style.cssText = 'display:flex;justify-content:space-between;padding:9px 0;font-size:14px';
+        const label = document.createElement('span'); label.textContent = project.quote ? `Deposit (${project.quote.depositPercent}%)` : 'Deposit';
+        const status = document.createElement('span'); status.style.cssText = "font-family:'Oswald',sans-serif;font-size:13px;color:#5a7e8a"; status.textContent = project.paymentStatus.toUpperCase();
+        row.append(label, status); panel.appendChild(row);
+        if (project.renderVersion) {
+          try {
+            const renders = await api.renders();
+            const overview = renders.views.find((view) => view.name === 'overview') || renders.views[0];
+            const objectUrl = await api.artifactObjectUrl(overview.artifactRole, 'image/png');
+            const hero = document.querySelector('#projectHero');
+            if (hero.dataset.privateObjectUrl) URL.revokeObjectURL(hero.dataset.privateObjectUrl);
+            hero.src = objectUrl; hero.dataset.privateObjectUrl = objectUrl;
+          } catch (_) {}
+        }
+        if (!terminalStates.has(project.state)) timer = setTimeout(loadProject, 15000);
+      } catch (error) {
+        document.querySelector('#projectBadge').textContent = 'PROJECT UNAVAILABLE';
+        document.querySelector('#projectSummary').textContent = error.message;
+      } finally {
+        inFlight = false;
+      }
+    }
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) { clearTimeout(timer); loadProject(); } });
+    window.addEventListener('pagehide', () => { const hero = document.querySelector('#projectHero'); if (hero?.dataset.privateObjectUrl) URL.revokeObjectURL(hero.dataset.privateObjectUrl); });
+    await loadProject();
+  });
 }
 </script>
 </body>

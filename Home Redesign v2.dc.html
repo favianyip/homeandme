@@ -75,7 +75,7 @@ select { appearance: none; -webkit-appearance: none; }
       </nav>
       <div style="display: flex; gap: 16px; margin-top: 40px;">
         <a href="https://www.facebook.com/share/19EwNzh3n5/?mibextid=wwXIfr" target="_blank" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;"><img src="assets/images/fb-icon-teal.svg" alt="Facebook" style="height: 18px;"></a>
-        <a href="https://www.instagram.com/homeandme2017?utm_source=qr" target="_blank" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 20px;"></a>
+        <a href="https://www.instagram.com/homeandme2017?igsh=dXF5cnNjYjI3dWZn&amp;utm_source=qr" target="_blank" style="width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 20px;"></a>
       </div>
     </div>
   </sc-if>
@@ -95,7 +95,7 @@ select { appearance: none; -webkit-appearance: none; }
         <div style="background: linear-gradient(160deg, #ffffff, #f0ede6); border: 1px solid rgba(26,32,35,0.1); border-radius: 6px; padding: 10px; box-shadow: 0 30px 60px -34px rgba(26,32,35,0.4);">
           <div style="position: relative; border-radius: 4px; overflow: hidden; aspect-ratio: 4 / 3; background: #e7e2d8;">
             <sc-for list="{{ slides }}" as="slide" hint-placeholder-count="0">
-              <img src="{{ slide.src }}" alt="{{ slide.caption }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 1.4s ease; opacity: {{ slide.op }}; animation: hnmKen 11s linear infinite alternate;">
+              <div role="img" aria-label="{{ slide.caption }}" style="position: absolute; inset: 0; background-image: url('{{ slide.src }}'); background-size: cover; background-position: center; transition: opacity 1.4s ease; opacity: {{ slide.op }}; animation: hnmKen 11s linear infinite alternate;"></div>
             </sc-for>
             <div style="position: absolute; top: 16px; left: 18px; display: flex; align-items: center; gap: 8px; background: rgba(26,32,35,0.55); backdrop-filter: blur(6px); border-radius: 999px; padding: 8px 16px;">
               <span style="width: 7px; height: 7px; border-radius: 50%; background: #7fd8a8; animation: hnmPulse 2.4s ease-in-out infinite;"></span>
@@ -155,7 +155,7 @@ select { appearance: none; -webkit-appearance: none; }
         <a href="AboutUs.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; border-bottom: 1px solid rgba(26,32,35,0.4); padding-bottom: 4px;">READ OUR FULL STORY →</a>
       </div>
       <div style="overflow: hidden; border-radius: 4px;">
-        <img src="assets/images/modern-classic-bathroom_aboutus.jpg" alt="Modern classic interior" style="width: 100%; aspect-ratio: 4 / 3.2; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.04);">
+        <img src="assets/renders/dining-classic-wood.jpg" alt="Modern classic dining" style="width: 100%; aspect-ratio: 4 / 3.2; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.04);">
       </div>
     </div>
   </section>
@@ -163,16 +163,16 @@ select { appearance: none; -webkit-appearance: none; }
   <section style="padding: clamp(56px, 8vw, 88px) clamp(20px, 4vw, 40px) 0;">
     <div data-mq2="1" style="max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;">
       <figure style="margin: 0;">
-        <div style="overflow: hidden; border-radius: 4px;"><img src="assets/images/modern-classic-bathroom-1_aboutus.jpg" alt="Modern classic bathroom" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"></div>
+        <div style="overflow: hidden; border-radius: 4px;"><img src="assets/renders/bathroom-stone.jpg" alt="Stone master bathroom" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"></div>
         <figcaption style="display: flex; justify-content: space-between; padding-top: 12px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c;"><span>MASTER BATHROOM</span><span>Nº 01</span></figcaption>
       </figure>
       <figure style="margin: 0; transform: translateY(44px);">
-        <div style="overflow: hidden; border-radius: 4px;"><img src="assets/images/modern-classic-kitchen_aboutus.jpg" alt="Modern classic kitchen" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"></div>
-        <figcaption style="display: flex; justify-content: space-between; padding-top: 12px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c;"><span>KITCHEN</span><span>Nº 02</span></figcaption>
+        <div style="overflow: hidden; border-radius: 4px;"><img src="assets/renders/bedroom-common-study.jpg" alt="Common bedroom with study nook" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"></div>
+        <figcaption style="display: flex; justify-content: space-between; padding-top: 12px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c;"><span>COMMON BEDROOM</span><span>Nº 02</span></figcaption>
       </figure>
       <figure style="margin: 0;">
-        <div style="overflow: hidden; border-radius: 4px;"><img src="assets/images/master-bathroom.jpg" alt="Bathroom detail" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"></div>
-        <figcaption style="display: flex; justify-content: space-between; padding-top: 12px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c;"><span>EN-SUITE</span><span>Nº 03</span></figcaption>
+        <div style="overflow: hidden; border-radius: 4px;"><img src="assets/renders/family-lounge.jpg" alt="Family lounge" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"></div>
+        <figcaption style="display: flex; justify-content: space-between; padding-top: 12px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c;"><span>FAMILY LOUNGE</span><span>Nº 03</span></figcaption>
       </figure>
     </div>
   </section>
@@ -188,7 +188,7 @@ select { appearance: none; -webkit-appearance: none; }
       </div>
       <div data-mq2="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px;">
         <a href="javascript:void(0)" onClick="{{ openWalk0 }}" style="display: block; color: inherit; position: relative; border-radius: 6px; overflow: hidden;">
-          <img src="assets/renders/living-warm.jpg" alt="Modern Luxe project" style="width: 100%; aspect-ratio: 16 / 9.5; object-fit: cover; display: block; transition: transform 0.9s ease;" style-hover="transform: scale(1.04);">
+          <img src="assets/renders/living-luxe-dark.jpg" alt="Modern Luxe project" style="width: 100%; aspect-ratio: 16 / 9.5; object-fit: cover; display: block; transition: transform 0.9s ease;" style-hover="transform: scale(1.04);">
           <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,17,18,0.82), rgba(13,17,18,0) 55%); pointer-events: none;"></div>
           <div style="position: absolute; left: 24px; right: 24px; bottom: 22px; display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap;">
             <div>
@@ -251,17 +251,17 @@ select { appearance: none; -webkit-appearance: none; }
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px;">
         <a href="javascript:void(0)" onClick="{{ openThemeMC }}" style="display: block; color: inherit;">
           <div style="overflow: hidden; border-radius: 4px;">
-            <img src="assets/enhanced/design-config-img-1.png" alt="Modern Oriental" style="width: 100%; aspect-ratio: 3 / 2.6; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.02);">
+            <img src="assets/renders/bedroom-luxe-marble.jpg" alt="Modern Luxe" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.02);">
           </div>
           <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 18px 2px 6px;">
-            <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 19px; letter-spacing: 1.6px; margin: 0;">MODERN ORIENTAL</h3>
+            <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 19px; letter-spacing: 1.6px; margin: 0;">MODERN LUXE</h3>
             <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #5a7e8a;">VIEW →</span>
           </div>
-          <p style="margin: 0; padding: 0 2px; font-size: 16px; line-height: 1.6; color: #4a5350;">Lattice screens, dark stone feature walls and warm woods.</p>
+          <p style="margin: 0; padding: 0 2px; font-size: 16px; line-height: 1.6; color: #4a5350;">Warm marble, soft brass and deep timber — quiet luxury.</p>
         </a>
         <a href="javascript:void(0)" onClick="{{ openThemeSC }}" style="display: block; color: inherit;">
           <div style="overflow: hidden; border-radius: 4px;">
-            <img src="assets/enhanced/design-config-img-2.png" alt="Scandinavian" style="width: 100%; aspect-ratio: 3 / 2.6; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.02);">
+            <img src="assets/enhanced/design-config-img-2.png" alt="Scandinavian" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.02);">
           </div>
           <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 18px 2px 6px;">
             <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 19px; letter-spacing: 1.6px; margin: 0;">SCANDINAVIAN</h3>
@@ -271,13 +271,13 @@ select { appearance: none; -webkit-appearance: none; }
         </a>
         <a href="javascript:void(0)" onClick="{{ openThemeCL }}" style="display: block; color: inherit;">
           <div style="overflow: hidden; border-radius: 4px;">
-            <img src="assets/enhanced/design-config-img-3.png" alt="Contemporary" style="width: 100%; aspect-ratio: 3 / 2.6; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.02);">
+            <img src="assets/renders/living-classic-bright.jpg" alt="Modern Classic" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.02);">
           </div>
           <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 18px 2px 6px;">
-            <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 19px; letter-spacing: 1.6px; margin: 0;">CONTEMPORARY</h3>
+            <h3 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 19px; letter-spacing: 1.6px; margin: 0;">MODERN CLASSIC</h3>
             <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #5a7e8a;">VIEW →</span>
           </div>
-          <p style="margin: 0; padding: 0 2px; font-size: 16px; line-height: 1.6; color: #4a5350;">Light stone, white brick and confident teal upholstery.</p>
+          <p style="margin: 0; padding: 0 2px; font-size: 16px; line-height: 1.6; color: #4a5350;">Bright marble, warm wood and tailored carpentry.</p>
         </a>
       </div>
     </div>
@@ -343,7 +343,7 @@ select { appearance: none; -webkit-appearance: none; }
         <p style="margin: 0 0 28px; font-size: 17px; line-height: 1.7; color: #4a5350; text-wrap: pretty;">Whether you're comparing quotes or already holding your keys, we'll help you plan the renovation — write to us and we'll get back within one working day.</p>
         <div style="display: flex; gap: 14px;">
           <a href="https://www.facebook.com/share/19EwNzh3n5/?mibextid=wwXIfr" target="_blank" aria-label="Facebook" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center; transition: background 0.25s;" style-hover="background: rgba(90,126,138,0.1);"><img src="assets/images/fb-icon-teal.svg" alt="Facebook" style="height: 18px;"></a>
-          <a href="https://www.instagram.com/homeandme2017?utm_source=qr" target="_blank" aria-label="Instagram" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center; transition: background 0.25s;" style-hover="background: rgba(90,126,138,0.1);"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 20px;"></a>
+          <a href="https://www.instagram.com/homeandme2017?igsh=dXF5cnNjYjI3dWZn&amp;utm_source=qr" target="_blank" aria-label="Instagram" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center; transition: background 0.25s;" style-hover="background: rgba(90,126,138,0.1);"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 20px;"></a>
         </div>
       </div>
       <div>
@@ -377,10 +377,11 @@ select { appearance: none; -webkit-appearance: none; }
       <div style="display: flex; justify-content: space-between; gap: 48px; flex-wrap: wrap; margin-bottom: 48px;">
         <div style="max-width: 300px;">
           <img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 44px; width: auto; margin-bottom: 16px;">
-          <p style="margin: 0 0 20px; line-height: 1.7; font-size: 14px; color: #4a5350;">Completing home with me — Singapore's online renovation platform with full cost transparency.</p>
+          <p style="margin: 0 0 16px; line-height: 1.7; font-size: 14px; color: #4a5350;">Completing home with me — Singapore's online renovation platform with full cost transparency.</p>
+          <p style="margin: 0 0 20px; line-height: 1.7; font-size: 14px; color: #4a5350;"><a href="tel:+6594235227" style="color: #1a2023;">+65 9423 5227</a><br>21 Toh Guan Road East, #03-02<br>Toh Guan Centre, Singapore 608609</p>
           <div style="display: flex; gap: 12px;">
             <a href="https://www.facebook.com/share/19EwNzh3n5/?mibextid=wwXIfr" target="_blank" aria-label="Facebook" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;" style-hover="background: rgba(90,126,138,0.1);"><img src="assets/images/fb-icon-teal.svg" alt="Facebook" style="height: 17px;"></a>
-            <a href="https://www.instagram.com/homeandme2017?utm_source=qr" target="_blank" aria-label="Instagram" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;" style-hover="background: rgba(90,126,138,0.1);"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 19px;"></a>
+            <a href="https://www.instagram.com/homeandme2017?igsh=dXF5cnNjYjI3dWZn&amp;utm_source=qr" target="_blank" aria-label="Instagram" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;" style-hover="background: rgba(90,126,138,0.1);"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 19px;"></a>
           </div>
         </div>
         <div style="display: flex; gap: clamp(32px, 5vw, 72px); flex-wrap: wrap;">
@@ -524,7 +525,7 @@ select { appearance: none; -webkit-appearance: none; }
   <sc-if value="{{ showTheme }}" hint-placeholder-val="{{ false }}">
     <div style="position: fixed; inset: 0; z-index: 100; background: rgba(23,29,31,0.65); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px;" onClick="{{ closeOverlay }}">
       <div data-mq2="1" style="background: #f6f4ef; border-radius: 8px; max-width: 920px; width: 100%; overflow: auto; max-height: 88vh; display: grid; grid-template-columns: 1.1fr 1fr; animation: hnmRise 0.4s ease both;" onClick="{{ stop }}">
-        <img src="{{ themeImg }}" alt="{{ themeName }}" style="width: 100%; height: 100%; object-fit: cover; display: block; min-height: 260px;">
+        <div role="img" aria-label="{{ themeName }}" style="width: 100%; height: 100%; background-image: url('{{ themeImg }}'); background-size: cover; background-position: center; min-height: 260px;"></div>
         <div style="padding: clamp(26px, 4vw, 44px);">
           <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 14px;">DESIGN THEME</p>
           <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 30px; margin: 0 0 16px;">{{ themeName }}</h3>
@@ -563,7 +564,7 @@ select { appearance: none; -webkit-appearance: none; }
     <div style="position: fixed; inset: 0; z-index: 120; background: #0d1112; overflow: hidden;">
       <div ref="{{ zoomRef }}" onPointerMove="{{ viewerMove }}" onPointerLeave="{{ viewerLeave }}" onClick="{{ viewerClick }}" style="position: absolute; inset: 0; transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); cursor: {{ viewerCursor }}; will-change: transform;">
         <sc-for list="{{ viewerRooms }}" as="room" hint-placeholder-count="0">
-          <img src="{{ room.src }}" alt="{{ room.label }}" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; user-select: none; transition: opacity 1s ease, transform 1.8s cubic-bezier(0.22, 1, 0.36, 1); opacity: {{ room.op }}; transform: {{ room.tf }};">
+          <div role="img" aria-label="{{ room.label }}" style="position: absolute; inset: 0; background-image: url('{{ room.src }}'); background-size: cover; background-position: center; user-select: none; transition: opacity 1s ease, transform 1.8s cubic-bezier(0.22, 1, 0.36, 1); opacity: {{ room.op }}; transform: {{ room.tf }};"></div>
         </sc-for>
       </div>
       <div style="position: absolute; top: 0; left: 0; right: 0; padding: 18px clamp(16px, 3vw, 32px); display: flex; justify-content: space-between; align-items: center; gap: 16px; background: linear-gradient(to bottom, rgba(13,17,18,0.75), rgba(13,17,18,0)); pointer-events: none;">
@@ -581,7 +582,7 @@ select { appearance: none; -webkit-appearance: none; }
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
               <sc-for list="{{ viewerThumbs }}" as="thumb" hint-placeholder-count="0">
                 <button type="button" onClick="{{ thumb.go }}" style="padding: 0; border-radius: 4px; overflow: hidden; cursor: pointer; background: none; border: 2px solid {{ thumb.border }}; opacity: {{ thumb.op }}; transition: opacity 0.3s;">
-                  <img src="{{ thumb.src }}" alt="{{ thumb.label }}" style="width: 86px; height: 54px; object-fit: cover; display: block;">
+                  <div role="img" aria-label="{{ thumb.label }}" style="width: 86px; height: 54px; background-image: url('{{ thumb.src }}'); background-size: cover; background-position: center;"></div>
                 </button>
               </sc-for>
             </div>
@@ -630,16 +631,16 @@ class Component extends DCLogic {
   projectsData() {
     return [
       { title: 'MODERN LUXE · 4-ROOM HDB', rooms: [
-        { src: 'assets/renders/living-warm.jpg', label: 'LIVING ROOM' },
-        { src: 'assets/renders/dining-warm.jpg', label: 'DINING & ENTRY' },
-        { src: 'assets/renders/master-warm.jpg', label: 'MASTER BEDROOM' },
-        { src: 'assets/renders/study-warm.jpg', label: 'STUDY' },
+        { src: 'assets/renders/living-luxe-dark.jpg', label: 'LIVING & DINING' },
+        { src: 'assets/renders/dining-classic-wood.jpg', label: 'DINING & ENTRY' },
+        { src: 'assets/renders/bedroom-luxe-marble.jpg', label: 'MASTER BEDROOM' },
+        { src: 'assets/renders/bedroom-common-study.jpg', label: 'STUDY' },
       ]},
       { title: 'MODERN CLASSIC · 4-ROOM HDB', rooms: [
         { src: 'assets/images/login-bg.jpg', label: 'LIVING & DINING' },
-        { src: 'assets/images/modern-classic-kitchen_aboutus.jpg', label: 'KITCHEN' },
+        { src: 'assets/renders/kitchen-mono.jpg', label: 'KITCHEN' },
         { src: 'assets/images/master-bathroom.jpg', label: 'MASTER BATHROOM' },
-        { src: 'assets/images/modern-classic-bathroom-1_aboutus.jpg', label: 'EN-SUITE' },
+        { src: 'assets/renders/bedroom-cream.jpg', label: 'MASTER BEDROOM' },
       ]},
     ];
   }
@@ -656,24 +657,22 @@ class Component extends DCLogic {
 
   slideData() {
     return [
-      { src: 'assets/images/login-bg.jpg', caption: 'LIVING & DINING — MODERN LUXE' },
-      { src: 'assets/images/master-bathroom.jpg', caption: 'MASTER BATHROOM — MODERN CLASSIC' },
-      { src: 'assets/renders/living-contemporary.jpg', caption: 'LIVING ROOM — CONTEMPORARY' },
-      { src: 'assets/images/modern-classic-bathroom-1_aboutus.jpg', caption: 'EN-SUITE — MODERN CLASSIC' },
+      { src: 'assets/renders/bedroom-common-study.jpg', caption: 'COMMON BEDROOM — STUDY NOOK' },
+      { src: 'assets/renders/bedroom-scandinavian.jpg', caption: 'MASTER BEDROOM — SCANDINAVIAN' },
     ];
   }
 
   themeData() {
     return {
-      mc: { name: 'MODERN ORIENTAL', img: 'assets/images/design-config-img-1.jpg',
-        desc: 'Lattice screens, dark stone feature walls and warm woods — a serene take on heritage detailing.',
-        specs: ['Fluted timber and lattice screens', 'Dark stone feature wall', 'Warm oak flooring', 'Brass and linen accents'] },
-      sc: { name: 'SCANDINAVIAN', img: 'assets/images/design-config-img-2.jpg',
+      mc: { name: 'MODERN LUXE', img: 'assets/renders/bedroom-luxe-marble.jpg',
+        desc: 'Warm marble, soft brass and deep timber — quiet luxury in every room.',
+        specs: ['Marble and stone feature walls', 'Brass and champagne accents', 'Deep timber carpentry', 'Layered warm lighting'] },
+      sc: { name: 'SCANDINAVIAN', img: 'assets/enhanced/design-config-img-2.png',
         desc: 'Light woods, soft neutrals and honest textures — calm, bright spaces built around everyday living.',
         specs: ['Light oak platform and shelving', 'White laminate carpentry', 'Matt black fixtures', 'Soft linen and bouclé textures'] },
-      cl: { name: 'CONTEMPORARY', img: 'assets/images/design-config-img-3.jpg',
-        desc: 'Light stone surfaces, white brick and confident teal upholstery for spaces with a fresher point of view.',
-        specs: ['Light stone-look tiles', 'White brick feature wall', 'Teal fabric upholstery', 'Matt black and wood details'] },
+      cl: { name: 'MODERN CLASSIC', img: 'assets/renders/living-classic-bright.jpg',
+        desc: 'Bright marble, warm wood and tailored carpentry — timeless and easy to live with.',
+        specs: ['Wood + white marble feature wall', 'Tailored built-in carpentry', 'Warm neutral palette', 'Matt black accents'] },
     };
   }
 
@@ -833,7 +832,7 @@ class Component extends DCLogic {
           this.setState({ zoomed: false });
         } else {
           node.style.transformOrigin = `${x}% ${y}%`;
-          node.style.transform = 'scale(2.2)';
+          node.style.transform = 'scale(1.45)';
           this.setState({ zoomed: true });
         }
       },

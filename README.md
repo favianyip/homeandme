@@ -1,21 +1,31 @@
-# Home and Me
+# Home & Me public website
 
-Source code backup of the **Home and Me** website — an ASP.NET Web Forms (C# / .NET Framework) e-commerce and room-customizer application.
+Sanitized static deployment source for [homeandme.sg](https://homeandme.sg). Backend source, customer files and credentials are intentionally excluded.
 
-## What's included
-- `.aspx` / `.aspx.cs` pages and code-behind
-- `Admin/` admin panel source
-- `App_Code/`, `Controls/`, `assets/`, `ckeditor/`, etc.
+## Runtime modes
 
-## What's excluded (see `.gitignore`)
-- `Web.config` — contains database connection strings and secrets
-- `Bin/` and `*.dll` — compiled output
-- `UploadedFiles/`, `ExtractedFiles/`, `DownloadFiles/`, `App_Data/` — uploaded media / data (~900 MB+)
+- The committed `config.js` keeps service-backed AI/payment features disabled on the public site until production gates pass.
+- `DEMO_FALLBACK_ENABLED` preserves the clearly labelled visual journey.
+- Environment-specific staging may provide a private API URL and enable tested flags.
 
-## Running locally
-This is a server-rendered ASP.NET app. It cannot be opened as static HTML.
-To run it you need:
-- Windows + IIS / IIS Express (or Visual Studio)
-- .NET Framework
-- A SQL Server database (connection strings live in `Web.config`)
-- Payment gateway config (Stripe / PayPal)
+## Implemented staging journey
+
+A controlled local staging test has passed:
+
+```text
+floor-plan upload → analysis → geometry approval → measured layout → GLB
+→ four render views → design approval → quote approval → sandbox checkout
+→ verified webhook → receipt → paid dashboard → browser reload
+```
+
+See `docs/HERMES_CURRENT_STATUS.md` and `docs/END_TO_END_TEST_REPORT.md` for exact scope and evidence. This is not yet a production-ready arbitrary-floor-plan or photoreal-render release.
+
+## Frontend checks
+
+```bash
+node --check journey-api.js
+node --check three-d-stage.js
+node --test tests/journey-api.test.mjs
+```
+
+The private legacy ASP.NET archive is maintained separately and must never be published through GitHub Pages.

@@ -1,0 +1,66 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "name": "home",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "name": "journey",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "name": "dashboard",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "name": "home",
+      "width": 430,
+      "overflow": false
+    },
+    {
+      "name": "journey",
+      "width": 430,
+      "overflow": false
+    },
+    {
+      "name": "dashboard",
+      "width": 430,
+      "overflow": false
+    },
+    {
+      "name": "home",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "name": "journey",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "name": "dashboard",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "name": "home",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "name": "journey",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "name": "dashboard",
+      "width": 1440,
+      "overflow": false
+    }
+  ],
+  "generatedAt": "2026-07-22T00:03:43.346Z"
+}

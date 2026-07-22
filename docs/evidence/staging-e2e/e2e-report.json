@@ -1,0 +1,323 @@
+{
+  "passed": true,
+  "projectBadge": "HNM-20260721-DDD306E246 · PAID",
+  "summary": "Deposit verified server-side · receipt rcpt_6fb675c0e099697e79a7",
+  "apiResponses": [
+    {
+      "status": 201,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects"
+    },
+    {
+      "status": 202,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/floor-plan"
+    },
+    {
+      "status": 200,
+      "method": "PUT",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/property"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_3d1da8c970a48d60"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_3d1da8c970a48d60"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_3d1da8c970a48d60"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_3d1da8c970a48d60"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_3d1da8c970a48d60"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/geometry"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/detected_room_overlay/signed-url"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/detected_room_overlay"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/geometry/approve"
+    },
+    {
+      "status": 200,
+      "method": "PUT",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/design-brief"
+    },
+    {
+      "status": 201,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/layouts/generate"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/layouts/layout-practical-bdff79801d/approve"
+    },
+    {
+      "status": 202,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/model/generate"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_b16a8ab6794692a1"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_b16a8ab6794692a1"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_b16a8ab6794692a1"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_b16a8ab6794692a1"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_b16a8ab6794692a1"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_b16a8ab6794692a1"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/model"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_model_glb/signed-url"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_model_glb"
+    },
+    {
+      "status": 200,
+      "method": "PUT",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/design-brief"
+    },
+    {
+      "status": 202,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/model/generate"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_fe675e7ad58f8d3c"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_fe675e7ad58f8d3c"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_fe675e7ad58f8d3c"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_fe675e7ad58f8d3c"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_fe675e7ad58f8d3c"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_fe675e7ad58f8d3c"
+    },
+    {
+      "status": 202,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/renders"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_cc81437a771b48d2"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/jobs/job_cc81437a771b48d2"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/renders"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_render_overview/signed-url"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_render_overview"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_render_living/signed-url"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_render_living"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_render_bedroom/signed-url"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_render_bedroom"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_render_kitchen/signed-url"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_render_kitchen"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/design/approve"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/quote"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/quote/approve"
+    },
+    {
+      "status": 201,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/checkout-session"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/sandbox-checkout/cs_c539079bb7723d44b397"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/sandbox-checkout/cs_c539079bb7723d44b397/complete"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_render_overview/signed-url"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_render_overview"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_render_overview/signed-url"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://127.0.0.1:8765/api/v1/projects/HNM-20260721-DDD306E246/artifacts/approved_render_overview"
+    }
+  ],
+  "consoleMessages": [
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x4c00179c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x4c00179c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x4c00179c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x4c00179c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    }
+  ],
+  "pageErrors": [],
+  "screenshots": [
+    "01-upload-secured.png",
+    "02-geometry-review.png",
+    "03-live-customer-glb.png",
+    "04-render-gallery-review.png",
+    "05-sandbox-checkout.png",
+    "05-version-bound-quote.png",
+    "06-webhook-confirmed.png",
+    "07-paid-dashboard.png",
+    "08-paid-dashboard-reloaded.png"
+  ],
+  "completedAt": "2026-07-21T23:52:55.709Z"
+}
