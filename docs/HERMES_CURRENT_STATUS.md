@@ -1,6 +1,6 @@
 # HERMES Current Status
 
-Audit date: 2026-07-22. Public source: `favianyip/homeandme` `main` at `0b635cc`. Backend component branch: `feature/hermes-floorplan-render-e2e`.
+Audit date: 2026-07-22. Public source: `favianyip/homeandme` `main` at `0af97b6`. Backend component branch: `feature/hermes-floorplan-render-e2e`.
 
 Status vocabulary: **COMPLETE**, **WORKING BUT INCOMPLETE**, **PROTOTYPE ONLY**, **NOT STARTED**, **BLOCKED**.
 
@@ -25,7 +25,7 @@ The controlled staging upload-to-sandbox-payment vertical slice is **COMPLETE an
 | Runtime feature flags | COMPLETE | `config.js`, `journey-api.js` | Explicit configured API URL/flags → API or clearly labelled demo mode | 8 Node tests passed | Production API URL remains intentionally empty |
 | Guest project | COMPLETE (staging) | `POST /api/v1/projects` | Property seed → project ID + HttpOnly guest session | API tests + browser E2E | Account claiming is not implemented |
 | Floor-plan upload | COMPLETE (controlled formats) | `POST /api/v1/projects/{id}/floor-plan` | PDF/JPG/JPEG/PNG multipart → private original + queued job | Real browser upload returned `202` | Malware daemon, multipage selection, and arbitrary-plan accuracy remain incomplete |
-| Progress/resume | COMPLETE (single-host staging) | jobs/events/project endpoints; `project_store.py`, `project_worker.py` | Durable job → queued/running/completed/failed progress; strict expiring ownership lease; periodic heartbeat; stale-worker recovery; bounded exponential retry; attempt-unique output staging; atomic geometry/model/render publication | Browser polling and dashboard reload passed; failure-injection proves each version, artifact set, project state and current pointer commit together or all roll back; canonical geometry remains schema-pure while its artifact manifest is bound into immutable provenance; model/render manifests remain content-hash-bound | Add customer cancellation, orphaned-staging cleanup and a multi-host production queue |
+| Progress/resume | COMPLETE (single-host staging) | jobs/events/project endpoints; `project_store.py`, `project_worker.py`, `worker_cli.py` | Durable job → queued/running/completed/failed progress; strict leases and heartbeats; stale recovery; bounded retries; attempt-unique staging; atomic geometry/model/render publication; scheduled orphan cleanup | Tests prove all-or-nothing publication and that cleanup removes only expired unreferenced inactive attempts while preserving active analysis/model jobs, recent outputs and every artifact-backed directory; staging age and scan interval are configurable | Add customer cancellation and a multi-host production queue |
 | Geometry review/correction | WORKING BUT INCOMPLETE | Journey Station 03; `POST /projects/{id}/geometry/{correct,calibrate}`; `geometry.py`; `exporters.py`; existing review kernel | Source version/hash + customer wall measurement or edited rooms/walls/openings → immutable validated millimetre geometry plus versioned canonical JSON, corrected SVG, OBJ and validation report | Tests prove measured-wall calibration rescales planar coordinates, thicknesses and opening spans while preserving vertical heights; valid corrections create private artifacts and invalid networks fail closed | Scale can now be customer-confirmed with evidence; graphical drag/snap controls and room-boundary editing remain |
 | Layout options | WORKING BUT INCOMPLETE | `layout_engine.py`, layout endpoints | Approved geometry + brief → practical/storage/premium options using `measured-procedural-2` assets | API and browser flow passed; GLB tests verify articulated sofa component identity and immutable placement IDs | Clearance analysis remains preliminary and assets are procedural rather than manufacturer-grade models |
 | Live customer GLB | COMPLETE (controlled fixture) | `scene_renderer.py`, `blender_scene.py`, `project_worker.py`, `three-d-stage.js` | Approved geometry/layout/design brief → style-specific signed GLB → validated browser bytes | GLB loaded in browser; layout hash, brief hash, selected style, material palette and placement IDs verified | Models remain procedural and require a production-grade measured asset library |
@@ -54,14 +54,14 @@ The controlled staging upload-to-sandbox-payment vertical slice is **COMPLETE an
 | Capability | Status | Source | Actual result | Limitations / next action |
 |---|---|---|---|---|
 | Project database | WORKING BUT INCOMPLETE | `project_store.py`, SQLite WAL/foreign keys/transactions | Projects, versions, jobs, artifacts, quotes, checkouts, payments, receipts and events persisted; geometry/model/render publication uses lease-guarded all-or-nothing transactions with immutable artifact manifests | Migrate to PostgreSQL for production; add immutable DB triggers and backups |
-| Private artifact delivery | COMPLETE (staging) | signed HMAC URL + authorization + retrieval hash | Unsigned/forged access rejected; browser validates origin/type/size | Add S3-compatible private object-store adapter and deletion lifecycle |
+| Private artifact delivery | COMPLETE (staging) | signed HMAC URL + authorization + retrieval hash; worker staging lifecycle | Unsigned/forged access rejected; browser validates origin/type/size; hourly cleanup removes only unreferenced inactive staging older than 24 hours and preserves active jobs, recent outputs, active-analysis pipeline staging and every artifact-backed directory | Add S3-compatible private object-store adapter and an approved customer-data retention/deletion policy |
 | Browser guest auth | COMPLETE (single-host staging) | hashed token + HttpOnly/SameSite cookie; exact-origin CORS, fail-closed Origin enforcement and SQLite-atomic fixed-window rate buckets for unsafe API requests | Missing/foreign origins return `403`; exhausted buckets return `429` with `Retry-After`; allowed browser origin, Bearer requests and signed webhook pass | Replace SQLite buckets with shared PostgreSQL/Redis enforcement for multi-host production; add account claiming and trusted-proxy validation |
 | Payment atomicity | COMPLETE (sandbox) | one `BEGIN IMMEDIATE` transaction | Receipt/project/payment/event transition is atomic | Add failure-injection rollback test and production database transaction verification |
 
 ## Tests and evidence
 
 - Backend: `uv run ruff check . && uv run ruff format --check . && uv run pytest`
-  - **113 passed in 35.73 seconds**
+  - **114 passed in 35.46 seconds**
   - Ruff passed; 54 files formatted.
 - Frontend: `node --test tests/journey-api.test.mjs`
   - **8 passed**.
