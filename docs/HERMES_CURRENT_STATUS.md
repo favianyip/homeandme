@@ -1,12 +1,12 @@
 # HERMES Current Status
 
-Audit date: 2026-07-22. Public source: `favianyip/homeandme` sanitized baseline `189653d` plus branch `feature/hermes-floorplan-render-e2e`. Backend component branch: `feature/hermes-floorplan-render-e2e`.
+Audit date: 2026-07-22. Public source: `favianyip/homeandme` `main` at `835e5f9`. Backend component branch: `feature/hermes-floorplan-render-e2e`.
 
 Status vocabulary: **COMPLETE**, **WORKING BUT INCOMPLETE**, **PROTOTYPE ONLY**, **NOT STARTED**, **BLOCKED**.
 
 ## Verdict
 
-The controlled staging upload-to-sandbox-payment vertical slice is **COMPLETE and browser-proven**. It is not a production release: arbitrary-plan accuracy, homeowner geometry editing, customer-grade photorealism, revision handling, production infrastructure, and rotated payment credentials remain incomplete or blocked.
+The controlled staging upload-to-sandbox-payment vertical slice is **COMPLETE and browser-proven**. It is not a production release: arbitrary-plan accuracy, graphical geometry editing, customer-grade photorealism, automatic revision application, production infrastructure, and rotated payment credentials remain incomplete or blocked.
 
 ## Security incident containment
 
@@ -22,10 +22,10 @@ The controlled staging upload-to-sandbox-payment vertical slice is **COMPLETE an
 | Component | Status | Files/endpoints | Inputs → outputs | Tests / actual result | Known limitations / next action |
 |---|---|---|---|---|---|
 | Existing five-station design | COMPLETE | `Journey.html` | Existing visual journey → progressively enhanced real service flow | Browser E2E and screenshots | Preserve styling; no framework rewrite |
-| Runtime feature flags | COMPLETE | `config.js`, `journey-api.js` | Explicit configured API URL/flags → API or clearly labelled demo mode | 5 Node tests passed | Production API URL remains intentionally empty |
+| Runtime feature flags | COMPLETE | `config.js`, `journey-api.js` | Explicit configured API URL/flags → API or clearly labelled demo mode | 8 Node tests passed | Production API URL remains intentionally empty |
 | Guest project | COMPLETE (staging) | `POST /api/v1/projects` | Property seed → project ID + HttpOnly guest session | API tests + browser E2E | Account claiming is not implemented |
 | Floor-plan upload | COMPLETE (controlled formats) | `POST /api/v1/projects/{id}/floor-plan` | PDF/JPG/JPEG/PNG multipart → private original + queued job | Real browser upload returned `202` | Malware daemon, multipage selection, and arbitrary-plan accuracy remain incomplete |
-| Progress/resume | COMPLETE (single-host staging) | jobs/events/project endpoints; `project_store.py`, `project_worker.py` | Durable job → queued/running/completed/failed progress | Browser polling and dashboard reload passed | Add leases/backoff/cancellation and multi-host queue before production |
+| Progress/resume | COMPLETE (single-host staging) | jobs/events/project endpoints; `project_store.py`, `project_worker.py` | Durable job → queued/running/completed/failed progress; expiring ownership lease; stale-worker recovery; bounded exponential retry | Browser polling and dashboard reload passed; tests prove stale lease reclamation, stale-owner rejection, delayed retry, attempt exhaustion and migration from the prior job schema | Add cancellation and a multi-host production queue; a four-hour default lease is configurable and must exceed the longest render or gain periodic heartbeats |
 | Geometry review/correction | WORKING BUT INCOMPLETE | Journey Station 03; `POST /projects/{id}/geometry/{correct,calibrate}`; `geometry.py`; `exporters.py`; existing review kernel | Source version/hash + customer wall measurement or edited rooms/walls/openings → immutable validated millimetre geometry plus versioned canonical JSON, corrected SVG, OBJ and validation report | Tests prove measured-wall calibration rescales planar coordinates, thicknesses and opening spans while preserving vertical heights; valid corrections create private artifacts and invalid networks fail closed | Scale can now be customer-confirmed with evidence; graphical drag/snap controls and room-boundary editing remain |
 | Layout options | WORKING BUT INCOMPLETE | `layout_engine.py`, layout endpoints | Approved geometry + brief → practical/storage/premium options using `measured-procedural-2` assets | API and browser flow passed; GLB tests verify articulated sofa component identity and immutable placement IDs | Clearance analysis remains preliminary and assets are procedural rather than manufacturer-grade models |
 | Live customer GLB | COMPLETE (controlled fixture) | `scene_renderer.py`, `blender_scene.py`, `project_worker.py`, `three-d-stage.js` | Approved geometry/layout/design brief → style-specific signed GLB → validated browser bytes | GLB loaded in browser; layout hash, brief hash, selected style, material palette and placement IDs verified | Models remain procedural and require a production-grade measured asset library |
@@ -34,7 +34,7 @@ The controlled staging upload-to-sandbox-payment vertical slice is **COMPLETE an
 | Sandbox checkout | COMPLETE | checkout and sandbox-provider endpoints | Approved quote + idempotency key → server checkout | Browser checkout passed | Production provider intentionally disabled |
 | Secure webhook | COMPLETE (sandbox) | `POST /api/v1/payments/webhook` | Signed event → atomic payment/receipt/project transition | Invalid signature/amount rejected; altered event replay rejected; duplicate identical event idempotent | Add approved production-provider adapter after credential rotation |
 | Paid dashboard | COMPLETE (staging guest project) | `MyProject.dc.html`, project/payment/artifact endpoints | HttpOnly guest session → paid project, render, versions, receipt | Paid state survived dashboard reload | Registered accounts and multi-project listing not implemented |
-| Revision requests | WORKING BUT INCOMPLETE | Backend `journey_api.py`, `project_store.py`; `POST/GET /api/v1/projects/{id}/revisions` | Natural-language request + explicit scope/rooms + approved design version → immutable hash-bound request and selective downstream invalidation | API tests pass; stale-design and post-checkout changes fail closed | Integrate the existing Journey UI, apply requests into a new brief/layout/model/render chain, and add browser E2E |
+| Revision requests | WORKING BUT INCOMPLETE | Backend `journey_api.py`, `project_store.py`; `POST/GET /api/v1/projects/{id}/revisions`; Journey Station 04 | Natural-language request + explicit scope/rooms + approved design version → immutable hash-bound request, history and selective downstream invalidation | API and frontend tests pass; stale-design and post-checkout changes fail closed; Journey renders revision controls and history | Apply approved requests into a new brief/layout/model/render chain and add revision-regeneration browser E2E; natural-language interpretation requires an approved bounded model/provider or explicit structured customer edits |
 
 ## Floor-plan and geometry backend
 
@@ -61,8 +61,8 @@ The controlled staging upload-to-sandbox-payment vertical slice is **COMPLETE an
 ## Tests and evidence
 
 - Backend: `uv run ruff check . && uv run ruff format --check . && uv run pytest`
-  - **104 passed in 33.26 seconds**
-  - Ruff passed; 53 files formatted.
+  - **108 passed in 35.95 seconds**
+  - Ruff passed; 54 files formatted.
 - Frontend: `node --test tests/journey-api.test.mjs`
   - **8 passed**.
 - JavaScript/module syntax checks passed for `Journey.html`, `MyProject.dc.html`, `journey-api.js`, and `three-d-stage.js`.
