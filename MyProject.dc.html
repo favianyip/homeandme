@@ -152,7 +152,11 @@ if (runtime.flags.AI_ANALYSIS_ENABLED) {
     const api = new HomeAndMeProjectApi({ baseUrl: runtime.apiBaseUrl });
     const terminalStates = new Set(['PAID', 'FAILED', 'CANCELLED']);
     let timer = null;
+    let inFlight = false;
     async function loadProject() {
+      if (inFlight) return;
+      inFlight = true;
+      clearTimeout(timer);
       try {
         const project = await api.project();
         document.querySelector('#accountSummary').textContent = `SECURE GUEST PROJECT · ${project.projectId}`;
@@ -192,7 +196,9 @@ if (runtime.flags.AI_ANALYSIS_ENABLED) {
         row.append(label, status); panel.appendChild(row);
         if (project.renderVersion) {
           try {
-            const objectUrl = await api.artifactObjectUrl('approved_render_overview', 'image/png');
+            const renders = await api.renders();
+            const overview = renders.views.find((view) => view.name === 'overview') || renders.views[0];
+            const objectUrl = await api.artifactObjectUrl(overview.artifactRole, 'image/png');
             const hero = document.querySelector('#projectHero');
             if (hero.dataset.privateObjectUrl) URL.revokeObjectURL(hero.dataset.privateObjectUrl);
             hero.src = objectUrl; hero.dataset.privateObjectUrl = objectUrl;
@@ -202,6 +208,8 @@ if (runtime.flags.AI_ANALYSIS_ENABLED) {
       } catch (error) {
         document.querySelector('#projectBadge').textContent = 'PROJECT UNAVAILABLE';
         document.querySelector('#projectSummary').textContent = error.message;
+      } finally {
+        inFlight = false;
       }
     }
     document.addEventListener('visibilitychange', () => { if (!document.hidden) { clearTimeout(timer); loadProject(); } });

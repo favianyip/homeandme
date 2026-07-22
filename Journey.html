@@ -332,7 +332,27 @@ try { const s = JSON.parse(localStorage.getItem('hnm_journey_v1') || 'null'); if
 if (!Array.isArray(state.revisionScopes) || !state.revisionScopes.length) state.revisionScopes = ['materials'];
 function persist() { try { const { planUrl, ...rest } = state; localStorage.setItem('hnm_journey_v1', JSON.stringify({ ...rest, planUrl: planUrl && planUrl.length < 200000 ? planUrl : null })); } catch (e) {} }
 
-const layout = () => LAYOUTS.find((l) => l.id === state.layoutId) || null;
+function backendDisplayLayout() {
+  if (!serviceEnabled || !state.backendLayoutId || !state.geometry) return null;
+  const used = new Set();
+  const roomIds = [];
+  for (const room of state.geometry.geometry.rooms || []) {
+    const name = `${room.name || ''} ${room.function || ''}`.toLowerCase();
+    let id = null;
+    if (name.includes('living') || name.includes('dining')) id = 'living';
+    else if (name.includes('kitchen')) id = 'kitchen';
+    else if (name.includes('master')) id = 'master';
+    else if (name.includes('bed')) id = used.has('common') ? 'common2' : 'common';
+    else if (name.includes('study')) id = 'study';
+    else if (name.includes('family')) id = 'family';
+    else if (name.includes('bath') || name.includes('toilet')) id = 'bath';
+    if (id && ROOMS[id] && !used.has(id)) { used.add(id); roomIds.push(id); }
+  }
+  const fallback = (LAYOUTS.find((item) => item.prop === state.property) || LAYOUTS[0]).rooms;
+  const selected = state.backendLayouts?.options?.find((item) => item.layoutId === state.backendLayoutId);
+  return { id: state.backendLayoutId, label: selected?.type?.replaceAll('_', ' ').toUpperCase() || 'MEASURED LAYOUT', sqm: 0, rooms: roomIds.length ? roomIds : fallback };
+}
+const layout = () => backendDisplayLayout() || LAYOUTS.find((l) => l.id === state.layoutId) || null;
 const themeFor = (r) => state.themes[r] || 'luxe';
 const roomAmt = (r) => ROOMS[r].base * THEMES.find((t) => t.id === themeFor(r)).mult;
 const total = () => (layout() ? layout().rooms.reduce((s, r) => s + roomAmt(r), 0) : 0);
@@ -596,7 +616,7 @@ function drawLayouts() {
       const title = document.createElement('div'); title.className = 't'; title.textContent = option.type.replaceAll('_', ' ').toUpperCase();
       const sub = document.createElement('div'); sub.className = 's'; sub.textContent = `${option.placements.length} measured items · ${option.warnings.length ? option.warnings.length + ' review note(s)' : 'preliminary checks passed'}`;
       b.append(title, sub);
-      b.onclick = () => { state.backendLayoutId = option.layoutId; state.layoutId = (LAYOUTS.find((item) => item.prop === state.property) || LAYOUTS[0]).id; state.room = layout().rooms[0]; persist(); drawLayouts(); $('#cta3').disabled = false; };
+      b.onclick = () => { state.backendLayoutId = option.layoutId; state.layoutId = null; state.room = layout().rooms[0]; persist(); drawLayouts(); $('#cta3').disabled = false; };
       layCards.appendChild(b);
     });
     return;

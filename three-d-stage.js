@@ -308,9 +308,9 @@
 
     /** Parse validated GLB bytes supplied by the host; this component never fetches private URLs. */
     async setGlb(arrayBuffer) {
-      if (!this._THREE) await this.ready;
       this.setAttribute('data-model-state', 'loading');
       try {
+        if (!this._THREE) await this.ready;
         const bytes = new Uint8Array(arrayBuffer, 0, Math.min(4, arrayBuffer.byteLength));
         if (bytes.length !== 4 || String.fromCharCode(...bytes) !== 'glTF') throw new Error('Invalid GLB signature.');
         const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
@@ -344,7 +344,7 @@
     setObject(object) {
       const THREE = this._THREE;
       if (!THREE) throw new Error('three-d-stage: not ready — await stage.ready first');
-      if (this._object) {
+      if (this._object && this._object !== object) {
         this._scene.remove(this._object);
         this._disposeObject(this._object);
       }

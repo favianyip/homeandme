@@ -8,7 +8,7 @@
 
 ## Local staging commands
 
-From `/home/favianyip/ai-interior-platform`, configure variables listed in `.env.example`, then start:
+From the backend repository root, configure variables listed in `.env.example`, then start:
 
 ```bash
 uv run uvicorn spatialforge.api:app --host 127.0.0.1 --port 8765

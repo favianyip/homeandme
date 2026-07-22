@@ -1,6 +1,6 @@
 # Canonical Geometry
 
-Canonical geometry is an integer-millimetre, right-handed, Z-up document in `/home/favianyip/ai-interior-platform/src/spatialforge/domain.py`.
+Canonical geometry is an integer-millimetre, right-handed, Z-up document defined by the backend `spatialforge/domain.py` module.
 
 Current core fields include project ID, revision, units, coordinate system, topology mode, scale status, walls, openings and rooms. Partitioned-plan validation supports connected orthogonal internal partitions.
 

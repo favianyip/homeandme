@@ -13,11 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: JavaScript contracts
         run: |
+          node --check config.js
           node --check journey-api.js
           node --check three-d-stage.js
           node --test tests/journey-api.test.mjs
@@ -27,7 +30,11 @@ jobs:
           from pathlib import Path
           import re, subprocess
           for name in ('Journey.html', 'MyProject.dc.html'):
-              for index, module in enumerate(re.findall(r'<script type="module">(.*?)</script>', Path(name).read_text(), re.S)):
+              source = Path(name).read_text()
+              modules = re.findall(r'<script\b[^>]*\btype\s*=\s*["\x27]module["\x27][^>]*>(.*?)</script\s*>', source, re.I | re.S)
+              if not modules:
+                  raise RuntimeError(f'No inline module found in {name}')
+              for index, module in enumerate(modules):
                   target = Path('/tmp') / f'{name.replace(".", "-")}-{index}.mjs'
                   target.write_text(module)
                   subprocess.run(['node', '--check', str(target)], check=True)

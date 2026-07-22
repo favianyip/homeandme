@@ -1,6 +1,6 @@
 # HERMES Current Status
 
-Audit date: 2026-07-22. Public source: `favianyip/homeandme` sanitized baseline `189653d` plus branch `feature/hermes-floorplan-render-e2e`. Private legacy archive: `favianyip/homeandme-private`. Backend source: `/home/favianyip/ai-interior-platform`, branch `feature/hermes-floorplan-render-e2e`.
+Audit date: 2026-07-22. Public source: `favianyip/homeandme` sanitized baseline `189653d` plus branch `feature/hermes-floorplan-render-e2e`. Backend component branch: `feature/hermes-floorplan-render-e2e`.
 
 Status vocabulary: **COMPLETE**, **WORKING BUT INCOMPLETE**, **PROTOTYPE ONLY**, **NOT STARTED**, **BLOCKED**.
 
@@ -47,7 +47,7 @@ The controlled staging upload-to-sandbox-payment vertical slice is **COMPLETE an
 | Canonical geometry | COMPLETE (bounded kernel) | `domain.py`, `geometry.py`; integer mm, partition topology | Deterministic validation passed | Expand schema for columns/beams/stairs/voids/multiple levels and full provenance |
 | SVG/OBJ | COMPLETE (bounded) | `exporters.py` | Hash-bound vector plan and shell generated | Add technical dimensions/annotations and approved-only policy everywhere |
 | GLB/Blender | COMPLETE (controlled fixture) | Blender 4.0.2; approved geometry/layout hashes and measured placements | GLB and `.blend` generated; GLB magic/hash/placement verified | Pin a production worker image and improve assets/materials |
-| Rendering | WORKING BUT INCOMPLETE | Blender Eevee, three brief-driven material palettes, four derived cameras | Four readable same-scene PNGs; selected Scandinavian/Modern Luxe/Warm Contemporary style now reaches the GLB and render version | Upgrade to Cycles/PBR/high-detail assets and room-specific palettes; current results are not photorealistic |
+| Rendering | WORKING BUT INCOMPLETE | Blender Cycles production profile plus Eevee test profile, three brief-driven material palettes, four derived cameras | Four hash-bound Cycles PNGs from one approved scene; selected Scandinavian/Modern Luxe/Warm Contemporary style reaches the GLB and render version | Add manufacturer-grade assets, supported denoising and room-specific palettes; current results are not customer-grade photorealism |
 
 ## Persistence and security boundaries
 
