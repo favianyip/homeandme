@@ -55,13 +55,13 @@ The controlled staging upload-to-sandbox-payment vertical slice is **COMPLETE an
 |---|---|---|---|---|
 | Project database | WORKING BUT INCOMPLETE | `project_store.py`, SQLite WAL/foreign keys/transactions | Projects, versions, jobs, artifacts, quotes, checkouts, payments, receipts, events persisted | Migrate to PostgreSQL for production; add immutable DB triggers and backups |
 | Private artifact delivery | COMPLETE (staging) | signed HMAC URL + authorization + retrieval hash | Unsigned/forged access rejected; browser validates origin/type/size | Add S3-compatible private object-store adapter and deletion lifecycle |
-| Browser guest auth | COMPLETE (staging) | hashed token + HttpOnly/SameSite cookie; exact-origin credentialed CORS and fail-closed Origin enforcement for cookie-authenticated state changes | Missing/foreign origins return `403`; allowed browser origin and signed server webhook pass; project survives refresh without a JS-persisted secret | Add account claiming, distributed rate limiting and production proxy validation before public enablement |
+| Browser guest auth | COMPLETE (single-host staging) | hashed token + HttpOnly/SameSite cookie; exact-origin CORS, fail-closed Origin enforcement and SQLite-atomic fixed-window rate buckets for unsafe API requests | Missing/foreign origins return `403`; exhausted buckets return `429` with `Retry-After`; allowed browser origin, Bearer requests and signed webhook pass | Replace SQLite buckets with shared PostgreSQL/Redis enforcement for multi-host production; add account claiming and trusted-proxy validation |
 | Payment atomicity | COMPLETE (sandbox) | one `BEGIN IMMEDIATE` transaction | Receipt/project/payment/event transition is atomic | Add failure-injection rollback test and production database transaction verification |
 
 ## Tests and evidence
 
 - Backend: `uv run ruff check . && uv run ruff format --check . && uv run pytest`
-  - **104 passed in 33.19 seconds**
+  - **104 passed in 33.26 seconds**
   - Ruff passed; 53 files formatted.
 - Frontend: `node --test tests/journey-api.test.mjs`
   - **8 passed**.
