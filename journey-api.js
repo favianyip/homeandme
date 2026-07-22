@@ -51,7 +51,8 @@ export class HomeAndMeProjectApi {
     const contentType = response.headers.get('content-type') || '';
     const payload = contentType.includes('json') ? await response.json() : await response.text();
     if (!response.ok) {
-      const message = payload?.message || payload?.detail || `Request failed (${response.status})`;
+      const detail = payload?.detail;
+      const message = payload?.message || (typeof detail === 'string' ? detail : detail?.message) || `Request failed (${response.status})`;
       const error = new Error(message);
       error.status = response.status;
       error.payload = payload;
@@ -90,6 +91,16 @@ export class HomeAndMeProjectApi {
 
   job(jobId) { return this._request(`/api/v1/projects/${this.requireSession().projectId}/jobs/${jobId}`); }
   geometry() { return this._request(`/api/v1/projects/${this.requireSession().projectId}/geometry`); }
+  correctGeometry(sourceGeometryVersion, sourceGeometrySha256, reason, geometry) {
+    return this._request(`/api/v1/projects/${this.requireSession().projectId}/geometry/correct`, {
+      method: 'POST', body: { sourceGeometryVersion, sourceGeometrySha256, reason, geometry },
+    });
+  }
+  calibrateGeometry(sourceGeometryVersion, sourceGeometrySha256, referenceWallId, measuredLengthMm, evidenceNote) {
+    return this._request(`/api/v1/projects/${this.requireSession().projectId}/geometry/calibrate`, {
+      method: 'POST', body: { sourceGeometryVersion, sourceGeometrySha256, referenceWallId, measuredLengthMm, evidenceNote },
+    });
+  }
   approveGeometry(geometryVersion, geometrySha256) {
     return this._request(`/api/v1/projects/${this.requireSession().projectId}/geometry/approve`, {
       method: 'POST', body: { geometryVersion, geometrySha256 },
@@ -112,9 +123,16 @@ export class HomeAndMeProjectApi {
     return this._request(`/api/v1/projects/${this.requireSession().projectId}/renders`, { method: 'POST' });
   }
   renders() { return this._request(`/api/v1/projects/${this.requireSession().projectId}/renders`); }
+  renderHistory() { return this._request(`/api/v1/projects/${this.requireSession().projectId}/renders/history`); }
   approveDesign(renderSetId) {
     return this._request(`/api/v1/projects/${this.requireSession().projectId}/design/approve`, { method: 'POST', body: { renderSetId } });
   }
+  requestRevision(sourceDesignVersion, instructions, scopes, affectedRoomIds = []) {
+    return this._request(`/api/v1/projects/${this.requireSession().projectId}/revisions`, {
+      method: 'POST', body: { sourceDesignVersion, instructions, scopes, affectedRoomIds },
+    });
+  }
+  revisions() { return this._request(`/api/v1/projects/${this.requireSession().projectId}/revisions`); }
   quote() { return this._request(`/api/v1/projects/${this.requireSession().projectId}/quote`); }
   approveQuote(quoteVersion) {
     return this._request(`/api/v1/projects/${this.requireSession().projectId}/quote/approve`, { method: 'POST', body: { quoteVersion } });

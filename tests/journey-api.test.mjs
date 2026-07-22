@@ -73,3 +73,63 @@ test('client surfaces fail-closed API errors', async () => {
   api._saveSession({ projectId: 'HNM-1' });
   await assert.rejects(() => api.checkout('attempt-1'), /approve a design/);
 });
+
+test('revision request is bound to the approved design version', async () => {
+  const requests = [];
+  const api = new HomeAndMeProjectApi({
+    baseUrl: 'https://api.example', storage: memoryStorage(),
+    fetchImpl: async (url, init) => { requests.push({ url, init }); return response(201, { status: 'requested' }); },
+  });
+  api._saveSession({ projectId: 'HNM-1' });
+  await api.requestRevision(3, 'Use warmer timber in the living room.', ['materials'], ['living']);
+  assert.equal(requests[0].url, 'https://api.example/api/v1/projects/HNM-1/revisions');
+  assert.deepEqual(JSON.parse(requests[0].init.body), {
+    sourceDesignVersion: 3,
+    instructions: 'Use warmer timber in the living room.',
+    scopes: ['materials'],
+    affectedRoomIds: ['living'],
+  });
+});
+
+test('render history uses the authenticated project route', async () => {
+  const requests = [];
+  const api = new HomeAndMeProjectApi({
+    baseUrl: 'https://api.example', storage: memoryStorage(),
+    fetchImpl: async (url, init) => { requests.push({ url, init }); return response(200, { renderSets: [] }); },
+  });
+  api._saveSession({ projectId: 'HNM-1' });
+
+  const history = await api.renderHistory();
+
+  assert.deepEqual(history.renderSets, []);
+  assert.equal(requests[0].url, 'https://api.example/api/v1/projects/HNM-1/renders/history');
+  assert.equal(requests[0].init.credentials, 'include');
+});
+
+test('geometry correction is bound to source version and hash', async () => {
+  const requests = [];
+  const api = new HomeAndMeProjectApi({
+    baseUrl: 'https://api.example', storage: memoryStorage(),
+    fetchImpl: async (url, init) => { requests.push({ url, init }); return response(201, { geometryVersion: 2 }); },
+  });
+  api._saveSession({ projectId: 'HNM-1' });
+  const geometry = { project_id: 'HNM-1', revision: 1, walls: [] };
+  await api.correctGeometry(1, 'a'.repeat(64), 'Measured entry width.', geometry);
+
+  assert.equal(requests[0].url, 'https://api.example/api/v1/projects/HNM-1/geometry/correct');
+  assert.deepEqual(JSON.parse(requests[0].init.body), {
+    sourceGeometryVersion: 1,
+    sourceGeometrySha256: 'a'.repeat(64),
+    reason: 'Measured entry width.',
+    geometry,
+  });
+  await api.calibrateGeometry(2, 'b'.repeat(64), 'wall-north', 5500, 'Tape measurement');
+  assert.equal(requests[1].url, 'https://api.example/api/v1/projects/HNM-1/geometry/calibrate');
+  assert.deepEqual(JSON.parse(requests[1].init.body), {
+    sourceGeometryVersion: 2,
+    sourceGeometrySha256: 'b'.repeat(64),
+    referenceWallId: 'wall-north',
+    measuredLengthMm: 5500,
+    evidenceNote: 'Tape measurement',
+  });
+});

@@ -107,8 +107,23 @@
   .progress-track span { display: block; height: 100%; width: 0; background: #5a7e8a; transition: width .35s ease; }
   .detected-list { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0; }
   .detected-list span { border: 1px solid rgba(90,126,138,.35); border-radius: 999px; padding: 7px 11px; font-size: 11.5px; }
+  .geometry-editor { margin: 14px 0; border: 1px solid rgba(90,126,138,.3); border-radius: 6px; background: rgba(90,126,138,.04); }
+  .geometry-editor summary { cursor: pointer; padding: 13px 14px; font: 600 11px/1.4 'Open Sans', sans-serif; letter-spacing: 1.3px; color: #385a65; }
+  .geometry-editor-body { padding: 0 14px 14px; }
+  .geometry-group { border-top: 1px solid rgba(90,126,138,.18); padding: 12px 0; }
+  .geometry-group h4 { margin: 0 0 9px; font: 600 10px/1.4 'Open Sans', sans-serif; letter-spacing: 1.2px; color: #77746d; }
+  .geometry-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .geometry-fields label { font: 9px/1.3 'Open Sans', sans-serif; letter-spacing: .6px; color: #77746d; }
+  .geometry-fields input, .geometry-fields select { width: 100%; box-sizing: border-box; margin-top: 4px; padding: 8px; border: 1px solid #d8d4ca; background: #fff; font: 12px 'Open Sans', sans-serif; }
   .render-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
-  .render-grid img { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 5px; border: 1px solid rgba(26,32,35,.1); }
+  .render-grid img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 5px; border: 1px solid rgba(26,32,35,.1); background: #d9d5cb; }
+  .render-history-list { display: grid; gap: 8px; margin: 10px 0 14px; }
+  .render-history-card { display: grid; grid-template-columns: 112px 1fr; gap: 12px; align-items: center; border: 1px solid #d8d4ca; padding: 8px; background: #f8f6f1; }
+  .render-history-card img { width: 112px; aspect-ratio: 16 / 10; object-fit: cover; background: #d9d5cb; }
+  .render-history-card strong { display: block; font: 600 12px/1.4 'Open Sans', sans-serif; letter-spacing: 1px; }
+  .render-history-card span { display: block; margin-top: 4px; font: 10px/1.5 'Open Sans', sans-serif; color: #77746d; }
+  .revision-box { margin: 18px 0; padding: 16px; border: 1px solid rgba(90,126,138,.25); border-radius: 6px; background: rgba(90,126,138,.05); }
+  .revision-box textarea { width: 100%; min-height: 92px; resize: vertical; box-sizing: border-box; font-family: inherit; font-size: 13px; line-height: 1.5; letter-spacing: 0; }
   @media (max-width: 1060px) {
     body { overflow: auto; }
     main { position: static; margin-top: 64px; display: block; }
@@ -119,6 +134,7 @@
   }
   @media (max-width: 700px) {
     #stageTag { top: auto; bottom: 12px; left: 12px; }
+    .geometry-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 </style>
 </head>
@@ -181,8 +197,26 @@
       <p class="lede">Review the detected rooms and measurements first. Once you approve them, choose a measured layout and watch your own model build room by room.</p>
       <div id="analysisStatus" class="service-status" hidden><span class="message"></span><div class="progress-track"><span></span></div></div>
       <div id="geometryReview" hidden>
-        <div class="preview"><img id="overlayImg" alt="Detected floor-plan overlay"><div class="cap"><span>DETECTED OVERLAY</span><span style="color:#5a7e8a;">REVIEW BEFORE APPROVAL</span></div></div>
+        <div class="preview"><img id="overlayImg" alt="Detected floor-plan overlay"><div class="cap"><span id="geometryEvidenceLabel">DETECTED OVERLAY</span><span id="geometryEvidenceState" style="color:#5a7e8a;">REVIEW BEFORE APPROVAL</span></div></div>
         <div id="detectedRooms" class="detected-list"></div>
+        <details id="geometryEditor" class="geometry-editor">
+          <summary>CORRECT ROOMS, WALLS &amp; OPENING MEASUREMENTS</summary>
+          <div class="geometry-editor-body">
+            <p class="lede" style="font-size:12px;">All measurements are millimetres. Invalid or disconnected geometry is rejected before a new version is saved.</p>
+            <div class="geometry-group">
+              <h4>CONFIRM SCALE WITH ONE MEASURED WALL</h4>
+              <div class="geometry-fields">
+                <label>REFERENCE WALL<select id="calibrationWall"></select></label>
+                <label>MEASURED LENGTH (MM)<input id="calibrationLength" type="number" min="100" max="100000" step="1"></label>
+                <label>MEASUREMENT EVIDENCE<input id="calibrationEvidence" maxlength="1000" placeholder="Tape measurement"></label>
+              </div>
+              <button class="cta ghost" id="confirmGeometryScale" type="button">VALIDATE &amp; CONFIRM SCALE</button>
+            </div>
+            <div id="geometryFields"></div>
+            <label class="field" style="width:100%; box-sizing:border-box;"><span>Reason / measurement evidence</span><input id="geometryReason" maxlength="1000" placeholder="Example: Entry door site measurement confirmed at 1000 mm"></label>
+            <button class="cta ghost" id="saveGeometryCorrections" type="button">VALIDATE &amp; SAVE CORRECTED VERSION</button>
+          </div>
+        </details>
         <button class="cta ghost" id="approveGeometry">THE WALLS &amp; ROOMS LOOK RIGHT →</button>
       </div>
       <div class="cards" id="layCards"></div>
@@ -198,6 +232,10 @@
       <div class="rowline"><span class="muted">This room</span><span class="r" id="roomAmt">S$ 0</span></div>
       <div id="renderStatus" class="service-status" hidden><span class="message"></span><div class="progress-track"><span></span></div></div>
       <div id="renderGallery" class="render-grid" hidden></div>
+      <div id="renderHistoryPanel" hidden>
+        <p class="kicker" style="margin-top:16px;">SAVED RENDER VERSIONS</p>
+        <div id="renderHistory" class="render-history-list"></div>
+      </div>
       <button class="cta" id="cta4">GENERATE CUSTOMER RENDERS →</button>
     </div>
     <div class="card" data-step="5">
@@ -207,6 +245,15 @@
       <div id="specRows"></div>
       <div class="total"><span class="os" style="font-size:12px; letter-spacing:2.4px;">ESTIMATED TOTAL</span><span class="amt" id="grandAmt">S$ 0</span></div>
       <p class="lede" style="font-size:12.5px; color:#8a908c; margin-top:8px;">Final quote confirmed against your verified floor plan before works begin.</p>
+      <div id="revisionBox" class="revision-box" hidden>
+        <p class="kicker">REQUEST A REVISION</p>
+        <p class="lede" style="font-size:12.5px;">Describe changes before approving the quotation. Your request is locked to this exact design version.</p>
+        <textarea id="revisionInstructions" class="field" maxlength="5000" placeholder="Example: Use warmer timber and a lighter living-room palette."></textarea>
+        <div class="pills" id="revisionScopes" style="margin-top:10px;"></div>
+        <button class="cta ghost" id="requestRevision">REQUEST CHANGES TO THIS VERSION</button>
+        <div id="revisionStatus" class="service-status" hidden><span class="message"></span><div class="progress-track"><span></span></div></div>
+        <div id="revisionHistory" class="detected-list" hidden></div>
+      </div>
       <div style="display: flex; gap: 10px;">
         <button class="cta" id="payBtn" style="flex: 1;">APPROVE QUOTE &amp; OPEN CHECKOUT</button>
         <a class="cta ghost" href="MyProject.dc.html" style="flex: 1;">VIEW PROJECT →</a>
@@ -280,8 +327,9 @@ const STATIONS = [
 const EMAIL = 'homeandme25@gmail.com', WA = '6594235227';
 const fmt = (n) => 'S$ ' + Math.round(n).toLocaleString('en-SG');
 
-const state = { step: 1, planUrl: null, planName: '', property: 'hdb', postal: '', area: '', verified: false, layoutId: null, themes: {}, room: null, projectId: null, analysisJobId: null, geometry: null, backendLayouts: null, backendLayoutId: null, modelJobId: null, renderJobId: null, renders: null, quote: null };
+const state = { step: 1, planUrl: null, planName: '', property: 'hdb', postal: '', area: '', verified: false, layoutId: null, themes: {}, room: null, projectId: null, analysisJobId: null, geometry: null, backendLayouts: null, backendLayoutId: null, modelJobId: null, renderJobId: null, renders: null, quote: null, revisionScopes: ['materials'] };
 try { const s = JSON.parse(localStorage.getItem('hnm_journey_v1') || 'null'); if (s) Object.assign(state, s, { planUrl: s.planUrl || null }); } catch (e) {}
+if (!Array.isArray(state.revisionScopes) || !state.revisionScopes.length) state.revisionScopes = ['materials'];
 function persist() { try { const { planUrl, ...rest } = state; localStorage.setItem('hnm_journey_v1', JSON.stringify({ ...rest, planUrl: planUrl && planUrl.length < 200000 ? planUrl : null })); } catch (e) {} }
 
 const layout = () => LAYOUTS.find((l) => l.id === state.layoutId) || null;
@@ -419,16 +467,123 @@ $('#cta2').onclick = async () => {
     $('#cta2').textContent = 'RETRY ANALYSIS';
   }
 };
-async function loadGeometryReview() {
-  state.geometry = await projectApi.geometry();
-  const overlayUrl = await projectApi.artifactObjectUrl('detected_room_overlay', 'image/png');
-  setPrivateImage($('#overlayImg'), overlayUrl);
+function geometryField(container, labelText, value, onChange, options = null) {
+  const label = document.createElement('label'); label.textContent = labelText;
+  const input = options ? document.createElement('select') : document.createElement('input');
+  if (options) {
+    options.forEach((option) => { const item = document.createElement('option'); item.value = option; item.textContent = option.toUpperCase(); input.appendChild(item); });
+    input.value = value;
+  } else {
+    input.type = typeof value === 'number' ? 'number' : 'text'; input.step = '1'; input.value = value;
+  }
+  input.onchange = () => onChange(input.type === 'number' ? Number(input.value) : input.value);
+  label.appendChild(input); container.appendChild(label);
+}
+function renderGeometryEditor() {
+  const geometry = state.geometry.geometry;
+  const calibrationWall = $('#calibrationWall'); calibrationWall.innerHTML = '';
+  geometry.walls.forEach((wall) => {
+    const option = document.createElement('option'); option.value = wall.id;
+    option.textContent = `${wall.id} · ${Math.round(Math.hypot(wall.end.x - wall.start.x, wall.end.y - wall.start.y))} mm`;
+    calibrationWall.appendChild(option);
+  });
+  const setCalibrationLength = () => {
+    const wall = geometry.walls.find((item) => item.id === calibrationWall.value);
+    if (wall) $('#calibrationLength').value = Math.round(Math.hypot(wall.end.x - wall.start.x, wall.end.y - wall.start.y));
+  };
+  calibrationWall.onchange = setCalibrationLength; setCalibrationLength();
+  const root = $('#geometryFields'); root.innerHTML = '';
+  geometry.rooms.forEach((room) => {
+    const group = document.createElement('div'); group.className = 'geometry-group';
+    const title = document.createElement('h4'); title.textContent = `ROOM · ${room.id}`;
+    const fields = document.createElement('div'); fields.className = 'geometry-fields';
+    geometryField(fields, 'NAME', room.name, (value) => { room.name = value; });
+    geometryField(fields, 'FUNCTION', room.function || '', (value) => { room.function = value || null; });
+    group.append(title, fields); root.appendChild(group);
+  });
+  geometry.walls.forEach((wall) => {
+    const group = document.createElement('div'); group.className = 'geometry-group';
+    const title = document.createElement('h4'); title.textContent = `WALL · ${wall.id}`;
+    const fields = document.createElement('div'); fields.className = 'geometry-fields';
+    [['START X', wall.start, 'x'], ['START Y', wall.start, 'y'], ['END X', wall.end, 'x'], ['END Y', wall.end, 'y'], ['THICKNESS', wall, 'thickness'], ['HEIGHT', wall, 'height']]
+      .forEach(([label, target, key]) => geometryField(fields, label, target[key], (value) => { target[key] = value; }));
+    group.append(title, fields); root.appendChild(group);
+  });
+  geometry.openings.forEach((opening) => {
+    const group = document.createElement('div'); group.className = 'geometry-group';
+    const title = document.createElement('h4'); title.textContent = `OPENING · ${opening.id}`;
+    const fields = document.createElement('div'); fields.className = 'geometry-fields';
+    geometryField(fields, 'TYPE', opening.kind, (value) => { opening.kind = value; }, ['door', 'window', 'opening']);
+    geometryField(fields, 'HOST WALL', opening.wall_id, (value) => { opening.wall_id = value; }, geometry.walls.map((wall) => wall.id));
+    ['offset', 'width', 'height', 'sill'].forEach((key) => geometryField(fields, key.toUpperCase(), opening[key], (value) => { opening[key] = value; }));
+    group.append(title, fields); root.appendChild(group);
+  });
+}
+function renderGeometryReview() {
   const rooms = state.geometry.geometry.rooms || [];
   const roomList = $('#detectedRooms'); roomList.innerHTML = '';
   rooms.forEach((room) => { const chip = document.createElement('span'); chip.textContent = room.name || 'Unclassified room'; roomList.appendChild(chip); });
+  renderGeometryEditor();
   $('#geometryReview').hidden = false;
   showStatus('#analysisStatus', `${rooms.length} rooms detected · scale ${state.geometry.geometry.scale_status.replaceAll('_', ' ')}`, 100);
 }
+async function loadGeometryEvidence() {
+  const correctedRole = state.geometry.artifactRoles?.vectorPlanSvg;
+  const role = correctedRole || 'detected_room_overlay';
+  const objectUrl = await projectApi.artifactObjectUrl(role, correctedRole ? 'image/svg+xml' : 'image/png');
+  setPrivateImage($('#overlayImg'), objectUrl);
+  $('#overlayImg').alt = correctedRole ? `Corrected geometry version ${state.geometry.geometryVersion}` : 'Detected floor-plan overlay';
+  $('#geometryEvidenceLabel').textContent = correctedRole ? `CORRECTED VECTOR PLAN · V${state.geometry.geometryVersion}` : 'DETECTED OVERLAY';
+  $('#geometryEvidenceState').textContent = correctedRole ? 'VALIDATED · REVIEW BEFORE APPROVAL' : 'REVIEW BEFORE APPROVAL';
+}
+async function loadGeometryReview() {
+  state.geometry = await projectApi.geometry();
+  await loadGeometryEvidence();
+  renderGeometryReview();
+}
+$('#saveGeometryCorrections').onclick = async () => {
+  const reason = $('#geometryReason').value.trim();
+  if (reason.length < 3) return showStatus('#analysisStatus', 'Add the measurement source or reason for this correction.', 0);
+  const button = $('#saveGeometryCorrections'); button.disabled = true;
+  try {
+    const corrected = await projectApi.correctGeometry(
+      state.geometry.geometryVersion,
+      state.geometry.geometrySha256,
+      reason,
+      state.geometry.geometry,
+    );
+    state.geometry = corrected; persist(); await loadGeometryEvidence(); renderGeometryReview();
+    $('#geometryReason').value = '';
+    showStatus('#analysisStatus', `Corrected geometry version ${corrected.geometryVersion} validated and saved.`, 100);
+  } catch (error) {
+    showStatus('#analysisStatus', `Correction rejected: ${error.message}`, 0);
+  } finally {
+    button.disabled = false;
+  }
+};
+
+$('#confirmGeometryScale').onclick = async () => {
+  const evidence = $('#calibrationEvidence').value.trim();
+  const measuredLength = Number($('#calibrationLength').value);
+  if (evidence.length < 3 || !Number.isInteger(measuredLength)) return showStatus('#analysisStatus', 'Choose a wall, enter its measured millimetre length and add measurement evidence.', 0);
+  const button = $('#confirmGeometryScale'); button.disabled = true;
+  try {
+    const calibrated = await projectApi.calibrateGeometry(
+      state.geometry.geometryVersion,
+      state.geometry.geometrySha256,
+      $('#calibrationWall').value,
+      measuredLength,
+      evidence,
+    );
+    state.geometry = calibrated; persist(); await loadGeometryEvidence(); renderGeometryReview();
+    $('#calibrationEvidence').value = '';
+    showStatus('#analysisStatus', `Scale customer-confirmed in geometry version ${calibrated.geometryVersion}.`, 100);
+  } catch (error) {
+    showStatus('#analysisStatus', `Scale confirmation rejected: ${error.message}`, 0);
+  } finally {
+    button.disabled = false;
+  }
+};
 
 /* Station 3 */
 const layCards = $('#layCards');
@@ -508,6 +663,28 @@ function renderDesign() {
   $('#roomAmt').textContent = fmt(roomAmt(state.room));
   markActive();
 }
+async function loadRenderHistory() {
+  if (!serviceEnabled || !state.projectId) return;
+  const result = await projectApi.renderHistory();
+  const panel = $('#renderHistoryPanel');
+  const history = $('#renderHistory'); history.innerHTML = '';
+  for (const renderSet of [...result.renderSets].reverse()) {
+    const card = document.createElement('div'); card.className = 'render-history-card';
+    const firstView = renderSet.views && renderSet.views[0];
+    if (firstView) {
+      const objectUrl = await projectApi.artifactObjectUrl(firstView.artifactRole, 'image/png');
+      const image = document.createElement('img'); image.alt = `Render version ${renderSet.renderVersion} overview`;
+      setPrivateImage(image, objectUrl); card.appendChild(image);
+    }
+    const details = document.createElement('div');
+    const title = document.createElement('strong');
+    title.textContent = `VERSION ${renderSet.renderVersion} · ${(renderSet.style || 'saved design').replaceAll('_', ' ').toUpperCase()}`;
+    const meta = document.createElement('span');
+    meta.textContent = `${renderSet.views.length} views · ${renderSet.materialVersion || 'material version recorded'} · ${new Date(renderSet.createdAt).toLocaleDateString('en-SG')}`;
+    details.append(title, meta); card.appendChild(details); history.appendChild(card);
+  }
+  panel.hidden = result.renderSets.length === 0;
+}
 $('#cta4').onclick = async () => {
   if (!serviceEnabled) return go(5);
   if (state.renders && !state.quote) {
@@ -550,6 +727,7 @@ $('#cta4').onclick = async () => {
       setPrivateImage(image, objectUrl); gallery.appendChild(image);
     }
     gallery.hidden = false;
+    await loadRenderHistory();
     state.quote = null;
     persist(); updateTotal();
     showStatus('#renderStatus', 'Four same-scene renders completed · review every view before approval.', 100);
@@ -562,6 +740,54 @@ $('#cta4').onclick = async () => {
 };
 
 /* Station 5 */
+const REVISION_SCOPE_OPTIONS = [
+  ['style', 'STYLE'], ['materials', 'MATERIALS'], ['furniture', 'FURNITURE'], ['storage', 'STORAGE'], ['layout', 'LAYOUT'],
+];
+function drawRevisionScopes() {
+  const box = $('#revisionScopes'); box.innerHTML = '';
+  REVISION_SCOPE_OPTIONS.forEach(([scope, label]) => {
+    const button = document.createElement('button');
+    button.type = 'button'; button.className = 'pill' + (state.revisionScopes.includes(scope) ? ' sel' : '');
+    button.textContent = label; button.setAttribute('aria-pressed', state.revisionScopes.includes(scope) ? 'true' : 'false');
+    button.onclick = () => {
+      if (state.revisionScopes.includes(scope)) {
+        if (state.revisionScopes.length > 1) state.revisionScopes = state.revisionScopes.filter((item) => item !== scope);
+      } else state.revisionScopes.push(scope);
+      persist(); drawRevisionScopes();
+    };
+    box.appendChild(button);
+  });
+}
+async function loadRevisionHistory() {
+  if (!serviceEnabled || !state.projectId) return;
+  const result = await projectApi.revisions();
+  const history = $('#revisionHistory'); history.innerHTML = '';
+  result.revisions.forEach((revision) => {
+    const item = document.createElement('span');
+    item.textContent = `REQUEST ${revision.revisionRequestVersion} · DESIGN ${revision.sourceReferences.designVersion} · ${revision.status.toUpperCase()}`;
+    history.appendChild(item);
+  });
+  history.hidden = result.revisions.length === 0;
+}
+drawRevisionScopes();
+$('#requestRevision').onclick = async () => {
+  const instructions = $('#revisionInstructions').value.trim();
+  if (!state.quote) return showStatus('#revisionStatus', 'The approved design version is not available.', 0);
+  if (instructions.length < 10) return showStatus('#revisionStatus', 'Describe the requested change in at least 10 characters.', 0);
+  try {
+    $('#requestRevision').disabled = true;
+    showStatus('#revisionStatus', 'Locking this request to the approved design version…', 45);
+    const result = await projectApi.requestRevision(state.quote.designVersion, instructions, state.revisionScopes);
+    state.quote = null; state.renders = null; persist();
+    $('#payBtn').disabled = true;
+    await loadRevisionHistory();
+    showStatus('#revisionStatus', `Revision request ${result.revisionRequestVersion} recorded. Checkout is blocked until a new design is generated and approved.`, 100);
+  } catch (error) {
+    showStatus('#revisionStatus', `Revision request stopped: ${error.message}`, 0);
+    $('#requestRevision').disabled = false;
+  }
+};
+
 function specText() {
   const l = layout();
   const lines = ['HOME&ME RENOVATION SPEC', `Property: ${l.label} ${PROPS.find((p) => p.id === state.property).label} · ~${l.sqm} sqm`, `Location: ${state.addr ? state.addr + ' S(' + state.postal + ')' : state.area + ' ' + state.postal}`, `Floor plan: ${state.planName || '—'}`, '',
@@ -569,7 +795,10 @@ function specText() {
   return lines.join('\n');
 }
 function renderSpec() {
+  $('#revisionBox').hidden = !(serviceEnabled && state.quote);
   if (serviceEnabled && state.quote) {
+    $('#payBtn').disabled = false;
+    loadRevisionHistory().catch((error) => showStatus('#revisionStatus', `Revision history unavailable: ${error.message}`, 0));
     const rows = $('#specRows'); rows.innerHTML = '';
     const version = document.createElement('div'); version.className = 'rowline';
     version.textContent = `Project ${state.projectId} · geometry v${state.quote.geometryVersion} · layout v${state.quote.layoutVersion} · design v${state.quote.designVersion} · quote v${state.quote.quoteVersion}`;
@@ -627,7 +856,7 @@ async function resumeServiceProject() {
   try {
     const project = await projectApi.project();
     state.projectId = project.projectId;
-    state.quote = project.quote || state.quote;
+    state.quote = project.quote;
     if (project.geometryVersion && !state.geometry) state.geometry = await projectApi.geometry();
     if (project.modelVersion) {
       const model = await projectApi.model();
@@ -644,9 +873,17 @@ async function resumeServiceProject() {
         setPrivateImage(image, objectUrl); gallery.appendChild(image);
       }
       gallery.hidden = false;
+      await loadRenderHistory();
     }
     persist(); updateTotal();
     if (state.step === 5 && state.quote) renderSpec();
+    if (project.state === 'REVISION_REQUESTED') {
+      $('#revisionBox').hidden = false;
+      $('#requestRevision').disabled = true;
+      $('#payBtn').disabled = true;
+      await loadRevisionHistory();
+      showStatus('#revisionStatus', 'Your revision request is saved. Checkout remains blocked until a new design version is generated and approved.', 100);
+    }
   } catch (error) {
     showStatus('#uploadStatus', `Saved project could not be resumed: ${error.message}`, 0);
   }
