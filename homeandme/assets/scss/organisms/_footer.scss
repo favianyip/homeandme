@@ -1,0 +1,97 @@
+.hnm-footer {
+    &__social {
+        background: #597d89;
+        background: -moz-linear-gradient(left, #597d89 70%, #ffffff 100%);
+        background: -webkit-linear-gradient(left, #597d89 70%, #ffffff 100%);
+        background: linear-gradient(to right, #597d89 70%, #ffffff 100%);
+        padding: $spacer-3 $spacer-0;
+    }
+    &__social-inner {
+        display: flex;
+        align-items: center;
+    }
+    &__social-link {
+        min-width: 15px;
+        text-align: center;
+        height: 15px;
+        margin-right: $spacer-3;
+        display: block;
+        &:hover {
+            transform: scale(1.1);
+            transition: 0.3s;
+        }
+    }
+    &__social-icon {
+        height: 15px;
+        width: auto;
+    }
+    &__quick {
+        background-color: #436270;
+        padding: $spacer-2 $spacer-0;
+    }
+    &__quick-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &__quick-inner {
+        display: flex;
+        align-items: center;
+        margin: $spacer-0 (-$spacer-3);
+    }
+    &__quick-link,
+    &__copyright {
+        color: #fff;
+    }
+    &__quick-link {
+        white-space: nowrap;
+        margin: $spacer-1 $spacer-3;
+        position: relative;
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            background-color: #fff;
+        }
+        &::before {
+            width: 1px;
+            height: 16px;
+            top: 50%;
+            right: (-$spacer-3);
+            transform: translateY(-50%);
+        }
+        &::after {
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 1px;
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+        &:hover {
+            color: #fff;
+            &::after {
+                width: 100%;
+            }
+        }
+        &:last-child::before {
+            content: none;
+        }
+    }
+}
+
+@include mobile {
+    .hnm-footer {
+        &__quick-wrapper {
+            display: block;
+        }
+        &__quick-inner {
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: $spacer-3;
+        }
+        &__copyright {
+            text-align: center;
+        }
+    }
+}

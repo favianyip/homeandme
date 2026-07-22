@@ -1,0 +1,33 @@
+.grey-box {
+    background-color: $color-grey-light;
+    padding: $spacer-3;
+    border: 1px solid rgba(90, 126, 138, 0.2);
+    &__title {
+        @include font-lekton;
+        font-size: 22px;
+        line-height: 36px;
+        color: $color-grey;
+        font-weight: $font-regular;
+        margin-bottom: $spacer-3;
+    }
+    &--centered {
+        text-align: center;
+        padding: $spacer-4;
+        .hnm-main-head {
+            margin-bottom: $spacer-3;
+        }
+    }
+    &--no-border,
+    &--centered {
+        border: none;
+    }
+}
+
+@include mobile {
+    .grey-box {
+        &__title {
+            font-size: 20px;
+            line-height: 26px;
+        }
+    }
+}

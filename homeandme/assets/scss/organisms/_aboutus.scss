@@ -1,0 +1,197 @@
+.hnm-aboutus {
+    .grey-box--centered .hnm-main-head {
+        margin-bottom: $spacer-0;
+    }
+    &__remodeling {
+        display: flex;
+        margin-bottom: $spacer-4;
+    }
+    &__contents,
+    &__carousal,
+    &__img-sec {
+        width: 50%;
+    }
+    &__contents {
+        margin-right: $spacer-4;
+    }
+    &__head {
+        color: $color-grey;
+        font-weight: $font-semi-bold;
+        margin-bottom: $spacer-4;
+        font-size: 24px;
+        line-height: 28px;
+        @include font-oswald;
+    }
+    &__txt {
+        margin-bottom: $spacer-4;
+        &.marb-none {
+            margin-bottom: $spacer-0;
+            margin-top: $spacer-2;
+        }
+    }
+    &__editor {
+        font-weight: $font-bold;
+        font-size: 18px;
+        line-height: 24px;
+        border-bottom: 1px solid #D9D9D9;
+        max-width: 120px;
+        color: $color-grey;
+    }
+    &__carousal {
+        max-width: 570px;
+        margin: 0 auto;
+        max-height: 300px;
+        .slick-prev::before {
+            left: -10px;
+        }
+        .slick-next::before {
+            left: 10px;
+        }
+        .slick-dots {
+            bottom: -40px;
+            li {
+                background-color: $color-grey-3;
+                border-radius: 50%;
+                width: 12px;
+                height: 12px;
+                &.slick-active {
+                    background-color: $color-grey;
+                }
+            }
+        }
+    }
+    &__ourmission {
+        background-color: $color-grey-light;
+        padding: $spacer-4 $spacer-0;
+        margin-bottom: $spacer-4;
+    }
+    &__dots-none {
+        .slick-dots {
+            display: none;
+        }
+    }
+    &__icon {
+        min-width: 29px;
+        min-height: 29px;
+    }
+    &__ourmission-links {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        &:first-child {
+            margin-right: $spacer-5;
+        }
+        &:hover {
+            .hnm-aboutus__ourmission-link-bold {
+                text-decoration: underline;
+            }
+        }
+    }
+    &__ourmission-link-bold {
+        font-weight: $font-bold;
+        margin-top: $spacer-3;
+        color: $color-grey;
+        font-size: 18px;
+        line-height: 24px;
+    }
+    &__ourmission-share {
+        display: flex;
+        justify-content: center;
+    }
+    &__img-sec {
+        max-height: 280px;
+        overflow: hidden;
+        img {
+            height: 100%;
+            width: 570px;
+            display: block;
+            margin: 0 auto;
+        }
+    }
+    &__ourmission-inner {
+        display: flex;
+    }
+    &__projects {
+        display: flex;
+        flex-wrap: wrap;
+        margin: $spacer-0 (-$spacer-3);
+        .blog-details__suggested-tile {
+            width: calc(33.33% - 32px);
+            &:hover {
+                .blog-details__suggested-img {
+                    transform: scale(1);
+                }
+                .blog-details__suggested-img-div {
+                    &::after {
+                        opacity: 1;
+                    }
+                    &::before {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+        .blog-details__suggested-tile-head {
+            margin-top: $spacer-0;
+            text-align: center;
+        }
+        .blog-details__suggested-img-div {
+            &::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(54, 24, 24, 0.35);
+                opacity: 0;
+                transition: all 0.3s;
+            }
+            &::before {
+                content: '';
+                background-image: url("data:image/svg+xml,%3Csvg width='19' height='12' viewBox='0 0 19 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16.9861 5.3544C17.1781 5.62147 17.3244 5.84397 17.4229 6C17.3244 6.15603 17.1781 6.37853 16.9861 6.6456C16.5943 7.19048 16.0154 7.91645 15.2679 8.64098C13.7653 10.0975 11.6329 11.5 9.00377 11.5C6.3746 11.5 4.24226 10.0975 2.73962 8.64098C1.99215 7.91645 1.41324 7.19048 1.02144 6.6456C0.829405 6.37853 0.68308 6.15603 0.584605 6C0.68308 5.84397 0.829405 5.62147 1.02144 5.3544C1.41324 4.80952 1.99215 4.08355 2.73962 3.35902C4.24226 1.90253 6.3746 0.5 9.00377 0.5C11.6329 0.5 13.7653 1.90253 15.2679 3.35902C16.0154 4.08355 16.5943 4.80952 16.9861 5.3544Z' stroke='%23fff'/%3E%3Cpath d='M5.56458 6.00007C5.56458 5.12515 5.923 4.2828 6.56632 3.65923C7.21018 3.03515 8.08666 2.68188 9.00372 2.68188C9.92079 2.68188 10.7973 3.03515 11.4411 3.65923C12.0844 4.2828 12.4429 5.12515 12.4429 6.00007C12.4429 6.87498 12.0844 7.71734 11.4411 8.34091C10.7973 8.96499 9.92079 9.31825 9.00372 9.31825C8.08666 9.31825 7.21018 8.96499 6.56632 8.34091C5.923 7.71734 5.56458 6.87498 5.56458 6.00007Z' stroke='%23fff'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-size: contain;
+                background-position: center;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 22px;
+                height: 22px;
+                z-index: 1;
+                opacity: 0;
+                transition: all 0.3s;
+            }
+        }
+    }
+}
+
+@include mobile {
+    .hnm-aboutus {
+        &__remodeling,
+        &__ourmission-inner {
+            flex-direction: column;
+        }
+        &__contents,
+        &__carousal,
+        &__img-sec {
+            width: 100%;
+        }
+        &__carousal,
+        &__img-sec {
+            margin-top: $spacer-3;
+        }
+        &__contents {
+            margin-right: $spacer-0;
+        }
+        &__projects {
+            margin: $spacer-0;
+            .blog-details__suggested-tile {
+                width: 100%;
+            }
+        }
+    }
+}

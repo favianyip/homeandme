@@ -1,0 +1,73 @@
+.hnm-modal {
+    .modal-content {
+        border-radius: 0;
+        border: 0;
+        position: relative;
+    }
+    .modal-header {
+        background-color: $color-grey;
+        border-radius: 0;
+        color: $color-white;
+        padding: $spacer-2 $spacer-3;
+    }
+    .modal-title {
+        font-size: 18px;
+        line-height: 24px;
+        font-weight: $font-semi-bold;
+    }
+    .close {
+        color: #fff;
+        text-shadow: none;
+        opacity: 1;
+        padding: $spacer-0;
+        position: absolute;
+        top: -3px;
+        right: 16px;
+        margin: 0;
+        font-size: 50px;
+        line-height: 1;
+    }
+    .modal-body {
+        padding: $spacer-4 $spacer-3;
+    }
+    &__desc {
+        font-size: 18px;
+        line-height: 24px;
+        font-weight: $font-bold;
+        color: $color-grey;
+        margin-bottom: $spacer-3;
+    }
+    &__text-grey{
+        color: $color-grey;
+        margin-bottom: $spacer-2;
+    }
+    &__text-bold{
+        font-weight: $font-bold;
+    }
+    &__btn {
+        text-align: center;
+        padding-top: $spacer-2;
+    }
+    &__points{
+        .hnm-modal{
+            &__text-grey{
+                display: flex;
+            }
+            &__text-bold{
+                margin-right: $spacer-2;
+            }
+        }
+    }
+}
+
+@include mobile {
+    .hnm-modal {
+        .modal-body {
+            padding: $spacer-3;
+        }
+        &__desc {
+            font-size: 16px;
+            line-height: 22px;
+        }
+    }
+}

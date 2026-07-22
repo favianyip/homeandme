@@ -1,0 +1,31 @@
+.hnm-head-with-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacer-4;
+}
+
+@include mobile-tablet{
+    .hnm-head-with-total{
+        &--wrap{
+            flex-wrap: wrap;
+        }   
+    }
+}
+
+@include mobile {
+    .hnm-head-with-total {
+        flex-direction: column;
+        align-items: flex-start;
+        .hnm-sub-head {
+            margin-bottom: $spacer-3;
+        }
+        &--edit {
+            flex-direction: row;
+            .hnm-sub-head {
+                padding-right: $spacer-3;
+                margin-bottom: $spacer-0;
+            }
+        }
+    }
+}

@@ -1,0 +1,119 @@
+.hnm-accordion {
+    &__item {
+        // border: 1px solid $color-grey-border;
+        margin-bottom: $spacer-3;
+        // padding: $spacer-2 $spacer-3;
+        &:last-child {
+            margin-bottom: $spacer-0;
+        }
+    }
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        padding: $spacer-2 $spacer-6 $spacer-2 $spacer-3;
+        border: 1px solid $color-grey-border;
+        cursor: pointer;
+        &::after {
+            content: '';
+            background-image: url("data:image/svg+xml,%3Csvg width='14' height='6' viewBox='0 0 14 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 6L13.0622 0H0.937822L7 6Z' fill='%235A7E8A'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            position: absolute;
+            right: 16px;
+            top: 9px;
+            width: 15px;
+            height: 15px;
+            transition: all 0.3s;
+        }
+        &[aria-expanded="true"] {
+            border: 1px solid transparent;
+            &::after {
+                transform: rotate(180deg);
+            }
+        }
+    }
+    &__title {
+        color: $color-grey;
+        font-weight: $font-regular;
+    }
+    &__amount {
+        font-weight: $font-bold;
+        color: $color-grey;
+    }
+    &__content {
+        padding: $spacer-2 $spacer-3;
+        .hnm-amout-box {
+            margin-bottom: $spacer-2;
+            padding: $spacer-1 $spacer-3;
+            &__text {
+                font-size: 14px;
+                line-height: 20px;
+                font-weight: $font-regular;
+                @include font-lekton;
+                color: $color-black;
+            }
+            &__cost {
+                font-size: 16px;
+                line-height: 20px;
+                font-weight: $font-regular;
+            }
+        }
+    }
+    &__value-outer {
+        display: flex;
+        margin-bottom: $spacer-4;
+    }
+    &__value-inner {
+        display: flex;
+        padding-right: $spacer-5;
+        align-items: center;
+        // input[type="text"] {
+        //     width: 80px;
+        //     border: 1px solid $color-grey-3;
+        //     padding: $spacer-1 $spacer-2;
+        //     text-align: center;
+        // }
+    }
+    &__label {
+        padding-right: $spacer-2;
+        color: $color-grey;
+    }
+    &__remove-btn {
+        color: $color-grey;
+        padding-top: $spacer-2;
+        display: inline-block;
+        svg {
+            width: 15px;
+            height: 15px;
+            margin-left: $spacer-2;
+            margin-top: -2px;
+        }
+        &:hover {
+            color: $color-red;
+            svg path{
+                fill: $color-red;
+            }
+        }
+    }
+}
+
+@include mobile {
+    .hnm-accordion {
+        &__value-outer {
+            display: block;
+        }
+        &__value-inner {
+            padding-right: $spacer-0;
+            margin-bottom: $spacer-2;
+            &:last-child {
+                margin-bottom: $spacer-0;
+            }
+        }
+        &__label {
+            width: 130px;
+        }
+    }
+}

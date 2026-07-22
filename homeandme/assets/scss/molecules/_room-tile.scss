@@ -1,0 +1,67 @@
+.hnm-room-tile{
+    // min-width: 170px;
+    background-color: $color-white;
+    border-radius: 10px;
+    border: 1px solid $color-grey;
+    padding: $spacer-3;
+    position: relative;
+    cursor: pointer;
+    &__close{
+        width: 25px;
+        height: 25px;
+        position: absolute;
+        top: -12px;
+        right: -8px;
+        display: none;
+        img{
+            width: 100%;
+            height: auto;
+        }
+    }
+    .hnm-icon-round__img{
+        width: 80px;
+        height: 80px;
+    }
+    &.complete{
+        .hnm-icon-round{
+            &__text{
+                position: relative;
+                padding-left: $spacer-4;
+                &::before{
+                    content: "";
+                    width: 20px;
+                    height: 20px;
+                    background-image: url(../images/tick-icon-round-green.svg);
+                    background-size: contain;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+            }
+        }
+    }
+    &.active{
+        .hnm-room-tile{
+            &__close{
+                display: block;
+            }
+        }
+        .hnm-icon-round{
+            &__img{
+                fill: $color-white;
+                circle{
+                    fill: $color-grey;
+                    stroke: $color-grey;
+                }
+                path{
+                    fill: $color-white;
+                }
+            }
+            &__text{
+                color: $color-grey;
+            }
+        }
+    }
+}

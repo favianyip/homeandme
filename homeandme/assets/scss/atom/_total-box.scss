@@ -1,0 +1,20 @@
+.hnm-total-box {
+    display: flex;
+    &__txt,
+    &__amount {
+        padding: $spacer-2 $spacer-3;
+        min-width: 100px;
+        text-align: center;
+        border: 1px solid $color-grey-3;
+    }
+    &__txt {
+        background-color: $color-grey;
+        color: $color-white;
+        @include font-oswald;
+        font-weight: $font-bold;
+    }
+    &__amount {
+        color: $color-grey;
+        font-weight: $font-bold;
+    }
+}

@@ -1,0 +1,38 @@
+.faq{
+    &__pencil-txt{
+        background: url("../../assets/images/pencil.svg") no-repeat 0 4px;
+        padding-left: $spacer-3;
+        margin-bottom: $spacer-3;
+        font-weight: $font-bold;
+        color: $color-grey;
+        a{
+            font-weight: $font-regular;
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+    }
+    .hnm-accordion__header{
+        background:url("../../assets/images/spaner-grey.svg") no-repeat  16px 10px;
+    }
+    .hnm-accordion__header[aria-expanded="true"]{
+        background:url("../../assets/images/spaner-white.svg") #5A7E8A no-repeat  16px 10px;
+    }
+    .hnm-accordion__content{
+        border: #5A7E8A solid 1px;
+    }
+    .hnm-accordion__header[aria-expanded="true"] h2{
+        color: #fff;
+    }
+    .hnm-accordion__title{
+        padding-left: 25px;
+    }
+    .hnm-accordion__header::after{
+        background-image: url("../../assets/images/rt-arrow-grey.svg");
+        // left: 16px;
+    }
+    .hnm-accordion__header[aria-expanded="true"]::after{
+        background-image: url("../../assets/images/dwn-arrow-white.svg");
+        transform: none;
+    }
+}

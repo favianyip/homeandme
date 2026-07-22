@@ -1,0 +1,100 @@
+.hnm-upload-box{
+    padding: $spacer-3;
+    border: 1px dashed $color-grey;
+    max-width: 450px;
+    .hnm-sub-head{
+        margin-bottom: $spacer-3;
+    }
+    &__inner{
+        display: flex;
+    }
+    &__sec-1,
+    &__sec-2{
+        width: 100%;
+    }
+    &__sec-1{
+        padding: $spacer-2;
+        border: 1px solid $color-grey-border;
+        margin-right: $spacer-4;
+        box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.13);
+        max-width: 150px;
+    }
+    &__sec-2{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    &__img{
+        width: 100%;
+        display: block;
+    }
+    &__add-icon{
+        width: 35px;
+        height: 35px;
+        margin-left: $spacer-2;
+        circle{
+            stroke: $color-grey;
+        }
+        path{
+            stroke: $color-grey-2;
+        }
+    }
+    &__input-sec{
+        margin: auto $spacer-0;
+    }
+    &__btn-sec{
+        display: flex;
+        margin-top: $spacer-2;
+        .hnm-button{
+            margin-right: $spacer-3;
+            &:last-child{
+                margin-right: $spacer-0;
+            }
+        }
+    }
+    &__input{
+        display: none;
+        & + label{
+            color: $color-black;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            &:hover{
+                // color: $color-grey;
+                .hnm-upload-box__add-icon{
+                    fill: $color-grey;
+                    path{
+                        stroke: $color-white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include mobile{
+    .hnm-upload-box{
+        &__sec-1{
+            margin-right: $spacer-3;
+        }
+        &__add-icon{
+            width: 25px;
+            height: 25px;
+        }
+    }
+}
+
+@media (max-width: 320px){
+    .hnm-upload-box{
+        &__inner,
+        &__sec-2{
+            display: block;
+        }
+        &__sec-2{
+            margin-top: $spacer-3;
+        }
+        &__btn-sec{
+            margin-top: $spacer-4;
+        }
+    }
+}

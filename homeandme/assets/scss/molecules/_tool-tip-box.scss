@@ -1,0 +1,32 @@
+.hnm-tooltip {
+    position: relative;
+    &__label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid #D9D9D9;
+        padding: $spacer-2 $spacer-3;
+        color: #5A7E8A;
+        font-weight: 700;
+        cursor: pointer;
+    }
+    &__input {
+        position: absolute;
+        opacity: 0;
+        visibility: hidden;
+        &:checked {
+            &~.hnm-tooltip__drop-down {
+                max-height: 1000px;
+                transition: all 0.8s;
+            }
+        }
+    }
+    &__drop-down {
+        max-height: 0;
+        overflow: hidden;
+    }
+    &__desc {
+        padding: $spacer-3;
+        border: 1px solid #D9D9D9;
+    }
+}

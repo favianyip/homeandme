@@ -1,0 +1,39 @@
+.hnm-button {
+    display: inline-block;
+    font-family: 'oswald', sans-serif;
+    color: $color-white;
+    text-transform: uppercase;
+    background-color: $color-grey;
+    border: 2px solid $color-grey;
+    padding: $spacer-2 $spacer-4;
+    transition: 0.3s;
+    text-align: center;
+    &__icon {
+        width: 16px;
+        height: 16px;
+        fill: $color-white;
+        margin-right: $spacer-2;
+        vertical-align: unset;
+        position: relative;
+        top: 1px;
+        transition: 0.3s;
+    }
+    &:hover {
+        color: $color-grey;
+        background-color: $color-grey-light;
+        .hnm-button__icon {
+            fill: $color-grey;
+        }
+    }
+    &--secondary {
+        color: $color-grey;
+        background-color: $color-grey-2;
+        border: 2px solid $color-grey-2;
+        .hnm-button__icon {
+            fill: $color-grey;
+        }
+        &:hover {
+            border: 2px solid $color-grey-2;
+        }
+    }
+}
