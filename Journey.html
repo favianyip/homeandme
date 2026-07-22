@@ -4,20 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Home &amp; Me — 3D Project Journey</title>
+<link rel="icon" href="assets/images/hnm-logo.png" type="image/png">
+<script src="config.js"></script>
 <script type="importmap">
 {
   "imports": {
     "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
     "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
     "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
-    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js",
+    "three/addons/loaders/GLTFLoader.js": "https://unpkg.com/three@0.184.0/examples/jsm/loaders/GLTFLoader.js"
   },
   "integrity": {
     "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
     "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
     "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
     "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
-    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ",
+    "https://unpkg.com/three@0.184.0/examples/jsm/loaders/GLTFLoader.js": "sha384-3CnKaFWE2emo2DOUQi/yFm4SMemUgSZ9IAJe/V2pyJTw9KXWYSmR0MiX/7RoPyiJ"
   }
 }
 </script>
@@ -97,6 +101,14 @@
   .planthumb .img { width: 64px; height: 48px; border-radius: 4px; background: #fff center/cover no-repeat; border: 1px solid rgba(26,32,35,0.1); }
   .planthumb .n { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .planthumb .ok { font-size: 12px; color: #5a7e8a; }
+  .service-status { margin: 14px 0; padding: 12px 14px; border-radius: 6px; background: rgba(90,126,138,0.08); color: #4a5350; font-size: 12.5px; line-height: 1.5; }
+  .service-status[hidden] { display: none; }
+  .progress-track { height: 5px; margin-top: 9px; border-radius: 999px; overflow: hidden; background: rgba(26,32,35,0.1); }
+  .progress-track span { display: block; height: 100%; width: 0; background: #5a7e8a; transition: width .35s ease; }
+  .detected-list { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0; }
+  .detected-list span { border: 1px solid rgba(90,126,138,.35); border-radius: 999px; padding: 7px 11px; font-size: 11.5px; }
+  .render-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
+  .render-grid img { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 5px; border: 1px solid rgba(26,32,35,.1); }
   @media (max-width: 1060px) {
     body { overflow: auto; }
     main { position: static; margin-top: 64px; display: block; }
@@ -139,6 +151,7 @@
         <div style="flex:1; min-width:0;"><div class="n"></div><div class="ok">On the table — see it in 3D</div></div>
         <button class="linkbtn" id="replacePlan">REPLACE</button>
       </div>
+      <div id="uploadStatus" class="service-status" hidden><span class="message"></span><div class="progress-track"><span></span></div></div>
       <button class="cta" id="cta1" disabled>CONTINUE — VERIFY PROPERTY →</button>
     </div>
     <div class="card" data-step="2">
@@ -165,7 +178,13 @@
     <div class="card" data-step="3">
       <p class="kicker">STATION 03 — LAYOUT</p>
       <h2>Watch your walls rise</h2>
-      <p class="lede">Pick the layout that matches your plan — the model builds itself room by room. Orbit it, check the flow, change your mind freely.</p>
+      <p class="lede">Review the detected rooms and measurements first. Once you approve them, choose a measured layout and watch your own model build room by room.</p>
+      <div id="analysisStatus" class="service-status" hidden><span class="message"></span><div class="progress-track"><span></span></div></div>
+      <div id="geometryReview" hidden>
+        <div class="preview"><img id="overlayImg" alt="Detected floor-plan overlay"><div class="cap"><span>DETECTED OVERLAY</span><span style="color:#5a7e8a;">REVIEW BEFORE APPROVAL</span></div></div>
+        <div id="detectedRooms" class="detected-list"></div>
+        <button class="cta ghost" id="approveGeometry">THE WALLS &amp; ROOMS LOOK RIGHT →</button>
+      </div>
       <div class="cards" id="layCards"></div>
       <button class="cta" id="cta3" disabled>CONTINUE — DRESS THE ROOMS →</button>
     </div>
@@ -174,21 +193,23 @@
       <h2>Dress every room</h2>
       <p class="lede">Give each room its own theme — mix freely. The model tints as you go and every choice is priced live.</p>
       <div class="pills" id="roomChips"></div>
-      <div class="preview"><img id="previewImg" src="assets/renders/living-luxe-dark.jpg" alt="Room render"><div class="cap"><span id="prevRoom">LIVING &amp; DINING</span><span id="prevTheme" style="color:#5a7e8a;">MODERN LUXE</span></div></div>
+      <div class="preview"><img id="previewImg" src="assets/renders/living-luxe-dark.jpg" alt="Style reference"><div class="cap"><span id="prevRoom">LIVING &amp; DINING</span><span id="prevTheme" style="color:#5a7e8a;">STYLE REFERENCE — NOT YOUR HOME</span></div></div>
       <div class="pills" id="themePills"></div>
       <div class="rowline"><span class="muted">This room</span><span class="r" id="roomAmt">S$ 0</span></div>
-      <button class="cta" id="cta4">CONTINUE — QUOTE &amp; PAY →</button>
+      <div id="renderStatus" class="service-status" hidden><span class="message"></span><div class="progress-track"><span></span></div></div>
+      <div id="renderGallery" class="render-grid" hidden></div>
+      <button class="cta" id="cta4">GENERATE CUSTOMER RENDERS →</button>
     </div>
     <div class="card" data-step="5">
       <p class="kicker">STATION 05 — QUOTE &amp; PAY</p>
       <h2>Your renovation, specified</h2>
-      <p class="lede">This spec — floor plan, layout, themes, budget — is exactly what our designers (and soon, our AI renderer) work from. Lock it in with a PayNow or card deposit, or send it to us first.</p>
+      <p class="lede">Review the version-bound preliminary quotation. A deposit checkout is created only after you approve the design and quotation.</p>
       <div id="specRows"></div>
       <div class="total"><span class="os" style="font-size:12px; letter-spacing:2.4px;">ESTIMATED TOTAL</span><span class="amt" id="grandAmt">S$ 0</span></div>
       <p class="lede" style="font-size:12.5px; color:#8a908c; margin-top:8px;">Final quote confirmed against your verified floor plan before works begin.</p>
       <div style="display: flex; gap: 10px;">
-        <button class="cta" id="payBtn" style="flex: 1;">DEPOSIT — PAYNOW QR</button>
-        <a class="cta" href="Checkout.dc.html" style="flex: 1;">DEPOSIT — CARD →</a>
+        <button class="cta" id="payBtn" style="flex: 1;">APPROVE QUOTE &amp; OPEN CHECKOUT</button>
+        <a class="cta ghost" href="MyProject.dc.html" style="flex: 1;">VIEW PROJECT →</a>
       </div>
       <div class="qr" id="qrBox" style="display:none;">
         <img src="assets/images/qr-img.png" alt="PayNow QR">
@@ -206,7 +227,12 @@
 </main>
 <script src="three-d-stage.js"></script>
 <script type="module">
+import { HomeAndMeProjectApi, journeyConfig, pollJob } from './journey-api.js';
+
 const $ = (s) => document.querySelector(s);
+const runtime = journeyConfig();
+const serviceEnabled = runtime.flags.AI_ANALYSIS_ENABLED;
+const projectApi = serviceEnabled ? new HomeAndMeProjectApi({ baseUrl: runtime.apiBaseUrl }) : null;
 const THEMES = [
   { id: 'luxe', label: 'MODERN LUXE', mult: 1.15, color: 0xb08a5e },
   { id: 'classic', label: 'MODERN CLASSIC', mult: 1.0, color: 0x7f97a0 },
@@ -228,13 +254,14 @@ const IMGS = {
   scandi: { living: 'assets/enhanced/design-config-img-2.png', kitchen: 'assets/enhanced/design-config-img-3.png', master: 'assets/renders/bedroom-scandinavian.jpg', common: 'assets/renders/bedroom-cream.jpg', common2: 'assets/renders/bedroom-beige-wardrobe.jpg', study: 'assets/renders/bedroom-common-study.jpg', bath: 'assets/renders/bathroom-geometric.jpg', family: 'assets/renders/family-lounge.jpg' },
 };
 const PROPS = [
-  { id: 'hdb', label: 'HDB FLAT' }, { id: 'condo', label: 'CONDOMINIUM' }, { id: 'landed', label: 'LANDED' },
+  { id: 'hdb', label: 'HDB FLAT' }, { id: 'ec', label: 'EXECUTIVE CONDO' }, { id: 'condo', label: 'CONDOMINIUM' }, { id: 'landed', label: 'LANDED' },
 ];
 const LANDED = ['living', 'kitchen', 'family', 'master', 'common', 'common2', 'study', 'bath'];
 const LAYOUTS = [
   { id: 'hdb3', prop: 'hdb', label: '3-ROOM', sqm: 68, rooms: ['living', 'kitchen', 'master', 'common', 'bath'] },
   { id: 'hdb4', prop: 'hdb', label: '4-ROOM', sqm: 92, rooms: ['living', 'kitchen', 'master', 'common', 'common2', 'bath'] },
   { id: 'hdb5', prop: 'hdb', label: '5-ROOM', sqm: 110, rooms: ['living', 'kitchen', 'master', 'common', 'common2', 'study', 'bath'] },
+  { id: 'ec3', prop: 'ec', label: '3-BEDROOM EC', sqm: 100, rooms: ['living', 'kitchen', 'master', 'common', 'common2', 'bath'] },
   { id: 'c2', prop: 'condo', label: '2-BEDROOM', sqm: 72, rooms: ['living', 'kitchen', 'master', 'common', 'bath'] },
   { id: 'c3', prop: 'condo', label: '3-BEDROOM', sqm: 95, rooms: ['living', 'kitchen', 'master', 'common', 'common2', 'bath'] },
   { id: 'cp', prop: 'condo', label: 'PENTHOUSE', sqm: 150, rooms: ['living', 'kitchen', 'family', 'master', 'common', 'common2', 'study', 'bath'] },
@@ -253,7 +280,7 @@ const STATIONS = [
 const EMAIL = 'homeandme25@gmail.com', WA = '6594235227';
 const fmt = (n) => 'S$ ' + Math.round(n).toLocaleString('en-SG');
 
-const state = { step: 1, planUrl: null, planName: '', property: 'hdb', postal: '', area: '', verified: false, layoutId: null, themes: {}, room: null };
+const state = { step: 1, planUrl: null, planName: '', property: 'hdb', postal: '', area: '', verified: false, layoutId: null, themes: {}, room: null, projectId: null, analysisJobId: null, geometry: null, backendLayouts: null, backendLayoutId: null, modelJobId: null, renderJobId: null, renders: null, quote: null };
 try { const s = JSON.parse(localStorage.getItem('hnm_journey_v1') || 'null'); if (s) Object.assign(state, s, { planUrl: s.planUrl || null }); } catch (e) {}
 function persist() { try { const { planUrl, ...rest } = state; localStorage.setItem('hnm_journey_v1', JSON.stringify({ ...rest, planUrl: planUrl && planUrl.length < 200000 ? planUrl : null })); } catch (e) {} }
 
@@ -281,7 +308,7 @@ STATIONS.forEach(([n, t, s], i) => {
   rail.appendChild(d);
 });
 const note = document.createElement('p'); note.className = 'rail-note';
-note.textContent = 'Your progress is saved on this device. Every choice feeds the spec our team — and soon our AI renderer — builds from.';
+note.textContent = serviceEnabled ? 'Your project and processing history are saved securely on the server. You can close this page and return later.' : 'DEMO MODE — progress is saved only on this device. Sample layouts and images are not results for your home.';
 rail.appendChild(note);
 
 function go(n) {
@@ -292,7 +319,18 @@ function go(n) {
   if (n === 5) renderSpec();
   updateTotal();
 }
-function updateTotal() { $('#totalPill').textContent = fmt(total()); }
+function updateTotal() { $('#totalPill').textContent = state.quote ? fmt(state.quote.totalMinor / 100) : fmt(total()); }
+function showStatus(selector, message, progress = 0) {
+  const box = $(selector); box.hidden = false; box.querySelector('.message').textContent = message;
+  box.querySelector('.progress-track span').style.width = `${Math.max(0, Math.min(100, progress))}%`;
+}
+function absoluteApiUrl(relative) { return new URL(relative, runtime.apiBaseUrl + '/').href; }
+function setPrivateImage(image, objectUrl) {
+  if (image.dataset.privateObjectUrl) URL.revokeObjectURL(image.dataset.privateObjectUrl);
+  image.src = objectUrl; image.dataset.privateObjectUrl = objectUrl;
+}
+window.addEventListener('pagehide', () => document.querySelectorAll('[data-private-object-url]').forEach((image) => URL.revokeObjectURL(image.dataset.privateObjectUrl)));
+let pendingPlanFile = null;
 
 /* Station 1 */
 const planDrop = $('#planDrop'), planFile = $('#planFile');
@@ -300,11 +338,31 @@ planDrop.onclick = () => planFile.click();
 $('#replacePlan').onclick = () => planFile.click();
 ['dragover', 'dragleave', 'drop'].forEach((ev) => planDrop.addEventListener(ev, (e) => { e.preventDefault(); planDrop.classList.toggle('over', ev === 'dragover'); if (ev === 'drop' && e.dataTransfer.files[0]) planPicked(e.dataTransfer.files[0]); }));
 planFile.onchange = () => planFile.files[0] && planPicked(planFile.files[0]);
-function planPicked(f) {
-  if (/\.pdf$/i.test(f.name)) return planSet('assets/images/sample-floorplan.png', f.name);
-  const rd = new FileReader(); rd.onload = () => planSet(rd.result, f.name); rd.readAsDataURL(f);
+async function planPicked(f) {
+  pendingPlanFile = f;
+  const previewUrl = /\.pdf$/i.test(f.name) ? 'assets/images/sample-floorplan.png' : URL.createObjectURL(f);
+  planSet(previewUrl, f.name);
+  if (!serviceEnabled) return;
+  $('#cta1').disabled = true;
+  try {
+    showStatus('#uploadStatus', 'Creating your private project…', 15);
+    const project = await projectApi.createProject(state.property, null, 1);
+    state.projectId = project.projectId;
+    showStatus('#uploadStatus', 'Uploading and validating the original floor plan…', 45);
+    const job = await projectApi.uploadFloorPlan(f);
+    state.analysisJobId = job.jobId;
+    persist();
+    showStatus('#uploadStatus', `Upload secured · project ${project.projectId}`, 100);
+    $('#cta1').disabled = false;
+  } catch (error) {
+    showStatus('#uploadStatus', `Upload stopped: ${error.message}`, 0);
+  }
 }
-$('#useSample').onclick = () => planSet('assets/images/sample-floorplan.png', 'HNM-sample-floorplan.png');
+$('#useSample').onclick = async () => {
+  if (!serviceEnabled) return planSet('assets/images/sample-floorplan.png', 'HNM-sample-floorplan.png');
+  const response = await fetch('assets/images/sample-floorplan.png');
+  await planPicked(new File([await response.blob()], 'HNM-sample-floorplan.png', { type: 'image/png' }));
+};
 function planSet(url, name) {
   state.planUrl = url; state.planName = name; persist();
   const th = $('#planThumb'); th.style.display = 'flex'; th.querySelector('.img').style.backgroundImage = `url('${url}')`; th.querySelector('.n').textContent = name;
@@ -340,16 +398,54 @@ $('#postal').oninput = (e) => {
   $('#areaHint').textContent = full ? `Sector ${state.postal.slice(0, 2)} — ${AREAS[state.postal.slice(0, 2)] || 'Singapore'}` : 'Enter your 6-digit postal code';
   if (full) geoLookup(state.postal); else { $('#geoBox').style.display = 'none'; state.addr = ''; geoLast = ''; }
 };
-$('#cta2').onclick = () => {
+$('#cta2').onclick = async () => {
   if (!/^\d{6}$/.test(state.postal)) { $('#verifyErr').textContent = 'Enter a valid 6-digit Singapore postal code.'; return; }
-  $('#verifyErr').textContent = ''; $('#cta2').textContent = 'VERIFYING…';
-  setTimeout(() => { if (!state.addr) state.area = AREAS[state.postal.slice(0, 2)] || 'Singapore'; state.verified = true; persist(); $('#cta2').textContent = 'VERIFIED ✓'; setTimeout(() => go(3), 500); }, 1100);
+  $('#verifyErr').textContent = ''; $('#cta2').textContent = serviceEnabled ? 'ANALYSING YOUR PLAN…' : 'VERIFYING…';
+  if (!serviceEnabled) {
+    setTimeout(() => { if (!state.addr) state.area = AREAS[state.postal.slice(0, 2)] || 'Singapore'; state.verified = true; persist(); $('#cta2').textContent = 'VERIFIED ✓'; setTimeout(() => go(3), 500); }, 1100);
+    return;
+  }
+  if (!state.analysisJobId) { $('#verifyErr').textContent = 'Upload the floor plan again to start analysis.'; return; }
+  try {
+    await projectApi.updateProperty(state.property, state.postal, 1);
+    await pollJob(projectApi, state.analysisJobId, (job) => showStatus('#analysisStatus', job.message, job.progressPercentage));
+    state.verified = true;
+    await loadGeometryReview();
+    persist();
+    $('#cta2').textContent = 'ANALYSIS READY ✓';
+    go(3);
+  } catch (error) {
+    $('#verifyErr').textContent = error.message;
+    $('#cta2').textContent = 'RETRY ANALYSIS';
+  }
 };
+async function loadGeometryReview() {
+  state.geometry = await projectApi.geometry();
+  const overlayUrl = await projectApi.artifactObjectUrl('detected_room_overlay', 'image/png');
+  setPrivateImage($('#overlayImg'), overlayUrl);
+  const rooms = state.geometry.geometry.rooms || [];
+  const roomList = $('#detectedRooms'); roomList.innerHTML = '';
+  rooms.forEach((room) => { const chip = document.createElement('span'); chip.textContent = room.name || 'Unclassified room'; roomList.appendChild(chip); });
+  $('#geometryReview').hidden = false;
+  showStatus('#analysisStatus', `${rooms.length} rooms detected · scale ${state.geometry.geometry.scale_status.replaceAll('_', ' ')}`, 100);
+}
 
 /* Station 3 */
 const layCards = $('#layCards');
 function drawLayouts() {
   layCards.innerHTML = '';
+  if (serviceEnabled) {
+    if (!state.backendLayouts) return;
+    state.backendLayouts.options.forEach((option) => {
+      const b = document.createElement('button'); b.className = 'laycard' + (state.backendLayoutId === option.layoutId ? ' sel' : '');
+      const title = document.createElement('div'); title.className = 't'; title.textContent = option.type.replaceAll('_', ' ').toUpperCase();
+      const sub = document.createElement('div'); sub.className = 's'; sub.textContent = `${option.placements.length} measured items · ${option.warnings.length ? option.warnings.length + ' review note(s)' : 'preliminary checks passed'}`;
+      b.append(title, sub);
+      b.onclick = () => { state.backendLayoutId = option.layoutId; state.layoutId = (LAYOUTS.find((item) => item.prop === state.property) || LAYOUTS[0]).id; state.room = layout().rooms[0]; persist(); drawLayouts(); $('#cta3').disabled = false; };
+      layCards.appendChild(b);
+    });
+    return;
+  }
   LAYOUTS.filter((l) => l.prop === state.property).forEach((l) => {
     const b = document.createElement('button'); b.className = 'laycard' + (state.layoutId === l.id ? ' sel' : '');
     b.innerHTML = `<div class="t">${l.label}</div><div class="s">~${l.sqm} sqm · ${l.rooms.length} rooms</div>`;
@@ -357,7 +453,46 @@ function drawLayouts() {
     layCards.appendChild(b);
   });
 }
-$('#cta3').onclick = () => go(4);
+$('#approveGeometry').onclick = async () => {
+  try {
+    $('#approveGeometry').disabled = true;
+    showStatus('#analysisStatus', 'Approving this geometry version and generating measured layouts…', 70);
+    await projectApi.approveGeometry(state.geometry.geometryVersion, state.geometry.geometrySha256);
+    await projectApi.putDesignBrief({
+      householdMembers: 1,
+      roomsToRenovate: state.geometry.geometry.rooms.map((room) => room.name),
+      preferredStyles: ['scandinavian'],
+      storageRequirements: 'standard',
+      specialInstructions: 'Initial layout brief; room styling is confirmed at Station 04.',
+    });
+    state.backendLayouts = await projectApi.generateLayouts();
+    $('#geometryReview').hidden = true;
+    showStatus('#analysisStatus', 'Geometry version approved · choose a measured layout.', 100);
+    persist(); drawLayouts();
+  } catch (error) {
+    showStatus('#analysisStatus', `Geometry approval stopped: ${error.message}`, 0);
+    $('#approveGeometry').disabled = false;
+  }
+};
+$('#cta3').onclick = async () => {
+  if (!serviceEnabled) return go(4);
+  try {
+    $('#cta3').disabled = true;
+    showStatus('#analysisStatus', 'Approving layout and building your customer-specific GLB…', 15);
+    await projectApi.approveLayout(state.backendLayoutId);
+    const job = await projectApi.generateModel(); state.modelJobId = job.jobId; persist();
+    await pollJob(projectApi, job.jobId, (progress) => showStatus('#analysisStatus', progress.message, progress.progressPercentage));
+    const model = await projectApi.model();
+    const glbBytes = await projectApi.artifactBytes(model.glbArtifactRole, 'model/gltf-binary');
+    await stage.setGlb(glbBytes);
+    $('#stageTag').textContent = 'YOUR HOME — APPROVED GEOMETRY';
+    $('#cta3').disabled = false;
+    go(4);
+  } catch (error) {
+    showStatus('#analysisStatus', `Model generation stopped: ${error.message}`, 0);
+    $('#cta3').disabled = false;
+  }
+};
 
 /* Station 4 */
 function renderDesign() {
@@ -366,14 +501,65 @@ function renderDesign() {
   const chips = $('#roomChips'); chips.innerHTML = '';
   l.rooms.forEach((r) => { const b = document.createElement('button'); b.className = 'pill' + (state.room === r ? ' sel' : ''); b.textContent = ROOMS[r].label; b.onclick = () => { state.room = r; persist(); renderDesign(); markActive(); }; chips.appendChild(b); });
   const tp = $('#themePills'); tp.innerHTML = '';
-  THEMES.forEach((t) => { const b = document.createElement('button'); b.className = 'pill' + (themeFor(state.room) === t.id ? ' sel' : ''); b.textContent = t.label; b.onclick = () => { state.themes[state.room] = t.id; persist(); tintRoom(state.room); renderDesign(); updateTotal(); }; tp.appendChild(b); });
+  THEMES.forEach((t) => { const b = document.createElement('button'); b.className = 'pill' + (themeFor(state.room) === t.id ? ' sel' : ''); b.textContent = t.label; b.onclick = () => { state.themes[state.room] = t.id; state.renders = null; state.quote = null; $('#renderGallery').hidden = true; $('#cta4').textContent = 'GENERATE CUSTOMER RENDERS →'; persist(); tintRoom(state.room); renderDesign(); updateTotal(); }; tp.appendChild(b); });
   $('#previewImg').src = IMGS[themeFor(state.room)][state.room];
   $('#prevRoom').textContent = ROOMS[state.room].label;
   $('#prevTheme').textContent = THEMES.find((t) => t.id === themeFor(state.room)).label;
   $('#roomAmt').textContent = fmt(roomAmt(state.room));
   markActive();
 }
-$('#cta4').onclick = () => go(5);
+$('#cta4').onclick = async () => {
+  if (!serviceEnabled) return go(5);
+  if (state.renders && !state.quote) {
+    try {
+      $('#cta4').disabled = true;
+      await projectApi.approveDesign(state.renders.renderSetId);
+      state.quote = await projectApi.quote();
+      persist(); updateTotal();
+      showStatus('#renderStatus', 'Design version approved · quotation generated.', 100);
+      $('#cta4').disabled = false;
+      go(5);
+    } catch (error) {
+      showStatus('#renderStatus', `Design approval stopped: ${error.message}`, 0);
+      $('#cta4').disabled = false;
+    }
+    return;
+  }
+  try {
+    $('#cta4').disabled = true;
+    showStatus('#renderStatus', 'Saving the room-specific design brief…', 5);
+    await projectApi.putDesignBrief({
+      householdMembers: 1,
+      workFromHome: state.themes.study !== undefined,
+      cookingFrequency: 'weekly',
+      storageRequirements: 'standard',
+      roomsToRenovate: layout().rooms.map((room) => ROOMS[room].label),
+      preferredStyles: [...new Set(layout().rooms.map((room) => THEMES.find((theme) => theme.id === themeFor(room)).label.toLowerCase()))],
+      budgetSgd: Math.round(total()),
+      specialInstructions: 'Room-specific styles selected in the Home & Me journey.',
+    });
+    const modelJob = await projectApi.generateModel();
+    await pollJob(projectApi, modelJob.jobId, (job) => showStatus('#renderStatus', job.message, Math.min(55, job.progressPercentage / 2)));
+    const renderJob = await projectApi.generateRenders(); state.renderJobId = renderJob.jobId; persist();
+    await pollJob(projectApi, renderJob.jobId, (job) => showStatus('#renderStatus', job.message, 55 + job.progressPercentage * .4));
+    state.renders = await projectApi.renders();
+    const gallery = $('#renderGallery'); gallery.innerHTML = '';
+    for (const view of state.renders.views) {
+      const objectUrl = await projectApi.artifactObjectUrl(view.artifactRole, 'image/png');
+      const image = document.createElement('img'); image.alt = `${view.name} project render`;
+      setPrivateImage(image, objectUrl); gallery.appendChild(image);
+    }
+    gallery.hidden = false;
+    state.quote = null;
+    persist(); updateTotal();
+    showStatus('#renderStatus', 'Four same-scene renders completed · review every view before approval.', 100);
+    $('#cta4').disabled = false;
+    $('#cta4').textContent = 'APPROVE THIS DESIGN & CONTINUE →';
+  } catch (error) {
+    showStatus('#renderStatus', `Render flow stopped: ${error.message}`, 0);
+    $('#cta4').disabled = false;
+  }
+};
 
 /* Station 5 */
 function specText() {
@@ -383,22 +569,88 @@ function specText() {
   return lines.join('\n');
 }
 function renderSpec() {
+  if (serviceEnabled && state.quote) {
+    const rows = $('#specRows'); rows.innerHTML = '';
+    const version = document.createElement('div'); version.className = 'rowline';
+    version.textContent = `Project ${state.projectId} · geometry v${state.quote.geometryVersion} · layout v${state.quote.layoutVersion} · design v${state.quote.designVersion} · quote v${state.quote.quoteVersion}`;
+    rows.appendChild(version);
+    state.quote.lineItems.forEach((item) => {
+      const line = document.createElement('div'); line.className = 'rowline';
+      const label = document.createElement('span'); label.textContent = `${item.description} · ${item.classification}`;
+      const amount = document.createElement('span'); amount.className = 'r'; amount.textContent = fmt(item.amountMinor / 100);
+      line.append(label, amount); rows.appendChild(line);
+    });
+    $('#grandAmt').textContent = fmt(state.quote.totalMinor / 100);
+    $('#payRef').textContent = `Deposit ${state.quote.depositPercent}% · ${fmt(state.quote.depositMinor / 100)} · sandbox only`;
+    return;
+  }
   const l = layout(); if (!l) return go(3);
   const rows = $('#specRows'); rows.innerHTML = '';
   const head = document.createElement('div'); head.className = 'rowline';
-  head.innerHTML = `<span class="muted">${l.label} · ${state.area} ${state.postal} · plan: ${state.planName || '—'}</span>`; rows.appendChild(head);
-  l.rooms.forEach((r) => { const d = document.createElement('div'); d.className = 'rowline'; d.innerHTML = `<span>${ROOMS[r].label} <span class="muted" style="font-size:12px;">· ${THEMES.find((t) => t.id === themeFor(r)).label}</span></span><span class="r">${fmt(roomAmt(r))}</span>`; rows.appendChild(d); });
+  const headText = document.createElement('span'); headText.className = 'muted'; headText.textContent = `${l.label} · ${state.area} ${state.postal} · plan: ${state.planName || '—'}`; head.appendChild(headText); rows.appendChild(head);
+  l.rooms.forEach((r) => {
+    const line = document.createElement('div'); line.className = 'rowline';
+    const label = document.createElement('span'); label.textContent = `${ROOMS[r].label} · ${THEMES.find((t) => t.id === themeFor(r)).label}`;
+    const amount = document.createElement('span'); amount.className = 'r'; amount.textContent = fmt(roomAmt(r));
+    line.append(label, amount); rows.appendChild(line);
+  });
   $('#grandAmt').textContent = fmt(total());
   const body = encodeURIComponent(specText() + '\n\nSent from the Home&Me 3D Journey');
   $('#emailBtn').href = `mailto:${EMAIL}?subject=${encodeURIComponent('Renovation enquiry — ' + l.label + ' ' + state.postal)}&body=${body}`;
   $('#waBtn').href = `https://wa.me/${WA}?text=${body}`;
 }
-$('#payBtn').onclick = () => { $('#qrBox').style.display = 'block'; $('#payRef').textContent = `REF: HNM-${state.postal || '000000'}-${Date.now().toString().slice(-5)} · DEPOSIT ${fmt(total() * 0.05)}`; };
+$('#payBtn').onclick = async () => {
+  if (!serviceEnabled) {
+    $('#qrBox').style.display = 'block';
+    $('#payRef').textContent = `DEMO ONLY · no payment request was created · sample deposit ${fmt(total() * 0.05)}`;
+    return;
+  }
+  try {
+    $('#payBtn').disabled = true; $('#payBtn').textContent = 'CREATING SERVER CHECKOUT…';
+    await projectApi.approveQuote(state.quote.quoteVersion);
+    const checkout = await projectApi.checkout(`journey-${state.projectId}-quote-${state.quote.quoteVersion}`);
+    if (!checkout.checkoutUrl) throw new Error('The existing checkout session is pending; open My Project to continue.');
+    window.location.href = absoluteApiUrl(checkout.checkoutUrl);
+  } catch (error) {
+    $('#qrBox').style.display = 'block'; $('#payRef').textContent = error.message;
+    $('#payBtn').disabled = false; $('#payBtn').textContent = 'RETRY SECURE CHECKOUT';
+  }
+};
 $('#dlSpec').onclick = () => {
   const l = layout();
   const spec = { version: '1.0', generatedAt: new Date().toISOString(), customer: { postal: state.postal, area: state.area }, property: { type: state.property, layoutId: l.id, layoutLabel: l.label, sqm: l.sqm }, floorPlan: { fileName: state.planName }, rooms: l.rooms.map((r) => ({ id: r, label: ROOMS[r].label, theme: themeFor(r), budgetSGD: Math.round(roomAmt(r)) })), totalSGD: Math.round(total()), currency: 'SGD', contact: { email: EMAIL, whatsapp: '+65 9423 5227' } };
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(spec, null, 2)], { type: 'application/json' })); a.download = 'homeandme-spec.json'; a.click();
 };
+
+async function resumeServiceProject() {
+  if (!serviceEnabled || !projectApi.session?.projectId) return;
+  try {
+    const project = await projectApi.project();
+    state.projectId = project.projectId;
+    state.quote = project.quote || state.quote;
+    if (project.geometryVersion && !state.geometry) state.geometry = await projectApi.geometry();
+    if (project.modelVersion) {
+      const model = await projectApi.model();
+      const glbBytes = await projectApi.artifactBytes(model.glbArtifactRole, 'model/gltf-binary');
+      await stage.setGlb(glbBytes);
+      $('#stageTag').textContent = 'YOUR HOME — SAVED PROJECT MODEL';
+    }
+    if (project.renderVersion) {
+      state.renders = await projectApi.renders();
+      const gallery = $('#renderGallery'); gallery.innerHTML = '';
+      for (const view of state.renders.views) {
+        const objectUrl = await projectApi.artifactObjectUrl(view.artifactRole, 'image/png');
+        const image = document.createElement('img'); image.alt = `${view.name} project render`;
+        setPrivateImage(image, objectUrl); gallery.appendChild(image);
+      }
+      gallery.hidden = false;
+    }
+    persist(); updateTotal();
+    if (state.step === 5 && state.quote) renderSpec();
+  } catch (error) {
+    showStatus('#uploadStatus', `Saved project could not be resumed: ${error.message}`, 0);
+  }
+}
 
 /* boot */
 drawProps(); drawLayouts();
@@ -408,6 +660,7 @@ buildModel();
 if (state.postal) { $('#postal').value = state.postal; $('#postal').dispatchEvent(new Event('input')); }
 if (state.layoutId) $('#cta3').disabled = false;
 go(Math.min(state.step || 1, 5));
+await resumeServiceProject();
 </script>
 </body>
 </html>
