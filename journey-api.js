@@ -90,6 +90,11 @@ export class HomeAndMeProjectApi {
   }
 
   job(jobId) { return this._request(`/api/v1/projects/${this.requireSession().projectId}/jobs/${jobId}`); }
+  cancelJob(jobId) {
+    return this._request(`/api/v1/projects/${this.requireSession().projectId}/jobs/${jobId}`, {
+      method: 'DELETE',
+    });
+  }
   geometry() { return this._request(`/api/v1/projects/${this.requireSession().projectId}/geometry`); }
   correctGeometry(sourceGeometryVersion, sourceGeometrySha256, reason, geometry) {
     return this._request(`/api/v1/projects/${this.requireSession().projectId}/geometry/correct`, {
