@@ -56,6 +56,22 @@ test('polling returns only after server completion', async () => {
   assert.deepEqual(seen, ['queued', 'running', 'completed']);
 });
 
+test('customer cancellation uses the authenticated project job route', async () => {
+  const requests = [];
+  const api = new HomeAndMeProjectApi({
+    baseUrl: 'https://api.example', storage: memoryStorage(),
+    fetchImpl: async (url, init) => { requests.push({ url, init }); return response(200, { status: 'cancelled' }); },
+  });
+  api._saveSession({ projectId: 'HNM-1' });
+
+  const cancelled = await api.cancelJob('job_123');
+
+  assert.equal(cancelled.status, 'cancelled');
+  assert.equal(requests[0].url, 'https://api.example/api/v1/projects/HNM-1/jobs/job_123');
+  assert.equal(requests[0].init.method, 'DELETE');
+  assert.equal(requests[0].init.credentials, 'include');
+});
+
 test('client rejects a signed artifact URL on another origin', async () => {
   const api = new HomeAndMeProjectApi({
     baseUrl: 'https://api.example', storage: memoryStorage(),
