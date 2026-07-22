@@ -1,0 +1,202 @@
+{
+ "schema": "hnm-plan-scene/1",
+ "plan_id": "sp-shophouse-c",
+ "display_name": "TWO-STOREY SHOPHOUSE",
+ "source_type": "uploaded_floor_plan_pdf",
+ "source_reference": "uploads/Floor Plan 27JB-GRDLQ.pdf",
+ "display_source": "Private source plan (on file)",
+ "anonymised": true,
+ "provenance": "MANUALLY TRACED FROM SOURCE PLAN",
+ "site_disclaimer": "DIMENSIONS REQUIRE SITE VERIFICATION",
+ "units": "m",
+ "source_to_model_transform": {
+  "note": "plan sheet top edge = model z=0 (window facade); x left-to-right; printed mm / 1000",
+  "scale": 0.001,
+  "flip_z": false
+ },
+ "assumed_verticals": {
+  "wall_height_cutaway_m": 1.2,
+  "wall_height_full_m": 2.5,
+  "floor_to_floor_m": 2.85,
+  "label": "ASSUMED FOR DEMO — HEIGHT NOT VERIFIED"
+ },
+ "verification_status": "MANUAL_TRACE_VERIFIED_2D",
+ "space_grammar": "space: key,pid,x,z,w,d + dw (door wall on the room carrying the leaf); pass=circulation; aux=non-habitable; walls/doors/windows are derived deterministically from adjacency by the shared engine (journey-3d.js) for BOTH 2D and 3D views",
+ "layout_key": "sh1",
+ "printed_dims_used": [
+  "6100 shop bay",
+  "3000 covered linkway",
+  "2190 footway",
+  "1000/2400/1800 rear band",
+  "2100 toilet depth",
+  "UP 19R stair",
+  "2400 LQ kitchen",
+  "1600 W.C. band"
+ ],
+ "needs_review": [
+  "shop interior depth interpolated (no single printed dim)",
+  "LQ front partitioning not shown on source — modelled as one open living quarters",
+  "party walls W/E assumed solid (mid-terrace unit)"
+ ],
+ "vertical_portal": {
+  "from": "floor0.hall",
+  "to": "floor1.hall",
+  "type": "timber staircase UP 19R"
+ },
+ "floors": [
+  {
+   "width_m": 6.1,
+   "depth_m": 9.7,
+   "elevation": "stacked at floor_to_floor_m (assumed)",
+   "spaces": [
+    {
+     "key": "garden",
+     "x": 0,
+     "z": 0,
+     "w": 6.1,
+     "d": 2.2,
+     "lbl": "FOOTWAY (PUBLIC)",
+     "aux": 1,
+     "pass": 1
+    },
+    {
+     "key": "shop",
+     "x": 0,
+     "z": 2.2,
+     "w": 6.1,
+     "d": 5.4,
+     "pid": "living",
+     "lbl": "SHOP FLOOR",
+     "shop": 1,
+     "solid": [
+      "W",
+      "E"
+     ]
+    },
+    {
+     "key": "hall",
+     "x": 0,
+     "z": 7.6,
+     "w": 1.2,
+     "d": 2.1,
+     "lbl": "TIMBER STAIRCASE",
+     "rise": "N",
+     "aux": 1,
+     "pass": 1
+    },
+    {
+     "key": "foyer",
+     "x": 1.2,
+     "z": 7.6,
+     "w": 1.6,
+     "d": 2.1,
+     "lbl": "REAR LOBBY",
+     "aux": 1,
+     "pass": 1
+    },
+    {
+     "key": "bath_c",
+     "x": 2.8,
+     "z": 7.6,
+     "w": 1.5,
+     "d": 2.1,
+     "pid": "bath",
+     "lbl": "TOILET",
+     "dw": "S"
+    },
+    {
+     "key": "store",
+     "x": 4.3,
+     "z": 7.6,
+     "w": 1.8,
+     "d": 2.1,
+     "lbl": "STORE",
+     "aux": 1
+    }
+   ]
+  },
+  {
+   "width_m": 6.1,
+   "depth_m": 9.7,
+   "elevation": "stacked at floor_to_floor_m (assumed)",
+   "spaces": [
+    {
+     "key": "balcony",
+     "x": 0,
+     "z": 0,
+     "w": 6.1,
+     "d": 2.2,
+     "lbl": "ACCESS BALCONY",
+     "aux": 1
+    },
+    {
+     "key": "living",
+     "x": 0,
+     "z": 2.2,
+     "w": 6.1,
+     "d": 5.4,
+     "lbl": "LIVING QUARTERS",
+     "solid": [
+      "W",
+      "E"
+     ]
+    },
+    {
+     "key": "hall",
+     "x": 0,
+     "z": 7.6,
+     "w": 1.2,
+     "d": 2.1,
+     "lbl": "STAIRS & LANDING",
+     "aux": 1,
+     "pass": 1
+    },
+    {
+     "key": "kitchen",
+     "x": 1.2,
+     "z": 7.6,
+     "w": 2.4,
+     "d": 2.1,
+     "dw": "W",
+     "solid": [
+      "E"
+     ]
+    },
+    {
+     "key": "bath_c",
+     "x": 3.6,
+     "z": 7.6,
+     "w": 1.5,
+     "d": 1,
+     "pid": "bath",
+     "lbl": "W.C.",
+     "dw": "W",
+     "swout": 1
+    },
+    {
+     "key": "bath_m",
+     "x": 3.6,
+     "z": 8.6,
+     "w": 1.5,
+     "d": 1.1,
+     "pid": "bath",
+     "lbl": "BATH",
+     "dw": "W",
+     "swout": 1
+    },
+    {
+     "key": "yard",
+     "x": 5.1,
+     "z": 7.6,
+     "w": 1,
+     "d": 2.1,
+     "lbl": "SERVICE / DRYING",
+     "solid": [
+      "E"
+     ],
+     "aux": 1
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,158 @@
+{
+ "schema": "hnm-plan-scene/1",
+ "plan_id": "sp-hdb4-corr-b",
+ "display_name": "HDB 4-ROOM CORRIDOR",
+ "source_type": "uploaded_floor_plan_pdf",
+ "source_reference": "uploads/07-182@310143.pdf",
+ "display_source": "Private source plan (on file)",
+ "anonymised": true,
+ "provenance": "MANUALLY TRACED FROM SOURCE PLAN",
+ "site_disclaimer": "DIMENSIONS REQUIRE SITE VERIFICATION",
+ "units": "m",
+ "source_to_model_transform": {
+  "note": "plan sheet top edge = model z=0 (window facade); x left-to-right; printed mm / 1000",
+  "scale": 0.001,
+  "flip_z": false
+ },
+ "assumed_verticals": {
+  "wall_height_cutaway_m": 1.2,
+  "wall_height_full_m": 2.5,
+  "floor_to_floor_m": 2.85,
+  "label": "ASSUMED FOR DEMO — HEIGHT NOT VERIFIED"
+ },
+ "verification_status": "MANUAL_TRACE_VERIFIED_2D",
+ "space_grammar": "space: key,pid,x,z,w,d + dw (door wall on the room carrying the leaf); pass=circulation; aux=non-habitable; walls/doors/windows are derived deterministically from adjacency by the shared engine (journey-3d.js) for BOTH 2D and 3D views",
+ "layout_key": "hdb4",
+ "printed_dims_used": [
+  "11700 overall",
+  "2850/3300/1700/1600/2250 bays",
+  "4100 bedroom depth",
+  "6000 kitchen depth",
+  "2300 bath depth",
+  "2500 service col",
+  "2550 store"
+ ],
+ "needs_review": [
+  "public access balcony omitted from private-unit model",
+  "bedroom2 door position at hall notch",
+  "store outline vs 2550 dim"
+ ],
+ "floors": [
+  {
+   "width_m": 11.7,
+   "depth_m": 9.7,
+   "elevation": "stacked at floor_to_floor_m (assumed)",
+   "spaces": [
+    {
+     "key": "common",
+     "x": 0,
+     "z": 0,
+     "w": 2.85,
+     "d": 4.1,
+     "lbl": "BEDROOM 2",
+     "dw": "N"
+    },
+    {
+     "key": "master",
+     "x": 2.85,
+     "z": 0,
+     "w": 3.3,
+     "d": 4.1,
+     "lbl": "MAIN BEDROOM",
+     "dw": "N"
+    },
+    {
+     "key": "ac",
+     "x": 6.15,
+     "z": 0,
+     "w": 1.7,
+     "d": 1.5,
+     "lbl": "AC LEDGE",
+     "aux": 1
+    },
+    {
+     "key": "bath_m",
+     "x": 6.15,
+     "z": 1.5,
+     "w": 1.7,
+     "d": 2.6,
+     "pid": "bath",
+     "lbl": "BATH / WC 1",
+     "dw": "N"
+    },
+    {
+     "key": "yard",
+     "x": 7.85,
+     "z": 0,
+     "w": 1.6,
+     "d": 1.5,
+     "lbl": "SERVICE YARD",
+     "aux": 1
+    },
+    {
+     "key": "bath_c",
+     "x": 7.85,
+     "z": 1.5,
+     "w": 1.6,
+     "d": 2.6,
+     "pid": "bath",
+     "lbl": "BATH / WC 2",
+     "dw": "N"
+    },
+    {
+     "key": "kitchen",
+     "x": 9.45,
+     "z": 0,
+     "w": 2.25,
+     "d": 6,
+     "dw": "W"
+    },
+    {
+     "key": "corr",
+     "x": 0,
+     "z": 4.1,
+     "w": 2.85,
+     "d": 0.8,
+     "lbl": "HALL",
+     "aux": 1,
+     "pass": 1
+    },
+    {
+     "key": "common2",
+     "x": 0,
+     "z": 4.9,
+     "w": 2.85,
+     "d": 3.6,
+     "lbl": "BEDROOM 3",
+     "dw": "S"
+    },
+    {
+     "key": "living",
+     "x": 2.85,
+     "z": 4.1,
+     "w": 6.6,
+     "d": 4.4
+    },
+    {
+     "key": "store",
+     "x": 9.45,
+     "z": 6,
+     "w": 2.25,
+     "d": 2.5,
+     "lbl": "STORE / PANTRY",
+     "aux": 1
+    },
+    {
+     "key": "foyer",
+     "x": 7.5,
+     "z": 8.5,
+     "w": 1.95,
+     "d": 1.2,
+     "lbl": "ENTRY",
+     "aux": 1,
+     "pass": 1
+    }
+   ]
+  }
+ ]
+}

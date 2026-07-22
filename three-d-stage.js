@@ -228,7 +228,7 @@
       });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFShadowMap;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       this._renderer = renderer;
       this.shadowRoot.insertBefore(renderer.domElement, this._err);
 
@@ -306,48 +306,13 @@
       if (this._ro) this._ro.disconnect();
     }
 
-    /** Parse validated GLB bytes supplied by the host; this component never fetches private URLs. */
-    async setGlb(arrayBuffer) {
-      this.setAttribute('data-model-state', 'loading');
-      try {
-        if (!this._THREE) await this.ready;
-        const bytes = new Uint8Array(arrayBuffer, 0, Math.min(4, arrayBuffer.byteLength));
-        if (bytes.length !== 4 || String.fromCharCode(...bytes) !== 'glTF') throw new Error('Invalid GLB signature.');
-        const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
-        const gltf = await new GLTFLoader().parseAsync(arrayBuffer, '');
-        this.setObject(gltf.scene);
-        this.setAttribute('data-model-state', 'ready');
-        return gltf.scene;
-      } catch (error) {
-        this.setAttribute('data-model-state', 'error');
-        throw error;
-      }
-    }
-
-    _disposeObject(object) {
-      if (!object) return;
-      object.traverse((part) => {
-        if (!part.isMesh) return;
-        if (part.geometry) part.geometry.dispose();
-        const materials = Array.isArray(part.material) ? part.material : [part.material];
-        materials.forEach((material) => {
-          if (!material) return;
-          for (const value of Object.values(material)) if (value && value.isTexture) value.dispose();
-          material.dispose();
-        });
-      });
-    }
-
     /** Show (and own) the object. Replaces any previous object, enables
      *  shadows on every mesh, rests it on the ground plane, and frames
      *  the camera to its bounds. */
     setObject(object) {
       const THREE = this._THREE;
       if (!THREE) throw new Error('three-d-stage: not ready — await stage.ready first');
-      if (this._object && this._object !== object) {
-        this._scene.remove(this._object);
-        this._disposeObject(this._object);
-      }
+      if (this._object) this._scene.remove(this._object);
       this._object = object;
       object.traverse((o) => {
         if (o.isMesh) {

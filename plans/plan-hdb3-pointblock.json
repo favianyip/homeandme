@@ -1,0 +1,160 @@
+{
+ "schema": "hnm-plan-scene/1",
+ "plan_id": "sp-hdb3-ptblk-a",
+ "display_name": "HDB 3-ROOM POINT BLOCK",
+ "source_type": "uploaded_floor_plan_pdf",
+ "source_reference": "uploads/18-348@792447.pdf",
+ "display_source": "Private source plan (on file)",
+ "anonymised": true,
+ "provenance": "MANUALLY TRACED FROM SOURCE PLAN",
+ "site_disclaimer": "DIMENSIONS REQUIRE SITE VERIFICATION",
+ "units": "m",
+ "source_to_model_transform": {
+  "note": "plan sheet top edge = model z=0 (window facade); x left-to-right; printed mm / 1000",
+  "scale": 0.001,
+  "flip_z": false
+ },
+ "assumed_verticals": {
+  "wall_height_cutaway_m": 1.2,
+  "wall_height_full_m": 2.5,
+  "floor_to_floor_m": 2.85,
+  "label": "ASSUMED FOR DEMO — HEIGHT NOT VERIFIED"
+ },
+ "verification_status": "MANUAL_TRACE_VERIFIED_2D",
+ "space_grammar": "space: key,pid,x,z,w,d + dw (door wall on the room carrying the leaf); pass=circulation; aux=non-habitable; walls/doors/windows are derived deterministically from adjacency by the shared engine (journey-3d.js) for BOTH 2D and 3D views",
+ "layout_key": "hdb3",
+ "printed_dims_used": [
+  "9400 overall",
+  "3150/2950/3300 front bays",
+  "4000/2050/2750 depth bands",
+  "2200/1950 bath widths",
+  "1100 hall",
+  "2800 kitchen",
+  "1200 yard",
+  "1600 entry",
+  "1800 bath depth"
+ ],
+ "needs_review": [
+  "AC ledge exact outline (stepped footprint simplified)",
+  "shelter wall thickness from plan",
+  "foyer/shelter split at 1575 bay"
+ ],
+ "floors": [
+  {
+   "width_m": 9.4,
+   "depth_m": 8.85,
+   "elevation": "stacked at floor_to_floor_m (assumed)",
+   "spaces": [
+    {
+     "key": "master",
+     "x": 0,
+     "z": 0,
+     "w": 3.15,
+     "d": 4,
+     "lbl": "MAIN BEDROOM",
+     "dw": "E"
+    },
+    {
+     "key": "common",
+     "x": 3.15,
+     "z": 0,
+     "w": 2.95,
+     "d": 2.9,
+     "lbl": "BEDROOM 2",
+     "dw": "N"
+    },
+    {
+     "key": "corr",
+     "x": 3.15,
+     "z": 2.9,
+     "w": 2.95,
+     "d": 1.1,
+     "lbl": "HALL",
+     "aux": 1,
+     "pass": 1
+    },
+    {
+     "key": "living",
+     "x": 6.1,
+     "z": 0,
+     "w": 3.3,
+     "d": 6.05
+    },
+    {
+     "key": "bath_m",
+     "x": 0,
+     "z": 4,
+     "w": 2.2,
+     "d": 2.05,
+     "pid": "bath",
+     "lbl": "BATH / WC 1",
+     "dw": "S"
+    },
+    {
+     "key": "bath_c",
+     "x": 2.2,
+     "z": 4,
+     "w": 1.95,
+     "d": 2.05,
+     "pid": "bath",
+     "lbl": "BATH / WC 2"
+    },
+    {
+     "key": "corr2",
+     "x": 4.15,
+     "z": 4,
+     "w": 1.95,
+     "d": 2.05,
+     "lbl": "DINING",
+     "aux": 1,
+     "pass": 1
+    },
+    {
+     "key": "ac",
+     "x": 0,
+     "z": 6.05,
+     "w": 1.55,
+     "d": 0.95,
+     "lbl": "AC LEDGE",
+     "aux": 1
+    },
+    {
+     "key": "yard",
+     "x": 1.55,
+     "z": 6.05,
+     "w": 1.2,
+     "d": 2.8,
+     "lbl": "SERVICE YARD",
+     "aux": 1
+    },
+    {
+     "key": "kitchen",
+     "x": 2.75,
+     "z": 6.05,
+     "w": 2.8,
+     "d": 2.8,
+     "dw": "E"
+    },
+    {
+     "key": "foyer",
+     "x": 5.55,
+     "z": 6.05,
+     "w": 1.6,
+     "d": 2.8,
+     "lbl": "ENTRY",
+     "aux": 1,
+     "pass": 1
+    },
+    {
+     "key": "hs",
+     "x": 7.15,
+     "z": 6.05,
+     "w": 1.5,
+     "d": 1.6,
+     "lbl": "SHELTER",
+     "aux": 1
+    }
+   ]
+  }
+ ]
+}

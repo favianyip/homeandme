@@ -1,0 +1,166 @@
+{
+ "schema": "hnm-plan-scene/1",
+ "plan_id": "sp-condo-d4",
+ "display_name": "PRIVATE CONDO — UNIT TYPE D4",
+ "source_type": "uploaded_floor_plan_pdf",
+ "source_reference": "uploads/3.1. Unit Layout Plan.pdf",
+ "display_source": "Private source plan (on file)",
+ "anonymised": true,
+ "provenance": "MANUALLY TRACED FROM SOURCE PLAN",
+ "site_disclaimer": "DIMENSIONS REQUIRE SITE VERIFICATION",
+ "units": "m",
+ "source_to_model_transform": {
+  "note": "plan sheet top edge = model z=0 (window facade); x left-to-right; printed mm / 1000",
+  "scale": 0.001,
+  "flip_z": false
+ },
+ "assumed_verticals": {
+  "wall_height_cutaway_m": 1.2,
+  "wall_height_full_m": 2.5,
+  "floor_to_floor_m": 2.85,
+  "label": "ASSUMED FOR DEMO — HEIGHT NOT VERIFIED"
+ },
+ "verification_status": "MANUAL_TRACE_VERIFIED_2D",
+ "space_grammar": "space: key,pid,x,z,w,d + dw (door wall on the room carrying the leaf); pass=circulation; aux=non-habitable; walls/doors/windows are derived deterministically from adjacency by the shared engine (journey-3d.js) for BOTH 2D and 3D views",
+ "layout_key": "d4",
+ "printed_dims_used": [
+  "4845 balcony bay (balcony excluded per client direction)",
+  "2590/2550/2700 bedroom bays",
+  "4390 bedroom depth",
+  "2500 kitchen depth",
+  "3195 bedroom 4",
+  "1520/975 master-bath band"
+ ],
+ "needs_review": [
+  "front balcony excluded from model at client request",
+  "RC/AC ledge extents simplified",
+  "yard WC modelled as part of service yard"
+ ],
+ "floors": [
+  {
+   "width_m": 13.9,
+   "depth_m": 9.5,
+   "elevation": "stacked at floor_to_floor_m (assumed)",
+   "spaces": [
+    {
+     "key": "kitchen",
+     "x": 0.8,
+     "z": 2.4,
+     "w": 2.1,
+     "d": 2.5,
+     "dw": "N"
+    },
+    {
+     "key": "living",
+     "x": 2.9,
+     "z": 2.4,
+     "w": 3.1,
+     "d": 4.7
+    },
+    {
+     "key": "foyer",
+     "x": 0.8,
+     "z": 4.9,
+     "w": 2.1,
+     "d": 2.2,
+     "lbl": "FOYER",
+     "aux": 1,
+     "pass": 1,
+     "entry": "W"
+    },
+    {
+     "key": "hs",
+     "x": 1.6,
+     "z": 7.1,
+     "w": 1.3,
+     "d": 1.6,
+     "lbl": "SHELTER",
+     "aux": 1
+    },
+    {
+     "key": "yard",
+     "x": 2.9,
+     "z": 7.1,
+     "w": 1.6,
+     "d": 1.6,
+     "lbl": "SERVICE YARD & WC",
+     "aux": 1
+    },
+    {
+     "key": "ac",
+     "x": 4.5,
+     "z": 7.1,
+     "w": 1.5,
+     "d": 1.4,
+     "lbl": "AC LEDGE",
+     "aux": 1
+    },
+    {
+     "key": "common2",
+     "x": 6,
+     "z": 0,
+     "w": 2.6,
+     "d": 4.4,
+     "lbl": "BEDROOM 3",
+     "dw": "N"
+    },
+    {
+     "key": "common",
+     "x": 8.6,
+     "z": 0,
+     "w": 2.55,
+     "d": 4.4,
+     "lbl": "BEDROOM 2",
+     "dw": "N"
+    },
+    {
+     "key": "master",
+     "x": 11.15,
+     "z": 0,
+     "w": 2.7,
+     "d": 5.6,
+     "lbl": "MASTER BEDROOM"
+    },
+    {
+     "key": "corr",
+     "x": 6,
+     "z": 4.4,
+     "w": 5.15,
+     "d": 1.2,
+     "lbl": "HALL",
+     "aux": 1,
+     "pass": 1
+    },
+    {
+     "key": "bath_c",
+     "x": 6,
+     "z": 5.6,
+     "w": 1.5,
+     "d": 2.4,
+     "pid": "bath",
+     "lbl": "BATH 2",
+     "dw": "S"
+    },
+    {
+     "key": "study",
+     "x": 7.5,
+     "z": 5.6,
+     "w": 3.2,
+     "d": 2.4,
+     "lbl": "BEDROOM 4 / STUDY",
+     "dw": "S"
+    },
+    {
+     "key": "bath_m",
+     "x": 10.7,
+     "z": 5.6,
+     "w": 1.7,
+     "d": 2.4,
+     "pid": "bath",
+     "lbl": "MASTER BATH",
+     "dw": "S"
+    }
+   ]
+  }
+ ]
+}
