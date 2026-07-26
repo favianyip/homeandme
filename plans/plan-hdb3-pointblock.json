@@ -1,0 +1,82 @@
+{
+ "schema": "hnm-plan-scene/2",
+ "plan_id": "sp-hdb3-ptblk-a",
+ "display_name": "HDB 3-ROOM POINT BLOCK",
+ "source_type": "uploaded_floor_plan_pdf",
+ "source_reference": "PRIVATE SOURCE PLAN — held offline, not published",
+ "display_source": "Private source plan (on file)",
+ "anonymised": true,
+ "provenance": "MANUALLY TRACED FROM SOURCE PLAN",
+ "site_disclaimer": "DIMENSIONS REQUIRE SITE VERIFICATION",
+ "units": "m",
+ "source_to_model_transform": {
+  "note": "plan sheet top edge = model z=0 (bedroom window facade); x left-to-right; printed mm / 1000. Rect edges are structural centre-lines; the engine thickens walls about them.",
+  "scale": 0.001,
+  "flip_z": false
+ },
+ "assumed_verticals": {
+  "wall_height_cutaway_m": 1.2,
+  "wall_height_full_m": 2.5,
+  "floor_to_floor_m": 2.85,
+  "label": "ASSUMED FOR DEMO — HEIGHT NOT VERIFIED"
+ },
+ "verification_status": "MANUAL_TRACE_VERIFIED_2D",
+ "trace_confidence": "high",
+ "space_grammar": "space: key,pid,x,z,w,d + dw (door wall on the room carrying the leaf); pass=circulation; aux=non-habitable; out=outside the weather line (ledge/AC — excluded from area and walkability); voids=bounding-box area that is deliberately NOT part of the unit; walls/doors/windows are derived deterministically from adjacency by the shared engine (journey-3d.js) for BOTH 2D and 3D views",
+ "layout_key": "hdb3",
+ "dim_chains": [
+  { "axis": "x", "label": "top bays (bedrooms → living)", "mode": "axis", "band": [0, 4.0], "printed": [3150, 2950, 3300], "total": 9400 },
+  { "axis": "z", "label": "left edge", "mode": "axis", "band": [0, 1.55], "printed": [4000, 2050, 2750], "total": 8800 },
+  { "axis": "z", "label": "right edge (living → shelter → service)", "mode": "axis", "band": [6.1, 9.4], "from": 450, "printed": [3200, 2400, 2750], "total": 8350, "partial": true },
+  { "axis": "x", "label": "bottom bays (service strip)", "mode": "axis", "band": [6.05, 8.8], "from": 1550, "printed": [1200, 2800, 1600, 1575], "total": 7175, "partial": true },
+  { "axis": "x", "label": "clear widths", "mode": "clear", "printed": [2200, 1950, 1200, 2800, 1600, 1575] },
+  { "axis": "z", "label": "clear depths", "mode": "clear", "printed": [4000, 2900, 1100, 2050, 2400, 3200, 2750, 950] }
+ ],
+ "printed_dims_used": [
+  "9400 × 8800 overall",
+  "3150/2950/3300 front bays",
+  "4000/2050/2750 left depth band",
+  "2900 bedroom 2 + 1100 hall = 4000",
+  "3200 living + 2400 shelter = 5600 right band",
+  "2200/1950 bath widths",
+  "1200/2800/1600/1575 bottom service bays",
+  "1800 bath 2 CLEAR depth (2050 structural — wall allowance)",
+  "2800 kitchen CLEAR depth (2750 structural)"
+ ],
+ "unresolved_dims": [
+  "450 living-facade RC ledge derived from 5600 right band closing on the 6050 service line",
+  "shelter blast-wall thickness not printed"
+ ],
+ "needs_review": [
+  "AC ledge exact outline (stepped footprint simplified to 1550 × 950)",
+  "common lobby beyond the entry door declared as a void, not modelled"
+ ],
+ "floors": [
+  {
+   "width_m": 9.4,
+   "depth_m": 8.8,
+   "elevation": "stacked at floor_to_floor_m (assumed)",
+   "voids": [
+    { "key": "notch_sw", "x": 0, "z": 7.0, "w": 1.55, "d": 1.8, "note": "external notch below the AC ledge — outside the unit" },
+    { "key": "lobby", "x": 7.15, "z": 6.05, "w": 1.575, "d": 2.75, "note": "common lift lobby / riser — outside the unit" },
+    { "key": "lobby_e", "x": 8.725, "z": 6.05, "w": 0.675, "d": 2.75, "note": "common corridor edge — outside the unit" }
+   ],
+   "spaces": [
+    { "key": "master", "x": 0, "z": 0, "w": 3.15, "d": 4.0, "lbl": "MAIN BEDROOM", "dw": "E" },
+    { "key": "common", "x": 3.15, "z": 0, "w": 2.95, "d": 2.9, "lbl": "BEDROOM 2", "dw": "N" },
+    { "key": "corr", "x": 3.15, "z": 2.9, "w": 2.95, "d": 1.1, "lbl": "HALL", "aux": 1, "pass": 1 },
+    { "key": "ledge_n", "x": 6.1, "z": 0, "w": 3.3, "d": 0.45, "lbl": "RC LEDGE", "aux": 1, "out": 1 },
+    { "key": "living", "x": 6.1, "z": 0.45, "w": 3.3, "d": 3.2 },
+    { "key": "hall2", "x": 6.1, "z": 3.65, "w": 1.725, "d": 2.4, "lbl": "PASSAGE", "aux": 1, "pass": 1 },
+    { "key": "hs", "x": 7.825, "z": 3.65, "w": 1.575, "d": 2.4, "lbl": "HOUSEHOLD SHELTER", "aux": 1 },
+    { "key": "bath_m", "x": 0, "z": 4.0, "w": 2.2, "d": 2.05, "pid": "bath", "lbl": "BATH / WC 1", "dw": "S" },
+    { "key": "bath_c", "x": 2.2, "z": 4.0, "w": 1.95, "d": 2.05, "pid": "bath", "lbl": "BATH / WC 2" },
+    { "key": "corr2", "x": 4.15, "z": 4.0, "w": 1.95, "d": 2.05, "lbl": "DINING", "aux": 1, "pass": 1 },
+    { "key": "ac", "x": 0, "z": 6.05, "w": 1.55, "d": 0.95, "lbl": "AC LEDGE", "aux": 1, "out": 1 },
+    { "key": "yard", "x": 1.55, "z": 6.05, "w": 1.2, "d": 2.75, "lbl": "SERVICE YARD", "aux": 1 },
+    { "key": "kitchen", "x": 2.75, "z": 6.05, "w": 2.8, "d": 2.75, "dw": "E" },
+    { "key": "foyer", "x": 5.55, "z": 6.05, "w": 1.6, "d": 2.75, "entry": "N", "lbl": "ENTRY", "aux": 1, "pass": 1 }
+   ]
+  }
+ ]
+}

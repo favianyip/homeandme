@@ -1,0 +1,1263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home &amp; Me — Drafting Studio</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  three-d-stage:not(:defined){visibility:hidden}
+  body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+  header { position: fixed; inset: 0 0 auto 0; height: 52px; display: flex; align-items: center; gap: 16px; padding: 0 18px; background: rgba(246,244,239,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(26,32,35,0.1); z-index: 30; }
+  header img { height: 30px; display: block; }
+  .crumb { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #5a7e8a; }
+  .demo-note { font-family: 'Oswald', sans-serif; font-size: 8.5px; letter-spacing: 1.4px; color: #8a908c; white-space: nowrap; }
+  header .right { margin-left: auto; display: flex; gap: 14px; align-items: center; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; }
+  main { position: fixed; inset: 52px 0 0 0; display: grid; grid-template-columns: auto minmax(0,1fr) minmax(340px,40%); }
+  /* tool rail — hidden unless ADVANCED EDIT is on */
+  #rail { display: none; border-right: 1px solid rgba(26,32,35,0.1); background: #fbfaf7; flex-direction: column; align-items: center; padding: 10px 0; gap: 6px; width: 54px; }
+  body.adv #rail { display: flex; }
+  .advonly { display: none !important; }
+  body.adv .advonly { display: inline-block !important; }
+  .tbtn { width: 38px; height: 38px; border: 1px solid rgba(26,32,35,0.14); border-radius: 8px; background: #fff; cursor: pointer; display: grid; place-items: center; font-family: 'Oswald', sans-serif; font-size: 13px; color: #1a2023; position: relative; }
+  .tbtn:hover { border-color: #5a7e8a; color: #5a7e8a; }
+  .tbtn.sel { background: #5a7e8a; border-color: #5a7e8a; color: #fff; }
+  .tbtn .k { position: absolute; right: 3px; bottom: 1px; font-size: 7.5px; color: currentColor; opacity: 0.55; }
+  #rail hr { width: 26px; border: none; border-top: 1px solid rgba(26,32,35,0.12); margin: 4px 0; }
+  /* canvas column */
+  #mid { position: relative; display: flex; flex-direction: column; min-width: 0; }
+  #topbar { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid rgba(26,32,35,0.1); background: #fbfaf7; flex-wrap: wrap; }
+  .chip { font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid rgba(26,32,35,0.18); background: #fff; color: #1a2023; border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .chip:hover { border-color: #5a7e8a; color: #5a7e8a; }
+  .chip.sel { background: #5a7e8a; border-color: #5a7e8a; color: #fff; }
+  .chip.warn { border-color: rgba(176,124,42,0.5); color: #b07c2a; }
+  #topbar .sep { width: 1px; height: 20px; background: rgba(26,32,35,0.12); }
+  #topbar label { font-family: 'Oswald', sans-serif; font-size: 9px; letter-spacing: 1.6px; color: #8a908c; display: flex; align-items: center; gap: 6px; }
+  #uOp { width: 90px; accent-color: #5a7e8a; }
+  #wrap { position: relative; flex: 1; min-height: 0; }
+  #cv { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
+  #cv.grab { cursor: grab; }
+  #furnbar { position: absolute; left: 12px; bottom: 40px; display: none; gap: 6px; flex-wrap: wrap; max-width: 70%; }
+  #statusbar { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; gap: 16px; padding: 6px 12px; font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px; color: #69736c; background: rgba(251,250,247,0.9); border-top: 1px solid rgba(26,32,35,0.08); pointer-events: none; white-space: nowrap; overflow: hidden; }
+  #drop { position: absolute; inset: 0; display: none; place-items: center; background: rgba(90,126,138,0.14); border: 2px dashed #5a7e8a; z-index: 5; font-family: 'Oswald', sans-serif; letter-spacing: 2px; color: #40606c; font-size: 13px; pointer-events: none; }
+  /* auto-draft overlay */
+  #auto { position: absolute; inset: 0; display: none; place-items: center; background: rgba(246,244,239,0.88); backdrop-filter: blur(3px); z-index: 6; overflow: auto; padding: 20px; }
+  .acard { width: min(520px, 94%); background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 12px; padding: 26px 28px; box-shadow: 0 18px 50px rgba(26,32,35,0.12); }
+  .acard .kicker { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #5a7e8a; margin: 0 0 6px; }
+  .acard h2 { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 22px; letter-spacing: 0.5px; margin: 0 0 6px; }
+  .acard .lede { font-size: 13px; color: #69736c; line-height: 1.55; margin: 0 0 16px; }
+  #aSteps { list-style: none; margin: 14px 0 4px; padding: 0; display: none; }
+  #aSteps li { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; color: #b9beba; padding: 7px 0; border-bottom: 1px solid rgba(26,32,35,0.06); display: flex; justify-content: space-between; }
+  #aSteps li.on { color: #1a2023; }
+  #aSteps li.done { color: #5a7e8a; }
+  #aMatch { display: none; margin-top: 14px; }
+  #aMatch .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+  #aMatch .mlbl { font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 2px; color: #8a908c; }
+  /* right column */
+  #right { border-left: 1px solid rgba(26,32,35,0.1); display: flex; flex-direction: column; min-width: 0; background: #fff; }
+  #stageWrap { position: relative; height: 52%; min-height: 260px; border-bottom: 1px solid rgba(26,32,35,0.1); }
+  #stageWrap three-d-stage { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #stageTag { position: absolute; top: 10px; left: 12px; font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 2px; color: #fff; background: rgba(26,32,35,0.55); backdrop-filter: blur(6px); padding: 5px 10px; border-radius: 999px; z-index: 2; }
+  #live { position: absolute; top: 10px; right: 12px; z-index: 2; }
+  #panel { flex: 1; overflow-y: auto; padding: 16px 18px 28px; }
+  #panel h3 { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #8a908c; font-weight: 500; margin: 22px 0 10px; }
+  #panel h3:first-child { margin-top: 0; }
+  .subthumb { display: flex; align-items: center; gap: 12px; border: 1px solid rgba(26,32,35,0.14); border-radius: 8px; padding: 10px 12px; background: #fbfaf7; }
+  .subthumb .img { width: 64px; height: 48px; border-radius: 4px; background: #fff center/contain no-repeat; border: 1px solid rgba(26,32,35,0.1); flex: none; }
+  .subthumb .n { font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .subthumb .s { font-size: 11px; color: #8a908c; }
+  .statgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stat { border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: 8px 10px; background: #fbfaf7; }
+  .stat .v { font-family: 'Oswald', sans-serif; font-size: 19px; color: #5a7e8a; }
+  .stat .l { font-family: 'Oswald', sans-serif; font-size: 8.5px; letter-spacing: 1.4px; color: #8a908c; }
+  .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .cta { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; background: #1a2023; color: #fff; border: none; border-radius: 999px; padding: 10px 18px; cursor: pointer; }
+  .cta:hover { background: #5a7e8a; }
+  .cta.ghost { background: none; color: #1a2023; border: 1px solid rgba(26,32,35,0.25); }
+  .cta.ghost:hover { border-color: #5a7e8a; color: #5a7e8a; }
+  .note { font-size: 11.5px; color: #8a908c; line-height: 1.55; margin-top: 8px; }
+  .job { display: flex; justify-content: space-between; gap: 10px; padding: 8px 2px; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 12px; align-items: baseline; }
+  .job .st { font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.6px; color: #b07c2a; white-space: nowrap; }
+  .chk { display: flex; gap: 9px; align-items: baseline; padding: 6px 0; border-bottom: 1px solid rgba(26,32,35,0.07); font-size: 12px; line-height: 1.45; }
+  .chk .m { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1px; flex: none; width: 13px; }
+  .chk.ok .m { color: #5a7e8a; } .chk.no .m { color: #b4452f; } .chk.warn .m { color: #b07c2a; }
+  .chk .d { color: #8a908c; }
+  #toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: #1a2023; color: #fff; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.6px; padding: 10px 18px; border-radius: 999px; opacity: 0; transition: opacity 0.25s; z-index: 60; pointer-events: none; max-width: 80vw; text-align: center; }
+  @media (max-width: 1060px) {
+    body { overflow: auto; }
+    main { position: static; margin-top: 52px; display: block; }
+    #rail { flex-direction: row; }
+    #wrap { flex: none; height: 58vh; }
+    #mid { height: auto; }
+    #stageWrap { height: 320px; }
+  }
+</style>
+</head>
+<body>
+<div id="root">
+<header>
+  <a href="Home AI.dc.html"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me"></a>
+  <span class="crumb">AUTO-DRAFT STUDIO</span>
+  <span class="demo-note">DEMO — PLAN → 3D DRAFTED AUTOMATICALLY · SALES CONFIRMS, NOBODY DRAWS · SITE VERIFICATION STILL REQUIRED</span>
+  <span class="right">
+    <a href="Journey.html">CUSTOMER JOURNEY ↗</a>
+  </span>
+</header>
+<main>
+  <aside id="rail"></aside>
+  <section id="mid">
+    <div id="topbar">
+      <span id="levels" style="display:flex; gap:6px;"></span>
+      <span class="sep"></span>
+      <button class="chip sel" id="bAuto">⚡ NEW AUTO-DRAFT</button>
+      <label>UNDERLAY <input id="uOp" type="range" min="0" max="100" value="55"></label>
+      <button class="chip" id="bSrc">SOURCE PLAN</button>
+      <button class="chip advonly" id="bSub">LOAD SUBMISSION</button>
+      <button class="chip advonly" id="bSample">SAMPLE PLAN</button>
+      <button class="chip advonly" id="bUClear">CLEAR UNDERLAY</button>
+      <span class="sep advonly"></span>
+      <button class="chip sel advonly" id="bSnap">SNAP</button>
+      <button class="chip advonly" id="bClearLvl">CLEAR LEVEL</button>
+      <button class="chip" id="bAdv" style="margin-left:auto;">ADVANCED EDIT</button>
+      <span class="demo-note" id="saveTag">SAVED</span>
+    </div>
+    <div id="wrap">
+      <canvas id="cv"></canvas>
+      <div id="furnbar"></div>
+      <div id="drop">DROP FLOOR PLAN — IMAGE OR PDF</div>
+      <div id="auto">
+        <div class="acard">
+          <p class="kicker">AUTO-DRAFT — PLAN TO 3D</p>
+          <h2>Drop the customer's floor plan</h2>
+          <p class="lede">The system reads it, matches it against Home &amp; Me's plan-traced template library and drafts the 3D by itself — no drawing skills needed. You just confirm the match.</p>
+          <div class="btnrow" id="aStart">
+            <button class="cta" id="aSub">LOAD CUSTOMER SUBMISSION</button>
+            <button class="cta ghost" id="aSample">TRY THE SAMPLE PLAN</button>
+          </div>
+          <ol id="aSteps">
+            <li id="as1"><span>READING PLAN IMAGE</span><span class="tick"></span></li>
+            <li id="as2"><span>DETECTING SCALE &amp; OUTLINE</span><span class="tick"></span></li>
+            <li id="as3"><span>TRACING WALLS, DOORS &amp; ROOMS</span><span class="tick"></span></li>
+            <li id="as4"><span>MATCHING TEMPLATE LIBRARY</span><span class="tick"></span></li>
+          </ol>
+          <div id="aMatch">
+            <div id="aRead" class="note" style="margin:0 0 4px;"></div>
+            <span class="mlbl">BEST MATCH — CONFIRM OR PICK ANOTHER</span>
+            <div class="chips" id="aChips"></div>
+            <div class="btnrow"><button class="cta" id="aGen">GENERATE 3D DRAFT</button><button class="cta ghost" id="aCancel">CANCEL</button></div>
+          </div>
+          <p class="note">Recognition runs Claude vision on the plan right in the browser, then matches Home &amp; Me's template library (◆ = plan-traced). Every draft stays tagged “requires site verification”.</p>
+        </div>
+      </div>
+      <div id="statusbar"><span id="stHint"></span><span id="stPos"></span></div>
+    </div>
+  </section>
+  <section id="right">
+    <div id="stageWrap">
+      <three-d-stage id="stage" name="hnm-draft" background="#eceade"></three-d-stage>
+      <span id="stageTag">LIVE 3D — BUILDS AS YOU DRAW</span>
+      <button class="chip" id="bFrame" style="position:absolute; top:44px; right:12px; z-index:2;">REFRAME</button>
+    </div>
+    <div id="panel">
+      <h3>CUSTOMER SUBMISSION</h3>
+      <div class="subthumb" id="subBox"><div class="img"></div><div style="min-width:0;"><div class="n">No submission found</div><div class="s">Upload at Journey · Station 01</div></div></div>
+      <h3>AUTO-DRAFT MODEL</h3>
+      <div id="matchTag" class="note" style="margin:0 0 10px;"></div>
+      <div class="statgrid" id="stats"></div>
+      <div class="btnrow">
+        <button class="cta" id="bApprove">APPROVE → CUSTOMER JOURNEY</button>
+        <button class="cta ghost" id="bJson">DRAFT JSON</button>
+        <button class="cta ghost" id="bWipe">NEW DRAFT</button>
+      </div>
+      <p class="note">Approving hands the matched layout to the customer's 3D Journey. OBJ / MTL and GLB export: toolbar on the 3D viewport. Anything unusual? ADVANCED EDIT unlocks manual drawing tools.</p>
+      <h3>PLAN CHECKS</h3>
+      <div id="checks"></div>
+      <h3>RENDER NODE — DGX (STUB)</h3>
+      <div id="jobs"></div>
+      <div class="btnrow"><button class="cta" id="bQueue">QUEUE PHOTOREAL RENDER</button></div>
+      <p class="note">DEMO — no backend connected. In production this queues the GLB + camera set to your local DGX render service and returns stills to the customer's project.</p>
+    </div>
+  </section>
+</main>
+<div id="toast"></div>
+</div>
+<script src="three-d-stage.js"></script>
+<script type="module">
+const $ = (s) => document.querySelector(s);
+const WH = 2.5, LH = 2.85, WT = 0.1, SNAP = 0.05;
+const ENGINE = 4; // bump whenever convertLevel changes — saved drafts rebuild themselves on load
+const FURN = [
+  { id: 'bed', lbl: 'BED', w: 1.6, d: 2.0, h: 0.55, c: 0xc9b8a3 },
+  { id: 'sofa', lbl: 'SOFA', w: 2.2, d: 0.9, h: 0.72, c: 0x9aa89f },
+  { id: 'table', lbl: 'TABLE', w: 1.4, d: 0.8, h: 0.74, c: 0xb98d5f },
+  { id: 'ward', lbl: 'WARDROBE', w: 1.6, d: 0.6, h: 2.2, c: 0xa5825e },
+  { id: 'counter', lbl: 'KITCHEN RUN', w: 2.4, d: 0.6, h: 0.9, c: 0x3a4043 },
+  { id: 'fridge', lbl: 'FRIDGE', w: 0.7, d: 0.7, h: 1.8, c: 0xd8d8d4 },
+  { id: 'wc', lbl: 'WC', w: 0.45, d: 0.7, h: 0.75, c: 0xf2f2ee },
+  { id: 'sink', lbl: 'BASIN', w: 0.6, d: 0.5, h: 0.85, c: 0xf2f2ee },
+  { id: 'shower', lbl: 'SHOWER', w: 0.9, d: 0.9, h: 2.0, c: 0xbcd2d8 },
+];
+const TOOLS = [
+  ['select', 'V', '▲', 'Select / move · Del removes · R rotates · double-click renames a room'],
+  ['calibrate', 'C', '⟷', 'Calibrate: click two points on the plan, enter the real distance · drag moves the underlay'],
+  ['wall', 'W', '─', 'Walls: click to chain corners · Esc ends · Shift = free angle'],
+  ['room', 'R', '▭', 'Room: drag a rectangle · label it after'],
+  ['door', 'D', '◠', 'Door: click on a wall'],
+  ['win', 'N', '≡', 'Window: click on a wall'],
+  ['stairs', 'S', '≣', 'Stairs: drag footprint · R rotates ascent'],
+  ['furn', 'F', '⌂', 'Furniture: pick a piece, click to place · R rotates'],
+];
+const mkLevel = () => ({ walls: [], rooms: [], stairs: [], furn: [], under: null });
+let doc = { schema: 'hnm-studio/1', levels: [mkLevel()], active: 0 };
+try { const s = JSON.parse(localStorage.getItem('hnm_studio_v1') || 'null'); if (s && s.levels) doc = s; } catch (e) {}
+if (doc.active >= doc.levels.length) doc.active = 0;
+// migrate drafts saved before the SOURCE PLAN toggle: detach the plan image from the trace, keep it as proof
+if (doc.match && !doc.src && doc.levels[0] && doc.levels[0].under) {
+  const u = doc.levels[0].under;
+  doc.src = { url: u.url, iw: u.iw, ih: u.ih, name: doc.match.planName || 'customer plan' };
+  doc.levels.forEach((l) => { l.under = null; });
+}
+const L = () => doc.levels[doc.active];
+let tool = 'select', furnType = 'bed', snapOn = true, sel = null, chain = null, dragRect = null, calPts = [], mouse = { x: 0, y: 0 }, grab = null, imgCache = {};
+let Z = 62, panX = -2.5, panY = -1.6, spaceDown = false, panning = null;
+
+/* ---------- helpers ---------- */
+const toast = (m) => { const t = $('#toast'); t.textContent = m; t.style.opacity = 1; clearTimeout(t._h); t._h = setTimeout(() => { t.style.opacity = 0; }, 3200); };
+const sn = (v) => snapOn ? Math.round(v / SNAP) * SNAP : v;
+const W2S = (x, y) => [(x - panX) * Z, (y - panY) * Z];
+const S2W = (x, y) => [x / Z + panX, y / Z + panY];
+const dist = (ax, ay, bx, by) => Math.hypot(bx - ax, by - ay);
+const wallLen = (w) => dist(w.ax, w.ay, w.bx, w.by);
+function ptSeg(px, py, w) { // returns {d, t}
+  const dx = w.bx - w.ax, dy = w.by - w.ay, l2 = dx * dx + dy * dy;
+  const t = l2 ? Math.max(0, Math.min(1, ((px - w.ax) * dx + (py - w.ay) * dy) / l2)) : 0;
+  return { d: dist(px, py, w.ax + t * dx, w.ay + t * dy), t };
+}
+function opSegs(w) { // solid spans + placed openings, along wall length
+  const len = wallLen(w), ops = (w.ops || []).map((o) => ({ ...o, c: o.t * len })).sort((a, b) => a.c - b.c);
+  const segs = []; let cur = 0;
+  ops.forEach((o) => { const s = Math.max(cur, o.c - o.w / 2), e = Math.min(len, o.c + o.w / 2); if (s > cur + 0.01) segs.push([cur, s]); o.s = s; o.e = e; cur = e; });
+  if (cur < len - 0.01) segs.push([cur, len]);
+  return { len, ops, segs };
+}
+function persist() {
+  try { localStorage.setItem('hnm_studio_v1', JSON.stringify(doc)); $('#saveTag').textContent = 'SAVED'; }
+  catch (e) { // quota — drop underlay images from the stored copy, keep them in memory
+    try { localStorage.setItem('hnm_studio_v1', JSON.stringify({ ...doc, src: doc.src ? { ...doc.src, url: doc.src.url.length < 900000 ? doc.src.url : null } : null, levels: doc.levels.map((l) => ({ ...l, under: null })) })); $('#saveTag').textContent = 'SAVED (UNDERLAY TOO LARGE TO STORE)'; }
+    catch (e2) { $('#saveTag').textContent = 'NOT SAVED — STORAGE FULL'; }
+  }
+}
+let saveH = null, b3dH = null;
+function changed(geo) { $('#saveTag').textContent = 'SAVING…'; clearTimeout(saveH); saveH = setTimeout(persist, 700); redraw(); if (geo !== false) { clearTimeout(b3dH); b3dH = setTimeout(build3D, 350); } drawStats(); }
+
+/* ---------- tool rail / topbar ---------- */
+const rail = $('#rail');
+TOOLS.forEach(([id, key, glyph, hint]) => {
+  const b = document.createElement('button');
+  b.className = 'tbtn'; b.id = 'tool_' + id; b.title = hint + '  (' + key + ')';
+  b.innerHTML = glyph + '<span class="k">' + key + '</span>';
+  b.onclick = () => setTool(id);
+  rail.appendChild(b);
+});
+function setTool(t) {
+  tool = t; chain = null; calPts = []; dragRect = null;
+  document.querySelectorAll('.tbtn').forEach((b) => b.classList.toggle('sel', b.id === 'tool_' + t));
+  $('#furnbar').style.display = t === 'furn' ? 'flex' : 'none';
+  $('#stHint').textContent = TOOLS.find((x) => x[0] === t)[3].toUpperCase();
+  if (t === 'calibrate' && !L().under) toast('LOAD AN UNDERLAY FIRST — CALIBRATION SCALES THE PLAN IMAGE');
+  redraw();
+}
+const fb = $('#furnbar');
+FURN.forEach((f) => { const c = document.createElement('button'); c.className = 'chip'; c.textContent = f.lbl; c.id = 'f_' + f.id; c.onclick = () => { furnType = f.id; fb.querySelectorAll('.chip').forEach((x) => x.classList.toggle('sel', x.id === 'f_' + f.id)); }; fb.appendChild(c); });
+fb.querySelector('#f_bed').classList.add('sel');
+function drawLevels() {
+  const box = $('#levels'); box.innerHTML = '';
+  doc.levels.forEach((lv, i) => {
+    const c = document.createElement('button');
+    c.className = 'chip' + (i === doc.active ? ' sel' : '');
+    c.textContent = 'L' + (i + 1);
+    c.onclick = () => { doc.active = i; drawLevels(); changed(false); };
+    box.appendChild(c);
+  });
+  const add = document.createElement('button');
+  add.className = 'chip'; add.textContent = '+ LEVEL';
+  add.onclick = () => { doc.levels.push(mkLevel()); doc.active = doc.levels.length - 1; drawLevels(); changed(); toast('LEVEL ' + doc.levels.length + ' ADDED — DRAW ITS PLAN; IT STACKS ABOVE L' + (doc.levels.length - 1)); };
+  box.appendChild(add);
+  if (doc.levels.length > 1) {
+    const del = document.createElement('button');
+    del.className = 'chip warn'; del.textContent = '✕ L' + (doc.active + 1);
+    del.onclick = () => { if (!confirm('Delete level ' + (doc.active + 1) + ' and everything on it?')) return; doc.levels.splice(doc.active, 1); doc.active = Math.max(0, doc.active - 1); drawLevels(); changed(); };
+    box.appendChild(del);
+  }
+}
+$('#bSnap').onclick = () => { snapOn = !snapOn; $('#bSnap').classList.toggle('sel', snapOn); };
+$('#bClearLvl').onclick = () => { if (!confirm('Clear all drawing on level ' + (doc.active + 1) + '? (Underlay stays)')) return; const u = L().under; doc.levels[doc.active] = mkLevel(); L().under = u; sel = null; changed(); };
+$('#bWipe').onclick = () => { if (!confirm('Start a new empty draft? This clears all levels.')) return; doc = { schema: 'hnm-studio/1', levels: [mkLevel()], active: 0 }; sel = null; drawLevels(); changed(); fitView(); };
+$('#uOp').oninput = () => { if (L().under) { L().under.op = +$('#uOp').value / 100; changed(false); } };
+$('#bUClear').onclick = () => { if (L().under) { L().under = null; changed(false); } };
+
+/* ---------- underlay: submission / sample / drop / pdf ---------- */
+function setUnderlay(url, name, cb) {
+  const img = new Image();
+  img.onload = () => {
+    imgCache[url] = img;
+    const s = 12 / img.naturalWidth; // assume ~12 m wide until calibrated
+    L().under = { url, iw: img.naturalWidth, ih: img.naturalHeight, s, ox: 0, oy: 0, op: +$('#uOp').value / 100, cal: false };
+    changed(false); fitView();
+    if (cb) cb(); else toast((name || 'PLAN') + ' LOADED');
+  };
+  img.onerror = () => { // first paint of a cold asset can fail spuriously — retry once
+    if (img._retried) return toast('COULD NOT LOAD THAT IMAGE');
+    img._retried = 1; setTimeout(() => { img.src = url + (url.startsWith('data:') ? '' : (url.includes('?') ? '&' : '?') + 'r=1'); }, 220);
+  };
+  img.src = url;
+}
+function journeySub() { try { return JSON.parse(localStorage.getItem('hnm_journey_v1') || 'null'); } catch (e) { return null; } }
+function drawSub() {
+  const s = journeySub(), box = $('#subBox');
+  if (s && s.planName) {
+    box.querySelector('.n').textContent = s.planName;
+    box.querySelector('.s').textContent = s.planUrl ? (s.property || '').toUpperCase() + ' · postal ' + (s.postal || '—') + ' · tap LOAD SUBMISSION' : 'file too large to hand over — re-drop it here';
+    if (s.planUrl) box.querySelector('.img').style.backgroundImage = "url('" + s.planUrl + "')";
+  }
+}
+const ingest = (url, name) => setUnderlay(url, name, () => { if (!document.body.classList.contains('adv')) startAuto(name || ''); else toast((name || 'PLAN') + ' LOADED — MANUAL MODE'); });
+$('#bSub').onclick = () => { const s = journeySub(); if (s && s.planUrl) ingest(s.planUrl, s.planName); else toast('NO CUSTOMER SUBMISSION FOUND — UPLOAD AT JOURNEY STATION 01, OR DROP THE FILE HERE'); };
+$('#bSample').onclick = () => ingest('assets/images/sample-floorplan.png', 'SAMPLE PLAN');
+$('#aSub').onclick = () => $('#bSub').onclick();
+$('#aSample').onclick = () => $('#bSample').onclick();
+const wrap = $('#wrap');
+['dragenter', 'dragover'].forEach((ev) => wrap.addEventListener(ev, (e) => { e.preventDefault(); $('#drop').style.display = 'grid'; }));
+['dragleave', 'drop'].forEach((ev) => wrap.addEventListener(ev, (e) => { e.preventDefault(); if (ev === 'dragleave' && e.target !== wrap) return; $('#drop').style.display = 'none'; }));
+wrap.addEventListener('drop', async (e) => {
+  const f = e.dataTransfer.files && e.dataTransfer.files[0]; if (!f) return;
+  if (f.type === 'application/pdf') return pdfToUnderlay(f);
+  if (!f.type.startsWith('image/')) return toast('DROP AN IMAGE OR PDF');
+  const r = new FileReader(); r.onload = () => ingest(r.result, f.name.toUpperCase()); r.readAsDataURL(f);
+});
+async function pdfToUnderlay(f) {
+  toast('RASTERISING PDF…');
+  try {
+    const pdfjs = await import('https://unpkg.com/pdfjs-dist@4.2.67/build/pdf.min.mjs');
+    pdfjs.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@4.2.67/build/pdf.worker.min.mjs';
+    const pdf = await pdfjs.getDocument({ data: await f.arrayBuffer() }).promise;
+    const page = await pdf.getPage(1);
+    const vp = page.getViewport({ scale: 2200 / page.getViewport({ scale: 1 }).width });
+    const c = document.createElement('canvas'); c.width = vp.width; c.height = vp.height;
+    await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+    setUnderlay(c.toDataURL('image/png'), f.name.toUpperCase() + ' · PAGE 1', () => { if (!document.body.classList.contains('adv')) startAuto(f.name); });
+  } catch (err) { console.warn(err); toast('PDF RASTERISER UNAVAILABLE — EXPORT THE PLAN AS AN IMAGE AND DROP THAT'); }
+}
+
+/* ---------- 2D canvas ---------- */
+const cv = $('#cv'), ctx = cv.getContext('2d');
+let dpr = 1;
+new ResizeObserver(() => { dpr = devicePixelRatio || 1; cv.width = cv.clientWidth * dpr; cv.height = cv.clientHeight * dpr; redraw(); }).observe(cv);
+function fitView() {
+  let xs = [0, 8], ys = [0, 6];
+  const lv = L();
+  lv.walls.forEach((w) => { xs.push(w.ax, w.bx); ys.push(w.ay, w.by); });
+  lv.rooms.forEach((r) => { xs.push(r.x, r.x + r.w); ys.push(r.y, r.y + r.d); });
+  if (lv.under) { xs.push(lv.under.ox, lv.under.ox + lv.under.iw * lv.under.s); ys.push(lv.under.oy, lv.under.oy + lv.under.ih * lv.under.s); }
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  Z = Math.min((cv.clientWidth - 90) / (x1 - x0), (cv.clientHeight - 110) / (y1 - y0));
+  Z = Math.max(18, Math.min(140, Z));
+  panX = x0 - (cv.clientWidth / Z - (x1 - x0)) / 2; panY = y0 - (cv.clientHeight / Z - (y1 - y0)) / 2;
+  redraw();
+}
+function redraw() {
+  if (!cv.width) return;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, cv.clientWidth, cv.clientHeight);
+  ctx.fillStyle = '#f2efe8'; ctx.fillRect(0, 0, cv.clientWidth, cv.clientHeight);
+  const lv = L();
+  // grid
+  const g0 = S2W(0, 0), g1 = S2W(cv.clientWidth, cv.clientHeight);
+  ctx.lineWidth = 1;
+  for (let x = Math.floor(g0[0] * 2) / 2; x <= g1[0]; x += 0.5) {
+    const [sx] = W2S(x, 0); ctx.strokeStyle = Math.abs(x - Math.round(x)) < 0.01 ? 'rgba(26,32,35,0.10)' : 'rgba(26,32,35,0.045)';
+    ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx, cv.clientHeight); ctx.stroke();
+  }
+  for (let y = Math.floor(g0[1] * 2) / 2; y <= g1[1]; y += 0.5) {
+    const [, sy] = W2S(0, y); ctx.strokeStyle = Math.abs(y - Math.round(y)) < 0.01 ? 'rgba(26,32,35,0.10)' : 'rgba(26,32,35,0.045)';
+    ctx.beginPath(); ctx.moveTo(0, sy); ctx.lineTo(cv.clientWidth, sy); ctx.stroke();
+  }
+  // underlay
+  if (lv.under) {
+    const u = lv.under, img = imgCache[u.url];
+    if (img) { const [x, y] = W2S(u.ox, u.oy); ctx.globalAlpha = u.op != null ? u.op : 0.55; ctx.drawImage(img, x, y, u.iw * u.s * Z, u.ih * u.s * Z); ctx.globalAlpha = 1; }
+    else { const im = new Image(); im.onload = () => { imgCache[u.url] = im; redraw(); }; im.src = u.url; }
+    if (!u.cal) { ctx.fillStyle = '#b07c2a'; ctx.font = '600 10px Oswald'; ctx.fillText('UNDERLAY NOT CALIBRATED — SCALE IS A GUESS', 12, 18); }
+  }
+  // ghost of level below for alignment
+  if (doc.active > 0) {
+    const below = doc.levels[doc.active - 1];
+    ctx.strokeStyle = 'rgba(26,32,35,0.14)'; ctx.lineWidth = Math.max(2, WT * Z * 0.6); ctx.setLineDash([5, 5]);
+    below.walls.forEach((w) => { const a = W2S(w.ax, w.ay), b = W2S(w.bx, w.by); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); });
+    ctx.setLineDash([]);
+  }
+  // rooms
+  lv.rooms.forEach((r, i) => {
+    const [x, y] = W2S(r.x, r.y), w = r.w * Z, d = r.d * Z;
+    const isSel = sel && sel.kind === 'room' && sel.i === i;
+    ctx.fillStyle = isSel ? 'rgba(90,126,138,0.16)' : 'rgba(90,126,138,0.07)';
+    ctx.strokeStyle = isSel ? '#5a7e8a' : 'rgba(26,32,35,0.35)'; ctx.lineWidth = isSel ? 2 : 1;
+    ctx.fillRect(x, y, w, d); ctx.strokeRect(x, y, w, d);
+    ctx.textAlign = 'center';
+    const fs = d < 34 ? 8.5 : 11, dim = r.w.toFixed(2) + ' × ' + r.d.toFixed(2) + ' m';
+    ctx.font = '500 ' + fs + 'px Oswald';
+    let txt = r.label;
+    if (ctx.measureText(txt).width > w - 6) { // shrink, then abbreviate, then drop
+      const words = txt.split(/[\s/]+/);
+      txt = words[0].length * (fs * 0.52) < w - 6 ? words[0] : '';
+    }
+    const both = d > 30 && ctx.measureText(dim).width < w - 6;
+    if (txt) { ctx.fillStyle = 'rgba(26,32,35,0.8)'; ctx.fillText(txt, x + w / 2, y + d / 2 + (both ? -2 : fs * 0.36)); }
+    if (both) { ctx.fillStyle = 'rgba(90,126,138,0.9)'; ctx.font = '300 9.5px Oswald'; ctx.fillText(dim, x + w / 2, y + d / 2 + 11); }
+    ctx.textAlign = 'left';
+  });
+  // stairs
+  lv.stairs.forEach((s, i) => {
+    const isSel = sel && sel.kind === 'stairs' && sel.i === i;
+    drawRotRect(s, isSel, (x, y, w, d) => {
+      ctx.strokeStyle = isSel ? '#5a7e8a' : 'rgba(26,32,35,0.6)'; ctx.lineWidth = isSel ? 2 : 1.2;
+      ctx.strokeRect(x, y, w, d);
+      const n = 8;
+      for (let k = 1; k < n; k++) { ctx.beginPath(); ctx.moveTo(x, y + (d * k) / n); ctx.lineTo(x + w, y + (d * k) / n); ctx.stroke(); }
+      ctx.font = '600 9px Oswald'; ctx.fillStyle = '#5a7e8a'; ctx.textAlign = 'center';
+      ctx.fillText('UP ↑', x + w / 2, y + 12); ctx.textAlign = 'left';
+    });
+  });
+  // furniture
+  lv.furn.forEach((f, i) => {
+    const isSel = sel && sel.kind === 'furn' && sel.i === i;
+    drawRotRect(f, isSel, (x, y, w, d) => {
+      ctx.strokeStyle = isSel ? '#5a7e8a' : 'rgba(26,32,35,0.5)'; ctx.lineWidth = isSel ? 2 : 1;
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.fillRect(x, y, w, d); ctx.strokeRect(x, y, w, d);
+      const def = FURN.find((z) => z.id === f.type);
+      ctx.font = '300 8.5px Oswald'; ctx.fillStyle = 'rgba(26,32,35,0.65)'; ctx.textAlign = 'center';
+      if (w > 26) ctx.fillText(def.lbl, x + w / 2, y + d / 2 + 3);
+      ctx.textAlign = 'left';
+    });
+  });
+  // walls + openings
+  lv.walls.forEach((w, i) => {
+    const { len, ops, segs } = opSegs(w);
+    const ux = (w.bx - w.ax) / (len || 1), uy = (w.by - w.ay) / (len || 1);
+    const isSel = sel && sel.kind === 'wall' && sel.i === i;
+    ctx.strokeStyle = isSel ? '#5a7e8a' : '#1a2023'; ctx.lineWidth = Math.max(3, WT * Z); ctx.lineCap = 'butt';
+    segs.forEach(([s, e]) => { const a = W2S(w.ax + ux * s, w.ay + uy * s), b = W2S(w.ax + ux * e, w.ay + uy * e); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); });
+    ops.forEach((o, oi) => {
+      const a = W2S(w.ax + ux * o.s, w.ay + uy * o.s), b = W2S(w.ax + ux * o.e, w.ay + uy * o.e);
+      const oSel = sel && sel.kind === 'op' && sel.i === i && sel.oi === oi;
+      if (o.k === 'door') {
+        const ang = Math.atan2(uy, ux), R = o.w * Z, ou = o.entry ? (o.out || 1) : 1;
+        if (o.entry) { // main entrance: bronze threshold across the opening + tag on the outside
+          ctx.strokeStyle = '#b07c2a'; ctx.lineWidth = Math.max(3, WT * Z * 0.8);
+          ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+          const tg = o.tag || ou;
+          const mx = (a[0] + b[0]) / 2 + Math.sin(ang) * 16 * tg, my = (a[1] + b[1]) / 2 - Math.cos(ang) * 16 * tg;
+          ctx.font = '600 9px Oswald'; ctx.textAlign = 'center';
+          ctx.fillStyle = 'rgba(246,244,239,0.92)'; ctx.fillRect(mx - 17, my - 6, 34, 12);
+          ctx.fillStyle = '#b07c2a'; ctx.fillText('ENTRY', mx, my + 3.5);
+          ctx.textAlign = 'left';
+        }
+        ctx.strokeStyle = oSel ? '#5a7e8a' : o.entry ? '#8c5f16' : 'rgba(26,32,35,0.75)';
+        ctx.lineWidth = o.entry ? 2.2 : 1.4;
+        if (ou < 0) { // swing the front door inwards
+          ctx.beginPath(); ctx.moveTo(b[0], b[1]); ctx.lineTo(b[0] + Math.sin(ang) * R, b[1] - Math.cos(ang) * R); ctx.stroke();
+          ctx.beginPath(); ctx.arc(b[0], b[1], R, ang + Math.PI, ang + Math.PI * 1.5); ctx.stroke();
+        } else {
+          ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(a[0] - Math.sin(ang) * R, a[1] + Math.cos(ang) * R); ctx.stroke();
+          ctx.beginPath(); ctx.arc(a[0], a[1], R, ang, ang + Math.PI / 2); ctx.stroke();
+        }
+      } else {
+        ctx.strokeStyle = oSel ? '#5a7e8a' : '#7da3ad'; ctx.lineWidth = Math.max(2, WT * Z * 0.5);
+        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+      }
+    });
+    if (isSel) { [[w.ax, w.ay], [w.bx, w.by]].forEach(([px, py]) => { const [sx, sy] = W2S(px, py); ctx.fillStyle = '#5a7e8a'; ctx.beginPath(); ctx.arc(sx, sy, 5, 0, 7); ctx.fill(); }); }
+    if (isSel || tool === 'wall') { // length tag
+      const m = W2S(w.ax + ux * len / 2, w.ay + uy * len / 2);
+      ctx.fillStyle = 'rgba(90,126,138,0.95)'; ctx.font = '300 9px Oswald'; ctx.fillText(len.toFixed(2) + ' m', m[0] + 5, m[1] - 5);
+    }
+  });
+  // wall chain preview
+  if (chain) {
+    const p = snapPoint(mouse.x, mouse.y, true);
+    const a = W2S(chain.x, chain.y), b = W2S(p.x, p.y);
+    ctx.strokeStyle = '#5a7e8a'; ctx.lineWidth = Math.max(3, WT * Z); ctx.globalAlpha = 0.55;
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.globalAlpha = 1;
+    ctx.fillStyle = '#40606c'; ctx.font = '600 10px Oswald';
+    ctx.fillText(dist(chain.x, chain.y, p.x, p.y).toFixed(2) + ' m', b[0] + 8, b[1] - 8);
+  }
+  // rect preview (room / stairs)
+  if (dragRect) {
+    const [x, y] = W2S(Math.min(dragRect.x0, dragRect.x1), Math.min(dragRect.y0, dragRect.y1));
+    const w = Math.abs(dragRect.x1 - dragRect.x0) * Z, d = Math.abs(dragRect.y1 - dragRect.y0) * Z;
+    ctx.strokeStyle = '#5a7e8a'; ctx.setLineDash([5, 4]); ctx.lineWidth = 1.5; ctx.strokeRect(x, y, w, d); ctx.setLineDash([]);
+    ctx.fillStyle = '#40606c'; ctx.font = '600 10px Oswald';
+    ctx.fillText(Math.abs(dragRect.x1 - dragRect.x0).toFixed(2) + ' × ' + Math.abs(dragRect.y1 - dragRect.y0).toFixed(2) + ' m', x + 6, y - 6);
+  }
+  // calibration
+  calPts.forEach((p, i) => {
+    const [x, y] = W2S(p.x, p.y);
+    ctx.strokeStyle = '#b07c2a'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x - 9, y); ctx.lineTo(x + 9, y); ctx.moveTo(x, y - 9); ctx.lineTo(x, y + 9); ctx.stroke();
+    if (i === 1) { const [x0, y0] = W2S(calPts[0].x, calPts[0].y); ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x, y); ctx.stroke(); ctx.setLineDash([]); }
+  });
+  if (tool === 'calibrate' && calPts.length === 1) {
+    const [x, y] = W2S(mouse.x, mouse.y), [x0, y0] = W2S(calPts[0].x, calPts[0].y);
+    ctx.strokeStyle = '#b07c2a'; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x, y); ctx.stroke(); ctx.setLineDash([]);
+  }
+  // origin
+  const [ox, oy] = W2S(0, 0);
+  ctx.strokeStyle = 'rgba(176,124,42,0.5)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(ox - 7, oy); ctx.lineTo(ox + 7, oy); ctx.moveTo(ox, oy - 7); ctx.lineTo(ox, oy + 7); ctx.stroke();
+}
+function drawRotRect(r, isSel, body) {
+  const cx = r.x + r.w / 2, cy = r.y + r.d / 2, [sx, sy] = W2S(cx, cy);
+  ctx.save(); ctx.translate(sx, sy); ctx.rotate((r.rot || 0) * Math.PI / 2);
+  body(-r.w * Z / 2, -r.d * Z / 2, r.w * Z, r.d * Z);
+  ctx.restore();
+}
+function snapPoint(wx, wy, angleFromChain) {
+  // endpoint magnet
+  let best = null, bd = 0.22;
+  L().walls.forEach((w) => { [[w.ax, w.ay], [w.bx, w.by]].forEach(([px, py]) => { const d = dist(wx, wy, px, py); if (d < bd) { bd = d; best = { x: px, y: py }; } }); });
+  if (best) return best;
+  if (angleFromChain && chain && !shiftDown) {
+    const dx = wx - chain.x, dy = wy - chain.y, r = Math.hypot(dx, dy);
+    const a = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * (Math.PI / 4);
+    return { x: sn(chain.x + Math.cos(a) * r), y: sn(chain.y + Math.sin(a) * r) };
+  }
+  return { x: sn(wx), y: sn(wy) };
+}
+
+/* ---------- interactions ---------- */
+let shiftDown = false;
+cv.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const [wx, wy] = S2W(e.offsetX, e.offsetY);
+  Z = Math.max(12, Math.min(220, Z * (e.deltaY < 0 ? 1.12 : 0.89)));
+  panX = wx - e.offsetX / Z; panY = wy - e.offsetY / Z;
+  redraw();
+}, { passive: false });
+cv.addEventListener('pointerdown', (e) => {
+  cv.setPointerCapture(e.pointerId);
+  const [wx, wy] = S2W(e.offsetX, e.offsetY);
+  if (e.button === 1 || spaceDown) { panning = { x: e.offsetX, y: e.offsetY, px: panX, py: panY }; return; }
+  if (tool === 'select') {
+    const hit = hitTest(wx, wy);
+    sel = hit;
+    if (hit) {
+      const it = itemOf(hit);
+      if (hit.kind === 'wall') {
+        const nearA = dist(wx, wy, it.ax, it.ay) < 0.18, nearB = dist(wx, wy, it.bx, it.by) < 0.18;
+        grab = { end: nearA ? 'a' : nearB ? 'b' : null, ox: wx, oy: wy, snap: { ...it } };
+      } else if (hit.kind !== 'op') grab = { ox: wx - it.x, oy: wy - it.y };
+    }
+    redraw();
+  } else if (tool === 'calibrate') {
+    if (!L().under) return toast('NO UNDERLAY ON THIS LEVEL');
+    panning = null; grab = { ux: L().under.ox, uy: L().under.oy, x: e.offsetX, y: e.offsetY, moved: false, cal: true };
+  } else if (tool === 'wall') {
+    const p = snapPoint(wx, wy, true);
+    if (!chain) chain = { x: p.x, y: p.y };
+    else {
+      if (dist(chain.x, chain.y, p.x, p.y) > 0.14) { L().walls.push({ ax: chain.x, ay: chain.y, bx: p.x, by: p.y, ops: [] }); chain = { x: p.x, y: p.y }; changed(); }
+    }
+  } else if (tool === 'room' || tool === 'stairs') {
+    dragRect = { x0: sn(wx), y0: sn(wy), x1: sn(wx), y1: sn(wy) };
+  } else if (tool === 'door' || tool === 'win') {
+    placeOpening(wx, wy, tool === 'door' ? 'door' : 'win');
+  } else if (tool === 'furn') {
+    const def = FURN.find((f) => f.id === furnType);
+    L().furn.push({ x: sn(wx - def.w / 2), y: sn(wy - def.d / 2), w: def.w, d: def.d, rot: 0, type: def.id });
+    sel = { kind: 'furn', i: L().furn.length - 1 };
+    changed();
+  }
+});
+cv.addEventListener('pointermove', (e) => {
+  const [wx, wy] = S2W(e.offsetX, e.offsetY);
+  mouse.x = wx; mouse.y = wy;
+  $('#stPos').textContent = wx.toFixed(2) + ', ' + wy.toFixed(2) + ' m · ZOOM ' + Math.round(Z) + ' PX/M · LEVEL ' + (doc.active + 1) + (L().under ? (L().under.cal ? ' · CALIBRATED' : ' · UNCALIBRATED') : '');
+  if (panning) { panX = panning.px - (e.offsetX - panning.x) / Z; panY = panning.py - (e.offsetY - panning.y) / Z; redraw(); return; }
+  if (grab && grab.cal && e.buttons) { // drag moves underlay
+    const u = L().under; if (!u) return;
+    if (Math.hypot(e.offsetX - grab.x, e.offsetY - grab.y) > 6) grab.moved = true;
+    if (grab.moved) { u.ox = grab.ux + (e.offsetX - grab.x) / Z; u.oy = grab.uy + (e.offsetY - grab.y) / Z; redraw(); }
+    return;
+  }
+  if (tool === 'select' && sel && grab && e.buttons) {
+    const it = itemOf(sel);
+    if (sel.kind === 'wall') {
+      if (grab.end) { it[grab.end + 'x'] = sn(wx); it[grab.end + 'y'] = sn(wy); }
+      else { const dx = sn(wx - grab.ox), dy = sn(wy - grab.oy); it.ax = grab.snap.ax + dx; it.ay = grab.snap.ay + dy; it.bx = grab.snap.bx + dx; it.by = grab.snap.by + dy; }
+      changed();
+    } else if (sel.kind !== 'op') { it.x = sn(wx - grab.ox); it.y = sn(wy - grab.oy); changed(); }
+    return;
+  }
+  if (dragRect) { dragRect.x1 = sn(wx); dragRect.y1 = sn(wy); redraw(); return; }
+  if (chain || tool === 'calibrate') redraw();
+});
+cv.addEventListener('pointerup', (e) => {
+  if (panning) { panning = null; return; }
+  if (grab && grab.cal) {
+    if (!grab.moved) { // calibration click
+      const [wx, wy] = S2W(e.offsetX, e.offsetY);
+      calPts.push({ x: wx, y: wy });
+      if (calPts.length === 2) {
+        const dpx = dist(calPts[0].x, calPts[0].y, calPts[1].x, calPts[1].y);
+        const real = parseFloat(prompt('Real distance between the two points, in metres:', '3.0'));
+        const u = L().under;
+        if (real > 0 && dpx > 0.01 && u) {
+          const f = real / dpx;
+          u.s *= f; u.ox = calPts[0].x + (u.ox - calPts[0].x) * f; u.oy = calPts[0].y + (u.oy - calPts[0].y) * f; u.cal = true;
+          toast('CALIBRATED — 1 M ON PLAN NOW MEASURES 1 M HERE');
+          changed(false);
+        }
+        calPts = [];
+      }
+      redraw();
+    } else changed(false);
+    grab = null; return;
+  }
+  grab = null;
+  if (dragRect) {
+    const x = Math.min(dragRect.x0, dragRect.x1), y = Math.min(dragRect.y0, dragRect.y1);
+    const w = Math.abs(dragRect.x1 - dragRect.x0), d = Math.abs(dragRect.y1 - dragRect.y0);
+    if (w > 0.4 && d > 0.4) {
+      if (tool === 'room') {
+        const label = (prompt('Room label:', 'LIVING AREA') || 'ROOM').toUpperCase();
+        L().rooms.push({ x, y, w, d, label });
+        sel = { kind: 'room', i: L().rooms.length - 1 };
+      } else {
+        L().stairs.push({ x, y, w, d, rot: 0 });
+        sel = { kind: 'stairs', i: L().stairs.length - 1 };
+        if (doc.levels.length === 1) toast('STAIRS PLACED — ADD A LEVEL (+ LEVEL) FOR IT TO CLIMB TO');
+      }
+      changed();
+    }
+    dragRect = null; redraw();
+  }
+});
+cv.addEventListener('dblclick', (e) => {
+  const [wx, wy] = S2W(e.offsetX, e.offsetY);
+  if (tool === 'wall') { chain = null; redraw(); return; }
+  const hit = hitTest(wx, wy);
+  if (hit && hit.kind === 'room') {
+    const r = L().rooms[hit.i];
+    r.label = (prompt('Room label:', r.label) || r.label).toUpperCase();
+    changed();
+  }
+});
+function placeOpening(wx, wy, kind) {
+  let best = null, bd = 0.3, bi = -1;
+  L().walls.forEach((w, i) => { const r = ptSeg(wx, wy, w); if (r.d < bd) { bd = r.d; best = r; bi = i; } });
+  if (!best) return toast('CLICK ON A WALL TO PLACE A ' + kind.toUpperCase());
+  const w = L().walls[bi], len = wallLen(w), ow = kind === 'door' ? 0.9 : 1.2;
+  if (len < ow + 0.2) return toast('WALL TOO SHORT FOR THIS ' + kind.toUpperCase());
+  let c = Math.max(ow / 2 + 0.06, Math.min(len - ow / 2 - 0.06, best.t * len));
+  w.ops = w.ops || [];
+  const clash = w.ops.some((o) => Math.abs(o.t * len - c) < (o.w + ow) / 2 + 0.05);
+  if (clash) return toast('OVERLAPS AN EXISTING OPENING');
+  w.ops.push({ k: kind, t: c / len, w: ow });
+  sel = { kind: 'op', i: bi, oi: w.ops.length - 1 };
+  changed();
+}
+function hitTest(wx, wy) {
+  const lv = L();
+  const rr = (arr, kind) => { for (let i = arr.length - 1; i >= 0; i--) { const f = arr[i], cx = f.x + f.w / 2, cy = f.y + f.d / 2, a = -(f.rot || 0) * Math.PI / 2; const px = cx + (wx - cx) * Math.cos(a) - (wy - cy) * Math.sin(a), py = cy + (wx - cx) * Math.sin(a) + (wy - cy) * Math.cos(a); if (px >= f.x && px <= f.x + f.w && py >= f.y && py <= f.y + f.d) return { kind, i }; } return null; };
+  let h = rr(lv.furn, 'furn'); if (h) return h;
+  h = rr(lv.stairs, 'stairs'); if (h) return h;
+  for (let i = 0; i < lv.walls.length; i++) { // openings before walls
+    const w = lv.walls[i], { len, ops } = opSegs(w), ux = (w.bx - w.ax) / (len || 1), uy = (w.by - w.ay) / (len || 1);
+    for (let oi = 0; oi < ops.length; oi++) { const o = ops[oi]; if (dist(wx, wy, w.ax + ux * o.c, w.ay + uy * o.c) < Math.max(0.25, o.w / 2)) return { kind: 'op', i, oi }; }
+  }
+  for (let i = lv.walls.length - 1; i >= 0; i--) if (ptSeg(wx, wy, lv.walls[i]).d < 0.16) return { kind: 'wall', i };
+  for (let i = lv.rooms.length - 1; i >= 0; i--) { const r = lv.rooms[i]; if (wx >= r.x && wx <= r.x + r.w && wy >= r.y && wy <= r.y + r.d) return { kind: 'room', i }; }
+  return null;
+}
+function itemOf(s) { const lv = L(); return s.kind === 'wall' ? lv.walls[s.i] : s.kind === 'room' ? lv.rooms[s.i] : s.kind === 'stairs' ? lv.stairs[s.i] : s.kind === 'furn' ? lv.furn[s.i] : null; }
+window.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'Shift') shiftDown = true;
+  if (e.key === ' ') { spaceDown = true; cv.classList.add('grab'); e.preventDefault(); }
+  const k = e.key.toLowerCase();
+  const adv = document.body.classList.contains('adv');
+  const map = { v: 'select', c: 'calibrate', w: 'wall', r: null, d: 'door', n: 'win', s: 'stairs', f: 'furn' };
+  if (k === 'r') {
+    if (tool === 'select' && sel && (sel.kind === 'furn' || sel.kind === 'stairs')) { const it = itemOf(sel); it.rot = ((it.rot || 0) + 1) % 4; changed(); return; }
+    if (adv) setTool('room'); return;
+  }
+  if (adv && map[k] && !e.metaKey && !e.ctrlKey) setTool(map[k]);
+  if (e.key === 'Escape') { chain = null; dragRect = null; calPts = []; sel = null; redraw(); }
+  if ((e.key === 'Delete' || e.key === 'Backspace') && sel) {
+    const lv = L();
+    if (sel.kind === 'wall') lv.walls.splice(sel.i, 1);
+    else if (sel.kind === 'room') lv.rooms.splice(sel.i, 1);
+    else if (sel.kind === 'stairs') lv.stairs.splice(sel.i, 1);
+    else if (sel.kind === 'furn') lv.furn.splice(sel.i, 1);
+    else if (sel.kind === 'op') lv.walls[sel.i].ops.splice(sel.oi, 1);
+    sel = null; changed(); e.preventDefault();
+  }
+});
+window.addEventListener('keyup', (e) => { if (e.key === 'Shift') shiftDown = false; if (e.key === ' ') { spaceDown = false; cv.classList.remove('grab'); } });
+
+/* ---------- 3D ---------- */
+const stage = $('#stage');
+let THREE = null, built = false;
+const { THREE: T } = await stage.ready; THREE = T;
+const M3 = (c, o) => new THREE.MeshStandardMaterial({ name: 'm' + c.toString(16), color: c, roughness: 0.92, ...o });
+const mats = { bronze: M3(0xb07c2a), wall: M3(0xf4f1ea), floor: M3(0xe7e2d6), slab: M3(0xe9e5da), wood: M3(0xb98d5f), dark: M3(0x3a4043), glass: new THREE.MeshStandardMaterial({ name: 'glass', color: 0x9fc3cf, transparent: true, opacity: 0.35, roughness: 0.25 }), paper: M3(0xfdfcf9) };
+function sprite3(g, text, x, y, z, big) {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 128;
+  const q = c.getContext('2d'); q.font = '600 ' + (big ? 52 : 40) + 'px Oswald, Arial'; q.textAlign = 'center';
+  q.fillStyle = big ? 'rgba(90,126,138,0.98)' : 'rgba(26,32,35,0.85)'; q.fillText(text, 256, 82);
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), transparent: true }));
+  sp.scale.set(big ? 1.9 : 1.6, big ? 0.48 : 0.4, 1); sp.position.set(x, y, z); g.add(sp);
+}
+function box3(g, w, h, d, mat, x, y, z, name, rotY) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+  m.name = name; m.position.set(x, y + h / 2, z); if (rotY) m.rotation.y = rotY;
+  g.add(m); return m;
+}
+function build3D() {
+  const g = new THREE.Group(); g.name = 'hnm_draft'; let any = false;
+  doc.levels.forEach((lv, li) => {
+    const lg = new THREE.Group(); lg.name = 'level_' + (li + 1); lg.position.y = li * LH; g.add(lg);
+    let xs = [], ys = [];
+    lv.walls.forEach((w) => { xs.push(w.ax, w.bx); ys.push(w.ay, w.by); });
+    lv.rooms.forEach((r) => { xs.push(r.x, r.x + r.w); ys.push(r.y, r.y + r.d); });
+    const hasGeo = xs.length > 0;
+    if (hasGeo) any = true;
+    lv.rooms.forEach((r, ri) => {
+      box3(lg, r.w - 0.02, 0.05, r.d - 0.02, mats.floor, r.x + r.w / 2, 0, r.y + r.d / 2, 'floor_' + r.label.replace(/\W+/g, '_') + '_' + ri);
+      sprite3(lg, r.label, r.x + r.w / 2, Math.max(0.75, WH * 0.55), r.y + r.d / 2);
+    });
+    if (hasGeo && li > 0) {
+      const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+      box3(lg, x1 - x0 + 0.25, 0.1, y1 - y0 + 0.25, mats.slab, (x0 + x1) / 2, -0.12, (y0 + y1) / 2, 'slab_L' + (li + 1));
+    }
+    lv.walls.forEach((w, wi) => {
+      const { len, ops, segs } = opSegs(w);
+      if (len < 0.05) return;
+      const ux = (w.bx - w.ax) / len, uy = (w.by - w.ay) / len, rotY = -Math.atan2(uy, ux);
+      const put = (s, e, y0, h, mat, nm) => { if (e - s < 0.015 || h < 0.015) return; const mid = (s + e) / 2; box3(lg, e - s, h, WT, mat, w.ax + ux * mid, y0, w.ay + uy * mid, nm + '_w' + wi + '_L' + (li + 1), rotY); };
+      segs.forEach(([s, e], si2) => put(s, e, 0, WH, mats.wall, 'wall' + si2));
+      ops.forEach((o, oi) => {
+        if (o.k === 'door') {
+          put(o.s, o.e, 2.05, WH - 2.05, mats.wall, 'lintel' + oi);
+          const leafW = (o.e - o.s) * 0.94;
+          const m = new THREE.Mesh(new THREE.BoxGeometry(leafW, 2.0, 0.04), mats.wood);
+          m.name = 'door' + oi + '_w' + wi;
+          const hx = w.ax + ux * o.s, hy = w.ay + uy * o.s;
+          m.position.set(leafW / 2, 1.0, 0); // hinge pivot at segment start, leaf 35° open
+          const piv = new THREE.Group(); piv.position.set(hx, 0, hy); piv.rotation.y = rotY + 0.6; piv.add(m); lg.add(piv);
+          if (o.entry && li === 0) { // main entrance: bronze threshold + tag, matching the 2D trace
+            const mid = (o.s + o.e) / 2, ou = o.out || 1, nx = uy * ou, ny = -ux * ou;
+            const bx = w.ax + ux * mid, by = w.ay + uy * mid;
+            box3(lg, o.e - o.s + 0.12, 0.04, 0.5, mats.bronze, bx + nx * 0.3, 0.002, by + ny * 0.3, 'threshold_w' + wi, rotY);
+            sprite3(lg, 'ENTRANCE', bx + nx * 0.85, 0.5, by + ny * 0.85);
+          }
+        } else {
+          put(o.s, o.e, 0, 0.85, mats.wall, 'sill' + oi);
+          put(o.s, o.e, 0.85, 1.35, mats.glass, 'glazing' + oi);
+          put(o.s, o.e, 2.2, WH - 2.2, mats.wall, 'header' + oi);
+        }
+      });
+    });
+    lv.stairs.forEach((s, si2) => {
+      const n = 10, sg = new THREE.Group();
+      sg.position.set(s.x + s.w / 2, 0, s.y + s.d / 2); sg.rotation.y = -(s.rot || 0) * Math.PI / 2; lg.add(sg);
+      const run = s.d - 0.1, tread = run / n;
+      for (let k = 0; k < n; k++) {
+        const m = new THREE.Mesh(new THREE.BoxGeometry(Math.min(s.w - 0.08, 1.2), 0.07, tread), mats.wood);
+        m.name = 'stair_' + si2 + '_t' + k + '_L' + (li + 1);
+        m.position.set(0, ((k + 1) / n) * (LH - 0.15), run / 2 - tread / 2 - k * tread); sg.add(m);
+      }
+    });
+    lv.furn.forEach((f, fi) => {
+      const def = FURN.find((z) => z.id === f.type);
+      box3(lg, f.w - 0.03, def.h, f.d - 0.03, def.id === 'shower' ? mats.glass : def.id === 'counter' ? mats.dark : M3(def.c), f.x + f.w / 2, 0.01, f.y + f.d / 2, def.id + '_' + fi + '_L' + (li + 1), -(f.rot || 0) * Math.PI / 2 || 0);
+    });
+    if (hasGeo && doc.levels.length > 1) {
+      const x0 = Math.min(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+      sprite3(lg, 'LEVEL ' + (li + 1), x0 - 1.0, Math.max(0.6, WH * 0.4), y1 + 0.7, true);
+    }
+  });
+  if (!any) { // empty scene placeholder pad
+    box3(g, 6, 0.06, 4.5, mats.paper, 3, 0, 2.25, 'empty_pad');
+    sprite3(g, 'DRAW WALLS OR ROOMS TO BUILD', 3, 1.0, 2.25);
+  }
+  const cam = stage._camera, ctl = stage._controls;
+  const keep = built && cam && ctl ? { p: cam.position.clone(), t: ctl.target.clone() } : null;
+  stage.setObject(g);
+  if (keep) { cam.position.copy(keep.p); ctl.target.copy(keep.t); ctl.update(); }
+  built = true;
+}
+$('#bFrame').onclick = () => { built = false; build3D(); };
+
+/* ---------- stats / export / jobs ---------- */
+function drawStats() {
+  const t = { walls: 0, rooms: 0, doors: 0, wins: 0, furn: 0, area: 0 };
+  doc.levels.forEach((lv) => {
+    t.walls += lv.walls.length; t.rooms += lv.rooms.length; t.furn += lv.furn.length;
+    lv.walls.forEach((w) => (w.ops || []).forEach((o) => { if (o.k === 'door') t.doors++; else t.wins++; }));
+    lv.rooms.forEach((r) => { if (!r.noArea) t.area += r.w * r.d; }); // internal floor area only — matches PLAN CHECKS
+  });
+  const c0 = doc.levels[doc.active] && doc.levels[doc.active].checks;
+  const fp = c0 ? c0.W.toFixed(1) + ' × ' + c0.D.toFixed(1) : '—';
+  $('#stats').innerHTML = [
+    [doc.levels.length, 'LEVELS'], [t.rooms, 'ROOMS'], [t.area.toFixed(1) + ' m²', 'INTERNAL AREA'],
+    [fp + ' m', 'L' + (doc.active + 1) + ' FOOTPRINT'], [t.doors + ' / ' + t.wins, 'DOORS / WINDOWS'], [t.walls, 'WALL RUNS'],
+  ].map(([v, l]) => '<div class="stat"><div class="v">' + v + '</div><div class="l">' + l + '</div></div>').join('');
+  drawChecks();
+}
+$('#bJson').onclick = () => {
+  const out = { ...doc, exportedAt: new Date().toISOString(), note: 'hnm-studio/1 draft — dimensions require site verification' };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' }));
+  a.download = 'hnm-draft.json'; a.click(); URL.revokeObjectURL(a.href);
+};
+let jobs = [];
+try { jobs = JSON.parse(localStorage.getItem('hnm_render_jobs') || '[]'); } catch (e) {}
+function drawJobs() {
+  $('#jobs').innerHTML = jobs.length
+    ? jobs.map((j) => '<div class="job"><span>' + j.id + ' · ' + j.label + '</span><span class="st">' + j.status + '</span></div>').join('')
+    : '<p class="note" style="margin:0;">No render jobs queued.</p>';
+}
+$('#bQueue').onclick = () => {
+  jobs.unshift({ id: 'HNM-R-' + String(jobs.length + 1).padStart(3, '0'), label: 'Draft · ' + doc.levels.length + ' level' + (doc.levels.length > 1 ? 's' : ''), status: 'QUEUED — AWAITING DGX NODE', at: Date.now() });
+  try { localStorage.setItem('hnm_render_jobs', JSON.stringify(jobs.slice(0, 20))); } catch (e) {}
+  drawJobs(); toast('RENDER JOB QUEUED — DEMO ONLY, NO BACKEND CONNECTED');
+};
+
+/* ---------- auto-draft: template library + rect→walls converter ---------- */
+const TPL = [
+  { id: 'hdb3', j: 'hdb3', prop: 'hdb', traced: 1, label: 'HDB 3-ROOM · 65 m²', levels: [[
+    ['master', 0, 0, 3.15, 4.0, { lbl: 'MAIN BEDROOM' }], ['common', 3.15, 0, 2.95, 2.9, { lbl: 'BEDROOM 2' }],
+    ['corr', 3.15, 2.9, 2.95, 1.1, { p: 1, lbl: 'HALL' }], ['living', 6.1, 0, 3.3, 6.05, {}],
+    ['bath_m', 0, 4.0, 2.2, 2.05, { lbl: 'BATH / WC 1' }], ['bath_c', 2.2, 4.0, 1.95, 2.05, { lbl: 'BATH / WC 2' }],
+    ['corr2', 4.15, 4.0, 1.95, 2.05, { p: 1, lbl: 'DINING' }], ['ac', 0, 6.05, 1.55, 0.95, { x: 1, lbl: 'AC LEDGE' }],
+    ['yard', 1.55, 6.05, 1.2, 2.8, { x: 1, lbl: 'SERVICE YARD' }], ['kitchen', 2.75, 6.05, 2.8, 2.8, {}],
+    ['foyer', 5.55, 6.05, 1.6, 2.8, { p: 1, lbl: 'ENTRY', entry: 'N' }], ['hs', 7.15, 6.05, 1.5, 1.6, { x: 1, lbl: 'SHELTER' }]]] },
+  { id: 'hdb4', j: 'hdb4', prop: 'hdb', traced: 1, label: 'HDB 4-ROOM · 93 m²', levels: [[
+    ['common', 0, 0, 2.85, 4.1, { lbl: 'BEDROOM 2' }], ['master', 2.85, 0, 3.3, 4.1, { lbl: 'MAIN BEDROOM' }],
+    ['ac', 6.15, 0, 1.7, 1.5, { x: 1, lbl: 'AC LEDGE' }], ['bath_m', 6.15, 1.5, 1.7, 2.6, { lbl: 'BATH / WC 1' }],
+    ['yard', 7.85, 0, 1.6, 1.5, { x: 1, lbl: 'SERVICE YARD' }], ['bath_c', 7.85, 1.5, 1.6, 2.6, { lbl: 'BATH / WC 2' }],
+    ['kitchen', 9.45, 0, 2.25, 6.0, {}], ['corr', 0, 4.1, 2.85, 0.8, { p: 1, lbl: 'HALL' }],
+    ['common2', 0, 4.9, 2.85, 3.6, { lbl: 'BEDROOM 3' }], ['living', 2.85, 4.1, 6.6, 4.4, {}],
+    ['store', 9.45, 6.0, 2.25, 2.5, { x: 1, lbl: 'STORE / PANTRY' }], ['foyer', 7.5, 8.5, 1.95, 1.2, { p: 1, lbl: 'ENTRY', entry: 'N' }]]] },
+  { id: 'hdbEA', j: 'hdbEA', prop: 'hdb', traced: 1, label: 'EXEC APARTMENT · 146 m²', levels: [[
+    ['study', 0, 0, 4.3, 3.0, { lbl: 'STUDY / BEDROOM' }], ['common2', 0, 3.0, 4.3, 3.3, { lbl: 'BEDROOM 3' }],
+    ['master', 0, 6.3, 5.5, 3.5, { lbl: 'MAIN BEDROOM' }], ['bath_m', 5.5, 6.3, 1.5, 3.5, { lbl: 'BATH / WC 1' }],
+    ['common', 7.0, 6.3, 3.0, 3.5, { lbl: 'BEDROOM 2' }], ['kitchen', 10.0, 6.3, 2.6, 3.5, {}],
+    ['bath_c', 12.6, 7.0, 1.6, 2.8, { lbl: 'BATH / WC 2' }], ['store', 12.6, 4.6, 1.6, 2.4, { x: 1, lbl: 'STORE' }],
+    ['ac', 14.2, 6.3, 1.9, 3.5, { x: 1, lbl: 'AC LEDGE' }], ['corr', 4.3, 4.6, 8.3, 1.7, { p: 1, lbl: 'HALLWAY' }],
+    ['living', 4.3, 0, 11.8, 4.6, {}], ['foyer', 14.2, 4.6, 1.9, 1.7, { p: 1, lbl: 'ENTRY', entry: 'E' }]]] },
+  { id: 'd4', j: 'd4', prop: 'condo', traced: 1, label: 'CONDO TYPE D4 · 4-BEDROOM', levels: [[
+    ['dining', 0.8, 0, 5.2, 2.4, { lbl: 'DINING' }], ['kitchen', 0.8, 2.4, 2.1, 2.5, {}], ['living', 2.9, 2.4, 3.1, 4.7, {}],
+    ['foyer', 0.8, 4.9, 2.1, 2.2, { p: 1, lbl: 'FOYER', entry: 'W' }], ['hs', 0.8, 7.1, 2.1, 1.6, { x: 1, lbl: 'SHELTER' }],
+    ['yard', 2.9, 7.1, 1.6, 1.6, { x: 1, lbl: 'SERVICE YARD & WC' }], ['ac', 4.5, 7.1, 1.5, 1.6, { x: 1, lbl: 'AC LEDGE' }],
+    ['common2', 6.0, 0, 2.6, 4.4, { lbl: 'BEDROOM 3' }], ['common', 8.6, 0, 2.55, 4.4, { lbl: 'BEDROOM 2' }],
+    ['master', 11.15, 0, 2.7, 5.6, { lbl: 'MASTER BEDROOM' }], ['corr', 6.0, 4.4, 5.15, 1.2, { p: 1, lbl: 'HALL' }],
+    ['bath_c', 6.0, 5.6, 1.5, 3.1, { lbl: 'BATH 2' }], ['study', 7.5, 5.6, 3.2, 3.1, { lbl: 'BEDROOM 4 / STUDY' }],
+    ['bath_m', 10.7, 5.6, 3.15, 3.1, { lbl: 'MASTER BATH' }]]] },
+  { id: 'c2', j: 'c2', prop: 'condo', label: 'CONDO 2-BEDROOM · 70 m²', levels: [[
+    ['balcony', 0, 0, 4.6, 1.5, { x: 1, lbl: 'BALCONY' }], ['living', 0, 1.5, 4.6, 4.3, {}],
+    ['kitchen', 0, 5.8, 2.7, 2.8, {}], ['hs', 2.7, 5.8, 1.9, 1.6, { x: 1, lbl: 'SHELTER' }],
+    ['foyer', 2.7, 7.4, 1.9, 1.2, { p: 1, lbl: 'FOYER', entry: 'N' }], ['common', 4.6, 0, 2.6, 3.4, { lbl: 'BEDROOM 2' }],
+    ['bath_c', 7.2, 0, 1.8, 3.4, { lbl: 'BATH 2' }], ['corr', 4.6, 3.4, 4.4, 1.6, { p: 1, lbl: 'CORRIDOR' }],
+    ['master', 4.6, 5.0, 2.8, 3.6, { lbl: 'MAIN BEDROOM' }], ['bath_m', 7.4, 5.0, 1.6, 2.4, { lbl: 'ENSUITE' }],
+    ['ac', 7.4, 7.4, 1.6, 1.2, { x: 1, lbl: 'AC LEDGE' }]]] },
+  { id: 'c3', j: 'c3', prop: 'condo', label: 'CONDO 3-BEDROOM · 95 m²', levels: [[
+    ['balcony', 0, 0, 5.0, 1.5, { x: 1, lbl: 'BALCONY' }], ['living', 0, 1.5, 5.0, 4.5, {}],
+    ['kitchen', 0, 6.0, 2.9, 2.8, {}], ['hs', 2.9, 6.0, 2.1, 1.5, { x: 1, lbl: 'SHELTER' }],
+    ['foyer', 2.9, 7.5, 2.1, 1.3, { p: 1, lbl: 'FOYER', entry: 'N' }], ['common', 5.0, 0, 2.9, 3.3, { lbl: 'BEDROOM 2' }],
+    ['common2', 7.9, 0, 2.7, 3.3, { lbl: 'BEDROOM 3' }], ['corr', 5.0, 3.3, 5.6, 1.5, { p: 1, lbl: 'CORRIDOR' }],
+    ['master', 5.0, 4.8, 3.1, 4.0, { lbl: 'MAIN BEDROOM' }], ['bath_m', 8.1, 4.8, 1.4, 2.4, { lbl: 'ENSUITE' }],
+    ['bath_c', 9.5, 4.8, 1.1, 2.4, { lbl: 'BATH 2' }], ['ac', 8.1, 7.2, 2.5, 1.6, { x: 1, lbl: 'AC LEDGE' }]]] },
+  { id: 'l1', j: 'l1', prop: 'landed', label: 'TERRACE · 2-STOREY · 180 m²', levels: [[
+    ['garden', 0, 0, 7.2, 2.0, { p: 1, lbl: 'PORCH & GARDEN' }], ['living', 0, 2.0, 4.6, 4.6, {}],
+    ['kitchen', 4.6, 2.0, 2.6, 4.6, {}], ['family', 0, 6.6, 3.6, 3.6, { lbl: 'FAMILY AREA' }],
+    ['hall', 3.6, 6.6, 1.4, 3.6, { p: 1, rise: 'S', lbl: 'STAIRS' }], ['bath_c', 5.0, 6.6, 2.2, 3.6, { lbl: 'GUEST BATH' }]], [
+    ['balcony', 0, 0, 7.2, 2.0, { x: 1, lbl: 'BALCONY' }], ['master', 0, 2.0, 3.6, 4.6, { lbl: 'MAIN BEDROOM' }],
+    ['landing', 3.6, 2.0, 1.4, 4.6, { p: 1, lbl: 'LANDING' }], ['common2', 5.0, 2.0, 2.2, 3.2, { lbl: 'BEDROOM 3' }],
+    ['bath_m', 5.0, 5.2, 2.2, 1.4, { lbl: 'BATH 2' }], ['common', 0, 6.6, 3.6, 3.6, { lbl: 'BEDROOM 2' }],
+    ['hall', 3.6, 6.6, 1.4, 3.6, { p: 1, lbl: 'STAIRS & HALL' }], ['study', 5.0, 6.6, 2.2, 3.6, { lbl: 'STUDY' }]]] },
+];
+// areas shown anywhere in the UI are derived from the traced geometry — never a hand-typed number
+TPL.forEach((t) => {
+  const a = t.levels.reduce((s, lv) => s + lv.filter((r) => !['garden', 'balcony', 'terrace'].includes(r[0]) && !r[0].startsWith('ac')).reduce((q, r) => q + r[3] * r[4], 0), 0);
+  t.area = Math.round(a);
+  t.label = t.label.replace(/ · \d+ m²$/, '') + ' · ' + t.area + ' m²';
+});
+function convertLevel(rects) {
+  const lv = mkLevel();
+  const items = rects.map(([key, x, y, w, d, o]) => ({ key, x, y, w, d, o: o || {} }));
+  const base = (k) => k.replace(/[_\d].*$/, '');
+  const isOut = (it) => ['garden', 'balcony', 'terrace'].includes(it.key);
+  const isPass = (it) => !!it.o.p && !isOut(it);
+  const isBath = (it) => base(it.key) === 'bath';
+  const isSvc = (it) => ['hs', 'store', 'yard', 'wic'].includes(base(it.key));
+  const isLedge = (it) => base(it.key) === 'ac';
+  const isSocial = (it) => ['living', 'family', 'dining'].includes(base(it.key));
+  const isSleep = (it) => ['master', 'common', 'study'].includes(base(it.key));
+  const winRoom = (it) => isSocial(it) || isSleep(it) || base(it.key) === 'kitchen';
+  const label = (it) => it.o.lbl || it.key.toUpperCase();
+  // single-access spaces: shelter/store/yard/WIC and baths. Bedrooms take a corridor door + an ensuite; ledges sealed.
+  const cap = (it) => isLedge(it) ? 0 : (isSvc(it) || isBath(it)) ? 1 : isSleep(it) ? 2 : base(it.key) === 'kitchen' ? 3 : 99;
+  items.forEach((it) => {
+    it.doors = 0; it.links = [];
+    lv.rooms.push({ x: it.x, y: it.y, w: it.w, d: it.d, label: label(it), noArea: isOut(it) || isLedge(it) });
+    if (it.o.rise) { const sw = Math.min(1.15, it.w - 0.25), sd = Math.max(1.6, it.d - 0.7); lv.stairs.push({ x: it.x + (it.w - sw) / 2, y: it.y + (it.d - sd) / 2, w: sw, d: sd, rot: it.o.rise === 'S' ? 2 : 0 }); }
+  });
+  /* ---- shared edges + external spans ---- */
+  const EPS = 0.06, edges = [];
+  for (let i = 0; i < items.length; i++) for (let j = i + 1; j < items.length; j++) {
+    const A = items[i], B = items[j];
+    const tryEdge = (horiz, c) => {
+      const a = Math.max(horiz ? A.x : A.y, horiz ? B.x : B.y), b = Math.min(horiz ? A.x + A.w : A.y + A.d, horiz ? B.x + B.w : B.y + B.d);
+      if (b - a > 0.12) edges.push({ i, j, A, B, horiz, c, a, b, len: b - a, kind: 'wall', op: null });
+    };
+    if (Math.abs(A.y + A.d - B.y) < EPS) tryEdge(true, B.y);
+    else if (Math.abs(B.y + B.d - A.y) < EPS) tryEdge(true, A.y);
+    if (Math.abs(A.x + A.w - B.x) < EPS) tryEdge(false, B.x);
+    else if (Math.abs(B.x + B.w - A.x) < EPS) tryEdge(false, A.x);
+  }
+  const ext = [];
+  items.forEach((it, i) => {
+    if (isOut(it)) return;
+    [['S', it.y, it.x, it.x + it.w, true], ['N', it.y + it.d, it.x, it.x + it.w, true], ['W', it.x, it.y, it.y + it.d, false], ['E', it.x + it.w, it.y, it.y + it.d, false]].forEach(([side, c, lo, hi, horiz]) => {
+      const taken = edges.filter((e) => (e.i === i || e.j === i) && e.horiz === horiz && Math.abs(e.c - c) < EPS).map((e) => [e.a, e.b]).sort((p, q) => p[0] - q[0]);
+      let cur = lo;
+      taken.forEach(([a, b]) => { if (a > cur + 0.1) ext.push({ it, i, side, horiz, c, a: cur, b: a, kind: 'wall', op: null }); cur = Math.max(cur, b); });
+      if (hi - cur > 0.1) ext.push({ it, i, side, horiz, c, a: cur, b: hi, kind: 'wall', op: null });
+    });
+  });
+  /* ---- rule engine: open links, then prioritised doors under access caps ---- */
+  const link = (e) => { e.A.links.push(e.B); e.B.links.push(e.A); };
+  const openEdge = (e) => { e.kind = 'open'; link(e); };
+  const setDoor = (e, w) => { e.kind = 'door'; e.op = { k: 'door', w }; e.A.doors++; e.B.doors++; link(e); };
+  const cand = [];
+  edges.forEach((e) => {
+    const A = e.A, B = e.B, oA = isOut(A), oB = isOut(B);
+    if (oA && oB) { e.kind = 'skip'; return; }
+    if (oA || oB) { // outdoor boundary belongs to the indoor neighbour
+      const out = oA ? A : B, room = oA ? B : A;
+      if (isLedge(room) || isSvc(room)) { e.kind = 'wall'; return; }
+      if (out.key === 'garden' && (isSocial(room) || isPass(room)) && e.len >= 1.0) { const so = e.horiz ? (out.y + out.d / 2 < e.c ? 1 : -1) : (out.x + out.w / 2 < e.c ? -1 : 1); e.kind = 'door'; e.op = { k: 'door', w: 0.95, entry: 1, out: so, tag: -so }; e.entryish = true; link(e); return; }
+      if ((isSocial(room) || base(room.key) === 'master') && e.len >= 1.4) { e.kind = 'door'; e.op = { k: 'door', w: Math.min(1.8, e.len - 0.4) }; link(e); return; } // sliding door to balcony
+      if (winRoom(room) && e.len >= 1.0) { e.kind = 'win'; e.op = { k: 'win', w: Math.min(1.6, e.len - 0.3) }; return; }
+      e.kind = 'wall'; return;
+    }
+    if (isLedge(A) || isLedge(B)) { e.kind = 'wall'; return; } // AC ledge stays sealed
+    if (isPass(A) && isPass(B)) return openEdge(e);
+    if ((isPass(A) && isSocial(B)) || (isPass(B) && isSocial(A)) || (isSocial(A) && isSocial(B))) return openEdge(e);
+    if (e.len < 0.85) { e.kind = 'wall'; return; } // too narrow for a door
+    const pri = (() => {
+      const bath = isBath(A) ? A : isBath(B) ? B : null, other = bath ? (bath === A ? B : A) : null;
+      if (bath) {
+        if (isSvc(other) || isBath(other)) return 0;
+        if (base(other.key) === 'master' && bath.key.endsWith('_m')) return 100; // master ensuite
+        if (isPass(other)) return bath.key.endsWith('_m') ? 40 : 90;
+        if (isSleep(other)) return 70;
+        if (isSocial(other)) return 66;
+        return 30;
+      }
+      const svc = isSvc(A) ? A : isSvc(B) ? B : null, host = svc ? (svc === A ? B : A) : null;
+      if (svc) {
+        if (isSvc(host)) return 0;
+        if (isPass(host) || base(host.key) === 'foyer') return 80;
+        if (base(host.key) === 'kitchen') return 55;
+        if (isSocial(host)) return 50;
+        return 0;
+      }
+      if ((isSleep(A) && isPass(B)) || (isSleep(B) && isPass(A))) return 85;
+      if (isSleep(A) !== isSleep(B) && (isSocial(A) || isSocial(B))) { // bedroom off the living/dining zone only when no corridor serves it
+        const bed = isSleep(A) ? A : B;
+        const hasPass = edges.some((x) => (x.A === bed || x.B === bed) && isPass(x.A === bed ? x.B : x.A) && x.len >= 0.85);
+        return hasPass ? 0 : 65;
+      }
+      if ((base(A.key) === 'kitchen' && isPass(B)) || (base(B.key) === 'kitchen' && isPass(A))) return 75;
+      if ((base(A.key) === 'kitchen' && isSocial(B)) || (base(B.key) === 'kitchen' && isSocial(A))) return 60;
+      return 0;
+    })();
+    if (pri > 0) cand.push({ e, pri });
+  });
+  cand.sort((p, q) => q.pri - p.pri || q.e.len - p.e.len);
+  cand.forEach(({ e }) => {
+    if (e.kind !== 'wall') return;
+    if (e.A.doors >= cap(e.A) || e.B.doors >= cap(e.B)) return;
+    setDoor(e, Math.min(isBath(e.A) || isBath(e.B) ? 0.8 : 0.9, e.b - e.a - 0.28));
+  });
+  /* ---- exactly one entry: external door, unless the plan enters from a garden ---- */
+  let entryRoom = edges.find((e) => e.entryish) ? (isOut(edges.find((e) => e.entryish).A) ? edges.find((e) => e.entryish).B : edges.find((e) => e.entryish).A) : null;
+  if (!entryRoom) {
+    const foyer = items.find((it) => base(it.key) === 'foyer');
+    const near = (it) => !foyer ? 0 : it === foyer ? 2 : foyer.links.includes(it) ? 1 : 0;
+    const score = (s) => {
+      const it = s.it;
+      if (it.o.entry && s.side !== it.o.entry) return 0; // traced plans name their front wall
+      const b = it.o.entry ? 120 : base(it.key) === 'foyer' ? 100 : isPass(it) ? 88 : isSocial(it) ? 80 : base(it.key) === 'kitchen' ? 55 : 0;
+      return b ? b + near(it) * 4 : 0;
+    };
+    const pick = ext.filter((s) => s.b - s.a >= 0.95 && score(s) > 0).sort((p, q) => score(q) - score(p) || (q.b - q.a) - (p.b - p.a))[0];
+    if (pick) { pick.kind = 'door'; pick.op = { k: 'door', w: Math.min(0.95, pick.b - pick.a - 0.16), entry: 1, out: pick.side === 'S' ? 1 : pick.side === 'N' ? -1 : pick.side === 'W' ? -1 : 1 }; pick.entry = true; entryRoom = pick.it; }
+  }
+  /* ---- windows on remaining external walls ---- */
+  ext.forEach((s) => {
+    if (s.kind !== 'wall') return;
+    const w = s.b - s.a;
+    if (winRoom(s.it) && w > 1.5) { s.kind = 'win'; s.op = { k: 'win', w: Math.min(1.6, w - 0.6) }; }
+    else if (isBath(s.it) && w > 1.1) { s.kind = 'win'; s.op = { k: 'win', w: Math.min(0.7, w - 0.5) }; }
+  });
+  /* ---- guarantee: every indoor space reachable from the entry ---- */
+  const walk = (from) => { const seen = new Set([from]); const q = [from]; while (q.length) { const c = q.shift(); c.links.forEach((n) => { if (!seen.has(n)) { seen.add(n); q.push(n); } }); } return seen; };
+  const needs = (it) => !isOut(it) && !isLedge(it);
+  if (entryRoom) {
+    for (let pass = 0; pass < 4; pass++) {
+      const seen = walk(entryRoom);
+      const orphan = items.filter((it) => needs(it) && !seen.has(it));
+      if (!orphan.length) break;
+      let fixed = false;
+      orphan.forEach((it) => {
+        const opts = edges.filter((e) => (e.A === it || e.B === it) && e.kind === 'wall' && e.len >= 0.85 && seen.has(e.A === it ? e.B : e.A) && !isOut(e.A === it ? e.B : e.A) && !isLedge(e.A === it ? e.B : e.A)).sort((p, q) => q.len - p.len);
+        if (!opts.length) return;
+        const e = opts[0], other = e.A === it ? e.B : e.A;
+        if (it.doors >= cap(it)) { // single-access space: move its one door to the side that is actually reachable
+          const old = edges.find((x) => x.kind === 'door' && (x.A === it || x.B === it) && !seen.has(x.A === it ? x.B : x.A));
+          if (!old) return;
+          old.kind = 'wall'; old.op = null; old.A.doors--; old.B.doors--;
+          old.A.links = old.A.links.filter((z) => z !== old.B); old.B.links = old.B.links.filter((z) => z !== old.A);
+        }
+        if (cap(other) === 0) return;
+        setDoor(e, Math.min(isBath(it) ? 0.8 : 0.9, e.b - e.a - 0.28)); fixed = true;
+      });
+      if (!fixed) break;
+    }
+  }
+  /* ---- guarantee: the master bedroom has toilet access ---- */
+  const master = items.find((it) => base(it.key) === 'master');
+  let masterBath = null;
+  if (master) {
+    masterBath = master.links.find((n) => isBath(n)) || null;
+    if (!masterBath) {
+      const e = edges.filter((x) => (x.A === master || x.B === master) && isBath(x.A === master ? x.B : x.A) && x.len >= 0.85).sort((p, q) => q.len - p.len)[0];
+      if (e) {
+        const bath = e.A === master ? e.B : e.A;
+        if (bath.doors >= cap(bath)) { const old = edges.find((x) => x.kind === 'door' && (x.A === bath || x.B === bath)); if (old) { old.kind = 'wall'; old.op = null; old.A.doors--; old.B.doors--; old.A.links = old.A.links.filter((z) => z !== old.B); old.B.links = old.B.links.filter((z) => z !== old.A); } }
+        setDoor(e, 0.8); masterBath = bath;
+      } else { // no adjacent bath — accept a bath reachable through the corridor
+        const seen = walk(master);
+        masterBath = items.find((it) => isBath(it) && seen.has(it)) || null;
+      }
+    }
+  }
+  /* ---- emit ---- */
+  const put = (horiz, c, a, b, op) => {
+    const wall = horiz ? { ax: a, ay: c, bx: b, by: c, ops: [] } : { ax: c, ay: a, bx: c, by: b, ops: [] };
+    if (op) { const w = Math.min(op.w, b - a - 0.24); if (w > 0.55) { const o2 = { k: op.k, t: 0.5, w }; if (op.entry) { o2.entry = 1; o2.out = op.out || 1; if (op.tag) o2.tag = op.tag; } wall.ops.push(o2); } }
+    lv.walls.push(wall);
+  };
+  edges.forEach((e) => { if (e.kind === 'open' || e.kind === 'skip') return; put(e.horiz, e.c, e.a, e.b, e.op); });
+  ext.forEach((s) => put(s.horiz, s.c, s.a, s.b, s.op));
+  const xs = items.map((i2) => [i2.x, i2.x + i2.w]).flat(), ys = items.map((i2) => [i2.y, i2.y + i2.d]).flat();
+  const seenAll = entryRoom ? walk(entryRoom) : new Set();
+  const shelter = items.find((it) => base(it.key) === 'hs');
+  lv.checks = {
+    entry: !!entryRoom, entryVia: entryRoom ? label(entryRoom) : null,
+    masterBath: master ? (masterBath ? label(masterBath) : false) : null,
+    masterEnsuite: !!(master && masterBath && master.links.includes(masterBath)),
+    shelter: shelter ? shelter.doors : null,
+    unreached: items.filter((it) => needs(it) && !seenAll.has(it)).map(label),
+    doors: edges.filter((e) => e.kind === 'door').length + ext.filter((s) => s.kind === 'door').length,
+    wins: edges.filter((e) => e.kind === 'win').length + ext.filter((s) => s.kind === 'win').length,
+    W: +(Math.max(...xs) - Math.min(...xs)).toFixed(2), D: +(Math.max(...ys) - Math.min(...ys)).toFixed(2),
+    area: +items.filter((it) => !isOut(it) && !isLedge(it)).reduce((s, it) => s + it.w * it.d, 0).toFixed(1),
+    gap: +((Math.max(...xs) - Math.min(...xs)) * (Math.max(...ys) - Math.min(...ys)) - items.reduce((s, it) => s + it.w * it.d, 0)).toFixed(1),
+  };
+  return lv;
+}
+let autoSel = null, autoPlan = '', lastAI = null;
+async function imageB64(url) {
+  // claude.complete's request budget is ~256KB total — ALWAYS re-encode and keep base64 under ~200K chars
+  const img = imgCache[url] || await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+  let px = 1000, q = 0.72, du = '';
+  for (let k = 0; k < 5; k++) {
+    const sc = Math.min(1, px / img.naturalWidth), c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(img.naturalWidth * sc)); c.height = Math.max(1, Math.round(img.naturalHeight * sc));
+    const q2 = c.getContext('2d'); q2.fillStyle = '#fff'; q2.fillRect(0, 0, c.width, c.height); q2.drawImage(img, 0, 0, c.width, c.height);
+    du = c.toDataURL('image/jpeg', q);
+    if (du.length < 200000) break;
+    px *= 0.8; q = Math.max(0.5, q - 0.08);
+  }
+  const m = du.match(/^data:(image\/\w+);base64,(.*)$/s);
+  return m ? { media: m[1], data: m[2] } : null;
+}
+async function analyzePlan(url) {
+  const img = await imageB64(url);
+  if (!img || !window.claude || !window.claude.complete) throw new Error('no vision');
+  const lib = TPL.map((t) => t.id + ': ' + t.label + ' · ' + t.levels.length + ' storey(s) · rooms: ' + t.levels[0].map((r) => r[5] && r[5].lbl ? r[5].lbl : r[0]).join(', ')).join('\n');
+  const text = await window.claude.complete({
+    model: 'claude-sonnet-4-5', max_tokens: 700,
+    messages: [{ role: 'user', content: [
+      { type: 'image', source: { type: 'base64', media_type: img.media, data: img.data } },
+      { type: 'text', text: 'You are Home & Me\'s floor-plan reader (Singapore homes). Study this floor plan image carefully. Count bedrooms, bathrooms, note kitchen/living/balcony/yard, storeys, and any printed dimensions or scale bar.\n\nTemplate library:\n' + lib + '\n\nPick the closest template. Reply with ONLY minified JSON, no markdown: {"match":"<template id>","confidence":<0-100>,"storeys":<n>,"rooms":["..."],"overallWidthM":<number or null, the plan\'s overall width in metres if dimensions are printed>,"reason":"<max 18 words>"}' },
+    ] }],
+  });
+  const j = JSON.parse(text.replace(/```json|```/g, '').trim());
+  if (!TPL.some((t) => t.id === j.match)) throw new Error('bad match id');
+  return j;
+}
+function autoShow(mode) {
+  $('#auto').style.display = 'grid';
+  $('#aStart').style.display = mode === 'start' ? 'flex' : 'none';
+  $('#aSteps').style.display = mode === 'start' ? 'none' : 'block';
+  $('#aMatch').style.display = mode === 'match' ? 'block' : 'none';
+  if (mode === 'start') ['as1', 'as2', 'as3', 'as4'].forEach((id) => { const li = $('#' + id); li.className = ''; li.querySelector('.tick').textContent = ''; });
+}
+function startAuto(planName) {
+  autoPlan = planName || ''; lastAI = null;
+  autoShow('steps');
+  const u = L().under;
+  const ai = u ? analyzePlan(u.url).catch((e) => { console.warn('vision fallback', e); return null; }) : Promise.resolve(null);
+  ['as1', 'as2', 'as3', 'as4'].forEach((id, i, arr) => setTimeout(() => {
+    const li = $('#' + id); li.className = 'on';
+    if (i < arr.length - 1) setTimeout(() => { li.className = 'done'; li.querySelector('.tick').textContent = '✓'; }, 430);
+    else ai.then((res) => {
+      lastAI = res;
+      li.className = 'done'; li.querySelector('.tick').textContent = res ? '✓' : '–';
+      buildChips(); autoShow('match');
+    });
+  }, 470 * i));
+}
+function guessTpl() {
+  const nm = (autoPlan || '').toLowerCase(), s = journeySub() || {};
+  if (/3[\s-]?r(oo)?m/.test(nm)) return 'hdb3';
+  if (/exec|\bea\b/.test(nm)) return 'hdbEA';
+  if (/terrace|landed|storey|shophouse/.test(nm)) return 'l1';
+  if (s.property === 'condo') return 'c3';
+  if (s.property === 'landed') return 'l1';
+  return 'hdb4';
+}
+function buildChips() {
+  const g = lastAI ? lastAI.match : guessTpl(), box = $('#aChips'); box.innerHTML = ''; autoSel = null;
+  $('#aRead').textContent = lastAI
+    ? 'AI READ: ' + (lastAI.rooms || []).slice(0, 8).join(', ').toUpperCase() + (lastAI.storeys > 1 ? ' · ' + lastAI.storeys + ' STOREYS' : '') + ' · CONFIDENCE ' + (lastAI.confidence != null ? lastAI.confidence + '%' : '—') + (lastAI.reason ? ' — ' + lastAI.reason : '')
+    : 'AI VISION UNAVAILABLE FOR THIS FILE — CONFIRM THE PROPERTY TYPE MANUALLY BELOW.';
+  TPL.forEach((t) => {
+    const c = document.createElement('button');
+    c.className = 'chip' + (t.id === g ? ' sel' : ''); if (t.id === g) autoSel = t;
+    c.textContent = t.label + (t.traced ? ' ◆' : '');
+    c.title = t.traced ? 'Plan-traced template' : 'Typical layout — not plan-traced';
+    c.onclick = () => { autoSel = t; box.querySelectorAll('.chip').forEach((x) => x.classList.remove('sel')); c.classList.add('sel'); };
+    box.appendChild(c);
+  });
+}
+$('#bSrc').onclick = () => {
+  if (!doc.src) return toast('NO SOURCE PLAN ON FILE — DROP THE CUSTOMER PLAN TO ATTACH ONE');
+  const on = !doc.levels[0].under;
+  doc.levels[0].under = on ? { url: doc.src.url, iw: doc.src.iw, ih: doc.src.ih, s: 12 / doc.src.iw, ox: 0, oy: 0, op: 0.25, cal: false } : null;
+  $('#bSrc').classList.toggle('sel', on);
+  if (on) { doc.active = 0; drawLevels(); $('#uOp').value = 25; }
+  changed(false);
+  toast(on ? 'SOURCE PLAN SHOWN UNDER THE TRACE — PROOF OF SUBMISSION' : 'SOURCE PLAN HIDDEN');
+};
+function drawChecks() {
+  const box = document.querySelector('#checks');
+  if (!doc.match) { box.innerHTML = '<p class="note" style="margin:0;">Generate an auto-draft to run the plan checks.</p>'; return; }
+  const rows = [];
+  const row = (st, t, d) => rows.push('<div class="chk ' + st + '"><span class="m">' + (st === 'ok' ? '✓' : st === 'warn' ? '!' : '✕') + '</span><span>' + t + (d ? ' <span class="d">' + d + '</span>' : '') + '</span></div>');
+  doc.levels.forEach((lv, i) => {
+    const c = lv.checks; if (!c) return;
+    const L = doc.levels.length > 1 ? 'L' + (i + 1) + ' · ' : '';
+    if (i === 0) c.entry ? row('ok', L + 'Entry door', 'enters via ' + c.entryVia) : row('no', L + 'No entry door found', 'plan has no external access');
+    if (c.masterBath === null) { /* no master on this level */ }
+    else if (!c.masterBath) row('no', L + 'Master bedroom has no toilet access', 'no bath adjacent or reachable');
+    else row('ok', L + 'Master toilet access', c.masterEnsuite ? 'ensuite door to ' + c.masterBath : 'shared — ' + c.masterBath + ' via corridor');
+    if (c.shelter !== null) c.shelter === 1 ? row('ok', L + 'Shelter single access', '1 door, as required') : row('no', L + 'Shelter has ' + c.shelter + ' accesses', 'must be exactly 1');
+    c.unreached.length ? row('no', L + 'Unreachable spaces', c.unreached.join(', ')) : row('ok', L + 'Every space reachable', c.doors + ' doors · ' + c.wins + ' windows');
+    row('ok', L + 'Footprint', c.W.toFixed(2) + ' × ' + c.D.toFixed(2) + ' m · ' + c.area.toFixed(1) + ' m² internal');
+    if (c.gap != null) (c.gap <= 0.6 ? row('ok', L + 'Outline fully tiled', 'no unassigned area') : row('warn', L + 'Unassigned area in outline', c.gap.toFixed(1) + ' m² not attributed to a space'));
+  });
+  row('warn', 'Dimensions from plan trace', 'site verification still required before quotation');
+  box.innerHTML = rows.join('');
+}
+function drawMatchTag() {
+  $('#matchTag').textContent = doc.match
+    ? 'MATCHED: ' + doc.match.label + (doc.match.traced ? ' · PLAN-TRACED ◆' : ' · TYPICAL LAYOUT') + (doc.src ? ' · SOURCE: ' + (doc.src.name || 'CUSTOMER PLAN').toUpperCase() : '') + ' — DIMENSIONS REQUIRE SITE VERIFICATION'
+    : 'No auto-draft yet — drop a customer plan to begin.';
+}
+function applyTemplate(t) {
+  const u0 = L().under;
+  doc = { schema: 'hnm-studio/1', engine: ENGINE, levels: t.levels.map(convertLevel), active: 0, match: { id: t.id, journeyId: t.j, label: t.label, prop: t.prop, traced: !!t.traced, planName: autoPlan },
+    src: u0 ? { url: u0.url, iw: u0.iw, ih: u0.ih, name: autoPlan || 'customer plan' } : null };
+  // canvas starts clean — the customer's plan is proof-on-demand via the SOURCE PLAN toggle
+  sel = null; built = false; $('#auto').style.display = 'none';
+  drawLevels(); changed(); fitView(); drawMatchTag();
+  toast('AUTO-DRAFT READY — REVIEW IN 3D, THEN APPROVE');
+}
+$('#aGen').onclick = () => { if (autoSel) applyTemplate(autoSel); };
+$('#aCancel').onclick = () => { $('#auto').style.display = 'none'; };
+$('#bAuto').onclick = () => autoShow('start');
+$('#bAdv').onclick = () => {
+  const on = document.body.classList.toggle('adv');
+  $('#bAdv').classList.toggle('sel', on);
+  if (!on) setTool('select');
+  toast(on ? 'MANUAL TOOLS UNLOCKED — FOR RARE FIXES ONLY' : 'MANUAL TOOLS HIDDEN');
+};
+$('#bApprove').onclick = () => {
+  if (!doc.match) return toast('GENERATE AN AUTO-DRAFT FIRST');
+  const s = journeySub() || {};
+  s.layoutId = doc.match.journeyId; s.property = doc.match.prop; s.verified = true; s.step = 3;
+  if (!s.planName) s.planName = doc.match.planName || 'auto-draft plan';
+  try { localStorage.setItem('hnm_journey_v1', JSON.stringify(s)); } catch (e) {}
+  toast('APPROVED — OPENING THE CUSTOMER JOURNEY');
+  setTimeout(() => { location.href = 'Journey.html'; }, 650);
+};
+
+/* ---------- boot ---------- */
+// drafts built by an older engine are rebuilt from their matched template, and re-labelled from live geometry
+if (doc.match && doc.engine !== ENGINE) {
+  const t0 = TPL.find((t) => t.id === doc.match.id);
+  if (t0) {
+    const u = doc.levels[0] && doc.levels[0].under;
+    doc.levels = t0.levels.map(convertLevel); doc.active = 0; sel = null;
+    doc.match.label = t0.label; doc.match.prop = t0.prop; doc.match.traced = !!t0.traced;
+    if (u && !doc.src) doc.src = { url: u.url, iw: u.iw, ih: u.ih, name: doc.match.planName || 'customer plan' };
+    doc.engine = ENGINE; built = false; persist();
+  }
+}
+drawLevels(); drawSub(); drawStats(); drawJobs(); drawMatchTag(); drawChecks(); setTool('select');
+$('#bSrc').classList.toggle('sel', !!(doc.levels[0] && doc.levels[0].under && doc.src));
+if (!doc.levels.some((l) => l.walls.length || l.rooms.length)) autoShow('start');
+if (L().under) $('#uOp').value = Math.round((L().under.op ?? 0.55) * 100);
+fitView(); build3D();
+</script>
+</body>
+</html>

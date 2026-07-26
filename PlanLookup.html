@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home &amp; Me — Find My Floor Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+  .osw { font-family: 'Oswald', sans-serif; }
+  .lbl { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
+  header { position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1); }
+  .navrow { height: 76px; display: flex; align-items: center; }
+  .navrow nav { display: flex; gap: 28px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; font-weight: 400; }
+  .navrow nav a { white-space: nowrap; }
+  #navBurger { display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid rgba(26,32,35,0.25); border-radius: 999px; background: none; cursor: pointer; font-size: 17px; color: #1a2023; }
+  #navPanel { position: fixed; inset: 0; z-index: 55; background: #f6f4ef; padding: 110px clamp(24px, 6vw, 48px) 40px; overflow: auto; display: none; }
+  #navPanel nav { display: grid; gap: 22px; font-family: 'Oswald', sans-serif; font-size: 22px; letter-spacing: 2.4px; }
+  .card { background: #fff; border: 1px solid rgba(26,32,35,0.1); }
+  .pill { border-radius: 999px; padding: 13px 28px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2px; cursor: pointer; border: 1px solid transparent; }
+  .pill-d { background: #1a2023; color: #f6f4ef; } .pill-d:hover { background: #5a7e8a; }
+  .pill-g { background: none; color: #1a2023; border-color: rgba(26,32,35,0.25); } .pill-g:hover { border-color: #5a7e8a; color: #5a7e8a; }
+  input { font: inherit; }
+  .step { display: flex; align-items: center; gap: 10px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #b6bab5; }
+  .step b { width: 22px; height: 22px; border-radius: 50%; border: 1px solid currentColor; display: grid; place-items: center; font-size: 10px; font-weight: 400; }
+  .step.on { color: #1a2023; } .step.on b { background: #1a2023; color: #f6f4ef; border-color: #1a2023; }
+  .badge { font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; padding: 4px 9px; border-radius: 2px; white-space: nowrap; }
+  .b-ver { background: #e2efe7; color: #2e7d54; } .b-cat { background: #f6ecd8; color: #a8761f; } .b-non { background: #efedea; color: #8a908c; }
+  #map { height: 330px; background: #e8e6e0; }
+  .sug { position: absolute; left: 0; right: 0; top: calc(100% + 6px); background: #fff; border: 1px solid rgba(26,32,35,0.14); z-index: 40; max-height: 290px; overflow: auto; box-shadow: 0 18px 40px -22px rgba(26,32,35,0.4); }
+  .sug div { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid rgba(26,32,35,0.06); font-size: 14px; }
+  .sug div:hover { background: #f6f4ef; }
+  .lay { text-align: left; background: #fff; border: 1px solid rgba(26,32,35,0.12); padding: 0; cursor: pointer; display: flex; flex-direction: column; }
+  .lay:hover { border-color: #5a7e8a; }
+  .lay[data-sel="1"] { border-color: #1a2023; box-shadow: inset 0 0 0 1px #1a2023; }
+  .lay[data-non="1"] { cursor: default; opacity: 0.72; } .lay[data-non="1"]:hover { border-color: rgba(26,32,35,0.12); }
+  .bar { height: 6px; background: #eeece6; display: flex; overflow: hidden; }
+  @media (max-width: 1160px) { .navrow nav { display: none; } #navBurger { display: flex; } }
+  @media (max-width: 900px) { .two { grid-template-columns: 1fr !important; } }
+</style>
+</head>
+<body>
+<header><div class="wrap navrow">
+  <a href="Home AI.dc.html" style="display:flex;align-items:center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height:44px;width:auto;"></a>
+  <nav>
+    <a href="Home AI.dc.html">HOME</a>
+    <a href="AboutUs.dc.html">ABOUT US</a>
+    <a href="Home AI.dc.html#portfolio">SHOWROOM</a>
+    <a href="Journey.html">3D JOURNEY</a>
+    <a href="PlanLookup.html" style="color:#5a7e8a;border-bottom:1px solid #5a7e8a;padding-bottom:3px;">FIND MY PLAN</a>
+    <a href="PlanIntake.html">VERIFY A PLAN</a>
+    <a href="HousingIdentity.html">HOUSING IDENTITY</a>
+    <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+    <a href="ContactUs.dc.html">CONTACT US</a>
+    <a href="Login.dc.html" style="color:#5a7e8a;">LOGIN</a>
+    <a href="PlanIntake.html" style="background:#1a2023;color:#f6f4ef;padding:12px 26px;border-radius:999px;">START YOUR RENOVATION</a>
+  </nav>
+  <button id="navBurger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+</div></header>
+<div id="navPanel">
+  <nav>
+    <a href="Home AI.dc.html">HOME</a>
+    <a href="AboutUs.dc.html">ABOUT US</a>
+    <a href="Home AI.dc.html#portfolio">VIRTUAL SHOWROOM</a>
+    <a href="Journey.html">3D JOURNEY</a>
+    <a href="PlanLookup.html" style="color:#5a7e8a;">FIND MY PLAN</a>
+    <a href="PlanIntake.html">VERIFY A PLAN</a>
+    <a href="HousingIdentity.html">HOUSING IDENTITY</a>
+    <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+    <a href="ContactUs.dc.html">CONTACT US</a>
+    <a href="Login.dc.html">LOGIN</a>
+    <a href="PlanIntake.html" style="margin-top:12px;justify-self:start;background:#1a2023;color:#f6f4ef;padding:16px 32px;border-radius:999px;font-size:15px;">START YOUR RENOVATION</a>
+  </nav>
+</div>
+
+<section class="wrap" style="padding: clamp(40px,6vw,64px) clamp(18px,4vw,40px) 28px;">
+  <p class="lbl" style="margin:0 0 16px;">FIND MY FLOOR PLAN</p>
+  <div style="max-width:820px;">
+    <h1 class="osw" style="font-weight:400;font-size:clamp(32px,4.4vw,48px);line-height:1.1;margin:0 0 16px;">Start from your address, not a scan</h1>
+    <p style="font-size:16.5px;line-height:1.7;color:#4a5350;margin:0;text-wrap:pretty;">HDB blocks are built to standard layouts. If we know your block, we already know the plan — no upload, no guesswork. Enter your block and we'll show the layouts registered for it.</p>
+  </div>
+  <div style="display:flex;gap:22px;flex-wrap:wrap;margin-top:clamp(24px,3vw,34px);">
+    <div class="step on" id="st1"><b>1</b>LOCATE</div>
+    <div class="step" id="st2"><b>2</b>CONFIRM LAYOUT</div>
+    <div class="step" id="st3"><b>3</b>OPEN IN 3D</div>
+  </div>
+</section>
+
+<section class="wrap" style="padding-bottom:20px;">
+  <div class="card" style="padding:clamp(20px,3vw,28px);">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
+      <div style="position:relative;flex:1;min-width:280px;">
+        <input id="q" type="text" autocomplete="off" placeholder="Your postal code or address — e.g. 530683, or 683 Hougang Ave 8"
+               style="width:100%;padding:16px 18px;border:1px solid rgba(26,32,35,0.22);background:#fdfcf9;font-size:15px;outline:none;">
+        <div class="sug" id="sug" style="display:none;"></div>
+      </div>
+      <button class="pill pill-g" id="geo" type="button">USE MY LOCATION</button>
+    </div>
+    <p style="margin:14px 0 0;font-size:12px;color:#8a908c;line-height:1.6;">
+Addresses resolved live through OneMap; block records queried live from HDB Property Information (data.gov.sg) — 13,357 blocks, with year of completion, highest floor and dwelling units by flat type.
+    </p>
+  </div>
+</section>
+
+<section class="wrap" id="result" style="display:none;padding-bottom:24px;">
+  <div class="two" style="display:grid;grid-template-columns:1fr 1fr;gap:22px;">
+    <div class="card" style="overflow:hidden;"><div id="map"></div></div>
+    <div class="card" style="padding:clamp(20px,3vw,26px);display:flex;flex-direction:column;">
+      <p class="lbl" style="margin:0 0 10px;">BLOCK RECORD</p>
+      <h2 class="osw" id="bAddr" style="font-weight:400;font-size:26px;margin:0 0 4px;line-height:1.2;"></h2>
+      <p id="bTown" style="margin:0 0 20px;font-size:13px;color:#8a908c;letter-spacing:0.4px;"></p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px;">
+        <div><p class="lbl" style="margin:0 0 5px;font-size:10px;">COMPLETED</p><p class="osw" id="bYear" style="margin:0;font-size:23px;font-weight:300;"></p></div>
+        <div><p class="lbl" style="margin:0 0 5px;font-size:10px;">STOREYS</p><p class="osw" id="bFlr" style="margin:0;font-size:23px;font-weight:300;"></p></div>
+        <div><p class="lbl" style="margin:0 0 5px;font-size:10px;">DWELLING UNITS</p><p class="osw" id="bUnits" style="margin:0;font-size:23px;font-weight:300;"></p></div>
+      </div>
+      <p class="lbl" style="margin:0 0 8px;font-size:10px;">FLAT TYPE MIX</p>
+      <div class="bar" id="bBar" style="margin-bottom:10px;"></div>
+      <div id="bLeg" style="display:flex;flex-wrap:wrap;gap:12px;font-size:11.5px;color:#4a5350;"></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="layouts" style="display:none;padding-bottom:clamp(50px,7vw,80px);">
+  <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:14px 0 6px;">
+    <p class="lbl" style="margin:0;">STEP 2 — WHICH ONE IS YOURS?</p>
+    <p style="margin:0;font-size:13px;color:#8a908c;">Block records give the flat types, not your specific unit — pick the one that matches your front door.</p>
+  </div>
+  <div id="layGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:18px;margin-top:18px;"></div>
+  <div id="cta" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:26px;">
+    <button class="pill pill-d" id="open" type="button" disabled style="opacity:0.4;">OPEN MY LAYOUT IN 3D</button>
+    <a class="pill pill-g" href="PlanIntake.html" style="display:inline-block;">NONE MATCH — SUBMIT MY OWN PLAN</a>
+    <span id="ctaNote" style="font-size:12.5px;color:#8a908c;"></span>
+  </div>
+</section>
+
+<footer style="border-top:1px solid rgba(26,32,35,0.1);padding:40px clamp(20px,4vw,40px);margin-top:clamp(40px,6vw,72px);">
+  <div style="max-width:1320px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;">
+    <img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height:38px;width:auto;">
+    <nav style="display:flex;gap:24px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:2px;flex-wrap:wrap;">
+      <a href="Home AI.dc.html">HOME</a>
+      <a href="AboutUs.dc.html">ABOUT US</a>
+      <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+      <a href="Login.dc.html">LOGIN</a>
+    </nav>
+    <span style="font-size:13px;color:#8a908c;">Copyright 2026 HOME&amp;ME</span>
+  </div>
+  <div style="max-width:1320px;margin:18px auto 0;display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;font-size:11.5px;color:#8a908c;">
+    <span>Layout records are indicative. Dimensions require site verification before quotation.</span>
+    <span>Block data © Housing &amp; Development Board via data.gov.sg</span>
+  </div>
+</footer>
+
+<script type="module">
+import { searchAddress, resolveProperty, townName, splitUnit } from './journey-address.js';
+
+// Blocks are resolved live: OneMap for the address, the HDB property register for the unit
+// mix. Same two sources the intake cross-check uses, so a block cannot mean two things.
+
+
+// ── flat type → traced layout ────────────────────────────────────────────────
+// status drives what we are willing to CLAIM: a verified trace is dimensionally
+// checked against the source sheet; catalog is a representative approximation;
+// none means we have not traced it and say so rather than substituting something close.
+const TYPES = {
+  '2room': { name:'2-ROOM',    status:'catalog',  layout:'hdb2',  doc:null,                              sqm:'45 – 47' },
+  '3room': { name:'3-ROOM',    status:'verified', layout:'hdb3',  doc:'plans/plan-hdb3-pointblock.json', sqm:'60 – 69' },
+  '4room': { name:'4-ROOM',    status:'verified', layout:'hdb4',  doc:'plans/plan-hdb4-corridor.json',   sqm:'90 – 105' },
+  '5room': { name:'5-ROOM',    status:'catalog',  layout:'hdb5',  doc:null,                              sqm:'110 – 123' },
+  'exec':  { name:'EXECUTIVE', status:'catalog',  layout:'hdbEA', doc:null,                              sqm:'142 – 150' },
+  '1room': { name:'1-ROOM',    status:'none',     layout:null,    doc:null,                              sqm:'33 – 35' },
+  'multigen': { name:'MULTI-GENERATION', status:'none', layout:null, doc:null,                          sqm:'—' },
+  'studio': { name:'STUDIO APARTMENT', status:'none', layout:null, doc:null,                            sqm:'35 – 45' },
+  'other': { name:'OTHER RENTAL', status:'none',  layout:null,    doc:null,                              sqm:'—' },
+};
+const STATUS = {
+  verified: { cls:'b-ver', tag:'VERIFIED TRACE',  note:'Dimensions checked against the source sheet.' },
+  catalog:  { cls:'b-cat', tag:'CATALOG LAYOUT',  note:'Representative layout — not yet dimension-verified.' },
+  none:     { cls:'b-non', tag:'NOT YET TRACED',  note:'No layout on file for this flat type.' },
+};
+const COL = { '1room':'#d8cdbb', '2room':'#c8b9a0', '3room':'#5a7e8a', '4room':'#1a2023', '5room':'#b08a5e', 'exec':'#8aa17c', multigen:'#9c8aa6', studio:'#b5c4bd', other:'#c3c9c2' };
+const FALLBACK = { name:'OTHER', status:'none', layout:null, doc:null, sqm:'—' };
+const typeOf = (t) => TYPES[t] || Object.assign({}, FALLBACK, { name: String(t).toUpperCase() });
+
+const $ = (s) => document.querySelector(s);
+const docCache = {};
+let map, marker, picked = null, block = null;
+
+const burger = $('#navBurger'), panel = $('#navPanel');
+burger.addEventListener('click', () => {
+  const open = panel.style.display !== 'block';
+  panel.style.display = open ? 'block' : 'none';
+  burger.textContent = open ? '✕' : '☰';
+  burger.setAttribute('aria-expanded', String(open));
+});
+panel.addEventListener('click', (e) => { if (e.target.tagName === 'A') burger.click(); });
+
+// draw a thumbnail from the REAL traced geometry, so the card cannot drift from the model
+async function thumb(path, w, h) {
+  if (!(path in docCache)) { try { docCache[path] = await (await fetch(path)).json(); } catch (e) { docCache[path] = null; } }
+  const d = docCache[path]; if (!d) return '';
+  const f = d.floors[0], k = Math.min((w - 16) / f.width_m, (h - 16) / f.depth_m);
+  const ox = (w - f.width_m * k) / 2, oy = (h - f.depth_m * k) / 2;
+  const box = (s, fill, stroke, dash) => `<rect x="${(ox + s.x * k).toFixed(1)}" y="${(oy + s.z * k).toFixed(1)}" width="${(s.w * k).toFixed(1)}" height="${(s.d * k).toFixed(1)}" fill="${fill}" stroke="${stroke}" stroke-width="0.8"${dash ? ' stroke-dasharray="3 2"' : ''}/>`;
+  const out = (s) => !!(s.out || s.outdoor) || s.key === 'ac' || /^ledge/.test(s.key || '');
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true">`
+    + (f.voids || []).map(v => box(v, '#efedea', '#e3ded2', 1)).join('')
+    + (f.spaces || []).map(s => box(s, out(s) ? '#f3f1ea' : s.pass ? '#f7f5ef' : '#fbfaf5', '#cfc9bb', out(s))).join('')
+    + `</svg>`;
+}
+
+function mix(b) {
+  const bar = $('#bBar'), leg = $('#bLeg');
+  bar.innerHTML = ''; leg.innerHTML = '';
+  Object.entries(b.m).forEach(([t, n]) => {
+    const pct = (100 * n / b.total_dwelling_units).toFixed(1);
+    bar.insertAdjacentHTML('beforeend', `<i style="width:${pct}%;background:${COL[t] || '#c3c9c2'};display:block;"></i>`);
+    leg.insertAdjacentHTML('beforeend', `<span style="display:flex;align-items:center;gap:6px;"><i style="width:9px;height:9px;background:${COL[t] || '#c3c9c2'};display:block;"></i>${typeOf(t).name} · ${n}</span>`);
+  });
+}
+
+async function cards(b) {
+  const g = $('#layGrid'); g.innerHTML = '';
+  const entries = Object.entries(b.m).sort((a, c) => c[1] - a[1]);
+  for (const [t, n] of entries) {
+    const T = typeOf(t), S = STATUS[T.status], usable = T.status !== 'none';
+    const art = T.doc ? await thumb(T.doc, 226, 132)
+      : `<div style="height:132px;display:grid;place-items:center;color:#c3c9c2;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:2px;">${T.status === 'catalog' ? 'CATALOG GEOMETRY' : 'NO PLAN ON FILE'}</div>`;
+    g.insertAdjacentHTML('beforeend', `
+      <button class="lay" type="button" data-t="${t}" ${usable ? '' : 'data-non="1" disabled'}>
+        <div style="background:#fdfcf9;border-bottom:1px solid rgba(26,32,35,0.08);display:grid;place-items:center;padding:8px;">${art}</div>
+        <div style="padding:15px 16px 17px;display:flex;flex-direction:column;gap:8px;flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;">
+            <span class="osw" style="font-size:17px;letter-spacing:1px;">${T.name}</span>
+            <span class="badge ${S.cls}">${S.tag}</span>
+          </div>
+          <p style="margin:0;font-size:12px;color:#8a908c;">${n} units in this block · approx ${T.sqm} m²</p>
+          <p style="margin:auto 0 0;font-size:12px;color:#4a5350;line-height:1.55;">${S.note}</p>
+        </div>
+      </button>`);
+  }
+  g.querySelectorAll('.lay:not([data-non])').forEach(el => el.addEventListener('click', () => {
+    g.querySelectorAll('.lay').forEach(x => x.removeAttribute('data-sel'));
+    el.setAttribute('data-sel', '1');
+    picked = typeOf(el.dataset.t);
+    $('#open').disabled = false; $('#open').style.opacity = '1';
+    $('#st3').classList.add('on');
+    $('#ctaNote').textContent = picked.status === 'verified'
+      ? 'Opens the dimension-verified trace for this flat type.'
+      : 'Opens a representative layout — confirm dimensions on site before quoting.';
+  }));
+  const gaps = entries.filter(([t]) => typeOf(t).status !== 'verified');
+  $('#ctaNote').textContent = gaps.length
+    ? `${gaps.length} of ${entries.length} flat types in this block are not dimension-verified yet.` : '';
+}
+
+async function select(b) {
+  block = b; picked = null;
+  if (b.class !== 'hdb') {
+    $('#result').style.display = 'none'; $('#layouts').style.display = '';
+    $('#layGrid').innerHTML = `<div class="card" style="padding:22px;grid-column:1/-1;">
+      <p class="osw" style="margin:0 0 8px;font-size:17px;">${b.class === 'hdb-nonres' ? 'Not a residential address' : 'Private property'}</p>
+      <p style="margin:0;font-size:13.5px;color:#4a5350;line-height:1.6;max-width:60ch;">${b.note || ''} Block-record lookup only covers HDB. Submit your plan and we will verify it against this address instead.</p></div>`;
+    $('#open').disabled = true; $('#open').style.opacity = '0.4';
+    $('#ctaNote').textContent = ''; $('#st2').classList.add('on');
+    return;
+  }
+  $('#result').style.display = ''; $('#layouts').style.display = '';
+  $('#st2').classList.add('on'); $('#st3').classList.remove('on');
+  $('#open').disabled = true; $('#open').style.opacity = '0.4';
+  $('#bAddr').textContent = b.street_address || b.address || b.label;
+  $('#bTown').textContent = `${townName(b.town)} · HDB Property Information record · resolved live`;
+  $('#bYear').textContent = b.year_completed;
+  $('#bFlr').textContent = b.max_floor_lvl;
+  $('#bUnits').textContent = b.total_dwelling_units;
+  mix(b); await cards(b);
+  if (!map) {
+    map = L.map('map', { scrollWheelZoom: false }).setView([b.lat, b.lng], 17);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap contributors' }).addTo(map);
+  }
+  map.setView([b.lat, b.lng], 17);
+  if (marker) marker.remove();
+  marker = L.circleMarker([b.lat, b.lng], { radius: 11, color: '#1a2023', weight: 2, fillColor: '#b08a5e', fillOpacity: 0.95 })
+    .addTo(map).bindTooltip(`BLK ${b.blk_no}`, { permanent: true, direction: 'top', offset: [0, -8] });
+  setTimeout(() => map.invalidateSize(), 60);
+}
+
+let hits = [], seq = 0, timer = null;
+function suggest(v) {
+  clearTimeout(timer);
+  const s = $('#sug');
+  if (String(v).trim().length < 3) { s.style.display = 'none'; return; }
+  timer = setTimeout(async () => {
+    const my = ++seq;
+    const parsed = splitUnit(v);
+    if (!parsed.query) { s.style.display = 'none'; return; }
+    s.innerHTML = '<div style="color:#8a908c;cursor:default;">Searching OneMap…</div>'; s.style.display = '';
+    try { hits = await searchAddress(parsed.query); }
+    catch (e) { if (my === seq) s.innerHTML = '<div style="color:#b4533a;cursor:default;">Address search unavailable.</div>'; return; }
+    if (my !== seq) return;
+    if (!hits.length) { s.innerHTML = `<div style="color:#8a908c;cursor:default;">OneMap has no address matching "${parsed.query}".</div>`; return; }
+    s.innerHTML = hits.map((r, i) => `<div data-i="${i}"><b style="font-weight:600;">${r.address}</b><span style="color:#8a908c;"> · ${r.postal}</span></div>`).join('');
+    s.querySelectorAll('div[data-i]').forEach(el => el.addEventListener('click', async () => {
+      const hit = hits[+el.dataset.i];
+      $('#q').value = hit.address; s.style.display = 'none';
+      try { select(await resolveProperty(hit)); }
+      catch (e) { alert('Could not reach the HDB property register. Try again in a moment.'); }
+    }));
+  }, 320);
+}
+
+$('#q').addEventListener('input', (e) => suggest(e.target.value));
+$('#q').addEventListener('focus', (e) => suggest(e.target.value));
+document.addEventListener('click', (e) => { if (!e.target.closest('#q') && !e.target.closest('#sug')) $('#sug').style.display = 'none'; });
+
+$('#geo').addEventListener('click', () => {
+  const btn = $('#geo'); btn.textContent = 'LOCATING…';
+  const reset = () => { btn.textContent = 'USE MY LOCATION'; };
+  if (!navigator.geolocation) { reset(); return alert('This browser has no location support — search by address instead.'); }
+  navigator.geolocation.getCurrentPosition(async (p) => {
+    try {
+      const r = await fetch(`https://www.onemap.gov.sg/api/public/revgeocode?location=${p.coords.latitude},${p.coords.longitude}&buffer=100&addressType=All`);
+      const g = ((await r.json()).GeocodeInfo || [])[0];
+      if (!g) { reset(); return alert('No address found at your location — search by address instead.'); }
+      const hit = { postal: g.POSTALCODE, blk_no: g.BLOCK || '', road: g.ROAD || '',
+        building: g.BUILDINGNAME && g.BUILDINGNAME !== 'null' ? g.BUILDINGNAME : '',
+        address: [g.BLOCK, g.ROAD].filter(Boolean).join(' '), lat: parseFloat(g.LATITUDE), lng: parseFloat(g.LONGITUDE) };
+      $('#q').value = hit.address;
+      select(await resolveProperty(hit));
+    } catch (e) { alert('Could not resolve your location.'); }
+    reset();
+  }, () => { reset(); alert('Location was blocked — search by address instead.'); }, { timeout: 8000 });
+});
+
+$('#open').addEventListener('click', () => {
+  if (!picked || !picked.layout || !block) return;
+  const q = new URLSearchParams({
+    layout: picked.layout, postal: block.postal || '',
+    addr: block.street_address || block.address || block.label,
+    town: townName(block.town), unit: '', cls: block.class || '',
+    plan: picked.name ? picked.name + ' (block record)' : 'Block record lookup', verified: '1',
+  });
+  location.href = `Journey.html?${q}`;
+});
+</script>
+</body>
+</html>

@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+<title>Home &amp; Me — AI-First Renovation, Singapore</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
 </head>
@@ -106,10 +107,10 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
         </div>
         <div style="display: grid; gap: 12px;">
           <div style="justify-self: end; max-width: 85%; background: var(--accent); color: #fff; border-radius: 12px 12px 3px 12px; padding: 12px 16px; font-size: 14.5px; line-height: 1.55;">4-room resale in Bishan, Scandinavian look, around S$50k?</div>
-          <div style="justify-self: start; max-width: 90%; background: rgba(246,244,239,0.08); border-radius: 12px 12px 12px 3px; padding: 12px 16px; font-size: 14.5px; line-height: 1.6; color: rgba(246,244,239,0.9);">Plan received ✓ — 6 rooms detected on your 92 sqm layout. Scandinavian fits S$46-49k with full carpentry. Want to see your living room in 3D first?</div>
+          <div style="justify-self: start; max-width: 90%; background: rgba(246,244,239,0.08); border-radius: 12px 12px 12px 3px; padding: 12px 16px; font-size: 14.5px; line-height: 1.6; color: rgba(246,244,239,0.9);">Plan received ✓ — 6 rooms detected on your 92 sqm layout. Scandinavian prices at S$48.9k with full carpentry. Want to see your living room in 3D first?</div>
           <div style="justify-self: start; display: flex; gap: 8px; flex-wrap: wrap;">
             <a href="Journey.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">SEE MY 3D MODEL</a>
-            <a href="Customize.dc.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">ITEMISE MY QUOTE</a>
+            <a href="Journey.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">ITEMISE MY QUOTE</a>
           </div>
         </div>
         <div style="display: flex; gap: 10px; margin-top: 18px; border-top: 1px solid rgba(246,244,239,0.14); padding-top: 16px;">
@@ -178,7 +179,7 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
     <div style="max-width: 1360px; margin: 0 auto;">
       <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 14px; text-align: center;">PRICING</p>
       <h2 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 16px; text-align: center; line-height: 1.12;">Whole-home themes, honest numbers</h2>
-      <p data-reveal="1" style="margin: 0 auto 52px; font-size: 16px; color: var(--mut); text-align: center; max-width: 56ch;">Guide prices for a full 4-room HDB renovation — every line itemises live in the customizer before you commit.</p>
+      <p data-reveal="1" style="margin: 0 auto 52px; font-size: 16px; color: var(--mut); text-align: center; max-width: 56ch;">Guide prices for a full 4-room HDB renovation — identical to the 3D journey’s live price book — every line itemises in the 3D journey before you commit.</p>
       <div data-mq3="1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: stretch;">
         <sc-for list="{{ plans }}" as="pl" hint-placeholder-count="3">
           <div data-reveal="1" style="background: var(--card); border: 1px solid {{ pl.border }}; border-radius: 10px; padding: 30px 26px; display: flex; flex-direction: column; gap: 14px; position: relative;">
@@ -259,9 +260,9 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
         <span style="font-size: 13px; color: var(--mut);">© {{ year }} HOME AND ME PTE. LTD. · Singapore</span>
       </div>
       <nav style="display: flex; gap: 20px; flex-wrap: wrap; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
-        <a href="Home Redesign v2.dc.html">CLASSIC SITE</a>
+        
         <a href="Journey.html">3D JOURNEY</a>
-        <a href="Customize.dc.html">CUSTOMIZER</a>
+        
         <a href="MyProject.dc.html">MY PROJECT</a>
         <a href="FaqAndHelp.dc.html">HELP</a>
         <a href="Legal.dc.html">PRIVACY &amp; LEGAL</a>
@@ -365,9 +366,9 @@ class Component extends DCLogic {
 
   plansData() {
     return [
-      { name: 'ESSENTIAL', price: 'S$32,800', tag: false, feats: ['Scandinavian theme, whole home', 'Flooring, painting & wet works', 'Kitchen + 2 bathroom packages', 'Basic carpentry (wardrobe + TV console)'] },
-      { name: 'SIGNATURE', price: 'S$44,800', tag: true, feats: ['Modern Classic theme, whole home', 'Full carpentry throughout', 'Feature walls + designer lighting', 'Dedicated project manager'] },
-      { name: 'LUXE', price: 'S$56,800', tag: false, feats: ['Modern Luxe theme, whole home', 'Marble & brass feature finishes', 'Custom joinery, every room', 'Priority scheduling + styling session'] },
+      { name: 'ESSENTIAL', price: 'S$48,870', tag: false, feats: ['Scandinavian theme, whole home', 'Flooring, painting & wet works', 'Kitchen + 2 bathroom packages', 'Basic carpentry (wardrobe + TV console)'] },
+      { name: 'SIGNATURE', price: 'S$54,300', tag: true, feats: ['Modern Classic theme, whole home', 'Full carpentry throughout', 'Feature walls + designer lighting', 'Dedicated project manager'] },
+      { name: 'LUXE', price: 'S$62,445', tag: false, feats: ['Modern Luxe theme, whole home', 'Marble & brass feature finishes', 'Custom joinery, every room', 'Priority scheduling + styling session'] },
     ];
   }
 

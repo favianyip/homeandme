@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+<title>Home &amp; Me — AI-First Renovation, Singapore</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
 </head>
@@ -42,9 +43,12 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
         <a href="#pricing">PRICING</a>
         <a href="#faq">FAQ</a>
         <a href="#contact">CONTACT</a>
+        <a href="PlanLookup.html" style="color: var(--accent);">FIND MY PLAN</a>
+        <a href="PlanIntake.html">VERIFY A PLAN</a>
+        <a href="HousingIdentity.html">HOUSING IDENTITY</a>
         <a href="Login.dc.html">LOGIN</a>
         <button type="button" onClick="{{ toggleTheme }}" aria-label="Toggle dark mode" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: none; color: var(--ink); cursor: pointer; font-size: 15px;">{{ themeIcon }}</button>
-        <a href="Journey.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: var(--accent); color: var(--accent-ink); padding: 13px 24px; border-radius: 999px; min-height: 44px; display: inline-flex; align-items: center;" style-hover="background: var(--ink); color: var(--bg);">START DESIGNING MY HOME</a>
+        <a href="PlanIntake.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: var(--accent); color: var(--accent-ink); padding: 13px 24px; border-radius: 999px;" style-hover="background: var(--ink); color: var(--bg);">UPLOAD YOUR FLOOR PLAN</a>
       </nav>
       <button id="bg" type="button" onClick="{{ toggleMenu }}" style="display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid var(--line); border-radius: 999px; background: none; cursor: pointer; font-size: 17px; color: var(--ink);">{{ menuIcon }}</button>
     </div>
@@ -58,22 +62,25 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
         <a href="#pricing" onClick="{{ closeMenu }}">PRICING</a>
         <a href="#faq" onClick="{{ closeMenu }}">FAQ</a>
         <a href="#contact" onClick="{{ closeMenu }}">CONTACT</a>
+        <a href="PlanLookup.html" style="color: var(--accent);">FIND MY PLAN</a>
+        <a href="PlanIntake.html">VERIFY A PLAN</a>
+        <a href="HousingIdentity.html">HOUSING IDENTITY</a>
         <a href="Login.dc.html">LOGIN</a>
-        <a href="Journey.html" style="margin-top: 10px; justify-self: start; background: var(--accent); color: var(--accent-ink); padding: 16px 30px; border-radius: 999px; font-size: 15px;">START DESIGNING MY HOME</a>
+        <a href="PlanIntake.html" style="margin-top: 10px; justify-self: start; background: var(--accent); color: var(--accent-ink); padding: 16px 30px; border-radius: 999px; font-size: 15px;">UPLOAD YOUR FLOOR PLAN</a>
       </nav>
     </div>
   </sc-if>
 
   <section id="top" style="position: relative; min-height: 92vh; display: flex; align-items: flex-end; overflow: hidden;">
     <img src="assets/images/login-bg.jpg" alt="Modern classic living room by Home &amp; Me" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: hnmKen 14s linear infinite alternate;">
-    <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(13,17,18,0.72), rgba(13,17,18,0.18) 68%), linear-gradient(to top, rgba(13,17,18,0.86) 0%, rgba(13,17,18,0.25) 55%, rgba(13,17,18,0.35) 100%);"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,17,18,0.86) 0%, rgba(13,17,18,0.25) 55%, rgba(13,17,18,0.35) 100%);"></div>
     <div style="position: relative; width: 100%; max-width: 1360px; margin: 0 auto; padding: 140px clamp(20px, 4vw, 40px) clamp(48px, 7vw, 84px); color: #f6f4ef;">
       <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.6px; color: #8fb0bb; margin: 0 0 18px;">SINGAPORE'S AI-FIRST RENOVATION PLATFORM · EST. 2017</p>
       <h1 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(38px, 6vw, 74px); line-height: 1.06; margin: 0 0 20px; max-width: 13ch;">Your home, designed before you pay a cent</h1>
       <p data-reveal="1" style="font-size: clamp(16px, 2vw, 19px); line-height: 1.65; color: rgba(246,244,239,0.85); margin: 0 0 34px; max-width: 52ch; text-wrap: pretty;">Upload your floor plan. Watch your exact rooms take shape in 3D, dressed in photoreal designs, priced line by line — then lock it in with PayNow or card.</p>
       <div data-reveal="1" style="display: flex; align-items: center; gap: 22px; flex-wrap: wrap;">
-        <a href="Journey.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: var(--accent); color: #fff; padding: 19px 38px; border-radius: 999px;" style-hover="background: #f6f4ef; color: #1a2023;">START DESIGNING MY HOME →</a>
-        <a href="#portfolio" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; color: #f6f4ef; border-bottom: 1px solid rgba(246,244,239,0.5); padding-bottom: 4px; min-height: 24px;">EXPLORE DESIGNS ↓</a>
+        <a href="PlanIntake.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: var(--accent); color: #fff; padding: 19px 38px; border-radius: 999px;" style-hover="background: #f6f4ef; color: #1a2023;">UPLOAD YOUR FLOOR PLAN →</a>
+        <a href="#assistant" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; color: #f6f4ef; border-bottom: 1px solid rgba(246,244,239,0.5); padding-bottom: 4px;">MEET THE AI ASSISTANT ↓</a>
       </div>
       <div style="display: flex; gap: clamp(20px, 4vw, 48px); flex-wrap: wrap; margin-top: clamp(36px, 5vw, 56px); border-top: 1px solid rgba(246,244,239,0.2); padding-top: 22px;">
         <span style="font-size: 13.5px; color: rgba(246,244,239,0.75);">HDB · Condo · Landed</span>
@@ -96,8 +103,7 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
           <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 4px 11px;">SOON</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">AI photoreal renders generated from your uploaded plan</p></div>
           <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 4px 11px;">SOON</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">Project dashboard — milestones, payments and site photos</p></div>
         </div>
-        <p style="margin: 22px 0 0; font-size: 13.5px; line-height: 1.65; color: var(--mut); max-width: 52ch;">Your floor plan and confirmed measurements will be used as the foundation for the proposed design. Final site measurements are always verified before renovation or construction.</p>
-        <a href="Journey.html" style="display: inline-block; margin-top: 22px; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: var(--ink); color: var(--bg); padding: 16px 32px; border-radius: 999px; min-height: 44px;" style-hover="background: var(--accent); color: var(--accent-ink);">START DESIGNING MY HOME →</a>
+        <a href="PlanIntake.html" style="display: inline-block; margin-top: 30px; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: var(--ink); color: var(--bg); padding: 16px 32px; border-radius: 999px;" style-hover="background: var(--accent); color: var(--accent-ink);">START WITH YOUR ADDRESS →</a>
       </div>
       <div data-reveal="1" style="background: var(--dark); color: var(--dark-ink); border-radius: 10px; padding: clamp(22px, 3vw, 32px); box-shadow: 0 40px 80px -48px rgba(0,0,0,0.55);">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(246,244,239,0.14); padding-bottom: 14px; margin-bottom: 18px;">
@@ -106,10 +112,10 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
         </div>
         <div style="display: grid; gap: 12px;">
           <div style="justify-self: end; max-width: 85%; background: var(--accent); color: #fff; border-radius: 12px 12px 3px 12px; padding: 12px 16px; font-size: 14.5px; line-height: 1.55;">4-room resale in Bishan, Scandinavian look, around S$50k?</div>
-          <div style="justify-self: start; max-width: 90%; background: rgba(246,244,239,0.08); border-radius: 12px 12px 12px 3px; padding: 12px 16px; font-size: 14.5px; line-height: 1.6; color: rgba(246,244,239,0.9);">Plan received ✓ — 6 rooms detected on your 92 sqm layout. Scandinavian fits S$46-49k with full carpentry. Want to see your living room in 3D first?</div>
+          <div style="justify-self: start; max-width: 90%; background: rgba(246,244,239,0.08); border-radius: 12px 12px 12px 3px; padding: 12px 16px; font-size: 14.5px; line-height: 1.6; color: rgba(246,244,239,0.9);">Plan received ✓ — 6 rooms detected on your 92 sqm layout. Scandinavian prices at S$48.9k with full carpentry. Want to see your living room in 3D first?</div>
           <div style="justify-self: start; display: flex; gap: 8px; flex-wrap: wrap;">
-            <a href="Journey.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">SEE MY 3D MODEL</a>
-            <a href="Customize.dc.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">ITEMISE MY QUOTE</a>
+            <a href="PlanIntake.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">SEE MY 3D MODEL</a>
+            <a href="PlanIntake.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">ITEMISE MY QUOTE</a>
           </div>
         </div>
         <div style="display: flex; gap: 10px; margin-top: 18px; border-top: 1px solid rgba(246,244,239,0.14); padding-top: 16px;">
@@ -126,15 +132,12 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
           <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 14px;">PORTFOLIO</p>
           <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0; line-height: 1.12;">Rooms we've already made real</h2>
         </div>
-        <a href="Journey.html" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 4px; min-height: 24px;">APPLY ANY OF THESE TO YOUR PLAN →</a>
-      </div>
-      <p style="margin: -18px 0 32px; font-size: 12.5px; color: var(--mut);">All images are Home &amp; Me interior concepts and 3D renders — not photographs of completed customer homes.</p>
-      <div>
+        <a href="PlanIntake.html" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 4px;">APPLY ANY OF THESE TO YOUR PLAN →</a>
       </div>
       <div data-mq3="1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;">
         <sc-for list="{{ portfolio }}" as="p" hint-placeholder-count="6">
           <figure data-reveal="1" style="margin: 0;">
-            <div style="position: relative; overflow: hidden; border-radius: 5px;"><img src="{{ p.src }}" alt="{{ p.alt }}" loading="lazy" style="width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"><span style="position: absolute; top: 10px; left: 10px; font-family: 'Oswald', sans-serif; font-size: 9px; letter-spacing: 1.6px; background: rgba(20,25,27,0.72); color: #f6f4ef; border-radius: 999px; padding: 5px 10px;">INTERIOR CONCEPT</span></div>
+            <div style="overflow: hidden; border-radius: 5px;"><img src="{{ p.src }}" alt="{{ p.alt }}" loading="lazy" style="width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"></div>
             <figcaption style="display: flex; justify-content: space-between; gap: 10px; padding-top: 11px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--mut);"><span>{{ p.room }}</span><span style="color: var(--accent);">{{ p.theme }}</span></figcaption>
           </figure>
         </sc-for>
@@ -178,7 +181,7 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
     <div style="max-width: 1360px; margin: 0 auto;">
       <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 14px; text-align: center;">PRICING</p>
       <h2 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 16px; text-align: center; line-height: 1.12;">Whole-home themes, honest numbers</h2>
-      <p data-reveal="1" style="margin: 0 auto 52px; font-size: 16px; color: var(--mut); text-align: center; max-width: 56ch;">Guide prices for a full 4-room HDB renovation — every line itemises live in the customizer before you commit.</p>
+      <p data-reveal="1" style="margin: 0 auto 52px; font-size: 16px; color: var(--mut); text-align: center; max-width: 56ch;">Guide prices for a full 4-room HDB renovation — identical to the 3D journey’s live price book — every line itemises in the 3D journey before you commit.</p>
       <div data-mq3="1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: stretch;">
         <sc-for list="{{ plans }}" as="pl" hint-placeholder-count="3">
           <div data-reveal="1" style="background: var(--card); border: 1px solid {{ pl.border }}; border-radius: 10px; padding: 30px 26px; display: flex; flex-direction: column; gap: 14px; position: relative;">
@@ -191,7 +194,7 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
                 <span style="font-size: 14px; line-height: 1.55; color: var(--ink2);">— {{ f }}</span>
               </sc-for>
             </div>
-            <a href="Journey.html" style="margin-top: auto; text-align: center; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 12px; background: {{ pl.btnBg }}; color: {{ pl.btnInk }}; border: 1px solid var(--accent); padding: 15px 20px; border-radius: 999px;" style-hover="background: var(--ink); color: var(--bg); border-color: var(--ink);">PRICE MY PLAN →</a>
+            <a href="PlanIntake.html" style="margin-top: auto; text-align: center; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 12px; background: {{ pl.btnBg }}; color: {{ pl.btnInk }}; border: 1px solid var(--accent); padding: 15px 20px; border-radius: 999px;" style-hover="background: var(--ink); color: var(--bg); border-color: var(--ink);">PRICE MY PLAN →</a>
           </div>
         </sc-for>
       </div>
@@ -259,26 +262,19 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
         <span style="font-size: 13px; color: var(--mut);">© {{ year }} HOME AND ME PTE. LTD. · Singapore</span>
       </div>
       <nav style="display: flex; gap: 20px; flex-wrap: wrap; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
-        <a href="Home Redesign v2.dc.html">CLASSIC SITE</a>
+        
         <a href="Journey.html">3D JOURNEY</a>
-        <a href="Customize.dc.html">CUSTOMIZER</a>
+        
+        <a href="PlanLookup.html">FIND MY PLAN</a>
+        
+        <a href="PlanIntake.html">VERIFY A PLAN</a>
+        
         <a href="MyProject.dc.html">MY PROJECT</a>
         <a href="FaqAndHelp.dc.html">HELP</a>
         <a href="Legal.dc.html">PRIVACY &amp; LEGAL</a>
       </nav>
     </div>
   </footer>
-  <div style="display: none;" data-owner-confirmation-required="not shown to visitors">
-    OWNER CONFIRMATION REQUIRED —
-    (1) Official WhatsApp number: site uses +65 9423 5227; alternative on record +65 8919 0776.
-    (2) Official email: homeandme25@gmail.com — confirm as public enquiry address.
-    (3) Company UEN for footer.
-    (4) Address confirmed: 21 Toh Guan Road East #03-02 Toh Guan Centre S(608609).
-    (5) Deposit percentage and payment structure (Journey shows 5% PayNow — confirm).
-    (6) Which AI functions are live vs in development (assistant chat is a preview).
-    (7) Replace the three sample reviews with verified customer reviews.
-    (8) Confirm which portfolio images are completed projects vs concept renders.
-  </div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;light&quot;, &quot;dark&quot;], &quot;default&quot;: &quot;light&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Appearance&quot;}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;options&quot;: [&quot;#5a7e8a&quot;, &quot;#b08a5e&quot;, &quot;#7f97a0&quot;, &quot;#3d6270&quot;], &quot;default&quot;: &quot;#5a7e8a&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Appearance&quot;}, &quot;animations&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Appearance&quot;}}">
@@ -332,11 +328,11 @@ class Component extends DCLogic {
         { src: 'assets/renders/bathroom-stone.jpg', room: 'BATHROOM', theme: 'GREY STONE', alt: 'Grey stone bathroom' },
       ],
       steps: [
-        { n: '01', t: 'UPLOAD YOUR PLAN', d: 'PDF, JPG or PNG — the colour plan from HDB or your developer.', href: 'Journey.html' },
-        { n: '02', t: 'VERIFY & LAYOUT', d: 'Postal check, then your walls rise in a live 3D model.', href: 'Journey.html' },
-        { n: '03', t: 'DESIGN IN 3D', d: 'Theme every room, mix freely, priced line by line.', href: 'Journey.html' },
-        { n: '04', t: 'PAYNOW DEPOSIT', d: '5% locks your slot and your quote. Card also accepted.', href: 'Checkout.dc.html' },
-        { n: '05', t: 'RENOVATE & TRACK', d: 'Vetted contractors; milestones tracked in your dashboard.', href: 'MyProject.dc.html' },
+        { n: '01', t: 'YOUR ADDRESS', d: 'Postal code and unit. We confirm the property against the HDB register before anything else.', href: 'PlanIntake.html' },
+        { n: '02', t: 'YOUR FLOOR PLAN', d: 'Submit the plan. It is checked against your address, so the wrong plan never reaches a quote.', href: 'PlanIntake.html' },
+        { n: '03', t: 'SEE IT IN 3D', d: 'Your layout is built with real walls, doors and windows.', href: 'PlanIntake.html' },
+        { n: '04', t: 'CHOOSE YOUR DESIGN', d: 'Theme every room, mix freely, priced line by line.', href: 'PlanIntake.html' },
+        { n: '05', t: 'QUOTE & PAY', d: '5% PayNow deposit locks your slot and your quote. Card also accepted.', href: 'PlanIntake.html' },
       ],
       reviews: [
         { quote: 'We saw our actual flat in 3D before signing anything. The quote never changed from what the customizer showed.', who: 'SAMPLE REVIEW — REPLACE WITH GOOGLE REVIEW' },
@@ -365,9 +361,9 @@ class Component extends DCLogic {
 
   plansData() {
     return [
-      { name: 'ESSENTIAL', price: 'S$32,800', tag: false, feats: ['Scandinavian theme, whole home', 'Flooring, painting & wet works', 'Kitchen + 2 bathroom packages', 'Basic carpentry (wardrobe + TV console)'] },
-      { name: 'SIGNATURE', price: 'S$44,800', tag: true, feats: ['Modern Classic theme, whole home', 'Full carpentry throughout', 'Feature walls + designer lighting', 'Dedicated project manager'] },
-      { name: 'LUXE', price: 'S$56,800', tag: false, feats: ['Modern Luxe theme, whole home', 'Marble & brass feature finishes', 'Custom joinery, every room', 'Priority scheduling + styling session'] },
+      { name: 'ESSENTIAL', price: 'S$48,870', tag: false, feats: ['Scandinavian theme, whole home', 'Flooring, painting & wet works', 'Kitchen + 2 bathroom packages', 'Basic carpentry (wardrobe + TV console)'] },
+      { name: 'SIGNATURE', price: 'S$54,300', tag: true, feats: ['Modern Classic theme, whole home', 'Full carpentry throughout', 'Feature walls + designer lighting', 'Dedicated project manager'] },
+      { name: 'LUXE', price: 'S$62,445', tag: false, feats: ['Modern Luxe theme, whole home', 'Marble & brass feature finishes', 'Custom joinery, every room', 'Priority scheduling + styling session'] },
     ];
   }
 

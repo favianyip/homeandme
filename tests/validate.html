@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home &amp; Me — Plan-Faithful Demo Test Runner</title>
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.184.0/build/three.module.js" } }
+</script>
+<style>
+  body { font-family: "Helvetica Neue", Arial, sans-serif; background: #f6f4ef; color: #1a2023; margin: 0; padding: 28px; }
+  h1 { font-size: 18px; letter-spacing: 1px; } h2 { font-size: 14px; margin: 22px 0 8px; }
+  table { border-collapse: collapse; width: 100%; max-width: 880px; background: #fff; }
+  td, th { border: 1px solid rgba(26,32,35,0.12); padding: 6px 10px; font-size: 12.5px; text-align: left; }
+  .pass { color: #2e7d54; font-weight: 600; } .fail { color: #b4533a; font-weight: 600; } .warn { color: #b07c2a; font-weight: 600; }
+  #sum { font-size: 15px; margin: 16px 0; font-weight: 600; }
+  .note { font-size: 11.5px; color: #8a908c; max-width: 720px; }
+</style>
+</head>
+<body>
+<h1>PLAN-FAITHFUL DEMO — AUTOMATED CHECKS</h1>
+<p class="note">Builds every canonical plan document through the same engine that renders the customer demo (journey-3d.js), then runs schema, golden, door, furniture, connectivity and walkability validators (journey-validate.js). 2D/3D/validation all derive from the one document.</p>
+<div id="sum">Running…</div>
+<div id="out"></div>
+<script type="module">
+import * as THREE from 'three';
+const { createModel } = await import('../journey-3d.js');
+const { validateScene } = await import('../journey-validate.js');
+const { checkFidelity } = await import('../journey-fidelity.js');
+
+const FILES = ['../plans/plan-hdb3-pointblock.json', '../plans/plan-hdb4-corridor.json', '../plans/plan-condo-d4.json', '../plans/plan-shophouse-27jb.json'];
+const GOLD = {
+  hdb3: { floors: 1, spaces: 14, baths: 2, bedrooms: 2, kitchens: 1, shelters: 1, yards: 1, entries: 1 },
+  hdb4: { floors: 1, spaces: 14, baths: 2, bedrooms: 3, kitchens: 1, shelters: 0, yards: 1, entries: 1 },
+  hdb5: { floors: 1, spaces: 14, baths: 2, bedrooms: 3, kitchens: 1, shelters: 0, yards: 1, entries: 1 },
+  d4:   { floors: 1, spaces: 16, baths: 2, bedrooms: 4, kitchens: 1, shelters: 1, yards: 1, entries: 1 },
+  sh1:  { floors: 2, spaces: 13, baths: 3, bedrooms: 0, kitchens: 1, shelters: 0, yards: 1, entries: 1, stair: true },
+};
+const docs = (await Promise.all(FILES.map((f) => fetch(f).then((r) => r.json())))).filter(Boolean);
+const THEMES = [{ id: 'luxe', label: 'L', mult: 1, color: 0xb08a5e }, { id: 'classic', label: 'C', mult: 1, color: 0x7f97a0 }, { id: 'scandi', label: 'S', mult: 1, color: 0xcfc5b0 }];
+const ROOMS = { living: { label: 'LIVING & DINING' }, kitchen: { label: 'KITCHEN' }, family: { label: 'FAMILY ROOM' }, master: { label: 'MASTER BEDROOM' }, common: { label: 'COMMON BEDROOM' }, common2: { label: 'COMMON BEDROOM 2' }, study: { label: 'STUDY' }, bath: { label: 'BATHROOMS' } };
+
+const results = []; let passN = 0, failN = 0;
+const check = (plan, name, ok, detail) => { results.push({ plan, name, ok: !!ok, detail: detail || '' }); ok ? passN++ : failN++; if (!ok) console.log('[FAIL]', plan, '|', name, '|', (detail || '').slice(0, 300)); };
+// the front door: exactly one entrance on the ground storey, wide enough to walk through
+const entryCheck = (key, api) => {
+  const s0 = api.getScene().storeys[0];
+  const ent = s0.doors.filter((d) => d.kind === 'entry' || d.kind === 'frontdoor');
+  check(key, 'entrance: exactly one on ground storey', ent.length === 1, ent.map((d) => `${d.into} ${(d.w * 1000) | 0}mm`).join(', ') || 'NONE');
+  check(key, 'entrance: leaf ≥ 750mm', ent.length === 1 && ent[0].w >= 0.75, ent[0] ? `${(ent[0].w * 1000) | 0}mm into ${ent[0].into}` : 'no entrance');
+};
+
+for (const doc of docs) {
+  const key = doc.layout_key, gold = GOLD[key] || {};
+  // ---- schema tests ----
+  check(key, 'schema: plan_id + provenance + transform', !!(doc.plan_id && doc.provenance && doc.source_to_model_transform));
+  check(key, 'schema: assumed verticals labelled', /NOT VERIFIED/.test((doc.assumed_verticals || {}).label || ''));
+  let uniq = true, valid = true, spaces = 0;
+  doc.floors.forEach((f) => {
+    const seen = new Set();
+    f.spaces.forEach((s) => { spaces++; if (seen.has(s.key)) uniq = false; seen.add(s.key); if (!(s.w > 0.05 && s.d > 0.05) || s.x < -0.01 || s.z < -0.01 || s.x + s.w > f.width_m + 0.01 || s.z + s.d > f.depth_m + 0.01) valid = false; });
+  });
+  check(key, 'schema: unique space keys per floor', uniq);
+  check(key, 'schema: spaces valid + inside envelope', valid);
+  // ---- FIDELITY to the source sheet: coverage, printed dimension chains, envelope ----
+  const fid = checkFidelity(doc);
+  check(key, 'fidelity: trace confidence declared', /^(high|medium|low)$/.test(fid.confidence), fid.confidence);
+  check(key, 'fidelity: envelope', fid.envelope.ok, fid.envelope.issues.join('; '));
+  check(key, 'fidelity: every m² allocated or declared void', fid.coverage.ok, fid.coverage.issues.join('; '));
+  check(key, 'fidelity: printed dimension chains declared', fid.chains.declared > 0, `${fid.chains.declared} chains`);
+  check(key, 'fidelity: printed dims realised in the model', fid.chains.ok, fid.chains.issues.join('; '));
+  check(key, 'fidelity: area reconciliation', fid.area.ok, `${fid.area.internal_sqm.toFixed(1)}m² internal${fid.area.stated_sqm ? ' vs ' + fid.area.stated_sqm + ' printed' : ''}`);
+  // ---- goldens from doc ----
+  const all = doc.floors.flatMap((f) => f.spaces);
+  const n = (fn) => all.filter(fn).length;
+  check(key, `golden: floor count = ${gold.floors}`, doc.floors.length === gold.floors);
+  check(key, `golden: space count = ${gold.spaces}`, spaces === gold.spaces, `got ${spaces}`);
+  check(key, `golden: bath/WC count = ${gold.baths}`, n((s) => s.pid === 'bath') === gold.baths, `got ${n((s) => s.pid === 'bath')}`);
+  check(key, `golden: bedroom count = ${gold.bedrooms}`, n((s) => ['master', 'common', 'common2', 'study'].includes(s.key)) === gold.bedrooms);
+  check(key, 'golden: kitchen present', n((s) => s.key === 'kitchen') === gold.kitchens);
+  if (gold.stair) check(key, 'golden: stair on both floors', doc.floors.every((f) => f.spaces.some((s) => s.key === 'hall')));
+  // ---- build through the real engine (headless stage) ----
+  const state = { view: { walls: 'cut', dims: false, storey: -1 }, themes: {}, planUrl: null, room: null, layoutId: key };
+  const stage = { setObject() {} };
+  const api = createModel({ THREE, stage, state, tween: () => {}, THEMES, ROOMS, themeFor: () => 'luxe', layout: () => ({ id: key }), planDocs: [doc] });
+  let rep = null, buildOk = true;
+  try { api.buildModel(); rep = validateScene(api.getScene(), doc, doc.display_name); } catch (e) { buildOk = false; check(key, 'engine build', false, String(e && e.message)); }
+  if (rep) {
+    check(key, 'engine build', buildOk);
+    check(key, 'validate: geometry', rep.geometry.ok, rep.geometry.issues.join('; '));
+    check(key, 'validate: doors & openings', rep.doors.ok, rep.doors.issues.join('; '));
+    check(key, 'validate: every bath/WC has a usable door', !rep.doors.issues.some((i) => /WC\/bath has NO door/.test(i)));
+    check(key, 'validate: room connectivity from entrance', rep.connectivity.ok, rep.connectivity.issues.join('; '));
+    check(key, 'validate: walkability (entrance→every room)', rep.walkability.ok, rep.walkability.issues.join('; '));
+    check(key, 'validate: furniture collisions & door swings', rep.furniture.ok, rep.furniture.issues.join('; '));
+    if (gold.entries) check(key, `doors: ${gold.entries} exterior entrance(s)`, api.getScene().storeys.reduce((t, s) => t + s.doors.filter((d) => d.kind === 'entry' || d.kind === 'frontdoor').length, 0) === gold.entries);
+    entryCheck(key, api);
+    check(key, 'not blocking customer step', !rep.blocking, rep.blocking ? 'BLOCKING' : '');
+  }
+}
+
+/* ---- inline catalog layouts (offline fallbacks) get the same entrance guarantee ---- */
+for (const key of ['hdb2', 'hdb3', 'hdb4', 'hdb5', 'd4', 'hdbEA', 'c2', 'c3', 'cp', 'l1', 'l2', 'l3']) {
+  const state = { view: { walls: 'cut', dims: false, storey: -1 }, themes: {}, planUrl: null, room: null, layoutId: key };
+  const api = createModel({ THREE, stage: { setObject() {} }, state, tween: () => {}, THEMES, ROOMS, themeFor: () => 'luxe', layout: () => ({ id: key }), planDocs: [] });
+  const plan = 'catalog ' + key;
+  try {
+    api.buildModel();
+    entryCheck(plan, api);
+    const sc = api.getScene();
+    const pseudo = { display_name: key, trace_confidence: 'low', floors: sc.storeys.map((s) => ({ width_m: s.W, depth_m: s.D, dim_chains: [{ axis: 'x', mode: 'clear', printed: [] }], spaces: s.rects.map((r) => ({ key: r.key, x: r.x, z: r.z, w: r.w, d: r.d, out: r.out })), voids: s.voids || [] })) };
+    const cfid = checkFidelity(pseudo);
+    check(plan, 'fidelity: every m² allocated (no silent holes)', cfid.coverage.ok, cfid.coverage.issues.join('; '));
+    const rep = validateScene(sc, null, key);
+    check(plan, 'validate: connectivity from entrance', rep.connectivity.ok, rep.connectivity.issues.join('; '));
+    check(plan, 'validate: walkability (entrance→every room)', rep.walkability.ok, rep.walkability.issues.join('; '));
+  } catch (e) { check(plan, 'engine build', false, String(e && e.message)); }
+}
+
+const byPlan = {};
+results.forEach((r) => { (byPlan[r.plan] = byPlan[r.plan] || []).push(r); });
+document.getElementById('out').innerHTML = Object.entries(byPlan).map(([plan, rows]) => `
+  <h2>${plan} — ${rows.filter((r) => r.ok).length}/${rows.length} passed</h2>
+  <table><tr><th>check</th><th>result</th><th>detail</th></tr>
+  ${rows.map((r) => `<tr><td>${r.name}</td><td class="${r.ok ? 'pass' : 'fail'}">${r.ok ? 'PASS' : 'FAIL'}</td><td>${r.detail}</td></tr>`).join('')}
+  </table>`).join('');
+document.getElementById('sum').textContent = `TOTAL: ${passN} passed · ${failN} failed · ${docs.length}/4 plan documents · 12 catalog layouts`;
+document.getElementById('sum').className = failN ? 'fail' : 'pass';
+console.log('[TESTS]', JSON.stringify({ pass: passN, fail: failN }));
+</script>
+</body>
+</html>

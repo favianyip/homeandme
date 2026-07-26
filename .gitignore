@@ -1,0 +1,11 @@
+# Private source floor plans — customer/source material. NEVER commit to this public repo.
+uploads/
+
+# Local design-handoff / review artifacts (kept out of the deployed site)
+design_handoff_plan_faithful_journey/
+screenshots/
+tools/
+.thumbnail
+
+# Env / secrets
+.env

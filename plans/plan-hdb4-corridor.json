@@ -1,0 +1,76 @@
+{
+ "schema": "hnm-plan-scene/2",
+ "plan_id": "sp-hdb4-corr-b",
+ "display_name": "HDB 4-ROOM CORRIDOR",
+ "source_type": "uploaded_floor_plan_pdf",
+ "source_reference": "PRIVATE SOURCE PLAN — held offline, not published",
+ "display_source": "Private source plan (on file)",
+ "anonymised": true,
+ "provenance": "MANUALLY TRACED FROM SOURCE PLAN",
+ "site_disclaimer": "DIMENSIONS REQUIRE SITE VERIFICATION",
+ "units": "m",
+ "source_to_model_transform": {
+  "note": "plan sheet top edge = model z=0 (bedroom window facade); x left-to-right; printed mm / 1000. Rect edges are structural centre-lines; the engine thickens walls about them.",
+  "scale": 0.001,
+  "flip_z": false
+ },
+ "assumed_verticals": {
+  "wall_height_cutaway_m": 1.2,
+  "wall_height_full_m": 2.5,
+  "floor_to_floor_m": 2.85,
+  "label": "ASSUMED FOR DEMO — HEIGHT NOT VERIFIED"
+ },
+ "verification_status": "MANUAL_TRACE_VERIFIED_2D",
+ "trace_confidence": "high",
+ "space_grammar": "space: key,pid,x,z,w,d + dw (door wall on the room carrying the leaf); pass=circulation; aux=non-habitable; out=outside the weather line (ledge/AC — excluded from area and walkability); voids=bounding-box area that is deliberately NOT part of the unit; walls/doors/windows are derived deterministically from adjacency by the shared engine (journey-3d.js) for BOTH 2D and 3D views",
+ "layout_key": "hdb4",
+ "dim_chains": [
+  { "axis": "x", "label": "top bays", "mode": "axis", "printed": [2850, 3300, 1700, 1600, 2250], "total": 11700 },
+  { "axis": "z", "label": "left edge", "mode": "axis", "band": [0, 2.85], "printed": [400, 4100, 4400], "total": 8900 },
+  { "axis": "z", "label": "right edge (kitchen → shelter)", "mode": "axis", "band": [9.45, 11.7], "printed": [400, 6000, 2500], "total": 8900 },
+  { "axis": "x", "label": "clear widths", "mode": "clear", "printed": [2850, 3300, 1700, 1600, 2250] },
+  { "axis": "z", "label": "clear depths", "mode": "clear", "printed": [2500, 2300, 800, 3600, 4100, 6000] }
+ ],
+ "printed_dims_used": [
+  "11700 × 8900 overall",
+  "2850/3300/1700/1600/2250 bays",
+  "400/4100/4400 left depth chain (4400 = 800 hall + 3600 bedroom 3)",
+  "400/6000 kitchen depth chain",
+  "2500 air-con ledge depth",
+  "2300 bath depth",
+  "3600 bedroom 3 / living party wall",
+  "2100 store CLEAR depth (2500 structural, incl. 400 shelter blast wall)"
+ ],
+ "unresolved_dims": [
+  "1200/1650 store door bay — door position taken at the store's west wall",
+  "300 step where the bath band (4800) runs deeper than the bedroom band (4500): modelled as the living/dining north step"
+ ],
+ "needs_review": [
+  "public access balcony sits OUTSIDE the 8900 envelope and is not modelled — the entrance opens onto it",
+  "store/pantry doubles as the apartment shelter; blast-wall thickness assumed"
+ ],
+ "floors": [
+  {
+   "width_m": 11.7,
+   "depth_m": 8.9,
+   "elevation": "stacked at floor_to_floor_m (assumed)",
+   "voids": [],
+   "spaces": [
+    { "key": "ledge_n", "x": 0, "z": 0, "w": 6.15, "d": 0.4, "lbl": "RC LEDGE", "aux": 1, "out": 1 },
+    { "key": "common", "x": 0, "z": 0.4, "w": 2.85, "d": 4.1, "lbl": "BEDROOM 2", "dw": "N" },
+    { "key": "master", "x": 2.85, "z": 0.4, "w": 3.3, "d": 4.1, "lbl": "MAIN BEDROOM", "dw": "N" },
+    { "key": "ac", "x": 6.15, "z": 0, "w": 1.7, "d": 2.5, "lbl": "AIR-CON LEDGE", "aux": 1, "out": 1 },
+    { "key": "yard", "x": 7.85, "z": 0, "w": 1.6, "d": 2.5, "lbl": "SERVICE YARD", "aux": 1 },
+    { "key": "bath_m", "x": 6.15, "z": 2.5, "w": 1.7, "d": 2.3, "pid": "bath", "lbl": "BATH / WC 1", "dw": "N" },
+    { "key": "bath_c", "x": 7.85, "z": 2.5, "w": 1.6, "d": 2.3, "pid": "bath", "lbl": "BATH / WC 2", "dw": "N" },
+    { "key": "ledge_e", "x": 9.45, "z": 0, "w": 2.25, "d": 0.4, "lbl": "RC LEDGE", "aux": 1, "out": 1 },
+    { "key": "kitchen", "x": 9.45, "z": 0.4, "w": 2.25, "d": 6.0, "dw": "W" },
+    { "key": "corr", "x": 0, "z": 4.5, "w": 2.85, "d": 0.8, "lbl": "HALL", "aux": 1, "pass": 1 },
+    { "key": "common2", "x": 0, "z": 5.3, "w": 2.85, "d": 3.6, "lbl": "BEDROOM 3", "dw": "S" },
+    { "key": "living", "x": 2.85, "z": 4.5, "w": 3.3, "d": 4.4, "open": ["E"] },
+    { "key": "living2", "x": 6.15, "z": 4.8, "w": 3.3, "d": 4.1, "pid": "living", "lbl": "DINING", "open": ["W"], "entry": "N" },
+    { "key": "store", "x": 9.45, "z": 6.4, "w": 2.25, "d": 2.5, "lbl": "STORE / PANTRY", "aux": 1 }
+   ]
+  }
+ ]
+}

@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+<title>Checkout — Home &amp; Me</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
 </head>
@@ -21,12 +22,21 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
   <header style="position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1);">
     <div style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); height: 72px; display: flex; align-items: center; gap: 20px;">
       <a href="Home AI.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 40px; width: auto;"></a>
-      <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c; border-left: 1px solid rgba(26,32,35,0.15); padding-left: 20px;">SECURE CHECKOUT · 4-ROOM HDB · RESALE</span>
-      <a href="Customize.dc.html" style="margin-left: auto; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; white-space: nowrap;">← BACK TO CUSTOMIZER</a>
+      <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c; border-left: 1px solid rgba(26,32,35,0.15); padding-left: 20px;">SECURE CHECKOUT · {{ crumbCtx }}</span>
+      <a href="Journey.html" style="margin-left: auto; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; white-space: nowrap;">← BACK TO 3D JOURNEY</a>
     </div>
   </header>
 
   <div style="max-width: 1200px; width: 100%; margin: 0 auto; padding: clamp(20px, 3.5vw, 40px) clamp(16px, 3vw, 32px); flex: 1;">
+    <sc-if value="{{ noSpec }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width: 640px; margin: clamp(20px, 6vw, 60px) auto; background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: clamp(28px, 5vw, 48px); text-align: center;">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.8px; color: #5a7e8a; margin: 0 0 12px;">NOTHING TO CHECK OUT YET</p>
+        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 28px; margin: 0 0 12px;">Your quote starts with your floor plan</h1>
+        <p style="margin: 0 auto 26px; font-size: 15px; line-height: 1.65; color: #4a5350; max-width: 46ch;">Every number here is itemised from the rooms and themes you pick in the 3D journey — no made-up prices. Start at Station 01 and your spec will be waiting.</p>
+        <a href="Journey.html" style="display: inline-block; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 16px 34px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">STATION 01 — UPLOAD FLOOR PLAN →</a>
+      </div>
+    </sc-if>
+    <sc-if value="{{ hasSpec }}" hint-placeholder-val="{{ true }}">
     <div style="display: flex; gap: 8px; align-items: center; margin-bottom: clamp(24px, 4vw, 40px); flex-wrap: wrap;">
       <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
         <span style="display: flex; align-items: center; gap: 8px;">
@@ -92,7 +102,7 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
         </sc-if>
 
         <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
-          <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 26px; margin: 0 0 6px;">Payment — 30% deposit</h1>
+          <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 26px; margin: 0 0 6px;">Payment — 10% deposit</h1>
           <p style="margin: 0 0 20px; font-size: 15px; color: #8a908c;">Pay {{ deposit }} now; the balance is billed by milestone as work completes.</p>
           <div style="display: flex; gap: 10px; margin-bottom: 22px;">
             <button type="button" onClick="{{ payCard }}" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.8px; padding: 12px 22px; border-radius: 999px; cursor: pointer; border: 1px solid {{ cardBorder }}; background: {{ cardBg }}; color: {{ cardColor }};">CARD</button>
@@ -111,7 +121,7 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
           <sc-if value="{{ isQr }}" hint-placeholder-val="{{ false }}">
             <div style="display: flex; gap: 22px; align-items: center; flex-wrap: wrap;">
               <img src="assets/images/qr-img.png" alt="PayNow QR" style="width: 150px; height: 150px; border: 1px solid rgba(26,32,35,0.15); border-radius: 8px; background: #fff; padding: 8px;">
-              <p style="margin: 0; font-size: 15px; color: #4a5350; max-width: 300px; line-height: 1.6;">Scan with your banking app to pay the {{ deposit }} deposit via PayNow. Reference: HNM-2026-0147.</p>
+              <p style="margin: 0; font-size: 15px; color: #4a5350; max-width: 300px; line-height: 1.6;">Scan with your banking app to pay the {{ deposit }} deposit via PayNow. Reference: {{ orderRef }}.</p>
             </div>
           </sc-if>
           <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 26px;">
@@ -124,7 +134,7 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
           <div style="text-align: center; padding: 28px 10px;">
             <span style="display: inline-flex; width: 64px; height: 64px; border-radius: 50%; background: rgba(90,126,138,0.12); color: #5a7e8a; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 18px;">✓</span>
             <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 28px; margin: 0 0 10px;">Payment successful</h1>
-            <p style="margin: 0 0 8px; font-size: 16px; color: #4a5350;">Project <strong>HNM-2026-0147</strong> is confirmed. Deposit of {{ deposit }} received.</p>
+            <p style="margin: 0 0 8px; font-size: 16px; color: #4a5350;">Project <strong>{{ orderRef }}</strong> is confirmed. Deposit of {{ deposit }} received.</p>
             <p style="margin: 0 0 26px; font-size: 15px; color: #8a908c;">Your project coordinator will contact you within 2 working days to schedule site measurement.</p>
             <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
               <a href="MyProject.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 15px 32px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">TRACK MY PROJECT →</a>
@@ -147,12 +157,13 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
           <span style="font-family: 'Oswald', sans-serif; font-size: 22px; color: #8fb0bb;">{{ total }}</span>
         </div>
         <div style="display: flex; justify-content: space-between; padding: 8px 0;">
-          <span style="font-size: 13px; color: rgba(246,244,239,0.6);">Deposit due today (30%)</span>
+          <span style="font-size: 13px; color: rgba(246,244,239,0.6);">Deposit due today (10%)</span>
           <span style="font-family: 'Oswald', sans-serif; font-size: 14px;">{{ deposit }}</span>
         </div>
         <p style="margin: 14px 0 0; font-size: 12px; color: rgba(246,244,239,0.5);">Demo checkout — no real payment is taken. Stripe / PayPal from the original site wire in here.</p>
       </aside>
     </div>
+    </sc-if>
   </div>
 
   <footer style="border-top: 1px solid rgba(26,32,35,0.1); padding: 28px clamp(16px, 3vw, 32px);">
@@ -170,42 +181,27 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = {
-    step: 1, pay: 'card', plan: false, s1Err: false,
+    step: 1, pay: 'card', plan: false, s1Err: false, spec: null, planName: '',
+    orderRef: 'HNM-' + new Date().getFullYear() + '-' + String(Math.floor(1000 + Math.random() * 9000)),
     fName: '', fMobile: '', fAddress: '', fPostal: '', fKeys: '',
   };
 
-  quote() {
-    return [
-      { room: 'LIVING & DINING', items: [
-        { label: 'Flooring — porcelain tiles', amount: 4830 },
-        { label: 'Feature wall & TV console', amount: 4370 },
-        { label: 'Ceiling & lighting works', amount: 2760 },
-        { label: 'Painting', amount: 1265 },
-      ]},
-      { room: 'KITCHEN', items: [
-        { label: 'Kitchen carpentry', amount: 6440 },
-        { label: 'Worktop & backsplash', amount: 3220 },
-      ]},
-      { room: 'MASTER BEDROOM', items: [
-        { label: 'Built-in wardrobe', amount: 3910 },
-        { label: 'Feature headboard wall', amount: 2530 },
-        { label: 'Flooring — vinyl', amount: 2070 },
-      ]},
-      { room: 'BATHROOMS', items: [
-        { label: 'Wall & floor tiling', amount: 5980 },
-        { label: 'Vanity & mirror cabinet', amount: 2185 },
-        { label: 'Shower screen & fittings', amount: 1955 },
-        { label: 'Plumbing & waterproofing', amount: 2990 },
-      ]},
-    ];
+  componentDidMount() {
+    try {
+      const spec = JSON.parse(localStorage.getItem('hnm_quote_v1') || 'null');
+      if (spec && spec.rooms && spec.rooms.length) {
+        this.setState({ spec, fPostal: spec.postal || '', fAddress: spec.addr || '', plan: !!spec.planName, planName: spec.planName || '' });
+      }
+    } catch (e) {}
   }
 
   fmt(n) { return 'S$ ' + Math.round(n).toLocaleString('en-SG'); }
 
   renderVals() {
     const s = this.state;
-    const q = this.quote();
-    const total = q.reduce((t, g) => t + g.items.reduce((x, i) => x + i.amount, 0), 0);
+    const spec = s.spec;
+    const total = spec ? spec.total : 0;
+    const rooms = spec ? spec.rooms : [];
     const stepDefs = [[1, 'ADDRESS'], [2, 'REVIEW'], [3, 'PAYMENT'], [4, 'DONE']];
     return {
       steps: stepDefs.map(([n, label], i) => ({
@@ -224,7 +220,10 @@ class Component extends DCLogic {
         this.setState({ step: 2, s1Err: false });
       },
       toStep3: () => this.setState({ step: 3 }),
-      toStep4: () => this.setState({ step: 4 }),
+      toStep4: () => {
+        try { localStorage.setItem('hnm_project_v1', JSON.stringify({ ref: s.orderRef, paidAt: new Date().toISOString(), deposit: Math.round(total * 0.1), spec })); } catch (e) {}
+        this.setState({ step: 4 });
+      },
       fName: s.fName, fMobile: s.fMobile, fAddress: s.fAddress, fPostal: s.fPostal, fKeys: s.fKeys,
       setFName: (e) => this.setState({ fName: e.target.value }),
       setFMobile: (e) => this.setState({ fMobile: e.target.value }),
@@ -233,13 +232,16 @@ class Component extends DCLogic {
       setFKeys: (e) => this.setState({ fKeys: e.target.value }),
       s1Err: s.s1Err,
       plan: s.plan,
-      planStatus: s.plan ? 'floor-plan.pdf attached ✓' : 'PDF or image of your floor / layout plan.',
+      planStatus: s.plan ? (s.planName || 'floor plan') + ' attached ✓' : 'PDF or image of your floor / layout plan.',
       planBtn: s.plan ? 'REPLACE' : 'ATTACH FILE',
       attachPlan: () => this.setState({ plan: true }),
-      reviewGroups: q.map((g) => ({ room: g.room, items: g.items.map((i) => ({ label: i.label, amount: this.fmt(i.amount) })) })),
-      summaryRows: q.map((g) => ({ label: g.room, amount: this.fmt(g.items.reduce((x, i) => x + i.amount, 0)) })),
+      reviewGroups: rooms.map((r) => ({ room: r.label, items: [{ label: r.themeLabel + ' theme — full room scope', amount: this.fmt(r.amount) }] })),
+      summaryRows: rooms.map((r) => ({ label: r.label, amount: this.fmt(r.amount) })),
       total: this.fmt(total),
-      deposit: this.fmt(total * 0.3),
+      deposit: this.fmt(total * 0.1),
+      noSpec: !spec, hasSpec: !!spec,
+      crumbCtx: spec ? spec.layoutLabel + ' ' + spec.propertyLabel + (spec.area ? ' · ' + spec.area.toUpperCase() : '') : 'START WITH YOUR FLOOR PLAN',
+      orderRef: s.orderRef,
       isCard: s.pay === 'card', isQr: s.pay === 'qr',
       payCard: () => this.setState({ pay: 'card' }),
       payQr: () => this.setState({ pay: 'qr' }),
