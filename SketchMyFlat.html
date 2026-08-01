@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home &amp; Me — Sketch My Flat</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Arial, sans-serif; }
+  a { color: #5a7e8a; text-decoration: none; }
+  a:hover { color: #3f5d67; }
+  .osw { font-family: 'Oswald', sans-serif; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
+  header { position: sticky; top: 0; z-index: 40; background: rgba(246,244,239,0.93); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(26,32,35,0.12); }
+  header .bar { display: flex; align-items: center; gap: 26px; padding: 14px 0; }
+  header nav { margin-left: auto; display: flex; gap: 22px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; }
+  header nav a { color: #1a2023; }
+  header nav a:hover { color: #5a7e8a; }
+  .card { background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 10px; }
+  .pill { font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; border-radius: 999px; padding: 13px 26px; cursor: pointer; border: 1px solid rgba(26,32,35,0.3); background: none; color: #1a2023; }
+  .pill:hover { background: rgba(26,32,35,0.06); }
+  .pill-g { background: #5a7e8a; border-color: #5a7e8a; color: #fff; }
+  .pill-g:hover { background: #6f95a1; }
+  .pill-d { background: #1a2023; border-color: #1a2023; color: #f6f4ef; }
+  .pill-d:hover { background: #33403f; }
+  .pill[disabled] { opacity: 0.4; cursor: default; }
+  .steps { display: flex; gap: 10px; flex-wrap: wrap; margin: 26px 0 18px; }
+  .step { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(26,32,35,0.2); color: rgba(26,32,35,0.45); }
+  .step.on { background: #1a2023; border-color: #1a2023; color: #f6f4ef; }
+  .drop { border: 2px dashed rgba(90,126,138,0.55); border-radius: 12px; padding: clamp(34px, 6vw, 64px) 24px; text-align: center; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+  .drop.over { background: rgba(90,126,138,0.08); border-color: #5a7e8a; }
+  .chip { font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; border: 1px solid rgba(90,126,138,0.5); color: #5a7e8a; border-radius: 999px; padding: 8px 14px; cursor: pointer; background: none; }
+  .chip:hover { background: rgba(90,126,138,0.1); }
+  .sw { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 8px; vertical-align: -1px; }
+  select, input[type="number"] { font: 13px "Helvetica Neue", Arial, sans-serif; padding: 7px 9px; border: 1px solid rgba(26,32,35,0.25); border-radius: 6px; background: #fff; max-width: 100%; }
+  .note { font-size: 12.5px; line-height: 1.6; color: rgba(26,32,35,0.6); }
+  .htog { font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.8px; border: 1px solid rgba(26,32,35,0.3); background: none; color: #1a2023; border-radius: 999px; padding: 8px 15px; cursor: pointer; }
+  .htog.on { background: #1a2023; color: #f6f4ef; border-color: #1a2023; }
+</style>
+</head>
+<body>
+<header data-embed-hide="1">
+  <div class="wrap bar">
+    <a href="Home AI.dc.html" style="display:flex;align-items:center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height:44px;width:auto;"></a>
+    <nav><a href="Home AI.dc.html">HOME</a><a href="Assistant.dc.html">ASSISTANT</a><a href="PlanIntake.html">VERIFY A PLAN</a><a href="PlanDetect.html">DETECTION LAB</a><a href="Studio.html">3D STUDIO</a></nav>
+  </div>
+</header>
+
+<section class="wrap" data-embed-hide="1" style="padding-top:clamp(30px,4.5vw,50px);">
+  <p class="osw" style="font-size:12px;letter-spacing:3.4px;color:#5a7e8a;margin:0 0 12px;">SKETCH MY FLAT</p>
+  <h1 class="osw" style="font-weight:400;font-size:clamp(28px,4.2vw,46px);margin:0 0 12px;line-height:1.1;">Drop in any HDB floor plan. Walk out with your unit in 3D.</h1>
+  <p style="margin:0;font-size:16px;line-height:1.7;color:rgba(26,32,35,0.7);max-width:70ch;text-wrap:pretty;">We trace the actual ink — walls, rooms, doors, windows — read the printed dimensions to set true scale, then extrude your unit 1:1. Nothing is invented: detection gaps stay gaps.</p>
+  <div class="steps">
+    <span class="step on" id="st1">01 · UPLOAD PLAN</span>
+    <span class="step" id="st2">02 · WALLS TRACED</span>
+    <span class="step" id="st3">03 · 3D SKETCH</span>
+  </div>
+</section>
+
+<section class="wrap" style="padding-bottom:26px;">
+  <div class="card" style="padding:clamp(16px,3vw,26px);">
+    <div class="drop" id="drop">
+      <p class="osw" style="margin:0 0 8px;font-size:clamp(17px,2.4vw,24px);letter-spacing:2px;">DROP YOUR FLOOR PLAN HERE</p>
+      <p class="note" style="margin:0 0 18px;">PDF, PNG, JPG or WEBP — a scan, a screenshot, even a phone photo. Or paste it (Ctrl/Cmd+V).</p>
+      <button class="pill pill-d" type="button" id="browse">BROWSE FILES</button>
+      <input type="file" id="file" accept="image/*,application/pdf,.pdf" style="display:none;">
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px;">
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="s2" style="display:none;padding-bottom:26px;">
+  <div class="card" style="padding:clamp(16px,3vw,26px);">
+    <p class="osw" id="status" style="margin:0 0 14px;font-size:12px;letter-spacing:2.4px;color:#5a7e8a;">TRACING…</p>
+    <div style="display:grid;grid-template-columns:minmax(300px,1.5fr) minmax(260px,1fr);gap:20px;align-items:start;">
+      <div style="min-width:0;">
+        <canvas id="out" style="width:100%;height:auto;border:1px solid rgba(26,32,35,0.12);border-radius:8px;background:#fdfcf9;"></canvas>
+        <p class="note" style="margin:10px 0 0;">Walls only, as you draw it: red = structural · blue = partition · faint grey = the rest of your drawing (furniture and fixture ink filtered out) · light tints + labels = detected rooms · dashed = unit envelope.</p>
+      </div>
+      <div style="min-width:0;">
+        <div id="planTypeBox"></div>
+        <div id="scaleBox" class="note" style="margin-bottom:14px;"></div>
+        <div id="rooms" style="display:grid;grid-template-columns:minmax(0,1fr);gap:8px;"></div>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:14px;flex-wrap:wrap;">
+          <input type="number" id="mw" step="0.05" min="3" max="30" placeholder="overall width, m" style="width:150px;">
+          <button class="chip" id="mwGo" type="button">CORRECT SCALE</button>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px;border-top:1px solid rgba(26,32,35,0.1);padding-top:18px;">
+      <button class="pill pill-g" id="cta" type="button" disabled style="font-size:13px;padding:16px 34px;">SKETCH MY 3D FLAT →</button>
+      <span class="note">Walls extruded 1:1 from your drawing at full 2.6 m height.</span>
+      <span class="note" id="failHelp" style="display:none;">Trouble tracing? The <a href="PlanDetect.html">detection lab</a> has manual controls and a typical-layout fallback.</span>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="s3" style="display:none;padding-bottom:48px;">
+  <div class="card" style="padding:clamp(16px,3vw,26px);">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
+      <p class="osw" style="margin:0;font-size:12px;letter-spacing:2.4px;color:#5a7e8a;flex:1;min-width:200px;">YOUR UNIT — TRACED &amp; EXTRUDED</p>
+      <button class="htog on" id="hFull" type="button">FULL HEIGHT 2.6 M</button>
+      <button class="htog" id="hCut" type="button">DOLLHOUSE CUT</button>
+      <button class="htog" id="hDiag" type="button">RED / BLUE DIAGNOSTIC</button>
+      <button class="htog on" id="hPath" type="button" title="Clean rebuild from the plan contract, or the raw 1:1 pixel trace">CLEAN REBUILD</button>
+      <a class="chip" href="Studio.html" style="text-decoration:none;">DRESS IT IN THE 3D STUDIO →</a>
+    </div>
+    <div style="position:relative;height:min(68vh,640px);background:#eceade;border-radius:8px;overflow:hidden;">
+      <three-d-stage id="stage3d" name="my-flat" background="#eceade" style="position:absolute;inset:0;width:100%;height:100%;"></three-d-stage>
+    </div>
+    <p class="note" id="skNote" style="margin:12px 0 0;"></p>
+  </div>
+</section>
+
+<script src="three-d-stage.js"></script>
+<script type="module">
+import { analysePlan, scaleCandidates, guessName, refineSmallCells, doorStats, widenDoors, classifyWalls, planTypeCheck } from './journey-vision.js';
+import { readDimensions, confirmScale, loadFontPack } from './journey-ocr.js';
+import { buildFaithful, traceCoverage } from './journey-faithful.js';
+import { regularise, inferWCs } from './journey-regularise.js';
+import { buildContract, validateContract } from './journey-contract.js';
+import { buildSolid } from './journey-solid.js';
+import { predictRooms, detToRects, nameFor } from './journey-ml.js';
+import { loadArchetypes } from './journey-archetype.js';
+
+const $ = (s) => document.querySelector(s);
+// Embedded inside the intake flow: drop our own chrome and report every stage to the host page,
+// so the address check and the 3D live in one 01–05 flow instead of three separate pages.
+const EMBED = new URLSearchParams(location.search).has('embed');
+if (EMBED) {
+  document.querySelectorAll('[data-embed-hide]').forEach((el) => { el.style.display = 'none'; });
+  document.body.style.background = 'transparent';
+}
+function post(type, payload) {
+  if (!EMBED) return;
+  try { parent.postMessage(Object.assign({ src: 'sketchmyflat', type }, payload || {}), '*'); } catch (e) { /* no host */ }
+}
+let lastH = 0;
+function postSize() {
+  if (!EMBED) return;
+  const h = Math.ceil(Math.max(document.body.scrollHeight, document.documentElement.scrollHeight));
+  if (h === lastH) return;
+  lastH = h;
+  post('size', { height: h });
+}
+if (EMBED) {
+  // A ResizeObserver on <body> does not fire when the growth comes from children that overflow
+  // it (canvas + chip grid), which is exactly the traced stage — the panel then sits clipped at
+  // its authored height with the 3D button below the fold. Poll scrollHeight instead; postSize
+  // is idempotent, so this costs nothing until the height actually changes.
+  new ResizeObserver(postSize).observe(document.documentElement);
+  setInterval(postSize, 400);
+  addEventListener('message', (e) => {
+    const d = e.data || {};
+    if (d.src !== 'planintake') return;
+    if (d.type === 'file' && d.url) start(d.url);
+    if (d.type === 'sketch') { const b = $('#cta'); if (b && !b.disabled) b.click(); }
+  });
+}
+const NAMES = ['LIVING / DINING','BEDROOM','MAIN BEDROOM','KITCHEN','BATH / WC','STORE','HOUSEHOLD SHELTER','SERVICE YARD','HALL','BALCONY','UTILITY','STORE / WC','OTHER'];
+const TINT = ['#5a7e8a','#b08a5e','#8aa17c','#9c8aa6','#c8b9a0','#7fa8b5','#b4737a','#87a37f','#a7906c','#7d94a5','#b5a24f','#8f7fb5'];
+const MODEL_BY_PREFIX = { '445': 'New Flat', '452': 'Model A', '453': 'Model A', '462': 'Simplified', '332': 'Improved', '300': 'SA' };
+const TYPE_BY_DIGIT = { '2': '2room', '3': '3room', '4': '4room', '5': '5room' };
+
+// Say which rung of the scale ladder fired. "Scale estimated from the closest archetype" and
+// "scale read off the sheet" are wildly different in reliability, and the user has no way to tell
+// them apart unless we say so — which is how a 1.66× error passed as a finished model. Module
+// scope, because the correct-scale handler must be able to restate it too.
+const TRUST = {
+  'pdf-ratio': ['#2e7d54', 'Exact — taken from the drawing, not inferred.'],
+  user: ['#2e7d54', 'Set by you from the printed sheet — the strongest evidence we have.'],
+  'printed-figure': ['#2e7d54', 'Strong — a printed figure on the sheet agrees with it.'],
+  'code-archetype': ['#a8761f', 'Fair — the sheet code named the flat type, but no printed dimension confirmed the size. Check one room against your own measurements.'],
+  archetype: ['#a8761f', 'Weak — matched on proportions alone, with no sheet code and no printed figure. Type the printed overall width if any room looks off.'],
+  assumed: ['#a8761f', 'Guessed from typical doorway widths. Type the printed overall width.'],
+};
+const trustLine = (s) => (TRUST[s] ? '<p style="margin:6px 0 0;color:' + TRUST[s][0] + ';"><b>Scale confidence:</b> ' + TRUST[s][1] + '</p>' : '');
+let det = null, mmPerPx = null, names = {}, mlInfo = {}, vNames = {}, arch = null, WM = null, mlModel = null, curSrc = null, wallH = 2.6, diag = false, lastCands = [], lastConf = null, clean = true, wcHint = null, lastReg = null, lastRegSig = '';
+const regSig = () => JSON.stringify(names) + '|' + mmPerPx + '|' + wallH;
+const WC_BY_TYPE = { '2room': 1, '3room': 1, '4room': 2, '5room': 2, 'exec': 2, 'SA': 1 };
+loadArchetypes('').then((a) => { arch = a; });
+fetch('plans/wall-model.json').then((r) => r.json()).then((m) => { WM = m; }).catch(() => {});
+fetch('plans/room-classifier.json').then((r) => r.ok ? r.json() : null).then((m) => { mlModel = m; }).catch(() => {});
+fetch('plans/digit-font.json').then((r) => r.json()).then((p) => loadFontPack(p)).catch(() => {});
+
+function codeFamilyHint(ocr) {
+  const c = ocr && ocr.codes && ocr.codes.length ? ocr.codes[0].code : null;
+  if (!c) return null;
+  const model = MODEL_BY_PREFIX[c.slice(0, 3)] || null;
+  const type = c.slice(0, 3) === '300' ? 'SA' : TYPE_BY_DIGIT[c[0]] || null;
+  const pref = (cand) => (model && cand.name.includes(model) ? 2 : 0) + (type && cand.flat_type === type ? 1 : 0);
+  return { code: c, model, type, pref };
+}
+async function fitImage(url) {
+  const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('not a readable image')); i.src = url; });
+  const mx = Math.max(im.width, im.height);
+  if (mx <= 1700) return url;
+  const c = document.createElement('canvas'), s = 1700 / mx;
+  c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+  const g = c.getContext('2d'); g.imageSmoothingQuality = 'high';
+  g.drawImage(im, 0, 0, c.width, c.height);
+  return c.toDataURL('image/png');
+}
+function nameRooms(scale) {
+  names = {}; mlInfo = {};
+  if (mlModel) {
+    const { rooms: rr, env } = detToRects(det, scale);
+    const preds = predictRooms(rr, env, mlModel);
+    det.rooms.forEach((r, i) => { names[r.id] = nameFor(preds[i].cls); mlInfo[r.id] = Math.round(preds[i].conf * 100); });
+  } else det.rooms.forEach((r) => { names[r.id] = guessName(det, r); });
+  if (det._openplan) names[1] = 'LIVING / DINING';
+  Object.entries(vNames).forEach(([id, n]) => { if (det.rooms.some((r) => r.id === +id)) names[+id] = n; });
+  refineSmallCells(det, names, scale); // after the vision overlay: fixture evidence beats a misassigned printed label on small cells
+}
+function st(t, tone) { const el = $('#status'); el.textContent = t; el.style.color = tone === 'warn' ? '#a8761f' : tone === 'ok' ? '#2e7d54' : '#5a7e8a'; }
+function fail(msg) {
+  st(msg.toUpperCase() + ' — TRY A SHARPER SCAN, OR USE THE DETECTION LAB.', 'warn');
+  $('#failHelp').style.display = '';
+  $('#cta').disabled = true;
+}
+function stepOn(n) { [1,2,3].forEach((i) => $('#st' + i).classList.toggle('on', i <= n)); }
+
+function wcMark(g, x, y) {
+  const R = Math.max(10, Math.round(det.W / 55));
+  g.setLineDash([4, 3]); g.lineWidth = 2; g.strokeStyle = '#0f7b8a';
+  g.beginPath(); g.arc(x, y, R, 0, 7); g.stroke();
+  g.setLineDash([]);
+  g.font = '700 ' + Math.round(R * 0.9) + 'px Arial'; g.textAlign = 'center';
+  g.lineWidth = Math.max(3, R / 3); g.strokeStyle = 'rgba(253,252,249,0.9)';
+  g.strokeText('WC?', x, y + R * 1.9);
+  g.fillStyle = '#0f7b8a'; g.fillText('WC?', x, y + R * 1.9);
+}
+function draw() {
+  if (mmPerPx) classifyWalls(det, mmPerPx);
+  const c = $('#out'); c.width = det.W; c.height = det.H;
+  const g = c.getContext('2d');
+  const id = g.createImageData(det.W, det.H);
+  for (let i = 0; i < det.W * det.H; i++) {
+    const j = i * 4;
+    let r = 253, gg = 252, b = 249;
+    if (det.ink[i]) { r = 205; gg = 200; b = 190; }
+    id.data[j] = r; id.data[j + 1] = gg; id.data[j + 2] = b; id.data[j + 3] = 255;
+  }
+  g.putImageData(id, 0, 0);
+  g.globalAlpha = 0.12;
+  det.rooms.forEach((r, i) => { g.fillStyle = TINT[i % TINT.length]; g.fillRect(r.x0, r.y0, r.x1 - r.x0, r.y1 - r.y0); });
+  g.globalAlpha = 1;
+  const wd = g.getImageData(0, 0, det.W, det.H);
+  for (let i = 0; i < det.W * det.H; i++) if (det.wall[i]) {
+    const j = i * 4, c = det.wallClass ? det.wallClass[i] : 0;
+    wd.data[j] = c === 2 ? 179 : c === 1 ? 47 : 58; wd.data[j + 1] = c === 2 ? 57 : c === 1 ? 107 : 64; wd.data[j + 2] = c === 2 ? 46 : c === 1 ? 176 : 67;
+  }
+  if (det.fixtures) for (let i = 0; i < det.W * det.H; i++) if (det.fixtures[i]) { const j = i * 4; wd.data[j] = 236; wd.data[j + 1] = 232; wd.data[j + 2] = 224; }
+  g.putImageData(wd, 0, 0);
+  g.strokeStyle = '#b07c2a'; g.lineWidth = 2; g.setLineDash([6, 4]);
+  g.strokeRect(det.envelope.x0, det.envelope.y0, det.envelope.x1 - det.envelope.x0, det.envelope.y1 - det.envelope.y0);
+  g.setLineDash([]);
+  if (wcHint && wcHint.zones) for (const z of wcHint.zones) {
+    wcMark(g, z.atPx[0], z.atPx[1]);
+  }
+  if (wcHint && wcHint.suggestions) for (const s of wcHint.suggestions) {
+    const dr = det.rooms.find((r) => r.id === s.tracedId);
+    if (dr) wcMark(g, (dr.x0 + dr.x1) / 2, (dr.y0 + dr.y1) / 2);
+  }
+  const fs = Math.max(12, Math.round(det.W / 70));
+  g.font = '700 ' + fs + 'px Arial'; g.textAlign = 'center';
+  det.rooms.forEach((r) => {
+    const cx = (r.x0 + r.x1) / 2, cy = (r.y0 + r.y1) / 2;
+    const label = names[r.id] || String(r.id);
+    g.lineWidth = Math.max(3, fs / 4); g.strokeStyle = 'rgba(253,252,249,0.85)';
+    g.strokeText(label, cx, cy + fs / 3);
+    g.fillStyle = '#1a2023'; g.fillText(label, cx, cy + fs / 3);
+  });
+}
+function wcAnchors() {
+  if (!det || !mmPerPx) return [];
+  return det.rooms.filter((r) => {
+    if (!/BATH|WC|TOILET|SHOWER/i.test(names[r.id] || '')) return false;
+    const a = ((r.x1 - r.x0) * mmPerPx / 1000) * ((r.y1 - r.y0) * mmPerPx / 1000);
+    return a >= 1 && a <= 5.5;
+  }).map((r) => ({ id: r.id, x0: r.x0, x1: r.x1, y0: r.y0, y1: r.y1 }));
+}
+// Rebuild at trace time so the review panel quotes the SAME areas the 3D builds. The traced
+// pixel count is a segmentation footprint measured on the dilated, door-sealed barrier grid — it
+// sits ~25% inside the real boundary — so it is not a floor area and must never be shown as one.
+function computeReg() {
+  lastReg = null;
+  if (!det || !mmPerPx) return;
+  try { lastReg = regularise(det, mmPerPx, { names, wallH: wallH * 1000, anchors: wcAnchors(), printed: printedInDet(), printedTotal: (pdfMeta && pdfMeta.total) || 0 }); }
+  catch (e) { lastReg = null; }
+  lastRegSig = regSig();
+}
+function roomChips() {
+  const s = mmPerPx;
+  const regRoom = (id) => (lastReg && lastReg.ok ? lastReg.rooms.find((x) => x.traced === id) : null);
+  $('#rooms').innerHTML = det.rooms.map((r, i) => {
+    const rr = regRoom(r.id);
+    // dimensions and area must come from ONE footprint. The rebuilt room absorbed neighbouring
+    // cells, so its area exceeds the det box that seeded it — quoting the box's dimensions beside
+    // the rebuilt area states a room you could not physically fit the floor into.
+    let span, complex = false;
+    if (rr && rr.poly && rr.poly.length > 2) {
+      const xs = rr.poly.map((p) => p[0]), ys = rr.poly.map((p) => p[1]);
+      span = ((Math.max(...xs) - Math.min(...xs)) / 1000).toFixed(2) + ' × '
+        + ((Math.max(...ys) - Math.min(...ys)) / 1000).toFixed(2) + ' m';
+      complex = rr.poly.length > 4;
+    } else {
+      const w = r.x1 - r.x0, d = r.y1 - r.y0;
+      span = s ? (w * s / 1000).toFixed(2) + ' × ' + (d * s / 1000).toFixed(2) + ' m' : w + '×' + d + ' px';
+    }
+    const label = complex ? 'spans ' + span : span;
+    const tail = rr ? ' · ' + rr.areaM2.toFixed(1) + ' m²'
+      : (lastReg && lastReg.ok ? ' · <span title="too small to stand in, or absorbed into a neighbouring room">merged</span>' : '');
+    // Row is a 2×2 grid, not a flex line: at 261px the select and the dimension readout cannot
+    // share a row without one starving the other (the select had flex-basis:0, so it absorbed
+    // the entire shortfall and rendered 2–3 glyphs of "LIVING / DINING"). Stacking removes the
+    // competition — each gets the full column width.
+    return '<div style="display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:8px;row-gap:3px;align-items:center;font-size:13px;">'
+      + '<span class="sw" style="background:' + TINT[i % TINT.length] + ';flex:none;grid-row:1 / span 2;"></span>'
+      + '<select data-id="' + r.id + '" style="width:100%;min-width:0;">' + [...new Set([...NAMES, ...Object.values(names)])].map((n) => '<option ' + (names[r.id] === n ? 'selected' : '') + '>' + n + '</option>').join('') + '</select>'
+      + '<span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:rgba(26,32,35,0.6);">' + label + tail + '</span></div>';
+  }).join('');
+  document.querySelectorAll('#rooms select').forEach((el) => el.addEventListener('change', () => { names[+el.dataset.id] = el.value; computeReg(); draw(); roomChips(); }));
+}
+function scaleNote(conf, hint, cands, ocr) {
+  let html = '';
+  if (hint) html += '<p style="margin:0 0 6px;color:#2e7d54;">Sheet code read: <b>' + hint.code + '</b>' + (hint.model ? ' — ' + hint.model + ' family' : '') + '.</p>';
+  if (conf) html += '<p style="margin:0;color:#2e7d54;">Scale confirmed by the sheet: printed figure <b>' + conf.read.n + ' mm</b>' + (conf.kind === 'archetype' ? ' matches ' + conf.cand.name + ' within ' + (conf.err * 100).toFixed(1) + '%.' : ' used as the overall width.') + '</p>';
+  else if (cands && cands.length) html += '<p style="margin:0;color:#a8761f;">Scale estimated from the closest archetype: <b>' + cands[0].name + '</b> (' + cands[0].env[0] + ' × ' + cands[0].env[1] + ' m). If room sizes look off, type the printed overall width below.</p>';
+  else if (mmPerPx) html += '<p style="margin:0;color:#a8761f;">Scale assumed' + (ocr && ocr.reads.length ? ' (printed figures did not agree)' : '') + ' — type the printed overall width below to correct it.</p>';
+  $('#scaleBox').innerHTML = html;
+}
+async function start(raw) {
+  if (typeof raw === 'string' && /\.pdf(\?|$)/i.test(raw)) {
+    st('READING PDF…');
+    try {
+      const r = await pdfToPng(raw);
+      if (!r) { fail('That PDF has no page that looks like a drawing'); return; }
+      pdfMeta = r;
+      raw = r.url;
+    } catch (e) { fail('Could not read that PDF'); return; }
+  } else if (!(pdfMeta && pdfMeta.url === raw)) {
+    // pdfMeta is module-level; without this a previous PDF's printed ratio would be applied to the
+    // next PNG someone drops. handleFile sets pdfMeta then calls start(r.url), so the identity
+    // check keeps it for exactly that hand-off and clears it for every other upload.
+    pdfMeta = null;
+  }
+  det = null; mmPerPx = null; vNames = {};  $('#s2').style.display = ''; $('#s3').style.display = 'none';
+  $('#failHelp').style.display = 'none';
+  $('#cta').disabled = true;
+  stepOn(1);
+  if (!EMBED) window.scrollTo({ top: $('#s2').offsetTop - 70, behavior: 'smooth' });
+  st('PREPARING IMAGE…');
+  let url;
+  try { url = await fitImage(raw); } catch (e) { fail('Not a readable image'); return; }
+  curSrc = url;
+  st('TRACING WALLS AND ROOMS…');
+  try { det = await analysePlan(url, { wallModel: WM }); } catch (e) { fail('Could not trace this drawing'); return; }
+  if (det.error) { fail(det.error); return; }
+  if (!det.rooms.length && det.envelope && det.envelope.x1 - det.envelope.x0 > 40) {
+    det.rooms = [{ id: 1, x0: det.envelope.x0 + 4, y0: det.envelope.y0 + 4, x1: det.envelope.x1 - 4, y1: det.envelope.y1 - 4 }];
+    det._openplan = true;
+  }
+  if (!det.rooms.length) { fail('No rooms could be traced'); return; }
+  const cands = scaleCandidates(det, arch && arch.archetypes) || [];
+  st('READING PRINTED DIMENSIONS…');
+  let ocr = null, conf = null;
+  try { ocr = await readDimensions(url); } catch (e) { ocr = { reads: [], codes: [] }; }
+  const hint = codeFamilyHint(ocr);
+  if (hint) cands.sort((a, b) => hint.pref(b) - hint.pref(a) || a.skew - b.skew);
+  try { conf = confirmScale(ocr.reads, det, cands); } catch (e) { conf = null; }
+  // THE SCALE LADDER, strongest evidence first. Each rung is only consulted when every rung above
+  // it produced nothing, and the rung that fired is recorded so the UI can say how much to trust
+  // the result. The old order jumped to archetype-matching too readily, which is how a commercial
+  // floor plate was scaled as a 4-Room Improved and every dimension inherited the error.
+  let src = 'assumed';
+  // Guard on pdfMeta alone, NOT on a url match against `url`: by this point `url` is fitImage's
+  // output, and fitImage re-encodes anything over 1700 px — which pdfToPng's ~2000 px render
+  // always is. Comparing them meant the rung could only fire on an absurdly small page, i.e. never.
+  const pdfRatio = pdfMeta && pdfMeta.ratio ? pdfMeta : null;
+  if (pdfRatio) {
+    // exact: paper mm per render pixel × render px per detector px × the drawing ratio.
+    // W0 is the detector width BEFORE deskew — det.W is the rotated bounding box, which is up to
+    // 1.4× wider and would drag mmPerPx down by the same factor.
+    const detW = det.W0 || det.W;
+    mmPerPx = ((25.4 / 72) / pdfRatio.renderScale) * (pdfRatio.pxWidth / detW) * pdfRatio.ratio;
+    src = 'pdf-ratio';
+  } else if (conf) { mmPerPx = conf.mmPerPx; src = 'printed-figure'; }
+  else if (cands.length) { mmPerPx = cands[0].mmPerPx; src = hint && hint.pref(cands[0]) > 0 ? 'code-archetype' : 'archetype'; }
+  else {
+    const ops = det.openings.map((o) => o.to - o.from).sort((a, b) => a - b);
+    const med = ops.length ? ops[Math.floor(ops.length / 2)] : 0;
+    mmPerPx = med >= 8 ? 900 / med : 10000 / (det.envelope.x1 - det.envelope.x0);
+  }
+  // HDB door-guideline sanity: when the sheet itself didn't confirm the scale, traced interior
+  // doors should read ~0.9 m — tune the scale to the doorway prior if they don't
+  const ds = doorStats(det, mmPerPx);
+  let tuned = false;
+  if (!conf && !pdfRatio && ds.widths.length >= 3 && ds.median && (ds.median < 0.65 || ds.median > 1.15)
+      && !(hint && cands.length && hint.pref(cands[0]) > 0)) { // a code-corroborated archetype is sheet evidence — door median is the weaker signal
+    const f = Math.min(1.35, Math.max(0.75, 0.9 / ds.median)); // clamped: a biased median can nudge the scale, never triple it
+    mmPerPx *= f; tuned = true;
+  }
+  scaleNote(conf, hint, cands, ocr);
+  window.__scaleSource = src;
+  if (src === 'pdf-ratio') $('#scaleBox').innerHTML = '<p style="margin:0;color:#2e7d54;">Scale read from the PDF itself: printed <b>1:' + pdfRatio.ratio + '</b> at true page size — exact, no estimate.</p>';
+  // Say which rung fired — see TRUST at module scope.
+  $('#scaleBox').insertAdjacentHTML('beforeend', trustLine(src));
+  lastCands = cands; lastConf = conf;
+  if (tuned) $('#scaleBox').insertAdjacentHTML('beforeend', '<p style="margin:6px 0 0;color:#2e7d54;">Scale tuned to HDB-standard 0.9 m doorways (doors read ' + ds.median.toFixed(2) + ' m at the archetype scale).</p>');
+  nameRooms(mmPerPx);
+  computeReg();
+  draw(); roomChips();
+  stepOn(2);
+  const sqm = ((det.envelope.x1 - det.envelope.x0) * mmPerPx / 1000) * ((det.envelope.y1 - det.envelope.y0) * mmPerPx / 1000);
+  const wins = det.openings.filter((o) => o.between && (o.between[0] === 0 || o.between[1] === 0)).length;
+  const sum = 'TRACED: ' + det.rooms.length + ' ROOMS · ' + (det.openings.length - wins) + ' DOORS · ' + wins + ' WINDOWS · ENVELOPE ≈ ' + sqm.toFixed(0) + ' M²' + (det._openplan ? ' · NO PARTITIONS — TREATED AS ONE OPEN PLAN' : '');
+  st(sum, 'ok');
+  // Plan-type gate. HDB priors — two WCs, 0.85 m interior doors, a 20-archetype scale library —
+  // are wrong for anything that is not a flat, and applying them silently is how a demolition
+  // drawing came out as a 29 m² bedroom and a 31 m² toilet. Say so, and stop trusting the
+  // archetype scale, rather than producing a confident wrong answer.
+  const pt = planTypeCheck(det, mmPerPx);
+  window.__planType = pt; window.__det = det; window.__mmPerPx = mmPerPx;
+  // Lives in its OWN element, never inside #scaleBox. #scaleBox is rebuilt wholesale from three
+  // call sites — including the CORRECT SCALE handler, which is the very action this notice tells
+  // the user to take. Appending into it meant following the instruction wiped the warning and the
+  // page then showed flat-convention room names with no caveat: the exact failure the gate exists
+  // to prevent, reintroduced through the UI.
+  $('#planTypeBox').innerHTML = pt.kind === 'ok' ? '' : planTypeHtml(pt, false);
+  $('#cta').disabled = false;
+  const okv = await visionNames();
+  if (okv) { nameRooms(mmPerPx); computeReg(); draw(); roomChips(); }
+  st(sum + (okv ? ' · PRINTED ROOM LABELS READ OFF THE SHEET' : ''), 'ok');
+  post('traced', { facts: traceFacts(), status: sum });
+  postSize();
+  requestAnimationFrame(postSize);
+}
+// What the host intake page needs to cross-check a detected plan against the address register:
+// the same shape planFacts() returns for a catalogued document, so one verifier serves both.
+function traceFacts() {
+  if (!det || !mmPerPx) return null;
+  const reg = lastReg && lastReg.ok ? lastReg : null;
+  const OUT = /BALCONY|LEDGE|AC |A\/C|SERVICE|YARD|PLANTER|TERRACE/i;
+  const rooms = reg ? reg.rooms.map((r) => {
+    const nm = (names[r.traced] || r.label || 'UNNAMED').toUpperCase();
+    const p = r.poly || [];
+    const xs = p.map((q) => q[0]), ys = p.map((q) => q[1]);
+    const bb = p.length ? { x: Math.min(...xs) / 1000, z: Math.min(...ys) / 1000,
+      w: (Math.max(...xs) - Math.min(...xs)) / 1000, d: (Math.max(...ys) - Math.min(...ys)) / 1000 } : null;
+    return Object.assign({ name: nm, sqm: +(r.areaM2 || 0).toFixed(1), out: OUT.test(nm) }, bb || {});
+  }) : [];
+  const internal = rooms.filter((r) => !r.out).reduce((a, r) => a + r.sqm, 0);
+  const outdoor = rooms.filter((r) => r.out).reduce((a, r) => a + r.sqm, 0);
+  const wins = det.openings.filter((o) => o.between && (o.between[0] === 0 || o.between[1] === 0)).length;
+  const pt = window.__planType || null;
+  return {
+    rooms, internal_sqm: +internal.toFixed(1), outdoor_sqm: +outdoor.toFixed(1),
+    bedrooms: rooms.filter((r) => /BED/i.test(r.name)).length,
+    storeys: 1,
+    shelter: rooms.some((r) => /SHELTER|HHS/i.test(r.name)),
+    doors: det.openings.length - wins, windows: wins,
+    confidence: window.__scaleSource === 'pdf-ratio' || window.__scaleSource === 'printed-figure' ? 'high'
+      : window.__scaleSource === 'user' ? 'confirmed by customer'
+      : window.__scaleSource === 'code-archetype' ? 'fair' : 'weak',
+    scaleSource: window.__scaleSource || 'assumed', mmPerPx,
+    planType: pt ? pt.kind : 'ok', planWhy: pt && pt.why ? pt.why : [],
+  };
+}
+function planTypeHtml(pt, scaleSet) {
+  // Two clauses with different lifetimes. The REASONS are ratios — coverage, space count, drawings
+  // outside the body — so they stay true no matter what the ruler says. The scale clause does not:
+  // once the user types a width, "the scale is a guess" is false and "type the printed overall
+  // width" instructs an action already completed. Freezing the whole banner at trace time made it
+  // contradict the line directly beneath it.
+  const head = pt.kind === 'not-unit'
+    ? '<b>This doesn\'t look like an HDB unit plan.</b> '
+    : '<b>I couldn\'t read this sheet reliably.</b> ';
+  const tail = pt.kind === 'not-unit'
+    ? (scaleSet
+      ? 'Scale is now set from your input, but the room names still use flat conventions that may not apply.'
+      : 'The scale is a guess and the room names use flat conventions that may not apply — '
+        + 'type the printed overall width to trace it as a generic layout.')
+    : (scaleSet
+      ? 'Scale is set from your input, but the trace itself is incomplete — the 3D will have gaps.'
+      : 'That is a fault in our trace, not in your plan. Type the printed overall width to fix the '
+        + 'scale; the missing walls need the sheet re-read at a different threshold.');
+  return '<p style="margin:0 0 14px;padding:10px 12px;background:#fdf1e7;border-left:3px solid #a8761f;color:#7a4d12;">'
+    + head + pt.why.join('; ') + '. ' + tail + '</p>';
+}
+function mapLabel(raw) {
+  const s = (raw || '').toUpperCase();
+  if (!s || s.indexOf('?') >= 0) return null;
+  if (/BED\s*(ROOM)?\s*1|MASTER|MAIN\s*BED/.test(s)) return 'MAIN BEDROOM';
+  if (/BED/.test(s)) return 'BEDROOM';
+  if (/KITCHEN[\s/]*DIN|DIN[\s/]*KITCHEN/.test(s)) return 'KITCHEN / DINING';
+  if (/KITCHEN/.test(s)) return 'KITCHEN';
+  if (/LIVING|LOUNGE|DINING/.test(s)) return 'LIVING / DINING';
+  if (/WC|TOILET|BATH|SHOWER|\bKC\b/.test(s)) return 'BATH / WC';
+  if (/SHELTER|\bHS\b/.test(s)) return 'HOUSEHOLD SHELTER';
+  if (/UTILITY/.test(s)) return 'UTILITY';
+  if (/YARD/.test(s)) return 'SERVICE YARD';
+  if (/BALCON|ACCESS/.test(s)) return 'BALCONY';
+  if (/STORE/.test(s)) return 'STORE';
+  if (/HALL|FOYER|CORRIDOR|LOBBY|PASSAGE/.test(s)) return 'HALL';
+  return null;
+}
+async function visionNames() {
+  if (!det || !window.claude || !window.claude.complete) return false;
+  st('READING PRINTED ROOM LABELS…');
+  try {
+    const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = curSrc; });
+    const k = Math.min(1, 1100 / Math.max(im.width, im.height));
+    const c = document.createElement('canvas');
+    c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+    const g = c.getContext('2d');
+    g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+    g.drawImage(im, 0, 0, c.width, c.height);
+    const f = c.width / det.W, R = Math.max(9, Math.round(c.width / 80));
+    det.rooms.forEach((r) => {
+      const x = (r.x0 + r.x1) / 2 * f, y = (r.y0 + r.y1) / 2 * f;
+      g.fillStyle = '#c62828'; g.beginPath(); g.arc(x, y, R, 0, 7); g.fill();
+      g.fillStyle = '#fff'; g.font = '700 ' + Math.round(R * 1.1) + 'px Arial'; g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.fillText(String(r.id), x, y + 1);
+    });
+    let q = 0.7, du = c.toDataURL('image/jpeg', q);
+    while (du.length > 195000 && q > 0.4) { q -= 0.1; du = c.toDataURL('image/jpeg', q); }
+    if (du.length > 195000) return false;
+    const text = await window.claude.complete({
+      model: 'claude-sonnet-4-5', max_tokens: 400,
+      messages: [{ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: du.split(',')[1] } },
+        { type: 'text', text: 'This is a Singapore HDB floor plan. Red numbered dots mark detected rooms. For each number, return the room name PRINTED on the plan for the space containing that dot (exact printed text, e.g. LIVING, KITCHEN/DINING, BEDROOM 1, WC, UTILITY, STORE, ACCESS BALCONY). Use "?" if no printed name is legible for that space. Also return "title": the plan\'s printed title or flat-type text if visible (e.g. "4-ROOM SIMPLIFIED (CORRIDOR)"), else "?". Reply with ONLY JSON, no other text: {"title":"...","1":"...","2":"..."}' }
+      ] }]
+    });
+    const j = JSON.parse((text.match(/\{[\s\S]*\}/) || ['{}'])[0]);
+    // printed TITLE is sheet evidence: re-anchor the archetype scale to the named family
+    const tRaw = (j.title || '').toUpperCase();
+    if (tRaw && tRaw !== '?' && !lastConf && lastCands.length) {
+      const fam = /SIMPLIFIED/.test(tRaw) ? 'Simplified' : /IMPROVED/.test(tRaw) ? 'Improved' : /NEW FLAT|NEW GENERATION/.test(tRaw) ? 'New Flat' : /MODEL A/.test(tRaw) ? 'Model A' : /POINT BLOCK/.test(tRaw) ? 'Point Block' : /STANDARD/.test(tRaw) ? 'Standard' : null;
+      const tm = tRaw.match(/([2-5])\s*-?\s*ROOM/);
+      const type = tm ? tm[1] + 'room' : null;
+      const m = fam ? lastCands.find((c) => c.name.toUpperCase().includes(fam.toUpperCase()) && (!type || c.flat_type === type)) : null;
+      if (m && Math.abs(m.mmPerPx - mmPerPx) / mmPerPx > 0.03) {
+        mmPerPx = m.mmPerPx;
+        $('#scaleBox').insertAdjacentHTML('beforeend', '<p style="margin:6px 0 0;color:#2e7d54;">Scale re-anchored to the printed title “' + j.title + '” → ' + m.name + '.</p>');
+      }
+    }
+    let used = 0;
+    const mmv = (mmPerPx || 0) / 1000;
+    const wcs = [];
+    for (const r of det.rooms) {
+      const mapped = mapLabel(j[String(r.id)]);
+      if (!mapped) continue;
+      const a = mmv ? (r.x1 - r.x0) * (r.y1 - r.y0) * mmv * mmv : 0;
+      // size sanity: a 1 m² cell is never a bedroom, an 8 m² room is never a WC or balcony
+      if (a && ((/BEDROOM|LIVING|KITCHEN/.test(mapped) && a < 5) || (mapped === 'MAIN BEDROOM' && a < 7) || (mapped === 'BATH / WC' && a > 7.5) || (/BALCONY|YARD|HALL|STORE|UTILITY/.test(mapped) && a >= 5))) continue;
+      if (mapped === 'BATH / WC') { wcs.push({ id: r.id, a: a || 99 }); continue; } // deduped below: 2 smallest only
+      vNames[r.id] = mapped; names[r.id] = mapped; used++;
+    }
+    wcs.sort((p, q) => p.a - q.a).slice(0, 2).forEach(({ id }) => { vNames[id] = 'BATH / WC'; names[id] = 'BATH / WC'; used++; });
+    return used > 0;
+  } catch (e) { return false; }
+}
+// The clean rebuild: evidence -> regularised wall graph -> contract -> gates -> solid. The 3D
+// reads only the contract, so nothing outside the flat and no fixture ink can reach the model.
+function wcNote(w, cand) {
+  if (!w || !w.need) return '';
+  const type = (cand && cand.flat_type) ? cand.flat_type.replace('room', '-room') : 'HDB';
+  const say = (enc, whose) => {
+    if (!enc) return '';
+    const pc = Math.round(enc.partitionShare * 100);
+    return enc.alterable
+      ? ' ' + whose + ' walls are ' + pc + '% partition, so on this drawing they read as non-structural — alterable with HDB approval.'
+      : ' Only ' + pc + '% of ' + whose.toLowerCase() + ' walls are partition; the other ' + (100 - pc) + '% is structural and cannot be hacked.';
+  };
+  // a zone has no walls of its own — enclosing it means ADDING a partition, not hacking one, so
+  // the host room's makeup is context for what you would build against, never a verdict
+  const zoneSay = (enc, label) => {
+    if (!enc) return '';
+    const pc = Math.round(enc.partitionShare * 100);
+    return ' Enclosing it means adding a partition rather than altering the flat: ' + label
+      + '’s own walls are ' + pc + '% partition and ' + (100 - pc) + '% structural.';
+  };
+  let s = '<b>A home cannot have no WC.</b> A ' + type + ' flat has ' + w.target + '; ';
+  s += w.traced === w.found
+    ? 'the trace found ' + w.found + '. '
+    : 'the trace found ' + w.traced + ' but only ' + w.found + ' survived the rebuild — '
+      + (w.lost === 1 ? 'one was' : w.lost + ' were') + ' merged into a neighbouring room. ';
+  const bits = [];
+  for (const x of w.suggestions) {
+    bits.push('<b>' + (x.label || 'an unlabelled room') + '</b> at ' + x.areaM2 + ' m² — ' + x.why.join(', ')
+      + '.' + say(x.enclosure, 'Its'));
+  }
+  for (const z of w.zones) {
+    const where = z.hostSuspect
+      ? 'inside the ' + z.hostArea + ' m² space currently labelled ' + z.hostLabel
+      : 'inside ' + z.hostLabel + (z.hostArea ? ' (' + z.hostArea + ' m²)' : '');
+    bits.push('<b>' + where + '</b>, where ' + z.fittings + ' drawn fitting'
+      + (z.fittings > 1 ? 's are' : ' is') + ' present but no partition was traced around them'
+      + (z.at ? ' (' + (z.at[0] / 1000).toFixed(1) + ' m, ' + (z.at[1] / 1000).toFixed(1) + ' m from the top-left corner)' : '')
+      + '.' + zoneSay(z.enclosure, z.hostSuspect ? 'that space' : z.hostLabel));
+  }
+  s += bits.length
+    ? 'Most likely ' + (bits.length > 1 ? 'locations' : 'location') + ': ' + bits.join(' Then ') + ' '
+    : 'No candidate space carried drawn fittings, so the WC could not be placed — mark it by hand. ';
+  if (w.suspect && w.suspect.length) {
+    s += w.suspect.map((x) => 'A space labelled ' + x.label + ' measures ' + x.areaM2
+      + ' m², far too large for an HDB toilet — the label was most likely carried along when the '
+      + 'trace merged that room, so it is not counted as a WC.').join(' ') + ' ';
+  }
+  return s + 'Suggested from the flat type and the drawn fittings, not traced — confirm before you build. ';
+}
+
+async function sketchClean(stage, THREE) {
+  // reuse the trace-time rebuild when nothing that feeds it has changed
+  if (!lastReg || lastRegSig !== regSig()) computeReg();
+  const reg = lastReg || regularise(det, mmPerPx, { names, wallH: wallH * 1000, anchors: wcAnchors(), printed: printedInDet(), printedTotal: (pdfMeta && pdfMeta.total) || 0 });
+  const cand = (lastConf && lastConf.cand) || lastCands[0] || null;
+  const wcTarget = (cand && WC_BY_TYPE[cand.flat_type]) || 2;
+  const wc = reg.ok ? inferWCs(det, reg, mmPerPx, { target: wcTarget, names }) : null;
+  wcHint = wc;
+  // a suggestion is held separately and NEVER written into `names` — writing it there would
+  // make the guess indistinguishable from a detection on the next render, so it would confirm
+  // itself and its own disclosure would vanish
+  const suggested = {};
+  if (wc) for (const s of wc.suggestions) {
+    suggested[s.room] = { confidence: s.confidence, label: 'BATH / WC (SUGGESTED)' };
+  }
+  const suspectRooms = {};
+  if (wc) for (const x of (wc.suspect || [])) suspectRooms[x.room] = true;
+  const cont = buildContract(reg, {
+    source: curSrc && curSrc.slice(0, 40), names, suggested, suspect: suspectRooms,
+    lane: 'raster',
+    scaleSource: window.__scaleSource || (lastConf ? 'printed-figure' : cand ? 'archetype' : 'assumed'),
+    scaleConfidence: ({ 'pdf-ratio': 0.99, 'printed-figure': 0.95, user: 0.9, 'code-archetype': 0.7, archetype: 0.5, assumed: 0.25 })[window.__scaleSource] ?? (lastConf ? 0.95 : cand ? 0.5 : 0.25),
+    expected: cand ? { areaM2: +(cand.env[0] * cand.env[1]).toFixed(1), mmPerPx: cand.mmPerPx, name: cand.name, wc: wcTarget } : null,
+  });
+  if (wc) {
+    cont.stats.wc = wc.found; // traced only: a suggestion must never satisfy the gate
+    cont.stats.wcSuggested = wc.suggestions.length + wc.zones.length;
+    cont.wcSuggestions = wc;
+  }
+  const contract = cont;
+  const v = validateContract(contract);
+  window.__contract = contract; // for the lab and for export
+  const notUnit = window.__planType && window.__planType.kind === 'not-unit';
+  // NOT gated on v.blocking. A non-flat sheet can pass every gate — this one does, at 69% enclosed
+  // and fully walkable — and then the panel confidently reports HDB findings about a commercial
+  // floor plate ("a home cannot have no WC"). Passing the gates only means the geometry is
+  // self-consistent, never that the priors applied to it were the right ones.
+  if (notUnit) {
+    // A provisional model is diagnostic when the sheet IS a flat — you can see where the trace
+    // went wrong and correct it. It is not diagnostic when the sheet is not a flat at all: there
+    // is no correct model for it to be a degraded version of, so rendering one just puts a wrong
+    // building on screen with a caption nobody reads. Refuse, and say what it would take.
+    stage.setObject(new THREE.Group());
+    $('#skNote').innerHTML = '<b style="color:#b3261e">Not built — this isn\'t an HDB unit plan.</b> '
+      + window.__planType.why.join('; ') + '. Rebuilding a sheet like this needs curved and '
+      + 'non-orthogonal walls, which this tool does not do: it partitions space with horizontal and '
+      + 'vertical wall lines, so a rotated or curved floor plate has no correct representation here. '
+      + 'A model would look plausible and be wrong in ways you could not see. '
+      + 'Switch to <b>RAW 1:1 TRACE</b> to view the unfiltered trace, or upload an HDB unit plan.';
+    stepOn(3);
+    post('blocked', { note: $('#skNote').textContent });
+    if (EMBED) { postSize(); return; }
+    window.scrollTo({ top: $('#s3').offsetTop - 70, behavior: 'smooth' });
+    return;
+  } else if (v.blocking) {
+    // Show it anyway, marked. An empty 640 px box reads as a crash, and the user cannot judge or
+    // correct a model they cannot see — the honest move is to build it and name the fault on top,
+    // not to withhold the only thing that makes the fault legible.
+    const why = v.gates.filter((gg) => !gg.pass && gg.severity === 'blocking')
+      .map((gg) => gg.label.toLowerCase() + ' — ' + gg.detail).join('; ');
+    let ok = false;
+    try {
+      const prov = buildSolid(contract, THREE, { wallH, diagnostic: diag, labels: true });
+      await stage.setObject(prov.group);
+      ok = true;
+      $('#skNote').innerHTML = '<b style="color:#b3261e">PROVISIONAL — this drawing failed the walkability check.</b> '
+        + why + '. The model below is built from what could be read, so you can see <em>where</em> it went wrong, '
+        + 'but it is not a sound model: treat every dimension as unverified. '
+        + 'Try a sharper scan, correct the overall width above, or switch to <b>RAW 1:1 TRACE</b> to compare against the unfiltered trace.';
+    } catch (e) { ok = false; }
+    if (!ok) {
+      stage.setObject(new THREE.Group());
+      $('#skNote').innerHTML = '<b>This drawing could not be rebuilt.</b> ' + why
+        + '. Switch to <b>RAW 1:1 TRACE</b> to see the unfiltered trace, or correct the overall width above.';
+    }
+    stepOn(3);
+    post('blocked', { note: $('#skNote').textContent });
+    if (EMBED) { postSize(); return; }
+    window.scrollTo({ top: $('#s3').offsetTop - 70, behavior: 'smooth' });
+    return;
+  }
+  const { group, stats } = buildSolid(contract, THREE, { wallH, diagnostic: diag });
+  stage.setObject(group);
+  draw();
+  const st2 = contract.stats;
+  const prop = contract.openings.filter((o) => o.source === 'proposed').length;
+  const warn = v.gates.filter((gg) => !gg.pass);
+  $('#skNote').innerHTML = 'Rebuilt from the plan contract: <b>' + stats.walls + ' walls</b> at ' + wallH.toFixed(2)
+    + ' m'
+    + (stats.parapets ? ' plus <b>' + stats.parapets + ' balcony parapet' + (stats.parapets > 1 ? 's' : '') + '</b> at '
+      + (Math.min(1.1, wallH)).toFixed(2) + ' m, open above for the view' : '')
+    + ', <b>' + stats.floors + ' rooms</b> (' + st2.roomArea + ' m² of floor, ' + Math.round(st2.coverage * 100)
+    + '% of the envelope enclosed), <b>' + stats.doors + ' doors</b> and ' + stats.windows + ' windows. '
+    + 'Every room is reachable from ' + (v.entry
+      ? 'the entrance door and every wall closes — checked, not assumed. '
+      : 'every other room and every wall closes — checked, not assumed. <b>No entrance door was detected</b> on this drawing, so the walk starts from the largest room rather than the front door. ')
+    + 'Walls come from the drawing\'s own wall lines, so fixtures, ledges and the corridor outside your flat are not modelled'
+    + (st2.exteriorTrimmed ? ' (' + st2.exteriorTrimmed + ' perimeter ledge' + (st2.exteriorTrimmed > 1 ? 's' : '') + ' trimmed)' : '') + '. '
+    + (prop ? '<b>' + prop + (prop > 1 ? ' doorways were' : ' doorway was') + ' positioned by inference</b> because the drawing showed no opening into ' + (prop > 1 ? 'those rooms' : 'that room') + ' — confirm ' + (prop > 1 ? 'them' : 'it') + ' on site. ' : '')
+    + wcNote(wc, cand)
+    + (det.rooms.length !== stats.floors ? 'The scan traced ' + det.rooms.length + ' regions and the model reconstructs ' + stats.floors + '; the rest were merged into their neighbours. ' : '')
+    + (warn.length ? 'Worth a look: ' + warn.map((gg) => gg.label.toLowerCase() + ' (' + gg.detail + ')').join(', ') + '. ' : '')
+    + 'Rename rooms above and re-sketch to update labels. Final measurements are always verified on site.';
+  stepOn(3);
+  post('model', { facts: traceFacts(), walls: stats.walls, floors: stats.floors, doors: stats.doors,
+    windows: stats.windows, coverage: st2.coverage, watertight: !!v.watertight, entry: !!v.entry,
+    note: $('#skNote').textContent });
+  if (EMBED) { postSize(); return; }
+  window.scrollTo({ top: $('#s3').offsetTop - 70, behavior: 'smooth' });
+}
+
+async function sketch() {
+  if (!det) return;
+  if (!mmPerPx) mmPerPx = 10000 / (det.envelope.x1 - det.envelope.x0);
+  widenDoors(det, mmPerPx); // HDB minimum clear widths before extrusion
+  classifyWalls(det, mmPerPx);
+  $('#s3').style.display = '';
+  const stage = $('#stage3d');
+  const { THREE } = await stage.ready;
+  if (clean) { await sketchClean(stage, THREE); return; }
+  const { group, stats } = buildFaithful(det, mmPerPx, names, THREE, (dd, r) => guessName(dd, r), { wallH, diagnostic: diag });
+  stage.setObject(group);
+  const cov = traceCoverage(det);
+  $('#skNote').textContent = 'Every wall is extruded 1:1 from your drawing (' + stats.wallRects + ' segments) at '
+    + wallH.toFixed(2) + ' m; floors are the exact room regions (' + stats.floorRects + ' patches) with thresholds through every doorway; '
+    + stats.doors + ' doors (' + stats.doorClasses.entrance + ' entrance · ' + stats.doorClasses.room + ' room · ' + stats.doorClasses.wc + ' WC — leaves sized to HDB-typical widths, openings under 0.8 m widened to the 0.85 m guideline) and '
+    + stats.windows + ' windows sit where the scan found them. The trace explains ' + Math.round(cov.coverage * 100)
+    + '% of the envelope — gaps stay gaps, nothing is invented. Structural share: ' + Math.round((det.structFrac || 0) * 100) + '% of wall mass is structural (red — HDB permit needed to hack); the rest is partition (blue). Rename rooms above and re-sketch to update labels. Final measurements are always verified on site.';
+  stepOn(3);
+  post('model', { facts: traceFacts(), raw: true, note: $('#skNote').textContent });
+  if (EMBED) { postSize(); return; }
+  window.scrollTo({ top: $('#s3').offsetTop - 70, behavior: 'smooth' });
+}
+$('#cta').addEventListener('click', sketch);
+$('#hPath').addEventListener('click', () => { clean = !clean; $('#hPath').classList.toggle('on', clean); $('#hPath').textContent = clean ? 'CLEAN REBUILD' : 'RAW 1:1 TRACE'; sketch(); });
+$('#hFull').addEventListener('click', () => { wallH = 2.6; $('#hFull').classList.add('on'); $('#hCut').classList.remove('on'); sketch(); });
+$('#hCut').addEventListener('click', () => { wallH = 1.15; $('#hCut').classList.add('on'); $('#hFull').classList.remove('on'); sketch(); });
+$('#hDiag').addEventListener('click', () => { diag = !diag; $('#hDiag').classList.toggle('on', diag); sketch(); });
+$('#mwGo').addEventListener('click', () => {
+  const v = +$('#mw').value;
+  if (v > 2 && det) { mmPerPx = v * 1000 / (det.envelope.x1 - det.envelope.x0); window.__mmPerPx = mmPerPx; window.__scaleSource = 'user'; nameRooms(mmPerPx); computeReg(); draw(); roomChips(); scaleNote(null, null, [], null); $('#scaleBox').innerHTML = '<p style="margin:0;color:#2e7d54;">Scale set from your width: <b>' + v.toFixed(2) + ' m</b> overall.</p>' + trustLine('user'); if (window.__planType && window.__planType.kind !== 'ok') $('#planTypeBox').innerHTML = planTypeHtml(window.__planType, true); if ($('#s3').style.display !== 'none') sketch(); }
+});
+// PDF is the format HDB actually hands out, and it is vector — rasterising it ourselves at ~2000 px
+// gives the detector a cleaner sheet than any scan. Multi-page files carry cover and services
+// sheets, so pick the page that looks like a drawing by ink coverage rather than assuming page 1.
+let PDFJS = null, pdfMeta = null;
+async function pdfToPng(src) {
+  if (!PDFJS) {
+    PDFJS = await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.min.mjs');
+    PDFJS.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.worker.min.mjs';
+  }
+  const doc = await PDFJS.getDocument(typeof src === 'string' ? encodeURI(src) : src).promise;
+  // Pick the page by what it SAYS, not by how much ink it has. A CD set's inkiest page is often a
+  // materials swatch board or a title sheet; the drawing we want is the one carrying room names,
+  // printed areas and a scale ratio. Text extraction is cheap, rendering is not — so score every
+  // page's text first and render only the winner.
+  const N = Math.min(doc.numPages, 24);
+  const scored = [];
+  for (let n = 1; n <= N; n++) {
+    let ratio = 0, words = 0, areas = 0, total = 0, isPlan = false;
+    try {
+      const page = await doc.getPage(n);
+      const tc = await page.getTextContent();
+      const txt = tc.items.map((it) => it.str).join(' ').replace(/\s+/g, ' ');
+      const near = txt.match(/SCALE[^0-9]{0,12}1\s*[:\uff1a]\s*(\d{2,4})/i) || txt.match(/\b1\s*[:\uff1a]\s*(\d{2,4})\b/);
+      const v = near ? +near[1] : 0;
+      if ([20, 25, 50, 75, 100, 125, 150, 200, 250, 500].indexOf(v) >= 0) ratio = v;
+      const tot = txt.match(/TOTAL\s+(?:FLOOR\s+)?AREA[^0-9]{0,14}([\d.]+)/i);
+      if (tot) total = +tot[1] || 0;
+      // Tokenise before counting: a page of symbol tags (AC C WD WC T T T WC WC WC…) otherwise
+      // scores like a page full of room names and outranks the real plan sheet.
+      words = (txt.match(/[A-Z][A-Z'’.\-]{1,}/gi) || [])
+        .filter((t) => !SYMBOLTAG.test(t) && ROOMWORD.test(t)).length;
+      areas = (txt.match(/[\d.]+\s*(?:SQM|SQ\.?\s?M|M\u00b2)/gi) || []).length;
+      isPlan = /\b(FLOOR|LAYOUT|PARTITION|DEMOLITION|KEY)\s+PLAN\b/i.test(txt);
+    } catch (e) { /* image-only page: score 0, still eligible via ink */ }
+    scored.push({ n, ratio, words, areas, total,
+      score: words * 2 + areas * 3 + (ratio ? 6 : 0) + (isPlan ? 5 : 0) });
+  }
+  // Whatever score EVERY page shares is the title block, not evidence — an architectural sheet
+  // carries "KEY PLAN" and the firm's boilerplate on all 23 pages, which scored every page alike
+  // and let the tie break to the lowest page number. Subtract that baseline before ranking.
+  const freq = new Map();
+  scored.forEach((s) => freq.set(s.score, (freq.get(s.score) || 0) + 1));
+  let base = 0, bn = 0;
+  freq.forEach((count, sc) => { if (count > bn || (count === bn && sc > base)) { bn = count; base = sc; } });
+  if (bn < 2) base = 0;
+  scored.forEach((s) => { s.resid = s.score - base; });
+  scored.sort((a, b) => b.resid - a.resid || a.n - b.n);
+  window.__pdfScores = scored.slice(0, 5).map((s) => s.n + ':' + s.score + '/' + s.resid);
+  // Text evidence alone is not enough to pick a page: a room schedule lists every room name and
+  // outscores the drawing itself. Structure decides eligibility — long straight runs in both axes
+  // — and text only ranks among pages that actually look like a drawing.
+  const probe = [];
+  for (let n = 1; n <= Math.min(doc.numPages, 24); n++) {
+    try {
+      const page = await doc.getPage(n);
+      const v0 = page.getViewport({ scale: 1 });
+      const k = Math.min(1, 640 / Math.max(v0.width, v0.height));
+      const vp = page.getViewport({ scale: k });
+      const c = document.createElement('canvas');
+      c.width = Math.round(vp.width); c.height = Math.round(vp.height);
+      const g = c.getContext('2d');
+      g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+      await page.render({ canvasContext: g, viewport: vp }).promise;
+      probe.push({ n, s: lineScore(g.getImageData(0, 0, c.width, c.height)) });
+    } catch (e) { probe.push({ n, s: 0 }); }
+  }
+  const bestLine = Math.max(1, ...probe.map((p) => p.s));
+  const lineOf = new Map(probe.map((p) => [p.n, p.s]));
+  window.__pdfProbe = probe.slice().sort((a, b) => b.s - a.s).slice(0, 6).map((p) => p.n + ':' + p.s);
+  const eligible = scored.filter((s) => (lineOf.get(s.n) || 0) >= bestLine * 0.4);
+  const pool = eligible.length ? eligible : scored;
+  pool.sort((a, b) => b.resid - a.resid || (lineOf.get(b.n) || 0) - (lineOf.get(a.n) || 0) || a.n - b.n);
+  const order = pool.slice(0, 3).map((s) => s.n);
+  const meta = new Map(scored.map((s) => [s.n, s]));
+  let best = null;
+  for (const n of order) {
+    const page = await doc.getPage(n);
+    const v0 = page.getViewport({ scale: 1 });
+    const k = Math.min(5, 2400 / Math.max(v0.width, v0.height));
+    const vp = page.getViewport({ scale: k });
+    const c = document.createElement('canvas');
+    c.width = Math.round(vp.width); c.height = Math.round(vp.height);
+    const g = c.getContext('2d');
+    g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); // PDFs have no background of their own
+    await page.render({ canvasContext: g, viewport: vp }).promise;
+    const d = g.getImageData(0, 0, c.width, c.height).data;
+    let ink = 0, seen = 0;
+    for (let i = 0; i < d.length; i += 16) { seen++; if (d[i] < 160) ink++; }
+    const cov = ink / Math.max(1, seen);
+    const m = meta.get(n) || {};
+    // A vector PDF carries its own scale as REAL TEXT — "SCALE 1:100" — and its page geometry is
+    // exact. Together those give millimetres per pixel outright, with no archetype guess and no OCR.
+    let printed = [];
+    try { printed = pdfLabels(await page.getTextContent(), vp); } catch (e) { printed = []; }
+    const cand = { cov, url: c.toDataURL('image/png'), page: n, ratio: m.ratio || 0,
+      renderScale: k, pxWidth: c.width, printed, total: m.total || 0, score: m.resid || 0 };
+    if (!best || cand.score > best.score || (cand.score === best.score && cov > best.cov)) best = cand;
+    if (best.score > 0 && best.cov > 0.004) break;
+  }
+  const pick = best && (best.score > 0 || best.cov > 0.0015) ? best : null;
+  window.__pdfPage = pick ? pick.page : null; // so the chosen page is inspectable, not inferred
+  return pick;
+}
+
+// How much does this page look like a floor plan rather than notes, a schedule or a swatch board?
+// Walls are LONG straight dark runs in both axes. Text gives short runs; colour blocks give few
+// dark pixels at all. Counting runs of at least ~4% of the page in each axis separates them
+// cleanly and costs one pass over a 640 px thumbnail.
+function lineScore(im) {
+  const { data: d, width: W, height: H } = im;
+  const dark = (x, y) => { const i = (y * W + x) * 4; return d[i] < 150 && d[i + 1] < 150 && d[i + 2] < 150; };
+  const minH = Math.max(12, W * 0.04), minV = Math.max(12, H * 0.04);
+  let runs = 0, ink = 0, seen = 0;
+  for (let y = 0; y < H; y += 2) {
+    let run = 0;
+    for (let x = 0; x < W; x++) {
+      seen++;
+      if (dark(x, y)) { run++; ink++; } else { if (run >= minH) runs++; run = 0; }
+    }
+    if (run >= minH) runs++;
+  }
+  for (let x = 0; x < W; x += 2) {
+    let run = 0;
+    for (let y = 0; y < H; y++) {
+      if (dark(x, y)) run++; else { if (run >= minV) runs++; run = 0; }
+    }
+    if (run >= minV) runs++;
+  }
+  const cov = ink / Math.max(1, seen);
+  // a page that is nearly all ink is a filled render or a photo, not a line drawing
+  return cov > 0.45 ? 0 : runs;
+}
+
+// A drafted sheet SOMETIMES prints what the tracer infers: the room's name and its area, set
+// beside each other inside the room. Where that text is real (not outlined artwork), reading it
+// beats every heuristic we have. But a drawing's text layer is mostly NOT room names — it is
+// symbol tags (AC, WD, WC, T), dimension strings and title-block boilerplate, and letting one of
+// those rename a room corrupts WC counting, the entrance test and the space grammar at once.
+// So the bar is deliberately high: a bare tag never qualifies, and a name with no printed area
+// beside it must look like prose. Positions come back in render pixels.
+const ROOMWORD = /BEDROOM|BED\s*\d|MASTER|TOILET|BATH|SHOWER|\bWC\b|KITCHEN|LIVING|DINING|FOYER|HALL|ENTRY|STORE|STORAGE|YARD|BALCONY|TERRACE|PATIO|STUDY|UTILITY|PANTRY|CLOSET|WARDROBE|WALK.?IN|SHELTER|\bHS\b|SERVICE|WASH|LAUNDRY|POWDER|GUEST|JUNIOR|COMMON/i;
+// standard symbol tags found on any drawing — never a room name, whatever the regex thinks
+const SYMBOLTAG = /^(AC|WD|WC|WM|FR|SK|FD|DB|RC|HS|SP|T|C|W|D|B|G|L|M|P|S|R)$/i;
+function pdfLabels(tc, vp) {
+  const items = [];
+  for (const it of tc.items) {
+    const s = (it.str || '').replace(/\s+/g, ' ').trim();
+    if (!s) continue;
+    const m = PDFJS.Util.transform(vp.transform, it.transform);
+    items.push({ s, x: m[4], y: m[5] });
+  }
+  const areas = [], names = [];
+  for (const it of items) {
+    const a = it.s.match(/^\(?([\d]{1,3}(?:\.\d{1,2})?)\s*(?:SQM|SQ\.?\s?M|M2|M\u00b2)\)?$/i);
+    if (a && +a[1] >= 0.8 && +a[1] <= 400) { areas.push({ v: +a[1], x: it.x, y: it.y }); continue; }
+    if (SYMBOLTAG.test(it.s)) continue;
+    if (it.s.length <= 34 && ROOMWORD.test(it.s) && !/TOTAL|LEGEND|SCALE|NOTE|PLAN|AREA\s*:/i.test(it.s)) {
+      names.push({ t: it.s.replace(/[:\u2013-]\s*$/, '').trim(), x: it.x, y: it.y });
+    }
+  }
+  // pair each name with the area printed nearest below it — CD sets stack them, and an area that
+  // belongs to another room is worse than no area at all, so the pairing radius stays tight
+  const used = new Set();
+  return names.map((n) => {
+    let best = null, bd = 1e9;
+    areas.forEach((a, i) => {
+      if (used.has(i)) return;
+      const dx = Math.abs(a.x - n.x), dy = a.y - n.y;
+      if (dx > 90 || dy < -14 || dy > 46) return;
+      const d = dx + Math.abs(dy);
+      if (d < bd) { bd = d; best = i; }
+    });
+    if (best != null) used.add(best);
+    return { name: n.t, areaM2: best != null ? areas[best].v : 0, x: n.x, y: best != null ? (n.y + areas[best].y) / 2 : n.y };
+  }).filter((p) => p.areaM2 || (p.name.length >= 5 && /[A-Z]{4,}/i.test(p.name)));
+}
+
+// Printed labels arrive in PDF render pixels; the detector works on a resized — and possibly
+// deskewed — copy. Map through the same two transforms the image went through, or the label lands
+// in the wrong room, which is worse than having no label.
+function printedInDet() {
+  if (!det || !pdfMeta || !pdfMeta.printed || !pdfMeta.printed.length) return null;
+  const f = (det.W0 || det.W) / pdfMeta.pxWidth;
+  const r = ((det.skewDeg || 0) * Math.PI) / 180;
+  const cs = Math.cos(r), sn = Math.sin(r);
+  const cx0 = (det.W0 || det.W) / 2, cy0 = (det.H0 || det.H) / 2;
+  const cx = det.W / 2, cy = det.H / 2;
+  return pdfMeta.printed.map((p) => {
+    const ix = p.x * f, iy = p.y * f;
+    return r
+      ? { name: p.name, areaM2: p.areaM2, x: (ix - cx0) * cs - (iy - cy0) * sn + cx, y: (ix - cx0) * sn + (iy - cy0) * cs + cy }
+      : { name: p.name, areaM2: p.areaM2, x: ix, y: iy };
+  }).filter((p) => {
+    // outside the plan body it is a schedule entry, a legend or a title block — not a room name
+    const b = det.body || det.envelope;
+    return p.x >= b.x0 && p.x <= b.x1 && p.y >= b.y0 && p.y <= b.y1;
+  });
+}
+
+function handleFile(f) {
+  if (!f) return;
+  if (f.type === 'application/pdf' || /\.pdf$/i.test(f.name || '')) {
+    st('READING PDF…');
+    f.arrayBuffer().then((b) => pdfToPng({ data: new Uint8Array(b) }))
+      .then((r) => { if (r) { pdfMeta = r; start(r.url); } else fail('That PDF has no page that looks like a drawing'); })
+      .catch(() => fail('Could not read that PDF — try exporting the page as PNG'));
+    return;
+  }
+  if (!/^image\//.test(f.type) && !/\.(png|jpe?g|webp|bmp|gif)$/i.test(f.name || '')) {
+    fail('Unsupported file — use PDF, PNG, JPG or WEBP');
+    return;
+  }
+  const r = new FileReader();
+  r.onload = () => start(r.result);
+  r.readAsDataURL(f);
+}
+$('#browse').addEventListener('click', () => $('#file').click());
+$('#file').addEventListener('change', (e) => { handleFile(e.target.files[0]); e.target.value = ''; });
+const drop = $('#drop');
+drop.addEventListener('click', (e) => { if (e.target === drop || e.target.tagName === 'P') $('#file').click(); });
+['dragover', 'dragenter'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', (e) => handleFile(e.dataTransfer.files[0]));
+window.addEventListener('paste', (e) => { const f = [...(e.clipboardData ? e.clipboardData.files : [])].find((x) => /^image\//.test(x.type)); if (f) handleFile(f); });
+document.querySelectorAll('.chip[data-src]').forEach((b) => b.addEventListener('click', () => start(b.dataset.src)));
+</script>
+</body>
+</html>

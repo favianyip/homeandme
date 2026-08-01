@@ -24,7 +24,7 @@
 // intermittently dropped requests and surfaced as "property class unconfirmed" — the reason
 // journey-address.js carries a retry budget. The key reduces how often that path is taken.
 
-export const DATA_GOV_KEY = 'v2:6b6cb431382a0fffe1bddc756465d55c6748a7a2d0645a2fbb8feec10d6b8298:bVTr4TC204jgw-lvsto9XuI9ocLj7nD0';
+export const DATA_GOV_KEY = ''; // removed for public deploy — inject via server/env
 
 /** Headers for data.gov.sg. Empty object when no key is set, so the call still works unauthenticated. */
 export const dataGovHeaders = () => (DATA_GOV_KEY ? { 'x-api-key': DATA_GOV_KEY } : {});

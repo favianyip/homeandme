@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Home &amp; Me — Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Arial, sans-serif; }
+a { color: #5a7e8a; text-decoration: none; }
+a:hover { color: #3f5d67; }
+@keyframes hnmPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes hnmDot { 0%,80%,100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-4px); opacity: 1; } }
+</style>
+</helmet>
+<div data-screen-label="Assistant" style="min-height: 100vh; display: flex; flex-direction: column;">
+  <header style="position: sticky; top: 0; z-index: 40; background: rgba(246,244,239,0.93); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(26,32,35,0.12);">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 14px clamp(18px, 4vw, 40px); display: flex; align-items: center; gap: 26px;">
+      <a href="Home AI.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 44px; width: auto;"></a>
+      <nav style="margin-left: auto; display: flex; gap: 22px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px;">
+        <a href="Home AI.dc.html" style="color: #1a2023;" style-hover="color: #5a7e8a;">HOME</a>
+        <a href="SketchMyFlat.html" style="color: #1a2023;" style-hover="color: #5a7e8a;">SKETCH MY FLAT</a>
+        <a href="PlanIntake.html" style="color: #1a2023;" style-hover="color: #5a7e8a;">VERIFY A PLAN</a>
+        <a href="PlanDetect.html" style="color: #1a2023;" style-hover="color: #5a7e8a;">DETECTION LAB</a>
+        <a href="Studio.html" style="color: #1a2023;" style-hover="color: #5a7e8a;">3D STUDIO</a>
+      </nav>
+    </div>
+  </header>
+  <main style="flex: 1; width: 100%; max-width: 920px; margin: 0 auto; padding: clamp(28px, 5vw, 52px) clamp(18px, 4vw, 40px) 60px;">
+    <div style="display: flex; align-items: end; justify-content: space-between; gap: 18px; flex-wrap: wrap; margin-bottom: 22px;">
+      <div>
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 12px;">AI RENOVATION ASSISTANT</p>
+        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(28px, 4vw, 42px); margin: 0; line-height: 1.12;">Ask us anything. Or just attach your plan.</h1>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.8px; color: #5a7e8a; border: 1px solid rgba(90,126,138,0.45); border-radius: 999px; padding: 7px 13px;">{{ providerLabel }}</span>
+        <button onClick="{{ toggleCfg }}" style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.8px; color: #1a2023; background: none; border: 1px solid rgba(26,32,35,0.3); border-radius: 999px; padding: 7px 13px; cursor: pointer;" style-hover="background: rgba(26,32,35,0.06);">MODEL &amp; KEYS</button>
+      </div>
+    </div>
+    <sc-if value="{{ showCfg }}" hint-placeholder-val="{{ false }}">
+      <div style="background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 10px; padding: 22px 24px; margin-bottom: 22px; box-shadow: 0 24px 48px -36px rgba(26,32,35,0.4);">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; margin: 0 0 14px; color: #5a7e8a;">MODEL &amp; KEYS</p>
+        <div style="display: grid; gap: 12px; max-width: 560px;">
+          <label style="display: grid; gap: 6px; font-size: 13px; color: rgba(26,32,35,0.7);">Provider
+            <select value="{{ cfgProvider }}" onChange="{{ onProv }}" style="font: inherit; padding: 10px 12px; border: 1px solid rgba(26,32,35,0.25); border-radius: 6px; background: #fff;">
+              <option value="claude">Claude — built into this preview (no key needed)</option>
+              <option value="openai">OpenAI — my API key (dev/testing only)</option>
+              <option value="proxy">Home &amp; Me server proxy (production)</option>
+            </select>
+          </label>
+          <sc-if value="{{ cfgIsOpenai }}" hint-placeholder-val="{{ false }}">
+            <label style="display: grid; gap: 6px; font-size: 13px; color: rgba(26,32,35,0.7);">OpenAI API key (sk-…)
+              <input type="password" value="{{ cfgKey }}" onChange="{{ onKey }}" placeholder="sk-…" style="font: inherit; padding: 10px 12px; border: 1px solid rgba(26,32,35,0.25); border-radius: 6px;">
+            </label>
+            <label style="display: grid; gap: 6px; font-size: 13px; color: rgba(26,32,35,0.7);">Model
+              <select value="{{ cfgModel }}" onChange="{{ onModel }}" style="font: inherit; padding: 10px 12px; border: 1px solid rgba(26,32,35,0.25); border-radius: 6px; background: #fff;">
+                <option value="gpt-4o-mini">gpt-4o-mini — cheap, fast, reads plans</option>
+                <option value="gpt-4o">gpt-4o — stronger vision</option>
+              </select>
+            </label>
+          </sc-if>
+          <sc-if value="{{ cfgIsProxy }}" hint-placeholder-val="{{ false }}">
+            <label style="display: grid; gap: 6px; font-size: 13px; color: rgba(26,32,35,0.7);">Proxy endpoint
+              <input type="text" value="{{ cfgProxy }}" onChange="{{ onProxy }}" style="font: inherit; padding: 10px 12px; border: 1px solid rgba(26,32,35,0.25); border-radius: 6px;">
+            </label>
+          </sc-if>
+          <div style="display: flex; gap: 10px;">
+            <button onClick="{{ saveCfg }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: #1a2023; color: #f6f4ef; border: none; border-radius: 999px; padding: 12px 26px; cursor: pointer;" style-hover="background: #5a7e8a;">SAVE</button>
+            <button onClick="{{ toggleCfg }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: none; color: #1a2023; border: 1px solid rgba(26,32,35,0.3); border-radius: 999px; padding: 12px 26px; cursor: pointer;">CANCEL</button>
+          </div>
+          <p style="margin: 4px 0 0; font-size: 12.5px; line-height: 1.6; color: rgba(26,32,35,0.55);">Your key is stored only in this browser and sent straight to OpenAI — fine for your own testing, never for launch. A ChatGPT Plus subscription is separate from the API: you need a key from platform.openai.com with billing enabled. For launch, keep the key on the Home &amp; Me server (proxy mode) — same rule as the data.gov.sg key.</p>
+        </div>
+      </div>
+    </sc-if>
+    <div style="background: #1a2023; color: #f6f4ef; border-radius: 10px; box-shadow: 0 40px 80px -48px rgba(0,0,0,0.55); display: flex; flex-direction: column; overflow: hidden;">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 22px; border-bottom: 1px solid rgba(246,244,239,0.14);">
+        <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8fb0bb;">HOME&amp;ME ASSISTANT</span>
+        <span style="display: flex; align-items: center; gap: 7px; font-size: 12px; color: rgba(246,244,239,0.6);"><span style="width: 7px; height: 7px; border-radius: 50%; background: #7fb069; animation: hnmPulse 2.2s infinite;"></span>Online</span>
+      </div>
+      <div ref="{{ msgsRef }}" style="height: clamp(400px, 54vh, 620px); overflow-y: auto; padding: 22px; display: flex; flex-direction: column; gap: 14px;">
+        <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="1">
+          <div style="{{ m.row }}">
+            <sc-if value="{{ m.imgUrl }}" hint-placeholder-val="{{ false }}">
+              <div role="img" aria-label="attached floor plan" style="{{ m.thumbStyle }}"></div>
+            </sc-if>
+            <div style="{{ m.bs }}">{{ m.text }}</div>
+          </div>
+        </sc-for>
+        <sc-if value="{{ busy }}" hint-placeholder-val="{{ false }}">
+          <div style="align-self: flex-start; background: rgba(246,244,239,0.08); border-radius: 12px 12px 12px 3px; padding: 14px 18px; display: flex; gap: 5px;">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: #8fb0bb; animation: hnmDot 1.2s infinite;"></span>
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: #8fb0bb; animation: hnmDot 1.2s 0.15s infinite;"></span>
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: #8fb0bb; animation: hnmDot 1.2s 0.3s infinite;"></span>
+          </div>
+        </sc-if>
+      </div>
+      <sc-if value="{{ showChips }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; padding: 0 22px 16px;">
+          <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+            <button onClick="{{ c.go }}" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); background: none; color: #f6f4ef; border-radius: 999px; padding: 10px 16px; cursor: pointer;" style-hover="background: rgba(246,244,239,0.12);">{{ c.label }}</button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <div style="border-top: 1px solid rgba(246,244,239,0.14); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;">
+        <sc-if value="{{ att }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; align-items: center; gap: 10px; align-self: flex-start; background: rgba(246,244,239,0.08); border: 1px solid rgba(246,244,239,0.2); border-radius: 8px; padding: 6px 10px;">
+            <div role="img" aria-label="plan preview" style="{{ attThumbStyle }}"></div>
+            <span style="font-size: 12.5px; color: rgba(246,244,239,0.75);">Floor plan attached</span>
+            <button onClick="{{ removeAtt }}" style="background: none; border: none; color: rgba(246,244,239,0.6); font-size: 15px; cursor: pointer; padding: 4px;" style-hover="color: #fff;">✕</button>
+          </div>
+        </sc-if>
+        <div style="display: flex; gap: 10px; align-items: end;">
+          <input type="file" accept="image/*" ref="{{ fileRef }}" onChange="{{ onFile }}" style="display: none;">
+          <button onClick="{{ pickFile }}" title="Attach a floor plan" style="flex: none; width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(246,244,239,0.3); background: none; color: #f6f4ef; cursor: pointer; display: flex; align-items: center; justify-content: center;" style-hover="background: rgba(246,244,239,0.12);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l9-9a3.7 3.7 0 0 1 5.2 5.2l-9 9a1.85 1.85 0 0 1-2.6-2.6l8.3-8.3"></path></svg>
+          </button>
+          <textarea rows="2" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKeys }}" placeholder="Ask about your renovation, or attach your floor plan…" style="flex: 1; resize: none; font: 15px/1.5 'Helvetica Neue', Arial, sans-serif; background: rgba(246,244,239,0.06); color: #f6f4ef; border: 1px solid rgba(246,244,239,0.2); border-radius: 10px; padding: 12px 14px; outline: none;" style-focus="border-color: #8fb0bb;"></textarea>
+          <button onClick="{{ sendClick }}" disabled="{{ busy }}" style="flex: none; font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: #5a7e8a; color: #fff; border: none; border-radius: 999px; padding: 14px 26px; cursor: pointer; min-height: 46px;" style-hover="background: #6f95a1;">SEND</button>
+        </div>
+      </div>
+    </div>
+    <p style="margin: 16px 4px 0; font-size: 12.5px; line-height: 1.6; color: rgba(26,32,35,0.5);">Answers are AI-generated guidance, not a quotation — final pricing follows a site visit and confirmed measurements. For the measured 3D model, continue to <a href="PlanIntake.html">plan verification</a>.</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultProvider&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;claude&quot;,&quot;openai&quot;,&quot;proxy&quot;],&quot;default&quot;:&quot;claude&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Model&quot;},&quot;showQuickPrompts&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chat&quot;}}">
+class Component extends DCLogic {
+  state = { msgs: [], input: '', busy: false, showCfg: false, att: null, ready: false,
+    cfg: { provider: 'claude', key: '', model: 'gpt-4o-mini', proxyUrl: '/api/chat' } };
+
+  async componentDidMount() {
+    const [llm, soul] = await Promise.all([import('./assistant-llm.js'), import('./assistant-soul.js')]);
+    this.llm = llm; this.soul = soul;
+    const cfg = llm.getConfig();
+    if (!localStorage.getItem('hnm-llm-provider') && this.props.defaultProvider) cfg.provider = this.props.defaultProvider;
+    this.setState({ ready: true, cfg, msgs: [{ role: 'assistant', text: soul.GREETING }] });
+  }
+  componentDidUpdate() { if (this.msgsEl) this.msgsEl.scrollTop = this.msgsEl.scrollHeight; }
+
+  send = async (forceText) => {
+    if (!this.llm || this.state.busy) return;
+    const t = ((forceText != null ? forceText : this.state.input) || '').trim();
+    const att = this.state.att;
+    if (!t && !att) return;
+    const um = { role: 'user', text: t || 'Please read this floor plan.', img: att };
+    const msgs = this.state.msgs.concat([um]);
+    this.setState({ msgs, input: '', att: null, busy: true });
+    try {
+      const text = await this.llm.chatLLM({ system: this.soul.SOUL, history: msgs, cfg: this.state.cfg });
+      this.setState({ msgs: msgs.concat([{ role: 'assistant', text: text || '(empty reply)' }]), busy: false });
+    } catch (e) {
+      this.setState({ msgs: msgs.concat([{ role: 'assistant', text: e.message, err: true }]), busy: false });
+    }
+  };
+
+  renderVals() {
+    const s = this.state, accent = '#5a7e8a';
+    const msgs = s.msgs.map((m) => ({
+      text: m.text,
+      imgUrl: m.img ? 'data:' + m.img.media + ';base64,' + m.img.data : null,
+      thumbStyle: m.img ? 'width:220px;height:150px;background:#fff url(data:' + m.img.media + ';base64,' + m.img.data + ') center/contain no-repeat;border-radius:8px;border:1px solid rgba(246,244,239,0.25);margin-bottom:6px;' : null,
+      row: 'display:flex;flex-direction:column;' + (m.role === 'user' ? 'align-items:flex-end;' : 'align-items:flex-start;'),
+      bs: 'max-width:82%;padding:12px 16px;font-size:14.5px;line-height:1.6;white-space:pre-wrap;' + (m.role === 'user'
+        ? 'background:' + accent + ';color:#fff;border-radius:12px 12px 3px 12px;'
+        : m.err ? 'background:rgba(214,116,88,0.12);border:1px solid rgba(214,116,88,0.5);color:#e8b3a0;border-radius:12px 12px 12px 3px;'
+        : 'background:rgba(246,244,239,0.08);color:rgba(246,244,239,0.92);border-radius:12px 12px 12px 3px;')
+    }));
+    const labels = { claude: 'CLAUDE · PREVIEW', openai: 'OPENAI · YOUR KEY', proxy: 'HOME&ME SERVER' };
+    const chips = ((this.soul && this.soul.QUICK_PROMPTS) || []).map((q) => ({
+      label: q.label,
+      go: () => { if (q.attach) { if (this.fileEl) this.fileEl.click(); } else this.send(q.text); }
+    }));
+    const setCfg = (k) => (e) => this.setState({ cfg: Object.assign({}, s.cfg, { [k]: e.target.value }) });
+    return {
+      msgs, busy: s.busy, input: s.input, showCfg: s.showCfg,
+      att: !!s.att,
+      attThumbStyle: s.att ? 'width:42px;height:42px;background:#fff url(data:' + s.att.media + ';base64,' + s.att.data + ') center/cover no-repeat;border-radius:5px;' : null,
+      showChips: (this.props.showQuickPrompts ?? true) && s.msgs.length <= 1 && !s.busy,
+      chips, providerLabel: labels[s.cfg.provider] || 'CLAUDE · PREVIEW',
+      cfgProvider: s.cfg.provider, cfgKey: s.cfg.key, cfgModel: s.cfg.model, cfgProxy: s.cfg.proxyUrl,
+      cfgIsOpenai: s.cfg.provider === 'openai', cfgIsProxy: s.cfg.provider === 'proxy',
+      onProv: setCfg('provider'), onKey: setCfg('key'), onModel: setCfg('model'), onProxy: setCfg('proxyUrl'),
+      toggleCfg: () => this.setState({ showCfg: !s.showCfg, cfg: this.llm ? this.llm.getConfig() : s.cfg }),
+      saveCfg: () => { if (this.llm) this.llm.saveConfig(s.cfg); this.setState({ showCfg: false }); },
+      msgsRef: (el) => { this.msgsEl = el; }, fileRef: (el) => { this.fileEl = el; },
+      pickFile: () => { if (this.fileEl) this.fileEl.click(); },
+      onFile: async (e) => {
+        const f = e.target.files && e.target.files[0]; e.target.value = '';
+        if (!f || !this.llm) return;
+        try { const img = await this.llm.fileToPlanImage(f); this.setState({ att: img }); }
+        catch (err) { this.setState({ msgs: s.msgs.concat([{ role: 'assistant', text: 'Could not read that image — try a JPG or PNG of the floor plan.', err: true }]) }); }
+      },
+      removeAtt: () => this.setState({ att: null }),
+      onInput: (e) => this.setState({ input: e.target.value }),
+      onKeys: (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.send(); } },
+      sendClick: () => this.send()
+    };
+  }
+}
+</script>
+</body>
+</html>

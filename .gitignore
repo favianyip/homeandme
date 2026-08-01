@@ -9,3 +9,8 @@ tools/
 
 # Env / secrets
 .env
+**/uploads/
+plans/train/
+**/plans/train/
+*.data_gov*key*
+.data_gov_sg_key

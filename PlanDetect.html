@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan Detection — walls, rooms, openings from your upload</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Arial, sans-serif; }
+  a { color: #5a7e8a; }
+  .osw { font-family: 'Oswald', sans-serif; }
+  .lbl { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #8a908c; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
+  header { background: rgba(246,244,239,0.93); border-bottom: 1px solid rgba(26,32,35,0.1); }
+  .navrow { height: 64px; display: flex; align-items: center; gap: 22px; }
+  .navrow nav { display: flex; gap: 20px; margin-left: auto; font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 2px; }
+  .navrow nav a { color: #1a2023; text-decoration: none; }
+  .card { background: #fff; border: 1px solid rgba(26,32,35,0.1); }
+  .pill { border-radius: 999px; padding: 11px 24px; font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 1.8px; cursor: pointer; border: 1px solid transparent; }
+  .pill-d { background: #1a2023; color: #f6f4ef; } .pill-d:hover { background: #5a7e8a; }
+  .pill-g { background: none; color: #1a2023; border-color: rgba(26,32,35,0.25); } .pill-g:hover { border-color: #5a7e8a; color: #5a7e8a; }
+  canvas { max-width: 100%; display: block; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th { text-align: left; font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 10px; letter-spacing: 1.4px; color: #8a908c; border-bottom: 1px solid rgba(26,32,35,0.12); padding: 7px 8px; }
+  td { padding: 6px 8px; border-bottom: 1px solid rgba(26,32,35,0.06); }
+  select, input[type="number"] { font: inherit; font-size: 12px; padding: 5px 8px; border: 1px solid rgba(26,32,35,0.2); background: #fdfcf9; }
+  .sw { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: middle; border-radius: 2px; }
+</style>
+</head>
+<body>
+<header><div class="wrap navrow">
+  <a href="Home AI.dc.html" style="display:flex;align-items:center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height:44px;width:auto;"></a>
+  <nav><a href="Home AI.dc.html">HOME</a><a href="Assistant.dc.html">ASSISTANT</a><a href="SketchMyFlat.html">SKETCH MY FLAT</a><a href="PlanIntake.html">VERIFY A PLAN</a><a href="Journey.html">3D JOURNEY</a><a href="tools/corpus-labeler.html">CORPUS LABELER</a></nav>
+</div></header>
+
+<section class="wrap" style="padding:26px 0 14px;">
+  <p class="lbl" style="margin:0 0 10px;">PLAN DETECTION — BETA</p>
+  <h1 class="osw" style="font-weight:400;font-size:clamp(24px,3.4vw,34px);margin:0 0 10px;">Walls, rooms and openings, read from the drawing</h1>
+  <p style="font-size:14px;color:#4a5350;line-height:1.65;max-width:72ch;margin:0;">Every step is shown, nothing is hidden behind a model: structure (red), detected rooms (tinted), openings and fenestration (green). Scale comes from matching the envelope against the archetype knowledge distilled from the plan corpus — confirm it, correct any room name, then export the draft for the 3D engine.</p>
+</section>
+
+<section class="wrap" style="padding-bottom:40px;">
+  <div class="card" style="padding:16px 18px;margin-bottom:18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+    <input type="file" id="file" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp" style="font-size:12.5px;">
+    <span style="font-size:12px;color:#8a908c;">or test on a corpus sheet:</span>
+    <select id="corpus"></select>
+    <button class="pill pill-d" id="run" type="button">DETECT</button>
+    <span id="status" style="font-size:12.5px;color:#8a908c;"></span>
+  </div>
+  <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:18px;align-items:start;" id="two">
+    <div class="card" style="padding:12px;"><canvas id="out"></canvas></div>
+    <div class="card" style="padding:16px 18px;">
+      <p class="lbl" style="margin:0 0 8px;font-size:10px;">SCALE</p>
+      <div id="scaleBox" style="font-size:12.5px;color:#4a5350;">Run detection first.</div>
+      <p class="lbl" style="margin:16px 0 8px;font-size:10px;">DETECTED ROOMS — CORRECT ANY NAME</p>
+      <table id="roomsT"></table>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
+        <button class="pill pill-d" id="exp" type="button" disabled style="opacity:0.4;">EXPORT PLAN JSON (FOR 3D)</button>
+        <button class="pill pill-g" id="sk3d" type="button" disabled style="opacity:0.4;">SKETCH IN 3D →</button>
+        <span id="fallback" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;">
+          <select id="fbSel"></select>
+          <button class="pill pill-g" id="fbGo" type="button">BUILD TYPICAL LAYOUT IN 3D →</button>
+        </span>
+      </div>
+      <p id="note" style="margin:12px 0 0;font-size:11.5px;color:#8a908c;line-height:1.6;">The export is a draft <i>hnm-plan-scene</i> document — the same format the 3D engine builds from. It is marked low-confidence until a person confirms it against the sheet.</p>
+    </div>
+  </div>
+</section>
+<section class="wrap" id="sk3dSec" style="display:none;padding-bottom:44px;">
+  <div class="card" style="padding:16px 18px;">
+    <p class="lbl" style="margin:0 0 6px;font-size:10px;">3D SKETCH — 1:1 EXTRUSION OF THE TRACED DRAWING</p>
+    <p style="margin:0 0 12px;font-size:12px;color:#8a908c;line-height:1.6;" id="sk3dNote"></p>
+    <div style="display:flex;gap:8px;margin:0 0 12px;">
+      <button class="pill" id="whLow" type="button">LOW WALLS (COMPARE TO PLAN)</button>
+      <button class="pill" id="whFull" type="button">FULL HEIGHT (2.6 M)</button>
+    </div>
+    <div style="position:relative;height:540px;background:#eceade;">
+      <three-d-stage id="stage3d" name="detected-plan" background="#eceade" style="position:absolute;inset:0;width:100%;height:100%;"></three-d-stage>
+    </div>
+  </div>
+</section>
+<script src="three-d-stage.js"></script>
+<script type="module">
+import { analysePlan, scaleCandidates, toPlanDoc, toJourneyDoc, guessName, refineSmallCells } from './journey-vision.js';
+import { readDimensions, confirmScale } from './journey-ocr.js';
+import { buildFaithful, traceCoverage } from './journey-faithful.js';
+import { predictRooms, detToRects, nameFor } from './journey-ml.js';
+let mlModel = null, mlInfo = {};
+fetch('plans/room-classifier.json').then((r) => r.ok ? r.json() : null).then((m) => { mlModel = m; }).catch(() => {});
+import { loadArchetypes } from './journey-archetype.js';
+fetch('plans/digit-font.json').then((r) => r.json()).then((p) => import('./journey-ocr.js').then((O) => O.loadFontPack(p))).catch(() => {}); // real-font digit exemplars
+let WM = null; fetch('plans/wall-model.json').then((r) => r.json()).then((m) => { WM = m; }).catch(() => {}); // learned wall model — cascade fallback pass
+
+const $ = (s) => document.querySelector(s);
+const FILES = ["plan-03016ad73821.png","plan-065dd3294da0.png","plan-0a626778e131.png","plan-1482a0b19ffb.png","plan-20f6622ab9a3.png","plan-2443228b6a83.png","plan-24e6e7f6ca09.png","plan-2627fa6e524f.png","plan-2caf11712a08.png","plan-2d36f509be6b.png","plan-3182d96e89ec.png","plan-3371b2a2df64.png","plan-387bcc02fa27.png","plan-3e39922e82c6.png","plan-3f90de967c22.png","plan-41adc3da0b26.png","plan-48696ed5496c.png","plan-4eae5c64fb44.png","plan-4f3b9773c605.png","plan-505118de00ca.png","plan-517f1106921a.png","plan-5515c4bbd97c.png","plan-648572201669.png","plan-658fa8e233ea.png","plan-66af9e00e2e6.png","plan-6b5004adbc23.png","plan-71f744d9ab87.png","plan-73f23de8a626.png","plan-755681512d8a.png","plan-783a6e8a1ff3.png","plan-78d866030f45.png","plan-7cbbd0719af4.png","plan-7f25f24b7b6a.png","plan-7f87aca05d77.png","plan-7fceabe17384.png","plan-823087c612eb.png","plan-838093e097ae.png","plan-85420e18dbcb.png","plan-8d85667d6fe4.png","plan-8d8e6e4bbd03.png","plan-8fb382491a54.png","plan-985915eec192.png","plan-9b7315d4d34b.png","plan-9e056ad8501f.png","plan-9e2d0a8d2896.png","plan-a07ad18b56b8.png","plan-a2a7fa042f70.png","plan-a67c4b92ffb8.png","plan-a70d362b24f1.png","plan-a7a893e8e386.png","plan-a926ce241bbf.png","plan-aaac94025833.png","plan-ac6936111f19.png","plan-ace60878c9ee.png","plan-afdeb7aee086.png","plan-b5b276894c57.png","plan-b77a4650643a.png","plan-b7a4124a6418.png","plan-b89c10b882d5.png","plan-be7d7c1b7ffa.png","plan-c0cf85dfd4ab.png","plan-c46ad2497918.png","plan-c8d5f07a4674.png","plan-cd3c71f150a8.png","plan-d232166f2850.png","plan-d49ce7c1e727.png","plan-d8734f0edf0f.png","plan-de6fd104a063.png","plan-e097cd70b96d.png","plan-e2e0a5577772.png","plan-e5fd92541c8b.png","plan-e7371c74f34e.png","plan-ed49a12eb4ad.png","plan-f0eadace7df0.png","plan-f14421ae7b94.png","plan-f212b4fe8a51.png","plan-f3ab84bda975.png","plan-f89b5a208f4e.png","plan-f93b3af26009.png","plan-fef96c577de7.png"];
+const V2 = ['30000112','33230034','44511006','45211155','45311092','46211600'].map((c) => c + '-cleaned-review.png'); // re-cleaned corpus — watermarks correctly removed, printed text intact
+$('#corpus').innerHTML = '<optgroup label="CLEANED REVIEW (V2) — preferred">' + V2.map((f) => `<option value="uploads/${f}">${f}</option>`).join('') + '</optgroup>'
+  + '<optgroup label="Earlier restored set (v1 — residual watermark artifacts)">' + FILES.map((f) => `<option value="plans/train/${f}">${f}</option>`).join('') + '</optgroup>';
+const NAMES = ['LIVING / DINING','BEDROOM','MAIN BEDROOM','KITCHEN','BATH / WC','STORE','HOUSEHOLD SHELTER','SERVICE YARD','HALL','BALCONY','UTILITY','STORE / WC','OTHER'];
+const TINT = ['#5a7e8a','#b08a5e','#8aa17c','#9c8aa6','#c8b9a0','#7fa8b5','#b4737a','#87a37f','#a7906c','#7d94a5','#b5a24f','#8f7fb5'];
+
+let det = null, mmPerPx = null, names = {}, srcUrl = null, arch = null, api3 = null, tweens = [];
+function tween(obj, key, to, ms, delay = 0) { tweens.push({ obj, key, from: obj[key], to, t0: performance.now() + delay, ms }); }
+(function loop() { requestAnimationFrame(loop); const now = performance.now(); tweens = tweens.filter((tw) => { const k = (now - tw.t0) / tw.ms; if (k < 0) return true; const e = k >= 1 ? 1 : 1 - Math.pow(1 - k, 3); tw.obj[tw.key] = tw.from + (tw.to - tw.from) * e; return k < 1; }); })();
+// same visual vocabulary as Journey station 03 (see Journey.html)
+const THEMES = [
+  { id: 'luxe', label: 'MODERN LUXE', mult: 1.15, color: 0xb08a5e },
+  { id: 'classic', label: 'MODERN CLASSIC', mult: 1.0, color: 0x7f97a0 },
+  { id: 'scandi', label: 'SCANDINAVIAN', mult: 0.9, color: 0xcfc5b0 },
+];
+const ROOMS = {
+  living: { label: 'LIVING & DINING' }, kitchen: { label: 'KITCHEN' }, family: { label: 'FAMILY AREA' },
+  master: { label: 'MAIN BEDROOM' }, common: { label: 'COMMON BEDROOM' }, common2: { label: 'COMMON BEDROOM 2' },
+  study: { label: 'STUDY' }, bath: { label: 'BATHROOMS' },
+};
+const st3 = { view: { walls: 'half' }, themes: {}, room: null, layoutId: 'detected' };
+loadArchetypes('').then((a) => { arch = a; });
+
+// Sheet numerical codes self-identify the layout family — mapping grounded in the v2 corpus
+// title blocks (44511006=4-RM NEW, 452/45311092=MODEL A, 46211600=SIMPLIFIED, 30000112=SA, 33230034=3I-C).
+const MODEL_BY_PREFIX = { '445': 'New Flat', '452': 'Model A', '453': 'Model A', '462': 'Simplified', '332': 'Improved', '300': 'SA' };
+const TYPE_BY_DIGIT = { '2': '2room', '3': '3room', '4': '4room', '5': '5room' };
+function codeFamilyHint(ocr) {
+  const c = ocr && ocr.codes && ocr.codes.length ? ocr.codes[0].code : null;
+  if (!c) return null;
+  const model = MODEL_BY_PREFIX[c.slice(0, 3)] || null;
+  const type = c.slice(0, 3) === '300' ? 'SA' : TYPE_BY_DIGIT[c[0]] || null;
+  const pref = (cand) => (model && cand.name.includes(model) ? 2 : 0) + (type && cand.flat_type === type ? 1 : 0);
+  return { code: c, model, type, pref };
+}
+function nameRooms(scale) {
+  names = {}; mlInfo = {};
+  if (mlModel) { // trained room-role model — features are metric, so naming waits for the resolved scale
+    const { rooms: rr, env } = detToRects(det, scale);
+    const preds = predictRooms(rr, env, mlModel);
+    det.rooms.forEach((r, i) => { names[r.id] = nameFor(preds[i].cls); mlInfo[r.id] = Math.round(preds[i].conf * 100); });
+  } else det.rooms.forEach((r) => { names[r.id] = guessName(det, r); });
+  if (det._openplan) names[1] = 'LIVING / DINING';
+  refineSmallCells(det, names, scale);
+}
+async function run(src) {
+  $('#status').textContent = 'Detecting…';
+  $('#exp').disabled = true; $('#exp').style.opacity = '0.4';
+  $('#sk3d').disabled = true; $('#sk3d').style.opacity = '0.4';
+  $('#sk3dSec').style.display = 'none';
+  try { det = await analysePlan(src, { wallModel: WM }); }
+  catch (e) { $('#status').textContent = 'Could not trace this image (' + e.message + ') — you can still get a 3D model:'; offerFallback(); return; }
+  if (det.error) { $('#status').textContent = det.error + ' — you can still get a 3D model:'; offerFallback(); return; }
+  $('#fallback').style.display = 'none';
+  if (!det.rooms.length && det.envelope && det.envelope.x1 - det.envelope.x0 > 40) {
+    det.rooms = [{ id: 1, x0: det.envelope.x0 + 4, y0: det.envelope.y0 + 4, x1: det.envelope.x1 - 4, y1: det.envelope.y1 - 4 }];
+    det._openplan = true; names[1] = 'LIVING / DINING';
+  }
+  if (!det.rooms.length) { $('#status').textContent = 'No rooms could be traced — you can still get a 3D model:'; offerFallback(); return; }
+  names = {}; mlInfo = {};
+  const cands = scaleCandidates(det, arch && arch.archetypes);
+  mmPerPx = cands.length ? cands[0].mmPerPx : null;
+  let ocr = null, conf = null, codeHint = null;
+  $('#status').textContent = 'Reading printed figures…';
+  try { ocr = await readDimensions(src); } catch (e) { ocr = { reads: [], codes: [] }; }
+  codeHint = codeFamilyHint(ocr);
+  if (codeHint) cands.sort((a, b) => codeHint.pref(b) - codeHint.pref(a) || a.skew - b.skew);
+  try { conf = confirmScale(ocr.reads, det, cands); } catch (e) { conf = null; }
+  if (conf) mmPerPx = conf.mmPerPx; else if (cands.length) mmPerPx = cands[0].mmPerPx;
+  drawScale(cands, ocr, conf, codeHint);
+  nameRooms(mmPerPx || 10000 / (det.envelope.x1 - det.envelope.x0 + 1));
+  draw(); drawRooms();
+  $('#status').textContent = `${det.rooms.length} rooms · ${det.openings.length} openings · envelope ${det.envelope.x1 - det.envelope.x0}×${det.envelope.y1 - det.envelope.y0}px` + (det._openplan ? ' · no partitions traced — treated as one open plan' : '');
+  $('#exp').disabled = false; $('#exp').style.opacity = '1';
+  $('#sk3d').disabled = false; $('#sk3d').style.opacity = '1';
+}
+
+function drawScale(cands, ocr, conf, codeHint) {
+  const codeLine = codeHint ? '<p style="margin:0 0 8px;font-size:11.5px;color:#2e7d54;">SHEET CODE READ: <b>' + codeHint.code + '</b>' + (codeHint.model ? ' — ' + codeHint.model + ' family preferred in the archetype pick' : '') + '.</p>' : '';
+  const dim = !ocr || !ocr.reads.length
+    ? '<p style="margin:0 0 10px;font-size:11.5px;color:#8a908c;">No printed figures read off this sheet (rotated text is out of scope) — scale from archetype match only.</p>'
+    : (conf
+      ? '<p style="margin:0 0 10px;font-size:11.5px;color:#2e7d54;">PRINTED FIGURE READ: <b>' + conf.read.n + ' mm</b>' + (conf.kind === 'archetype' ? ' — matches the ' + conf.axis + ' of ' + conf.cand.name + ' within ' + (conf.err * 100).toFixed(1) + '%. Scale confirmed by the sheet itself.' : ' — no archetype agreed, so it is used directly as the printed overall width.') + '</p>'
+      : '<p style="margin:0 0 10px;font-size:11.5px;color:#a8761f;">Figures read: ' + ocr.reads.slice(0, 6).map((r) => r.n).join(' · ') + ' — none agrees with an archetype envelope; confirm the scale yourself.</p>');
+  $('#scaleBox').innerHTML = codeLine + dim + (cands.length
+    ? `<select id="scaleSel" style="width:100%;">${conf && conf.kind === 'printed' ? `<option value="${conf.mmPerPx}" selected>PRINTED OVERALL ${conf.read.n} mm — read off the sheet</option>` : ''}${cands.map((c, i) => `<option value="${c.mmPerPx}" ${conf && conf.kind === 'archetype' && conf.cand === c ? 'selected' : ''}>${c.name} — ${c.env[0]}×${c.env[1]} m (${(c.skew * 100).toFixed(1)}% skew)</option>`).join('')}</select>
+       <p style="margin:8px 0 0;font-size:11.5px;color:#8a908c;">Best archetype fits from the corpus knowledge — pick the one matching the sheet's printed overall.</p>`
+    : `<p style="margin:0;font-size:12px;color:#a8761f;">No archetype envelope fits — enter the printed overall width:</p>`)
+    + `<div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+        <input type="number" id="mw" step="0.05" min="3" max="30" placeholder="overall width, m" style="width:150px;">
+        <button class="pill pill-g" id="mwGo" type="button" style="padding:7px 14px;font-size:10px;">USE WIDTH</button>
+      </div>`;
+  const sel = $('#scaleSel');
+  if (sel) sel.addEventListener('change', () => { mmPerPx = +sel.value; nameRooms(mmPerPx); drawRooms(); });
+  $('#mwGo').addEventListener('click', () => {
+    const v = +$('#mw').value;
+    if (v > 2) { mmPerPx = v * 1000 / (det.envelope.x1 - det.envelope.x0); nameRooms(mmPerPx); drawRooms(); }
+  });
+  // a confirmation (printed or archetype) already set mmPerPx — the dropdown must not override it
+  if (sel && !conf) { mmPerPx = +sel.value; }
+  else {
+    const ops = det.openings.map((o) => o.to - o.from).sort((a, b) => a - b);
+    const med = ops.length ? ops[Math.floor(ops.length / 2)] : 0;
+    mmPerPx = med >= 8 ? 900 / med : 10000 / (det.envelope.x1 - det.envelope.x0);
+    $('#scaleBox').insertAdjacentHTML('beforeend', `<p style="margin:8px 0 0;font-size:11px;color:#a8761f;">ASSUMED SCALE — ${med >= 8 ? 'from standard 900 mm doorways' : 'a 10 m overall width'}. Enter the printed width above to correct it.</p>`);
+  }
+}
+
+function draw() {
+  const c = $('#out'); c.width = det.W; c.height = det.H;
+  const g = c.getContext('2d');
+  const id = g.createImageData(det.W, det.H);
+  for (let i = 0; i < det.W * det.H; i++) {
+    const j = i * 4;
+    let r = 253, gg = 252, b = 249;
+    if (det.ink[i]) { r = 205; gg = 200; b = 190; }
+    id.data[j] = r; id.data[j + 1] = gg; id.data[j + 2] = b; id.data[j + 3] = 255;
+  }
+  g.putImageData(id, 0, 0);
+  g.globalAlpha = 0.32;
+  det.rooms.forEach((r, i) => { g.fillStyle = TINT[i % TINT.length]; g.fillRect(r.x0, r.y0, r.x1 - r.x0, r.y1 - r.y0); });
+  g.globalAlpha = 1;
+  // walls
+  const wd = g.getImageData(0, 0, det.W, det.H);
+  for (let i = 0; i < det.W * det.H; i++) if (det.wall[i]) { const j = i * 4; wd.data[j] = 58; wd.data[j + 1] = 64; wd.data[j + 2] = 67; }
+  g.putImageData(wd, 0, 0);
+  // openings
+  g.strokeStyle = '#2e7d54'; g.lineWidth = 3;
+  det.openings.forEach((o) => {
+    g.beginPath();
+    if (o.horiz) { g.moveTo(o.from, o.at); g.lineTo(o.to, o.at); }
+    else { g.moveTo(o.at, o.from); g.lineTo(o.at, o.to); }
+    g.stroke();
+  });
+  g.strokeStyle = '#b07c2a'; g.lineWidth = 2; g.setLineDash([6, 4]);
+  g.strokeRect(det.envelope.x0, det.envelope.y0, det.envelope.x1 - det.envelope.x0, det.envelope.y1 - det.envelope.y0);
+  g.setLineDash([]);
+  det.rooms.forEach((r, i) => {
+    g.fillStyle = '#1a2023'; g.font = '700 13px Arial'; g.textAlign = 'center';
+    g.fillText(String(r.id), (r.x0 + r.x1) / 2, (r.y0 + r.y1) / 2 + 4);
+  });
+}
+
+function drawRooms() {
+  const s = mmPerPx;
+  $('#roomsT').innerHTML = `<tr><th></th><th>ROOM</th><th style="text-align:right;">SIZE</th><th style="text-align:right;">AREA</th></tr>`
+    + det.rooms.map((r, i) => {
+      const w = r.x1 - r.x0, d = r.y1 - r.y0;
+      const size = s ? `${(w * s / 1000).toFixed(2)}×${(d * s / 1000).toFixed(2)} m` : `${w}×${d} px`;
+      const area = s ? ((w * s / 1000) * (d * s / 1000)).toFixed(1) + ' m²' : '—';
+      return `<tr><td><span class="sw" style="background:${TINT[i % TINT.length]};"></span>${r.id}</td>
+        <td><select data-id="${r.id}">${[...new Set([...NAMES, ...Object.values(names)])].map((n) => `<option ${names[r.id] === n ? 'selected' : ''}>${n}</option>`).join('')}</select>${mlInfo[r.id] ? `<span style="margin-left:6px;color:#8a908c;font-size:10.5px;" title="model confidence">${mlInfo[r.id]}%</span>` : ''}</td>
+        <td style="text-align:right;white-space:nowrap;">${size}</td><td style="text-align:right;">${area}</td></tr>`;
+    }).join('');
+  document.querySelectorAll('#roomsT select').forEach((el) => el.addEventListener('change', () => { names[+el.dataset.id] = el.value; }));
+}
+
+async function fitImage(url) {
+  const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('not a readable image')); i.src = url; });
+  const mx = Math.max(im.width, im.height);
+  if (mx <= 1700) return url;
+  const c = document.createElement('canvas'), s = 1700 / mx;
+  c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+  const g = c.getContext('2d'); g.imageSmoothingQuality = 'high';
+  g.drawImage(im, 0, 0, c.width, c.height);
+  return c.toDataURL('image/png');
+}
+function offerFallback() {
+  $('#fallback').style.display = 'flex';
+  if (!$('#fbSel').options.length) import('./journey-3d.js').then(({ CATALOG_NAMES }) => {
+    $('#fbSel').innerHTML = Object.entries(CATALOG_NAMES).filter(([k]) => k !== 'sh1').map(([k, n]) => `<option value="${k}" ${k === 'hdb4' ? 'selected' : ''}>${n}</option>`).join('');
+  });
+}
+$('#fbGo').addEventListener('click', async () => {
+  const { createModel, catalogDocs, CATALOG_NAMES } = await import('./journey-3d.js');
+  const id = $('#fbSel').value || 'hdb4';
+  const doc = catalogDocs()[id];
+  const fl = doc.floors[0];
+  const rooms = [...new Set(doc.floors.flatMap((f) => f.spaces || []).map((s) => s.pid).filter(Boolean))];
+  const lay = { id, rooms, label: CATALOG_NAMES[id], sqm: doc.internal_sqm || Math.round((fl.W || 9) * (fl.D || 12)) };
+  $('#sk3dSec').style.display = '';
+  const stage = $('#stage3d'); const { THREE } = await stage.ready;
+  api3 = createModel({ THREE, stage, state: st3, tween, THEMES, ROOMS, themeFor: (r) => st3.themes[r] || 'classic', layout: () => lay, planDocs: [doc] });
+  api3.buildModel();
+  if (api3.setDecor) api3.setDecor({ furn: true, swings: true, labels: true, wall: '#f4f1ea' });
+  $('#sk3dNote').textContent = 'TYPICAL ' + CATALOG_NAMES[id] + ' — catalog geometry, not traced from your image (the drawing could not be read). Same walls, doors, windows and fixtures as the Journey model.';
+  window.scrollTo({ top: $('#sk3dSec').offsetTop - 16, behavior: 'smooth' });
+});
+let wallH = 1.15;
+async function sketchFaithful() {
+  if (!det) return;
+  if (!mmPerPx) mmPerPx = 10000 / (det.envelope.x1 - det.envelope.x0);
+  $('#sk3dSec').style.display = '';
+  const stage = $('#stage3d');
+  const { THREE } = await stage.ready;
+  const { group, stats } = buildFaithful(det, mmPerPx, names, THREE, (dd, r) => guessName(dd, r), { wallH });
+  stage.setObject(group);
+  const cov = traceCoverage(det);
+  $('#sk3dNote').textContent = 'TRACED 1:1 — walls are the detected wall ink extruded pixel-exact (' + stats.wallRects
+    + ' segments), floors are the exact room regions (' + stats.floorRects + ' patches), ' + stats.doors + ' doors and '
+    + stats.windows + ' windows placed where the scan found them. Trace explains ' + Math.round(cov.coverage * 100)
+    + '% of the envelope — detection gaps render as gaps, nothing is invented. Correct room names above and re-sketch to update finishes.';
+  window.scrollTo({ top: $('#sk3dSec').offsetTop - 16, behavior: 'smooth' });
+}
+$('#sk3d').addEventListener('click', sketchFaithful);
+$('#whLow').addEventListener('click', () => { wallH = 1.15; sketchFaithful(); });
+$('#whFull').addEventListener('click', () => { wallH = 2.6; sketchFaithful(); });
+$('#run').addEventListener('click', () => run(srcUrl || $('#corpus').value));
+$('#corpus').addEventListener('change', () => { srcUrl = null; });
+$('#file').addEventListener('change', async (e) => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  if (/pdf$/i.test(f.type) || /\.pdf$/i.test(f.name)) { $('#status').textContent = 'PDF — export the plan page as PNG or JPG first, then upload that image.'; return; }
+  try { srcUrl = await fitImage(URL.createObjectURL(f)); } catch (err) { $('#status').textContent = 'Not a readable image file.'; return; }
+  run(srcUrl);
+});
+$('#exp').addEventListener('click', () => {
+  if (!det) return;
+  if (!mmPerPx) mmPerPx = 10000 / (det.envelope.x1 - det.envelope.x0);
+  const doc = toPlanDoc(det, mmPerPx, names);
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(doc, null, 1)], { type: 'application/json' }));
+  a.download = 'detected-plan.json'; a.click();
+});
+const qp = new URLSearchParams(location.search);
+if (qp.get('f')) { $('#corpus').value = 'plans/train/' + qp.get('f'); run($('#corpus').value); }
+</script>
+</body>
+</html>

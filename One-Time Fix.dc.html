@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="./doc-page.js"></script>
+<style>
+  doc-page:not(:defined) { visibility: hidden; }
+  body { margin: 0; }
+  a { color: #14545f; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #0c383f; }
+</style>
+</helmet>
+<doc-page margin="0.85in">
+<div slot="footer" style="display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Sans',sans-serif;font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;color:#8b929c;padding-top:8px;border-top:1px solid #e3e6eb">
+  <span>HomeandMe · one-time fix</span>
+  <span>Conclusion · for approval</span>
+</div>
+
+<h1 style="font-family:'Newsreader',serif;font-weight:600;font-size:40px;line-height:1.1;letter-spacing:-0.015em;color:#17191d;margin:0 0 14px">Your four complaints are one bug. Here is the single fix.</h1>
+
+<div style="display:flex;flex-wrap:wrap;gap:18px;font-family:'IBM Plex Sans',sans-serif;font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:#6a7280;padding-bottom:20px;border-bottom:2px solid #17191d;margin-bottom:26px">
+  <span>Conclusion memo</span>
+  <span>1 August 2026</span>
+  <span>Evidence: sheet 45211155</span>
+</div>
+
+<div style="break-inside:avoid;background:#f1f6f6;border-left:3px solid #14545f;padding:20px 22px;margin:0 0 30px;font-family:'IBM Plex Sans',sans-serif">
+  <p style="margin:0 0 12px;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#14545f;font-weight:600">The conclusion</p>
+  <p style="margin:0 0 10px;font-size:16px;line-height:1.55;color:#2a2e35">Stop deriving geometry from pixels. <strong>Delete the geometry half of the pipeline</strong> and let the 3D read only the plan contract. Detection stays exactly as it is.</p>
+  <p style="margin:0;font-size:15px;line-height:1.6;color:#2a2e35">This is a one-time fix rather than another patch because the blocked living door, the structure in the kitchen, the fins outside the flat and the covered toilet doors are not four bugs. They are one bug seen four times — and in the replacement they are not merely fixed, they become <em>unrepresentable</em>.</p>
+</div>
+
+<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:24px;line-height:1.2;color:#17191d;margin:34px 0 10px">1. What your screenshots actually say</h2>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">The tell is in your own status line: <strong>665 wall segments and 627 floor patches</strong> for a four-room flat. A four-room HDB flat has about fifty wall segments and eight floors. The current path is not building a flat; it is tiling a photograph. Every one of your complaints follows from that directly.</p>
+
+<div style="break-inside:avoid;display:grid;grid-template-columns:auto 1fr;gap:11px 16px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.55;color:#2a2e35;margin:0 0 18px">
+  <div style="font-weight:600;color:#8f2f28;white-space:nowrap">Living door blocked</div>
+  <div>The sheet traced <strong>1 door for 10 rooms</strong>, and zero entrances. A door exists only where the trace happened to leave a clean gap; a swing arc or a threshold line closes it, and the wall is then solid.</div>
+  <div style="font-weight:600;color:#8f2f28;white-space:nowrap">Kitchen structure</div>
+  <div>Fixture ink — the sink, the hob, the counter outline — is extruded as though it were wall. Nothing in the current path distinguishes a drawn appliance from a drawn partition.</div>
+  <div style="font-weight:600;color:#8f2f28;white-space:nowrap">Exterior fins</div>
+  <div>The sheet includes what is not the flat: RC ledges, planter boxes, the block's chamfered edge, the common corridor. Two of your ten "rooms" are ledges <strong>0.72 m and 0.38 m deep</strong>. They get walls and floors like anything else.</div>
+  <div style="font-weight:600;color:#8f2f28;white-space:nowrap">Toilet door covered</div>
+  <div>Same cause as the living door, plus the sanitary fixtures sitting in the doorway. The status line reports <strong>0 WC</strong> on a flat that has two.</div>
+  <div style="font-weight:600;color:#8f2f28;white-space:nowrap">And the giveaway</div>
+  <div>Two "HALLWAY" rooms measuring <strong>0.47 m wide</strong>. That is not a hallway. That is the inside of a wall, promoted to a room because a flood fill found some pixels there.</div>
+</div>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 22px">The single root cause: <strong>geometry is decided per pixel, with no representation of what a room is.</strong> The trace explains 63% of the envelope, and the other 37% is filled with whatever the ink happened to look like. You cannot tune your way out of this, because the model has no place to put the constraint "a room is an enclosed space you can stand in and walk into".</p>
+
+<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:24px;line-height:1.2;color:#17191d;margin:34px 0 10px">2. The same sheet, both ways</h2>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 16px">Sheet 45211155 — the one in your screenshots — run through the current live path and through the contract path. Same uploaded image, same detector, same scale: both measured in the live tool, which reads the sheet code and correctly resolves 4-Room Improved at 12.78 mm per pixel. That matters, because every threshold in the rebuild is expressed in millimetres, so a wrong scale changes the result — see §5.</p>
+
+<table style="width:100%;border-collapse:collapse;font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;line-height:1.45;color:#2a2e35;margin:0 0 10px">
+  <thead>
+    <tr>
+      <th style="text-align:left;font-weight:600;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#6a7280;border-bottom:1.5px solid #17191d;padding:0 10px 7px 0">Measure</th>
+      <th style="text-align:left;font-weight:600;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#6a7280;border-bottom:1.5px solid #17191d;padding:0 10px 7px 0">Live path today</th>
+      <th style="text-align:left;font-weight:600;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#6a7280;border-bottom:1.5px solid #17191d;padding:0 0 7px">Contract path</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">Wall segments</td>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;color:#8f2f28">665</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3;color:#2f6b3f">30</td>
+    </tr>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">Floor patches</td>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;color:#8f2f28">627</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3;color:#2f6b3f">5, one per room</td>
+    </tr>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">Doors</td>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;color:#8f2f28">1 (0 entrance)</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3;color:#2f6b3f">3, plus 2 wide openings</td>
+    </tr>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">Rooms reachable from entrance</td>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;color:#8f2f28">not measured</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3;color:#2f6b3f">5 of 5</td>
+    </tr>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">Envelope explained</td>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;color:#8f2f28">63%</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3;color:#2f6b3f">83%</td>
+    </tr>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">Narrowest "room"</td>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;color:#8f2f28">0.38 m</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3;color:#2f6b3f">2.28 m</td>
+    </tr>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">Geometry outside the flat</td>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;color:#8f2f28">ledges, chamfer, corridor</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3;color:#2f6b3f">none — 3 ledges trimmed</td>
+    </tr>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">Fixtures as walls</td>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;color:#8f2f28">yes</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3;color:#2f6b3f">structurally impossible</td>
+    </tr>
+  </tbody>
+</table>
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;line-height:1.5;color:#6a7280;margin:0 0 22px">Table 1 — Both columns measured in the live tool on the same upload at the same confirmed scale, switching only the <strong>CLEAN REBUILD</strong> / <strong>RAW 1:1 TRACE</strong> toggle. Across the fourteen-sheet corpus in <code style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:#f2f4f7;padding:1px 4px;border-radius:2px">tools/regularise-lab.html</code>: 13 of 14 watertight, 14 of 14 fully walkable, median four manual corrections per plan — though that harness resolves scale by envelope proportion rather than by sheet code, so treat its per-sheet dimensions as indicative only (§5).</p>
+
+<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:24px;line-height:1.2;color:#17191d;margin:34px 0 10px">3. Why these faults become unrepresentable</h2>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">This is the part that makes it a one-time fix. In the replacement, walls are not traced from ink. The wall centrelines define a grid of cells over the flat; every cell is assigned to a room; and a wall is simply <em>what sits between two cells belonging to different rooms</em>. Follow the consequences:</p>
+
+<ul style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.6;color:#2a2e35;margin:0 0 16px;padding-left:22px">
+  <li style="margin-bottom:9px"><strong>Fixture ink cannot become a wall.</strong> A sink sits inside one cell. Walls only exist on cell boundaries. There is no mechanism by which interior ink becomes structure — no threshold to get wrong.</li>
+  <li style="margin-bottom:9px"><strong>Nothing can appear outside the flat.</strong> Geometry exists only where cells were assigned to rooms. The chamfered block edge, the corridor and the planter are outside that union, so they are not drawn — and each facade comes out as one flush plane, because the outer boundary is a single merged run rather than a hundred traced fragments.</li>
+  <li style="margin-bottom:9px"><strong>A 0.47 m room cannot exist.</strong> Three rules kill it, in order: no axis is created for a gap narrower than 0.45 m, so the wall cavity never becomes a cell; any cell group under 1.6 m² or narrower than 0.8 m is absorbed into its neighbour; and any perimeter strip narrower than 1.2 m is dropped as a ledge rather than modelled. That last rule does real work — three ledges on your sheet, one on 33230034 — and it is guarded so a narrow space containing sanitary or kitchen fixture ink is kept even when its label is missing, because an unlabelled 1 m WC on a facade must not be mistaken for a ledge.</li>
+  <li><strong>No room can be sealed.</strong> After the doors are placed the system walks the door graph from the entrance; where it cannot reach a room it proposes a door on that room's longest shared boundary and flags it at low confidence. That is what took walkability from 5 of 14 to 14 of 14 sheets.</li>
+</ul>
+
+<div style="break-inside:avoid;background:#f1f7f2;border-left:3px solid #2f6b3f;padding:16px 20px;margin:0 0 22px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6;color:#2a2e35">
+  What makes this a fix rather than a patch: every rule above is stated in real-world millimetres about what a room <em>is</em> — 0.45 m of clear width, 1.6 m² of floor, 1.2 m to stand in — and none of them is a pixel threshold tuned against a particular drawing style. The old path needed per-sheet tuning because it was arguing with ink. These rules argue with architecture, so they transfer to sheets nobody has seen. The four faults in §1 are not filtered out; there is no representation in which they can occur.
+</div>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 22px">This also matches the published record. Removing everything outside the outer-wall boundary is reported as one of the highest-impact steps in floor-plan recognition systems — one such system credits it specifically for lifting room-recognition accuracy to 79% against 69% for the prior state of the art. Your instinct to keep the exterior clean is not a preference; it is the accuracy fix.</p>
+
+<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:24px;line-height:1.2;color:#17191d;margin:34px 0 10px">4. The change, precisely</h2>
+
+<div style="break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:0 0 20px;font-family:'IBM Plex Sans',sans-serif">
+  <div style="border:1px solid #e3e6eb;border-radius:3px;padding:16px 18px">
+    <p style="margin:0 0 10px;font-size:11px;letter-spacing:0.07em;text-transform:uppercase;color:#2f6b3f;font-weight:600">Keep, untouched</p>
+    <ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.55;color:#2a2e35">
+      <li style="margin-bottom:5px"><code style="font-family:'IBM Plex Mono',monospace;font-size:12.5px">journey-vision.js</code> — all wall and room detection</li>
+      <li style="margin-bottom:5px"><code style="font-family:'IBM Plex Mono',monospace;font-size:12.5px">journey-ocr.js</code> — printed dimensions and the sheet code</li>
+      <li style="margin-bottom:5px"><code style="font-family:'IBM Plex Mono',monospace;font-size:12.5px">journey-ml.js</code>, the archetype library</li>
+      <li>The upload flow, the 2D review panel, the room-name dropdowns</li>
+    </ul>
+  </div>
+  <div style="border:1px solid #e3e6eb;border-radius:3px;padding:16px 18px">
+    <p style="margin:0 0 10px;font-size:11px;letter-spacing:0.07em;text-transform:uppercase;color:#8f2f28;font-weight:600">Retire as a geometry source</p>
+    <ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.55;color:#2a2e35">
+      <li style="margin-bottom:5px"><code style="font-family:'IBM Plex Mono',monospace;font-size:12.5px">buildFaithful</code>'s rectangle decomposition</li>
+      <li style="margin-bottom:5px">Bounding-box rooms from the flood fill</li>
+      <li style="margin-bottom:5px">Fixture extrusion, floor-hole filling, sliver gates</li>
+      <li>Every threshold that exists to clean up the above</li>
+    </ul>
+  </div>
+</div>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 12px">The new path, four steps, all already written and tested:</p>
+<ol style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.6;color:#2a2e35;margin:0 0 16px;padding-left:22px">
+  <li style="margin-bottom:8px"><code style="font-family:'IBM Plex Mono',monospace;font-size:13px">analysePlan</code> produces evidence, as it does today.</li>
+  <li style="margin-bottom:8px"><code style="font-family:'IBM Plex Mono',monospace;font-size:13px">regularise()</code> turns evidence into the wall graph. New; verified on all fourteen sheets.</li>
+  <li style="margin-bottom:8px"><code style="font-family:'IBM Plex Mono',monospace;font-size:13px">buildContract()</code> plus <code style="font-family:'IBM Plex Mono',monospace;font-size:13px">validateContract()</code> emit the plan and its gates. New.</li>
+  <li>A single extruder reads the contract: one box per wall, one hole per opening, one floor per room. Roughly a hundred lines, replacing the whole faithful-trace builder. <strong>This is the only piece still to write.</strong></li>
+</ol>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 22px">And the gate that keeps it fixed: if the contract is not watertight and not fully walkable, <strong>the 3D does not render</strong>. It says what is wrong and offers the correction. A visible honest refusal is worth more than a walkthrough with a blocked living door — and it is what stops this class of fault ever reaching a customer again.</p>
+
+<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:24px;line-height:1.2;color:#17191d;margin:34px 0 10px">5. What this does not fix</h2>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">With geometry fixed, <strong>scale is the largest remaining error in the system</strong> — and it is entirely separate from geometry. The two runs of this sheet disagreed about the ruler. The live tool reads the sheet code, matches 4-Room Improved and settles on <strong>12.78 mm per pixel</strong>; the lab harness, which has no code reader and fits envelope proportions instead, matched a 5-Room Improved and settled on <strong>17.4 mm per pixel</strong>. Same drawing, <strong>1.36× different in every dimension and 1.85× in area</strong>.</p>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">That is not a rounding difference, it is a different flat. At the lab’s ruler the drawing came out as eight rooms and seven doors; at the correct ruler it is five rooms and three doors. Every threshold in the rebuild is stated in millimetres — 0.45 m minimum cell, 0.8 m minimum interior width, 1.2 m to stand in, 1.6 m² of floor — so the ruler decides which of them bite. Correct geometry measured with a wrong ruler is still a wrong model, and it is wrong in a way that looks entirely plausible.</p>
+
+<div style="break-inside:avoid;background:#fdf7ec;border-left:3px solid #8a5a12;padding:16px 20px;margin:0 0 16px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6;color:#2a2e35">
+  <strong>And the area gate cannot catch this.</strong> When scale comes from an archetype match it is <em>fitted</em> to that archetype’s envelope — the pixel envelope is multiplied by a factor derived from the archetype’s own dimensions. So the modelled envelope agrees with the expectation to a fraction of a percent by construction, whichever archetype was chosen, right or wrong. The 0.1% agreement on this sheet is arithmetic, not corroboration. Until the gate is given an independent reference — the OCR’d printed dimension, or the door-width prior already sitting in the tool — <strong>treat it as inert whenever the scale source reads “archetype”</strong>. This is the one risk in this memo you are not yet protected against.
+</div>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 22px">The live path is nonetheless the sound one: it reads the sheet code, prefers a printed dimension when it can find one, and falls back on proportions only last. Two jobs follow — give the harness the same scale chain so its numbers can gate a release, and give the area gate a reference it did not derive from the thing it is checking.</p>
+
+<h3 style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:15px;color:#17191d;margin:22px 0 6px">Rooms the trace never found</h3>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">The rebuild yields five rooms on 45211155 where the flat has about eight, and <strong>neither WC was traced</strong> — the old path reported “0 WC” on the same sheet, so this is a standing detection gap rather than something the rebuild introduced. A rebuild cannot conjure a room the detector never saw.</p>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">But a home cannot have no WC, and that is knowledge the system can act on. Every HDB type has a known count — one for a 2- or 3-room, two for a 4- or 5-room — so a shortfall is a detection miss to be reported, never a property of the flat. Three things now follow from that. A small space containing sanitary fixture ink is no longer absorbed, so a 1.5 m² toilet stops being merged away as a wall cavity. The missing WCs are nominated from the fixture ink itself, which survives even where no partition was traced around it. And each nomination reports whether that space is enclosed by partition or by structural wall, so the suggestion arrives with its own feasibility attached.</p>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">On your sheet it reports: an HDB 4-room has two WCs, the trace found none, and the two most likely locations are both inside spaces currently read as bedrooms — one at 6.5 m, 1.3 m from the top-left corner, the other at 3.6 m, 6.2 m. Neither has a partition traced around it, so enclosing either means <em>adding</em> a wall rather than altering the flat; the report therefore gives the host room's wall makeup as context for what you would be building against — 82% partition in the first case, 57% in the second, with the balance structural and not hackable. Both are marked <code style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f2f4f7;padding:1px 4px;border-radius:2px">WC?</code> on the 2D review and stated as suggestions, never as findings.</p>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 22px">That is the pattern worth generalising: where the drawing is silent, use what the building type guarantees, nominate rather than assert, and attach the constraint that decides whether the customer can act on it. Room <em>naming</em> works the same way — it still comes from the trace, so a mislabelled room stays mislabelled until someone corrects the dropdown, which is a click rather than a broken model.</p>
+
+<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:24px;line-height:1.2;color:#17191d;margin:34px 0 10px">6. Built — what to check</h2>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">All four steps are now in <code style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f2f4f7;padding:1px 4px;border-radius:2px">SketchMyFlat</code>. The extruder is <code style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f2f4f7;padding:1px 4px;border-radius:2px">journey-solid.js</code>: one box per wall, a lintel over each door, a sill and head around each window, one floor per room, and nothing else. The <strong>CLEAN REBUILD</strong> button is on by default; <strong>RAW 1:1 TRACE</strong> switches back to the old path on the same upload, so the two can be compared before anything is deleted.</p>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">Three sheets run end to end. Sheet 44511006 rebuilt as 29 walls, 8 rooms, 81.5 m² of floor, 94% enclosed, 8 doors, 5 windows. Sheet 33230034 as 31 walls, 7 rooms, 93% enclosed, 6 doors — and it trimmed one perimeter ledge, the 2.38 × 0.56 m strip the old path had listed as a "BALCONY" room. Your own sheet 45211155 is Table 1. That is the exterior complaint disappearing on real uploads rather than in a test harness.</p>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 22px">The gate is live: if a plan is not watertight and walkable, the 3D does not render and the panel says which check failed. What to look for when you try your own sheets — no fins outside the flat, nothing extruded in the kitchen, and every room enterable. If any of those still fail, the diagnosis in §1 is wrong and we should stop rather than tune, which is the other half of what made this a one-time decision.</p>
+
+<div style="break-inside:avoid;border-top:1px solid #e3e6eb;padding-top:14px;font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;line-height:1.55;color:#6a7280">
+  <p style="margin:0 0 6px;font-weight:600;color:#2a2e35">Sources</p>
+  <p style="margin:0 0 4px">Ahmed et al., automatic room detection in architectural floor plans — reports 79% room-recognition accuracy against a 69% state of the art, crediting removal of components outside the convex hull of the outer walls.</p>
+  <p style="margin:0 0 4px">Lv et al., <em>Residential Floor Plan Recognition and Reconstruction</em>, CVPR 2021 — wall centrelines as graph edges, junctions as vertices, for 3D reconstruction.</p>
+  <p style="margin:0">Xu et al., <em>FRI-Net</em>, ECCV 2024 — exterior walls are predominantly axis-aligned; fit axis-aligned structure first, diagonals second.</p>
+</div>
+</doc-page>
+</x-dc>
+</body>
+</html>

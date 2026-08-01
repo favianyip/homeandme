@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="./doc-page.js"></script>
+<style>
+  doc-page:not(:defined) { visibility: hidden; }
+  body { margin: 0; }
+  a { color: #14545f; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #0c383f; }
+</style>
+</helmet>
+<doc-page margin="0.85in">
+<div slot="footer" style="display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Sans',sans-serif;font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;color:#8b929c;padding-top:8px;border-top:1px solid #e3e6eb">
+  <span>HomeandMe · space grammar</span>
+  <span>Findings and resolution</span>
+</div>
+
+<h1 style="font-family:'Newsreader',serif;font-weight:600;font-size:38px;line-height:1.1;letter-spacing:-0.015em;color:#17191d;margin:0 0 14px">The model has geometry but no architecture</h1>
+
+<div style="display:flex;flex-wrap:wrap;gap:18px;font-family:'IBM Plex Sans',sans-serif;font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:#6a7280;padding-bottom:20px;border-bottom:2px solid #17191d;margin-bottom:26px">
+  <span>Findings + plan</span>
+  <span>1 August 2026</span>
+  <span>Sheet 07-182</span>
+</div>
+
+<div style="break-inside:avoid;background:#f1f6f6;border-left:3px solid #14545f;padding:20px 22px;margin:0 0 28px;font-family:'IBM Plex Sans',sans-serif">
+  <p style="margin:0 0 12px;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#14545f;font-weight:600">The finding</p>
+  <p style="margin:0 0 10px;font-size:15.5px;line-height:1.6;color:#2a2e35">All six faults you listed are one fault. The geometry is now sound — 47 walls, 90% enclosed, every wall closes. What is missing is <strong>architectural grammar</strong>: the system names a room from its shape alone, then places doors and windows from geometry alone. It has no concept that a WC opens onto circulation and never onto a kitchen, that an aircon ledge is not a room, or that a window is a drawn symbol rather than a gap in ink.</p>
+  <p style="margin:0;font-size:15px;line-height:1.6;color:#2a2e35">The fix is a new stage between geometry and presentation: <strong>solve naming, doors and windows together as one constrained labelling problem over the room graph</strong>, using HDB's layout rules as the constraints. Not six patches.</p>
+</div>
+
+<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:23px;line-height:1.2;color:#17191d;margin:32px 0 10px">1. Each symptom, and its mechanism</h2>
+
+<table style="width:100%;border-collapse:collapse;font-family:'IBM Plex Sans',sans-serif;font-size:13px;line-height:1.45;color:#2a2e35;margin:0 0 10px">
+  <thead>
+    <tr>
+      <th style="text-align:left;font-weight:600;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#6a7280;border-bottom:1.5px solid #17191d;padding:0 10px 7px 0">What you saw</th>
+      <th style="text-align:left;font-weight:600;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#6a7280;border-bottom:1.5px solid #17191d;padding:0 0 7px">Why it happened</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500;width:36%">A toilet opening off the kitchen</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3">Door inference picks the <em>longest shared boundary</em> of a sealed room. It has no rule about which neighbour a WC is allowed to open onto, so the largest adjacency wins — here, the kitchen wall.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">A door into another toilet</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3">Same rule, worse outcome. Two wet rooms sharing a wall are a legal adjacency for the solver and an impossible one for a home.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">Two "HALLWAY" rooms</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3">"HALLWAY" is the fallback name for any leftover face with no better geometric match. It is a shrug rendered as a label. You are right that HDB flats have almost no true hallway.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">The aircon ledge called a hallway</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3">Most likely mechanism: the perimeter trim only drops strips under 1.2 m, so a deeper ledge survives as interior space and then takes the fallback name. What is certain from this run is the absence of any exterior taxonomy — the same sheet also puts <strong>windows on three separate faces of an 8.7 m² "store / utility"</strong>, which no habitable-space rule would allow.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">Windows in the wrong places</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3">Windows are inferred from <em>clear runs of missing wall ink</em> on the outer boundary. But an HDB window is a drawn symbol — thin double lines inside the wall — and sliding windows in particular render as faint hollow lines that the wall trace discards. So the system finds windows where the drawing is merely thin, and misses them where they are actually drawn.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">No entrance found</td>
+      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3">Measured on this sheet: the eight openings on the outer boundary are 2575, 1192, 947, 800, 700, 625, 625 and 592 mm. Only two fall in the 850–1200 mm main-door band, and they give onto spaces labelled <em>balcony / service</em> and <em>kitchen</em> — so neither satisfies the "opens onto a hall or living space" condition. The only opening onto living / dining measures 625 mm, too narrow to qualify. A naming error and a fragmented opening, compounding.</td>
+    </tr>
+  </tbody>
+</table>
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;line-height:1.5;color:#6a7280;margin:0 0 20px">Table 1 — Note the pattern in the last row: naming errors cause door errors, which cause walkability errors. The three cannot be fixed independently, which is why they should be solved together.</p>
+
+<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:23px;line-height:1.2;color:#17191d;margin:32px 0 10px">2. What an HDB plan actually encodes</h2>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 12px">HDB plans are unusually regular, which is exactly why a grammar will work here. The vocabulary the system should be reading, and currently is not:</p>
+
+<ul style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6;color:#2a2e35;margin:0 0 14px;padding-left:22px">
+  <li style="margin-bottom:7px"><strong>Printed abbreviations are the ground truth.</strong> W/C is the toilet, HS is the household shelter, W/D marks the washer position in the service yard, BW is a bay window — a window raised about 0.5 m with a concrete ledge beneath. These are printed on the sheet and are far more reliable than any shape prior.</li>
+  <li style="margin-bottom:7px"><strong>Door symbols carry their type.</strong> A solid arc is a swing door supplied with the flat; service yards get bi-fold doors and household shelters get steel ones. Reading the arc gives both the position and the hinge side — which is the thing currently being guessed.</li>
+  <li style="margin-bottom:7px"><strong>The aircon ledge is a structure, not a space.</strong> For flats handed over from 2003 the condenser goes on a purpose-built ledge, and the only approved locations are that ledge or the service yard. It should be modelled as an external slab with a parapet, never as a room and never with a door.</li>
+  <li style="margin-bottom:7px"><strong>The household shelter is a room with rules.</strong> It is a reinforced box, most often opening into the kitchen or near the main door, and it is one of the few spaces that legitimately opens off a kitchen — so the grammar must permit it while forbidding a WC there.</li>
+  <li><strong>Size priors are tight.</strong> A common bedroom runs about 9–12 m² and a master about 12–15 m². A 16 m² "bedroom" or a 3.9 m² "hallway" should both be treated as suspect rather than accepted.</li>
+</ul>
+
+<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:23px;line-height:1.2;color:#17191d;margin:32px 0 10px">3. The resolution: a space-grammar stage</h2>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">One new stage, after the wall graph and before the model. It takes the room adjacency graph and assigns every space a <em>type</em>, every opening a <em>kind and a side</em>, jointly, subject to hard rules. Where the rules cannot all be satisfied it reports the conflict instead of picking the largest boundary.</p>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6;color:#2a2e35;margin:0 0 8px"><strong>Space taxonomy</strong> — five classes, not one flat list of names:</p>
+<div style="break-inside:avoid;display:grid;grid-template-columns:auto 1fr;gap:7px 14px;font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;line-height:1.5;color:#2a2e35;margin:0 0 16px">
+  <div style="font-weight:600;color:#14545f">habitable</div><div>living, dining, bedrooms, kitchen — get windows, doors, furniture</div>
+  <div style="font-weight:600;color:#14545f">wet</div><div>bath, WC — small, fixture ink, a door onto circulation, a high vent not a window</div>
+  <div style="font-weight:600;color:#14545f">service</div><div>yard, store, household shelter — utilitarian doors, no habitable window requirement</div>
+  <div style="font-weight:600;color:#14545f">exterior</div><div>aircon ledge, RC ledge, planter, common corridor — <strong>never a room</strong>: slab plus parapet, no door, no label</div>
+  <div style="font-weight:600;color:#14545f">circulation</div><div>foyer or corridor — only when a space is narrow, windowless and connects three or more others; otherwise it is a leftover and gets merged</div>
+</div>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6;color:#2a2e35;margin:0 0 8px"><strong>Access rules</strong> — the constraints that would have caught five of the six faults in Table 1; the windows need §4's detection change as well:</p>
+<ul style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6;color:#2a2e35;margin:0 0 16px;padding-left:22px">
+  <li style="margin-bottom:6px">A wet room opens onto circulation, living/dining, or its own bedroom as an en-suite. <strong>Never onto a kitchen. Never onto another wet room.</strong></li>
+  <li style="margin-bottom:6px">A bedroom opens onto circulation or living/dining — never directly onto another bedroom, never onto a wet room except as its own en-suite.</li>
+  <li style="margin-bottom:6px">A kitchen opens onto living/dining, and may additionally open onto a service yard or household shelter.</li>
+  <li style="margin-bottom:6px">An exterior space has no interior door at all, except a service door from a yard or kitchen.</li>
+  <li>Exactly one entrance, opening onto living/dining or a foyer, on the elevation facing the common corridor.</li>
+</ul>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6;color:#2a2e35;margin:0 0 16px"><strong>How it is solved.</strong> Score every (space, type) pairing from the evidence we already hold — printed label text, fixture ink, area, minor dimension, perimeter contact, adjacency — then choose the assignment that maximises total score <em>subject to the access rules and the flat-type expectation</em> (a 4-room has three bedrooms, two WCs, one kitchen). This is a small constraint problem: a dozen spaces and five classes, solved exhaustively in milliseconds. Doors then follow from the assignment rather than preceding it, and an inferred door is placed on a <em>legal</em> boundary — which structurally cannot be another toilet.</p>
+
+<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:23px;line-height:1.2;color:#17191d;margin:32px 0 10px">4. Windows: read the symbol, not the gap</h2>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">This one needs a detection change, not a grammar rule. A window in these drawings is drawn <em>inside</em> the wall as thin parallel lines, and the wall trace currently discards that as noise, so windows are then guessed from wherever the wall ink happens to be thin. The fix is to look for the symbol: on each exterior wall band, scan for a run of two or three thin parallel lines lying within the wall's own thickness, and take that run as the window — its extent, and its type from the line count. Sliding windows, the faintest case, need the scan to run on the pre-scrub ink rather than the cleaned wall mask.</p>
+
+<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 22px">Grammar then filters the result: windows belong on habitable and service perimeter walls, not on wet rooms, not on party walls between units, and not on exterior slabs. A bay window gets its 0.5 m ledge modelled beneath it.</p>
+
+<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:23px;line-height:1.2;color:#17191d;margin:32px 0 10px">5. Order of work</h2>
+
+<div style="break-inside:avoid;display:grid;grid-template-columns:auto 1fr;gap:9px 14px;font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;line-height:1.5;color:#2a2e35;margin:0 0 18px">
+  <div style="font-weight:600;color:#14545f;white-space:nowrap">1 · exterior taxonomy</div>
+  <div>Aircon ledges, RC ledges and planters stop being rooms. Smallest change, removes two wrong labels from your sheet immediately, and shrinks the room count toward reality.</div>
+  <div style="font-weight:600;color:#14545f;white-space:nowrap">2 · printed text first</div>
+  <div>Read W/C, HS, BW, W/D and room names off the sheet and let them override every shape prior. The most reliable evidence on the drawing is currently the least used.</div>
+  <div style="font-weight:600;color:#14545f;white-space:nowrap">3 · the grammar solver</div>
+  <div>Taxonomy, access rules, flat-type expectation; doors derived from the assignment. This is where the kitchen toilet and the toilet-to-toilet door die, and where "HALLWAY" stops being a shrug.</div>
+  <div style="font-weight:600;color:#14545f;white-space:nowrap">4 · door symbols</div>
+  <div>Read the swing arc for position and hinge side, replacing inference wherever an arc exists.</div>
+  <div style="font-weight:600;color:#14545f;white-space:nowrap">5 · window symbols</div>
+  <div>Thin-parallel-line scan on raw ink, filtered by grammar.</div>
+</div>
+
+<div style="break-inside:avoid;background:#fdf7ec;border-left:3px solid #8a5a12;padding:16px 20px;margin:0 0 20px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6;color:#2a2e35">
+  <strong>One caution, given this session's history.</strong> Steps 3 to 5 all change what the corpus produces, and the lab's pinned baseline is now older than several shipped features — it already reports the entrance-door improvement as a regression. Re-pinning that baseline has to come first, or I will misread my own results again. It is a five-minute job and it is step zero.
+</div>
+
+<div style="break-inside:avoid;border-top:1px solid #e3e6eb;padding-top:14px;font-family:'IBM Plex Sans',sans-serif;font-size:12px;line-height:1.55;color:#6a7280">
+  <p style="margin:0 0 6px;font-weight:600;color:#2a2e35">Sources</p>
+  <p style="margin:0 0 4px">Qanvast, <em>How to Read and Interpret Any HDB Floor Plan</em> — solid arcs denote swing doors supplied with the flat; service yards use bi-fold and household shelters steel doors; sliding windows appear as thin hollow lines that are easy to miss.</p>
+  <p style="margin:0 0 4px">Uchify, <em>How to Read Your HDB Floor Plan</em> — abbreviation vocabulary: W/C water closet, HS household shelter, W/D washer/dryer in the service yard, BW bay window raised 0.5 m over a concrete ledge; 50–100 mm drop at outdoor areas.</p>
+  <p style="margin:0 0 4px">VD Aircon / aircons.sg — for flats handed over from 2003 the condenser goes on the purpose-built aircon ledge; the service yard and that ledge are the only approved locations. Bedroom sizing: common 9–12 m², master 12–15 m².</p>
+  <p style="margin:0">Qanvast, <em>Household Shelter Layouts</em> — shelters most commonly open into the kitchen or sit near the main entrance.</p>
+</div>
+</doc-page>
+</x-dc>
+</body>
+</html>

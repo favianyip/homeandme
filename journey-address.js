@@ -80,9 +80,8 @@ function unitMix(rec) {
 /**
  * Split a unit number out of a free-text address.
  * Customers are asked for "address including unit number", so they type the whole thing — and
- * OneMap returns ZERO hits for any query containing one (measured with a real block+unit, here
- * shown generically: "<BLK> <STREET> #NN-NN", "<POSTAL> #NN-NN" and the bare "NN-NN" form all fail,
- * while the same address without it
+ * OneMap returns ZERO hits for any query containing one (measured: "447B JALAN KAYU #18-348",
+ * "791447 #18-348" and the bare "18-348" form all fail, while the same address without it
  * resolves). Stripping it here means the natural input works instead of silently finding nothing.
  * A `#`-prefixed unit is unambiguous anywhere; a bare NN-NNN form is only treated as a unit at
  * the END of the string, so street numbering is left alone.
