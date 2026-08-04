@@ -8,6 +8,7 @@ import {
   WorkflowGuardError,
   WorkflowPhase,
 } from '../journey-service-workflow.js';
+import { modelArtifactContract } from '../journey-model-artifacts.js';
 import { createRenderRequest } from '../journey-render-contract.js';
 
 const SHA = {
@@ -40,6 +41,20 @@ function memoryStorage() {
 
 function workflowError(code) {
   return (error) => error instanceof WorkflowGuardError && error.code === code;
+}
+
+function verifiedModelReceipt(model) {
+  const contract = modelArtifactContract(model);
+  return {
+    modelVersion: contract.modelVersion,
+    modelSha256: contract.modelSha256,
+    artifacts: contract.reviewArtifacts.map((artifact) => ({
+      role: artifact.role,
+      sha256: artifact.sha256,
+      byteSize: artifact.byteSize,
+      contentType: artifact.mediaType,
+    })),
+  };
 }
 
 class FakeProjectApi {
@@ -482,11 +497,33 @@ test('service controller runs the customer workflow through every explicit revie
     }),
     workflowError('CONFIRMATION_REQUIRED'),
   );
+  await assert.rejects(
+    () => workflow.approveModel({
+      modelVersion: model.modelVersion,
+      modelSha256: model.modelSha256,
+      reviewerActorId: 'customer:HNM-1',
+      confirmLayoutAndModel: true,
+    }),
+    workflowError('UNVERIFIED_MODEL_ARTIFACTS'),
+  );
+  const staleReceipt = verifiedModelReceipt(model);
+  staleReceipt.modelSha256 = '0'.repeat(64);
+  await assert.rejects(
+    () => workflow.approveModel({
+      modelVersion: model.modelVersion,
+      modelSha256: model.modelSha256,
+      reviewerActorId: 'customer:HNM-1',
+      confirmLayoutAndModel: true,
+      artifactReceipt: staleReceipt,
+    }),
+    workflowError('UNVERIFIED_MODEL_ARTIFACTS'),
+  );
   state = await workflow.approveModel({
     modelVersion: model.modelVersion,
     modelSha256: model.modelSha256,
     reviewerActorId: 'customer:HNM-1',
     confirmLayoutAndModel: true,
+    artifactReceipt: verifiedModelReceipt(model),
   });
   assert.equal(state.phase, WorkflowPhase.MODEL_APPROVED);
   assert.deepEqual(state.actions, ['generate_render']);

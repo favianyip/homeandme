@@ -1471,6 +1471,7 @@ export class ProjectJourneyApp {
       modelSha256: model.modelSha256,
       reviewerActorId: `customer:${this.state.projectId}`,
       confirmLayoutAndModel: true,
+      artifactReceipt: receipt,
     })));
   }
 

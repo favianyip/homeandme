@@ -23,6 +23,7 @@ Backend proof, customer data, credentials and private research must remain outsi
 ```bash
 node --check journey-api.js
 node --check journey-service-workflow.js
+node --check journey-model-artifacts.js
 node --check project-journey-model.js
 node --check project-journey.js
 node --check three-d-stage.js

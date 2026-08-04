@@ -706,7 +706,7 @@ a { color: inherit; }
   place-items: center;
   width: 54px;
   height: 54px;
-  border: 1px solid currentColor;
+  border: 1px solid currentcolor;
   border-radius: 50%;
   color: var(--ochre);
   font: .72rem/1 "HNM Balibold", sans-serif;

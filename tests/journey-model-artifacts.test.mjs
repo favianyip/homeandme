@@ -110,6 +110,18 @@ test('model artifact contract rejects missing, duplicate, unbound and oversized 
     model.artifactManifest[0].byteSize = 50 * 1024 * 1024 + 1;
     assert.match(validateModelArtifactContract(model).errors.join(' '), /GLB artifact exceeds/);
   });
+  await t.test('unsafe role identifier', () => {
+    const model = modelFixture();
+    model.glbArtifactRole = 'model/../secret';
+    model.artifactManifest[0].role = 'model/../secret';
+    assert.match(validateModelArtifactContract(model).errors.join(' '), /safe, non-empty identifiers/);
+  });
+  await t.test('wrong preview role count', () => {
+    const model = modelFixture();
+    model.previewArtifactRoles.pop();
+    model.artifactManifest.pop();
+    assert.match(validateModelArtifactContract(model).errors.join(' '), /previewArtifactRoles must contain 4 roles/);
+  });
 });
 
 test('model approval stays locked until every exact visual artifact receipt is present', () => {

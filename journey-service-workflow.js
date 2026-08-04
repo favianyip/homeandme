@@ -1,5 +1,8 @@
 import { HomeAndMeProjectApi, pollJob } from './journey-api.js';
-import { validateModelArtifactContract } from './journey-model-artifacts.js';
+import {
+  modelReviewApprovalState,
+  validateModelArtifactContract,
+} from './journey-model-artifacts.js';
 import { validateRenderRequest } from './journey-render-contract.js';
 
 export const SERVICE_WORKFLOW_SCHEMA = 'hnm-service-workflow/2';
@@ -796,12 +799,25 @@ export class JourneyServiceWorkflow {
     return model;
   }
 
-  async approveModel({ modelVersion, modelSha256, reviewerActorId, confirmLayoutAndModel } = {}) {
+  async approveModel({
+    modelVersion,
+    modelSha256,
+    reviewerActorId,
+    confirmLayoutAndModel,
+    artifactReceipt,
+  } = {}) {
     return this._exclusive(async () => {
       guard(confirmLayoutAndModel === true, 'CONFIRMATION_REQUIRED', 'The reviewed layout and model must be explicitly confirmed.');
       actorId(reviewerActorId);
       const model = await this._reviewModel();
       guard(model.modelVersion === version(modelVersion, 'modelVersion') && model.modelSha256 === digest(modelSha256, 'modelSha256'), 'STALE_MODEL', 'Approval must target the exact model version and hash shown for review.');
+      const artifactContract = validateModelArtifactContract(model);
+      const artifactReadiness = modelReviewApprovalState({
+        contract: artifactContract.contract,
+        receipt: artifactReceipt,
+        confirmed: true,
+      });
+      guard(artifactContract.ok && artifactReadiness.canApprove, 'UNVERIFIED_MODEL_ARTIFACTS', 'Approval requires verified receipts for the exact GLB and all four model reference renders.');
       guard(typeof this.api.approveModel === 'function', 'API_CONTRACT_MISSING', 'The service client has no hash-bound model approval method.');
       const approved = await this.api.approveModel(modelVersion, modelSha256, reviewerActorId);
       guard(approved?.state === 'MODEL_APPROVED' && approved.approvedModelVersion === modelVersion, 'INVALID_TRANSITION', 'Model approval did not bind the current model.');
