@@ -12,7 +12,7 @@ Sanitized static deployment source for [homeandme.sg](https://homeandme.sg). Bac
 
 ## Current proof boundary
 
-The repository contains deterministic geometry, topology, model, render-request and service-workflow contract tests. Those tests prove fail-closed state transitions and immutable bindings in code; they are not evidence that a public customer service or a complete renovation workflow is deployed.
+The repository contains deterministic geometry, topology, model-artifact, render-request and service-workflow contract tests. At model review, the browser can display only the authenticated service's manifest-bound GLB and four fixed PNG references (overview, living, bedroom and kitchen); SHA-256, byte size, MIME type and binary structure must verify, and the GLB-selected scene must embed the exact geometry, layout and scene-manifest hashes, before approval unlocks. The viewer is review-only and does not generate substitute measured geometry. These tests prove fail-closed state transitions and immutable bindings in code; they are not evidence that a public customer service or a complete renovation workflow is deployed.
 
 No end-to-end held-out real HDB floor plan has yet passed the full public path from authorised source through exact wall/door/window correction, scale and vertical review, approved layout, decoded model, deterministic render and final human acceptance. The site must not claim complete detection, measured 3D, photoreal output, live pricing, checkout, payment or contractor fulfilment until that evidence exists and the relevant service flags are explicitly enabled.
 
@@ -23,6 +23,7 @@ Backend proof, customer data, credentials and private research must remain outsi
 ```bash
 node --check journey-api.js
 node --check journey-service-workflow.js
+node --check journey-model-artifacts.js
 node --check project-journey-model.js
 node --check project-journey.js
 node --check three-d-stage.js

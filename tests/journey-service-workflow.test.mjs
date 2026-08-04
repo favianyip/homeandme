@@ -8,6 +8,7 @@ import {
   WorkflowGuardError,
   WorkflowPhase,
 } from '../journey-service-workflow.js';
+import { modelArtifactContract } from '../journey-model-artifacts.js';
 import { createRenderRequest } from '../journey-render-contract.js';
 
 const SHA = {
@@ -19,6 +20,13 @@ const SHA = {
   model: 'f'.repeat(64),
   optionSet: '1'.repeat(64),
   layoutOption: '2'.repeat(64),
+  sceneManifest: '3'.repeat(64),
+  glb: '4'.repeat(64),
+  scene: '5'.repeat(64),
+  preview1: '6'.repeat(64),
+  preview2: '7'.repeat(64),
+  preview3: '8'.repeat(64),
+  preview4: '9'.repeat(64),
 };
 
 function memoryStorage() {
@@ -35,6 +43,20 @@ function workflowError(code) {
   return (error) => error instanceof WorkflowGuardError && error.code === code;
 }
 
+function verifiedModelReceipt(model) {
+  const contract = modelArtifactContract(model);
+  return {
+    modelVersion: contract.modelVersion,
+    modelSha256: contract.modelSha256,
+    artifacts: contract.reviewArtifacts.map((artifact) => ({
+      role: artifact.role,
+      sha256: artifact.sha256,
+      byteSize: artifact.byteSize,
+      contentType: artifact.mediaType,
+    })),
+  };
+}
+
 class FakeProjectApi {
   constructor() {
     this.session = null;
@@ -43,6 +65,7 @@ class FakeProjectApi {
     this.jobs = new Map();
     this.verticalReview = null;
     this.layoutSet = null;
+    this.modelOverrides = {};
     this.geometryDocument = {
       project_id: 'HNM-1',
       revision: 1,
@@ -262,8 +285,20 @@ class FakeProjectApi {
       designBriefVersion: 1, designBriefSha256: '0'.repeat(64),
       materialVersion: 'palette-scandinavian-1',
       glbArtifactRole: 'model-1-glb', sceneArtifactRole: 'model-1-blend',
+      sceneManifestArtifactRole: 'model-1-scene-manifest',
+      sceneManifestSha256: SHA.sceneManifest,
       previewArtifactRoles: ['model-1-p1', 'model-1-p2', 'model-1-p3', 'model-1-p4'],
+      artifactManifest: [
+        { role: 'model-1-glb', sha256: SHA.glb, byteSize: 4096 },
+        { role: 'model-1-blend', sha256: SHA.scene, byteSize: 8192 },
+        { role: 'model-1-scene-manifest', sha256: SHA.sceneManifest, byteSize: 1024 },
+        { role: 'model-1-p1', sha256: SHA.preview1, byteSize: 2048 },
+        { role: 'model-1-p2', sha256: SHA.preview2, byteSize: 2048 },
+        { role: 'model-1-p3', sha256: SHA.preview3, byteSize: 2048 },
+        { role: 'model-1-p4', sha256: SHA.preview4, byteSize: 2048 },
+      ],
       approvalStatus: this.dashboard.approvedModelVersion === 1 ? 'approved' : 'ready',
+      ...this.modelOverrides,
     };
   }
 
@@ -462,11 +497,33 @@ test('service controller runs the customer workflow through every explicit revie
     }),
     workflowError('CONFIRMATION_REQUIRED'),
   );
+  await assert.rejects(
+    () => workflow.approveModel({
+      modelVersion: model.modelVersion,
+      modelSha256: model.modelSha256,
+      reviewerActorId: 'customer:HNM-1',
+      confirmLayoutAndModel: true,
+    }),
+    workflowError('UNVERIFIED_MODEL_ARTIFACTS'),
+  );
+  const staleReceipt = verifiedModelReceipt(model);
+  staleReceipt.modelSha256 = '0'.repeat(64);
+  await assert.rejects(
+    () => workflow.approveModel({
+      modelVersion: model.modelVersion,
+      modelSha256: model.modelSha256,
+      reviewerActorId: 'customer:HNM-1',
+      confirmLayoutAndModel: true,
+      artifactReceipt: staleReceipt,
+    }),
+    workflowError('UNVERIFIED_MODEL_ARTIFACTS'),
+  );
   state = await workflow.approveModel({
     modelVersion: model.modelVersion,
     modelSha256: model.modelSha256,
     reviewerActorId: 'customer:HNM-1',
     confirmLayoutAndModel: true,
+    artifactReceipt: verifiedModelReceipt(model),
   });
   assert.equal(state.phase, WorkflowPhase.MODEL_APPROVED);
   assert.deepEqual(state.actions, ['generate_render']);
@@ -498,6 +555,26 @@ test('service controller runs the customer workflow through every explicit revie
     confirmMetricScale: true,
     confirmWallsRoomsOpenings: true,
   });
+});
+
+test('model review rejects an incomplete authoritative artifact manifest before approval', async () => {
+  const api = new FakeProjectApi();
+  api.session = { projectId: 'HNM-1' };
+  Object.assign(api.dashboard, {
+    state: 'MODEL_READY',
+    geometryVersion: 2,
+    approvedGeometryVersion: 2,
+    designBriefVersion: 1,
+    layoutVersion: 1,
+    approvedLayoutVersion: 1,
+    modelVersion: 1,
+  });
+  const complete = await api.model();
+  api.modelOverrides = { artifactManifest: complete.artifactManifest.slice(0, -1) };
+  const workflow = makeWorkflow(api);
+
+  await assert.rejects(() => workflow.reviewModel(), workflowError('INVALID_MODEL_ARTIFACTS'));
+  assert.equal(api.trace.some(([name]) => name === 'approveModel'), false);
 });
 
 test('resume fails closed when server state or non-recoverable review data is unknown', async () => {

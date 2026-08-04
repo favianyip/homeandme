@@ -50,6 +50,7 @@
  *   name       — export file basename (default "model")
  *   background — CSS color behind the scene (default a warm paper tone)
  *   autorotate — when present, a slow turntable until the user interacts
+ *   review-only — hides and disables browser-side OBJ/GLB re-export
  *
  * Model in real-world meters, centered on the origin, y-up — exports
  * inherit the scene's units and orientation. The stage fills its own box;
@@ -86,6 +87,7 @@
       gap: 8px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
+    .toolbar[hidden] { display: none; }
     .toolbar button {
       appearance: none;
       border: 1px solid rgba(20, 20, 19, 0.18);
@@ -163,10 +165,10 @@
       this._err = document.createElement('div');
       this._err.className = 'err';
       root.appendChild(this._err);
-      const note = document.createElement('div');
-      note.className = 'note';
-      note.textContent = 'Drag to orbit · scroll to zoom · right-drag to pan';
-      root.appendChild(note);
+      this._note = document.createElement('div');
+      this._note.className = 'note';
+      this._note.textContent = 'Drag to orbit · scroll to zoom · right-drag to pan';
+      root.appendChild(this._note);
       this._toolbar = document.createElement('div');
       this._toolbar.className = 'toolbar';
       this._objBtn = document.createElement('button');
@@ -190,6 +192,10 @@
     }
 
     connectedCallback() {
+      if (this.hasAttribute('review-only')) {
+        this._note.textContent = 'Review only · drag to orbit · scroll to zoom · right-drag to pan';
+        this._toolbar.hidden = true;
+      }
       if (this._booted) {
         // Re-attached after a removal — resume what disconnected stopped.
         if (this._renderer) {
@@ -353,8 +359,9 @@
     }
 
     _setButtonsEnabled(on) {
-      this._objBtn.disabled = !on;
-      this._glbBtn.disabled = !on;
+      const enabled = on && !this.hasAttribute('review-only');
+      this._objBtn.disabled = !enabled;
+      this._glbBtn.disabled = !enabled;
     }
 
     /** Every mesh and material needs a unique name for o/usemtl lines —
@@ -391,7 +398,7 @@
      *  before. The no-object early return is not an attempt (the toolbar is
      *  disabled until the model loads) and reports nothing. */
     async _runExport(format) {
-      if (!this._object) return;
+      if (!this._object || this.hasAttribute('review-only')) return;
       try {
         await (format === 'obj' ? this._exportObj() : this._exportGlb());
         notifyExport(format, true);

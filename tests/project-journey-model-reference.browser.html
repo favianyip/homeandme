@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Project Journey model reference board</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/project-journey.css">
+  <style>
+    body { min-height: 100vh; padding: 32px; background: #f0eee7; }
+    .fixture-shell { width: min(1320px, 100%); margin: 0 auto; border: 1px solid var(--line); background: var(--paper-bright); box-shadow: var(--shadow); }
+    .fixture-kicker { display: flex; justify-content: space-between; padding: 13px 18px; border-bottom: 1px solid var(--line); color: var(--quiet); font-size: .6rem; text-transform: uppercase; letter-spacing: .12em; }
+    .fixture-stage-blueprint { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; background: radial-gradient(circle at 60% 35%, rgba(255,255,255,.9), transparent 42%), #dfe2dc; }
+    .fixture-model { position: relative; width: 68%; aspect-ratio: 1.35; transform: rotateX(58deg) rotateZ(-34deg); border: 9px solid #315f68; background: rgba(250,248,242,.92); box-shadow: 35px 35px 0 rgba(23,33,36,.12); }
+    .fixture-model::before, .fixture-model::after { content: ''; position: absolute; background: #315f68; }
+    .fixture-model::before { left: 42%; top: 0; width: 8px; height: 68%; }
+    .fixture-model::after { left: 0; top: 54%; width: 76%; height: 8px; }
+    .fixture-window { position: absolute; right: -10px; top: 22%; width: 11px; height: 34%; background: #91b8c1; box-shadow: 0 0 0 3px #e9f3f4; }
+    .fixture-door { position: absolute; left: 42%; bottom: -10px; width: 20%; height: 12px; background: #c65d3b; }
+    @media (max-width: 700px) { body { padding: 10px; } .fixture-kicker { display: block; } .fixture-kicker span { display: block; } }
+  </style>
+</head>
+<body data-result="running">
+  <main class="fixture-shell">
+    <div class="fixture-kicker"><span>Browser fixture · production model-review DOM</span><span>No customer or demo geometry</span></div>
+    <div id="modelReviewFixture" class="workbench"></div>
+  </main>
+  <script type="module">
+    const { ProjectJourneyApp } = await import('../project-journey.js');
+
+    const revokedUrls = [];
+    const revokeObjectUrl = URL.revokeObjectURL.bind(URL);
+    URL.revokeObjectURL = (url) => {
+      revokedUrls.push(url);
+      revokeObjectUrl(url);
+    };
+
+    const hashes = ['b', 'c', 'd'].map((value) => value.repeat(64));
+    const previewRoles = ['preview-overview', 'preview-living', 'preview-bedroom', 'preview-kitchen'];
+    const previewNames = ['OVERVIEW', 'LIVING', 'BEDROOM', 'KITCHEN'];
+    const palettes = [
+      ['#dce7e6', '#315f68'], ['#e9dfd2', '#8c694e'],
+      ['#e5dfeb', '#655a75'], ['#e3e7dc', '#5f7259'],
+    ];
+    const sha256 = async (bytes) => [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))]
+      .map((value) => value.toString(16).padStart(2, '0')).join('');
+    const makePreview = async (role, index) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 300;
+      const context = canvas.getContext('2d');
+      context.fillStyle = palettes[index][0];
+      context.fillRect(0, 0, 400, 300);
+      context.strokeStyle = palettes[index][1];
+      context.lineWidth = 9;
+      context.strokeRect(52, 74, 296, 152);
+      context.lineWidth = 6;
+      context.beginPath();
+      context.moveTo(178, 74); context.lineTo(178, 226);
+      context.moveTo(178, 136); context.lineTo(348, 136);
+      context.stroke();
+      context.beginPath();
+      context.arc(108, 164, 27, 0, Math.PI * 2);
+      context.stroke();
+      context.fillStyle = palettes[index][1];
+      context.font = '700 13px sans-serif';
+      context.fillText(`${previewNames[index]} · CONTRACT FIXTURE`, 52, 256);
+      const encoded = canvas.toDataURL('image/png').split(',', 2)[1];
+      if (!encoded) throw new Error('Browser could not create the PNG contract fixture.');
+      const binary = atob(encoded);
+      const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0)).buffer;
+      return { role, bytes, contentType: 'image/png', sha256: await sha256(bytes), byteSize: bytes.byteLength };
+    };
+    const previewPayloads = new Map((await Promise.all(previewRoles.map(makePreview))).map((item) => [item.role, item]));
+    const model = {
+      modelVersion: 7,
+      modelSha256: 'a'.repeat(64),
+      geometrySha256: 'e'.repeat(64),
+      layoutSha256: 'f'.repeat(64),
+      materialVersion: 'palette-browser-fixture-1',
+      glbArtifactRole: 'approved-model-glb',
+      sceneArtifactRole: 'approved-scene-blend',
+      sceneManifestArtifactRole: 'approved-scene-manifest',
+      sceneManifestSha256: hashes[2],
+      previewArtifactRoles: previewRoles,
+      artifactManifest: [
+        { role: 'approved-model-glb', sha256: hashes[0], byteSize: 24000 },
+        { role: 'approved-scene-blend', sha256: hashes[1], byteSize: 64000 },
+        { role: 'approved-scene-manifest', sha256: hashes[2], byteSize: 1200 },
+        ...previewRoles.map((role) => {
+          const payload = previewPayloads.get(role);
+          return { role, sha256: payload.sha256, byteSize: payload.byteSize };
+        }),
+      ],
+    };
+    const fixture = document.querySelector('#modelReviewFixture');
+    fixture.id = 'workbench';
+    const app = Object.create(ProjectJourneyApp.prototype);
+    Object.assign(app, {
+      busy: false,
+      error: null,
+      objectUrls: [],
+      previewEpoch: 1,
+      previewReceipts: { model: null, render: null },
+      state: { projectId: 'HNM-BROWSER-FIXTURE' },
+      phaseData: { model },
+      workbench: fixture,
+      workflow: {
+        api: {
+          artifactPayload: async (role, expectedContentType, maxBytes) => {
+            const payload = previewPayloads.get(role);
+            if (!payload || payload.contentType !== expectedContentType || payload.byteSize > maxBytes) {
+              throw new Error('Unexpected browser fixture artifact request.');
+            }
+            return { bytes: payload.bytes.slice(0), contentType: payload.contentType };
+          },
+        },
+      },
+    });
+    const receipt = (descriptor) => ({
+      role: descriptor.role,
+      sha256: descriptor.sha256,
+      byteSize: descriptor.byteSize,
+      contentType: descriptor.mediaType,
+    });
+    app.loadGlb = async (host, descriptor) => {
+      host.dataset.status = 'verified';
+      host.querySelector('.model-stage-note').textContent = 'GLB verified · 42 meshes · browser contract fixture';
+      const blueprint = document.createElement('div');
+      blueprint.className = 'fixture-stage-blueprint';
+      blueprint.innerHTML = '<div class="fixture-model"><i class="fixture-window"></i><i class="fixture-door"></i></div>';
+      host.prepend(blueprint);
+      return receipt(descriptor);
+    };
+    try {
+      app.renderModelReview();
+      const confirmation = document.querySelector('.consent input');
+      const approval = document.querySelector('[data-action="approve-model"]');
+      const reviewIsSettled = () => {
+        const cards = [...document.querySelectorAll('.model-reference-card')];
+        return cards.length === 4
+          && cards.every((card) => card.dataset.status === 'verified')
+          && document.querySelector('.model-artifact-count')?.textContent === '5/5'
+          && confirmation?.disabled === false
+          && approval?.disabled === true;
+      };
+      for (let attempt = 0; attempt < 24 && !reviewIsSettled(); attempt += 1) {
+        // A same-origin network turn keeps Chromium's dump-dom fixture alive while
+        // native PNG decoding settles; virtual timers can otherwise outrun decoding.
+        const turn = await fetch(`../favicon.svg?model-review-turn=${attempt}`, { cache: 'no-store' });
+        if (!turn.ok) throw new Error('Browser fixture network turn failed.');
+        await turn.arrayBuffer();
+      }
+      await Promise.resolve();
+      const cards = [...document.querySelectorAll('.model-reference-card')];
+      if (!reviewIsSettled()) {
+        const statuses = cards.map((card) => card.dataset.status || 'missing').join(',');
+        throw new Error(`Review did not settle: cards=${cards.length} [${statuses}], count=${document.querySelector('.model-artifact-count')?.textContent || 'missing'}, confirmationDisabled=${confirmation?.disabled}, approvalDisabled=${approval?.disabled}.`);
+      }
+      if (document.querySelector('.model-artifact-count')?.textContent !== '5/5') throw new Error('Artifact count did not reach 5/5.');
+      if (confirmation.disabled || !approval.disabled) throw new Error('Approval controls did not start fail-closed.');
+      confirmation.checked = true;
+      confirmation.dispatchEvent(new Event('change', { bubbles: true }));
+      await Promise.resolve();
+      if (approval.disabled) throw new Error('Exact verified review did not unlock approval.');
+      if (document.documentElement.scrollWidth > document.documentElement.clientWidth + 1) throw new Error('Model reference board overflows the viewport.');
+      if (app.objectUrls.length !== 4) throw new Error('Verified private PNG URLs were not tracked for cleanup.');
+      app.clearObjectUrls();
+      if (app.objectUrls.length !== 0 || revokedUrls.length !== 4) throw new Error('Verified private PNG URLs were not revoked.');
+      document.body.dataset.result = 'pass';
+    } catch (error) {
+      document.body.dataset.result = 'fail';
+      const output = document.createElement('pre');
+      output.textContent = error.stack || error.message;
+      document.body.prepend(output);
+    }
+  </script>
+</body>
+</html>
