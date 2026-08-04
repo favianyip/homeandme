@@ -10,11 +10,15 @@ import {
   canonicalGeometryChanges,
   geometryCorrectionSourceBinding,
   presentWorkflow,
-  previewApprovalState,
   projectToCanonicalGeometry,
   serviceAvailability,
   validateCorrectionWitnesses,
 } from './project-journey-model.js';
+import {
+  inspectGlbContainer,
+  modelArtifactContract,
+  modelReviewApprovalState,
+} from './journey-model-artifacts.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -1244,52 +1248,130 @@ export class ProjectJourneyApp {
   renderModelReview() {
     const model = this.phaseData.model;
     if (!model) { this.renderStopped({ blockedReason: 'The current model contract is unavailable.' }); return; }
+    let contract;
+    try {
+      contract = modelArtifactContract(model);
+    } catch (error) {
+      this.renderStopped({ blockedReason: error.message });
+      return;
+    }
     this.previewReceipts.model = null;
     const epoch = this.previewEpoch;
-    const stageHost = element('div', { className: 'model-stage', id: 'modelStageHost' }, [
+    const stageHost = element('div', { className: 'model-stage', id: 'modelStageHost', dataset: { status: 'loading' } }, [
       element('span', { className: 'model-stage-note', text: 'Approved-source GLB · loading private artifact' }),
+    ]);
+    const referenceCards = new Map();
+    const referenceGrid = element('div', { className: 'model-reference-grid' });
+    contract.previews.forEach((descriptor, index) => {
+      const card = element('article', {
+        className: 'model-reference-card',
+        dataset: { status: 'loading', view: descriptor.viewId },
+      }, [
+        element('header', {}, [
+          element('span', { className: 'micro-label', text: `Reference ${String(index + 1).padStart(2, '0')}` }),
+          element('strong', { text: descriptor.label }),
+        ]),
+        element('div', { className: 'model-reference-media' }, [
+          element('div', { className: 'processing-line' }, element('span')),
+        ]),
+        element('div', { className: 'model-reference-copy' }, [
+          element('p', { text: descriptor.cue }),
+          element('span', { className: 'model-reference-status', text: 'Downloading signed private PNG…', attrs: { role: 'status' } }),
+          element('code', { className: 'model-reference-hash', text: shortHash(descriptor.sha256) }),
+        ]),
+      ]);
+      referenceCards.set(descriptor.role, card);
+      referenceGrid.append(card);
+    });
+    const evidenceSummary = element('div', {
+      className: 'model-artifact-summary',
+      dataset: { ready: false },
+      attrs: { 'aria-live': 'polite' },
+    }, [
+      element('span', { className: 'model-artifact-count', text: `0/${contract.reviewArtifacts.length}` }),
+      element('div', {}, [
+        element('strong', { className: 'model-artifact-title', text: 'Verifying authoritative review artifacts' }),
+        element('small', { text: 'Approval remains locked until the GLB and all four fixed server previews match this model manifest.' }),
+      ]),
+    ]);
+    const referenceBoard = element('section', { className: 'model-reference-board', attrs: { 'aria-labelledby': 'modelReferenceTitle' } }, [
+      element('header', { className: 'model-reference-head' }, [
+        element('div', {}, [
+          element('span', { className: 'micro-label', text: 'Fixed reference angles' }),
+          element('h4', { id: 'modelReferenceTitle', text: 'Cross-check four fixed angles' }),
+        ]),
+        element('span', { className: 'reference-origin', text: 'Review aids · not proof' }),
+      ]),
+      referenceGrid,
     ]);
     const confirm = element('input', { type: 'checkbox', disabled: true });
     const approve = button('Approve this exact model', 'approve-model', { disabled: true });
     const sync = () => {
       const receipt = this.previewReceipts.model;
-      const readiness = previewApprovalState({
-        loaded: Boolean(receipt),
+      const readiness = modelReviewApprovalState({
+        contract,
+        receipt,
         confirmed: confirm.checked,
         busy: this.busy,
-        artifactVersion: receipt?.modelVersion,
-        artifactSha256: receipt?.modelSha256,
-        currentVersion: model.modelVersion,
-        currentSha256: model.modelSha256,
       });
+      $('.model-artifact-count', evidenceSummary).textContent = `${readiness.verifiedCount}/${readiness.requiredCount}`;
+      $('.model-artifact-title', evidenceSummary).textContent = readiness.ready
+        ? 'All visual reference artifacts verified'
+        : 'Verifying authoritative review artifacts';
+      evidenceSummary.dataset.ready = String(readiness.ready);
       confirm.disabled = !readiness.canConfirm;
       approve.disabled = !readiness.canApprove;
     };
+    const registerArtifact = (artifact) => {
+      if (!artifact || epoch !== this.previewEpoch || !stageHost.isConnected) return;
+      const current = this.previewReceipts.model || {
+        modelVersion: model.modelVersion,
+        modelSha256: model.modelSha256,
+        artifacts: [],
+      };
+      const artifacts = [...current.artifacts.filter((item) => item.role !== artifact.role), artifact];
+      this.previewReceipts.model = { ...current, artifacts };
+      sync();
+    };
     confirm.addEventListener('change', sync);
     approve.addEventListener('click', () => this.approveModel(confirm));
-    this.workbench.replaceChildren(element('div', { className: 'section-panel' }, [
+    this.workbench.replaceChildren(element('div', { className: 'section-panel model-review-panel' }, [
       element('h3', { className: 'panel-title', text: 'Inspect the whole unit before any image is rendered' }),
-      element('p', { className: 'panel-copy', text: `Model v${model.modelVersion} · ${shortHash(model.modelSha256)} · material ${model.materialVersion}.` }),
-      stageHost,
-      element('label', { className: 'consent' }, [confirm, element('span', { text: 'I reviewed the current shell, opening voids and furnishing layout and confirm the exact model version and hash shown.' })]),
+      element('p', { className: 'panel-copy', text: `Model v${model.modelVersion} · ${shortHash(model.modelSha256)} · material ${model.materialVersion}. The interactive viewer and four fixed review aids come only from this version-bound service output.` }),
+      element('div', { className: 'model-proof-layout' }, [stageHost, referenceBoard]),
+      evidenceSummary,
+      element('p', { className: 'model-proof-boundary', text: 'These four views can help find a missing wall, door or window before approval. They do not cover every room or prove the model matches the as-built flat; site verification remains required.' }),
+      element('label', { className: 'consent' }, [confirm, element('span', { text: 'I inspected the interactive model and all four fixed reference angles, including the shell, opening voids and furnishing layout, and confirm the exact model version and hash shown.' })]),
       element('div', { className: 'actions' }, approve),
     ]));
-    this.loadGlb(stageHost, model, epoch).then((receipt) => {
-      if (!receipt || epoch !== this.previewEpoch || !stageHost.isConnected) return;
-      this.previewReceipts.model = receipt;
-      sync();
-    });
+    this.previewReceipts.model = {
+      modelVersion: model.modelVersion,
+      modelSha256: model.modelSha256,
+      artifacts: [],
+    };
+    sync();
+    this.loadGlb(stageHost, contract.glb, epoch).then(registerArtifact);
+    for (const descriptor of contract.previews) {
+      this.loadModelPreview(referenceCards.get(descriptor.role), descriptor, epoch).then(registerArtifact);
+    }
   }
 
-  async loadGlb(host, model, epoch) {
+  async loadGlb(host, descriptor, epoch) {
     try {
-      const stage = element('three-d-stage', { attrs: { name: `homeandme-${this.state.projectId}`, background: '#e8e5dc', autorotate: '' } });
+      const stage = element('three-d-stage', { attrs: {
+        name: `homeandme-${this.state.projectId}`,
+        background: '#e8e5dc',
+        autorotate: '',
+        'review-only': '',
+      } });
       host.append(stage);
       const [{ THREE }, { GLTFLoader }] = await Promise.all([stage.ready, import('three/addons/loaders/GLTFLoader.js')]);
-      const bytes = await this.workflow.api.artifactBytes(model.glbArtifactRole, 'model/gltf-binary');
-      const header = new Uint8Array(bytes, 0, Math.min(4, bytes.byteLength));
-      if (bytes.byteLength < 12 || String.fromCharCode(...header) !== 'glTF') throw new Error('The model artifact is not a binary glTF file.');
+      const artifact = await this.workflow.api.artifactPayload(descriptor.role, descriptor.mediaType, descriptor.byteSize);
+      const { bytes, contentType } = artifact;
+      if (bytes.byteLength !== descriptor.byteSize) throw new Error('GLB byte size does not match the model manifest.');
       const artifactSha256 = await sha256Bytes(bytes);
+      if (artifactSha256 !== descriptor.sha256) throw new Error('GLB SHA-256 does not match the model manifest.');
+      inspectGlbContainer(bytes, descriptor.sceneBindings);
       const gltf = await new Promise((resolve, reject) => new GLTFLoader().parse(bytes, '', resolve, reject));
       if (!gltf?.scene) throw new Error('The GLB contains no scene.');
       if (!(gltf.scene instanceof THREE.Object3D)) throw new Error('The GLB scene is incompatible with the viewer.');
@@ -1303,17 +1385,70 @@ export class ProjectJourneyApp {
       if (!meshCount || bounds.isEmpty() || !finiteBounds) throw new Error('The GLB has no finite, reviewable mesh geometry.');
       if (epoch !== this.previewEpoch || !host.isConnected) return null;
       stage.setObject(gltf.scene);
+      host.dataset.status = 'verified';
       const note = $('.model-stage-note', host);
-      if (note) note.textContent = `Preview verified · ${meshCount} meshes · artifact ${shortHash(artifactSha256)}`;
+      if (note) note.textContent = `GLB verified · ${meshCount} meshes · ${shortHash(artifactSha256)}`;
       return {
-        modelVersion: model.modelVersion,
-        modelSha256: model.modelSha256,
-        artifactRole: model.glbArtifactRole,
-        artifactSha256,
+        role: descriptor.role,
+        sha256: artifactSha256,
+        byteSize: bytes.byteLength,
+        contentType,
       };
     } catch (error) {
+      host.dataset.status = 'error';
       const note = $('.model-stage-note', host);
       if (note) note.textContent = `Private model preview unavailable · ${error.message}`;
+      return null;
+    }
+  }
+
+  async loadModelPreview(card, descriptor, epoch) {
+    if (!card) return null;
+    const media = $('.model-reference-media', card);
+    const status = $('.model-reference-status', card);
+    try {
+      const artifact = await this.workflow.api.artifactPayload(descriptor.role, descriptor.mediaType, descriptor.byteSize);
+      const { bytes, contentType } = artifact;
+      if (bytes.byteLength !== descriptor.byteSize) throw new Error('Byte size does not match the model manifest.');
+      assertPngSignature(bytes);
+      const artifactSha256 = await sha256Bytes(bytes);
+      if (artifactSha256 !== descriptor.sha256) throw new Error('SHA-256 does not match the model manifest.');
+      const url = URL.createObjectURL(new Blob([bytes], { type: contentType }));
+      const image = element('img', { attrs: {
+        alt: `${descriptor.label}, fixed service-rendered reference`,
+        decoding: 'async',
+      } });
+      try {
+        await new Promise((resolve, reject) => {
+          image.addEventListener('load', resolve, { once: true });
+          image.addEventListener('error', () => reject(new Error('PNG could not be decoded.')), { once: true });
+          image.src = url;
+        });
+        if (typeof image.decode === 'function') await image.decode();
+        if (!(image.naturalWidth > 0) || !(image.naturalHeight > 0)) throw new Error('PNG decoded without dimensions.');
+        if (epoch !== this.previewEpoch || !card.isConnected) {
+          URL.revokeObjectURL(url);
+          return null;
+        }
+        this.objectUrls.push(url);
+        media.replaceChildren(image);
+        card.dataset.status = 'verified';
+        status.textContent = `Verified · ${image.naturalWidth}×${image.naturalHeight}`;
+        $('.model-reference-hash', card).textContent = shortHash(artifactSha256);
+        return {
+          role: descriptor.role,
+          sha256: artifactSha256,
+          byteSize: bytes.byteLength,
+          contentType,
+        };
+      } catch (error) {
+        URL.revokeObjectURL(url);
+        throw error;
+      }
+    } catch (error) {
+      card.dataset.status = 'error';
+      media.replaceChildren(element('span', { className: 'reference-error-mark', text: '!' }));
+      status.textContent = `Unavailable · ${error.message}`;
       return null;
     }
   }
@@ -1321,12 +1456,16 @@ export class ProjectJourneyApp {
   async approveModel(confirmation) {
     const model = this.phaseData.model;
     const receipt = this.previewReceipts.model;
-    const readiness = previewApprovalState({
-      loaded: Boolean(receipt), confirmed: confirmation.checked, busy: this.busy,
-      artifactVersion: receipt?.modelVersion, artifactSha256: receipt?.modelSha256,
-      currentVersion: model?.modelVersion, currentSha256: model?.modelSha256,
-    });
-    if (!readiness.canApprove) { this.error = new Error('Load and inspect the exact private model preview before approval.'); this.render(); return; }
+    let contract;
+    try {
+      contract = modelArtifactContract(model);
+    } catch (error) {
+      this.error = error;
+      this.render();
+      return;
+    }
+    const readiness = modelReviewApprovalState({ contract, receipt, confirmed: confirmation.checked, busy: this.busy });
+    if (!readiness.canApprove) { this.error = new Error('Verify and inspect the exact private GLB and all four fixed reference views before approval.'); this.render(); return; }
     await this.execute(async () => this.setState(await this.workflow.approveModel({
       modelVersion: model.modelVersion,
       modelSha256: model.modelSha256,

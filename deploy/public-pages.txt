@@ -16,6 +16,7 @@ support.js
 three-d-stage.js
 project-journey.js
 project-journey-model.js
+journey-model-artifacts.js
 journey-api.js
 journey-service-workflow.js
 journey-render-contract.js

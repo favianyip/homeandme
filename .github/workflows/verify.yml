@@ -25,6 +25,7 @@ jobs:
           node --check journey-intake-policy.js
           node --check journey-geometry-ops.js
           node --check journey-service-workflow.js
+          node --check journey-model-artifacts.js
           node --check journey-topology-gate.js
           node --check project-journey-model.js
           node --check project-journey.js
@@ -54,7 +55,7 @@ jobs:
                   target.write_text(script)
                   subprocess.run(['node', '--check', str(target)], check=True)
           PY
-      - name: Correction source browser lifecycle
+      - name: Browser review contracts
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/hnm-browser-server.log 2>&1 &
           server_pid=$!
@@ -70,9 +71,12 @@ jobs:
             sleep 0.1
           done
           test "$server_ready" = true
-          "$browser_bin" --headless --no-sandbox --disable-gpu --virtual-time-budget=3000 --dump-dom \
-            http://127.0.0.1:4173/tests/project-journey-lifecycle.browser.html >/tmp/hnm-browser-result.html
-          grep -q 'data-result="pass"' /tmp/hnm-browser-result.html
+          for fixture in project-journey-lifecycle.browser.html project-journey-model-reference.browser.html; do
+            result="/tmp/hnm-browser-${fixture//[^A-Za-z0-9]/-}.html"
+            "$browser_bin" --headless --no-sandbox --disable-gpu --virtual-time-budget=8000 --dump-dom \
+              "http://127.0.0.1:4173/tests/$fixture" >"$result"
+            grep -q 'data-result="pass"' "$result"
+          done
       - name: Reject backend files from public Pages source
         run: |
           if git ls-files | grep -E '\.(aspx|ashx|asmx|cs|config)$|^App_Code/|^App_Data/' ; then

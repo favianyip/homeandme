@@ -6,11 +6,13 @@ import test from 'node:test';
 const read = (name) => readFile(new URL(`../${name}`, import.meta.url), 'utf8');
 
 test('active public pages describe service-gated review, not browser-authored measured geometry', async () => {
-  const [index, home, projectJourney, projectJourneyUi, config] = await Promise.all([
+  const [index, home, projectJourney, projectJourneyUi, modelArtifacts, stage, config] = await Promise.all([
     read('index.html'),
     read('Home AI.dc.html'),
     read('ProjectJourney.html'),
     read('project-journey.js'),
+    read('journey-model-artifacts.js'),
+    read('three-d-stage.js'),
     read('config.js'),
   ]);
   const published = `${home}\n${projectJourney}\n${projectJourneyUi}`;
@@ -56,6 +58,16 @@ test('active public pages describe service-gated review, not browser-authored me
   assert.match(projectJourneyUi, /layoutSha256/);
   assert.match(projectJourneyUi, /image\.decode/);
   assert.match(projectJourneyUi, /Private model preview unavailable/);
+  assert.match(projectJourneyUi, /all four fixed reference views before approval/i);
+  assert.match(projectJourneyUi, /modelArtifactContract/);
+  assert.match(projectJourneyUi, /artifactSha256 !== descriptor\.sha256/);
+  assert.match(projectJourneyUi, /bytes\.byteLength !== descriptor\.byteSize/);
+  assert.match(projectJourneyUi, /review-only/);
+  assert.match(modelArtifacts, /spatialforge_scene_manifest_sha256/);
+  assert.match(modelArtifacts, /spatialforge_geometry_sha256/);
+  assert.match(modelArtifacts, /does not match the authenticated model contract/);
+  assert.match(stage, /\.toolbar\[hidden\] \{ display: none; \}/);
+  assert.match(stage, /this\.hasAttribute\('review-only'\)/);
   assert.match(projectJourneyUi, /canonicalGeometryChanges/);
   assert.match(projectJourneyUi, /sourceArtifactSha256/);
   assert.match(projectJourneyUi, /artifact\.bytes\.byteLength !== source\.byteSize/);

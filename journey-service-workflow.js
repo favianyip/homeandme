@@ -1,4 +1,5 @@
 import { HomeAndMeProjectApi, pollJob } from './journey-api.js';
+import { validateModelArtifactContract } from './journey-model-artifacts.js';
 import { validateRenderRequest } from './journey-render-contract.js';
 
 export const SERVICE_WORKFLOW_SCHEMA = 'hnm-service-workflow/2';
@@ -788,12 +789,10 @@ export class JourneyServiceWorkflow {
     guard(model.geometryVersion === current.project.approvedGeometryVersion
       && model.layoutVersion === current.project.approvedLayoutVersion
       && model.designBriefVersion === current.project.designBriefVersion, 'STALE_MODEL', 'The model is not bound to every current approved source.');
-    const declaredRoles = [model.glbArtifactRole, model.sceneArtifactRole, ...(model.previewArtifactRoles || [])];
+    const artifactContract = validateModelArtifactContract(model);
     guard(typeof model.materialVersion === 'string' && model.materialVersion.length > 0
-      && typeof model.glbArtifactRole === 'string' && typeof model.sceneArtifactRole === 'string'
-      && Array.isArray(model.previewArtifactRoles) && model.previewArtifactRoles.length === 4
-      && declaredRoles.every((role) => typeof role === 'string' && role)
-      && new Set(declaredRoles).size === declaredRoles.length, 'INVALID_MODEL_ARTIFACTS', 'The model artifact contract is incomplete.');
+      && artifactContract.ok, 'INVALID_MODEL_ARTIFACTS',
+    `The model artifact contract is incomplete. ${artifactContract.errors.join(' ')}`.trim());
     return model;
   }
 

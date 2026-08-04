@@ -30,6 +30,7 @@ jobs:
           node --check journey-api.js
           node --check journey-geometry-ops.js
           node --check journey-service-workflow.js
+          node --check journey-model-artifacts.js
           node --check journey-topology-gate.js
           node --check project-journey-model.js
           node --check project-journey.js
@@ -58,7 +59,7 @@ jobs:
                   target.write_text(script)
                   subprocess.run(['node', '--check', str(target)], check=True)
           PY
-      - name: Verify correction-source lifecycle in Chromium
+      - name: Verify browser review contracts in Chromium
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/hnm-pages-browser-server.log 2>&1 &
           server_pid=$!
@@ -74,9 +75,12 @@ jobs:
             sleep 0.1
           done
           test "$server_ready" = true
-          "$browser_bin" --headless --no-sandbox --disable-gpu --virtual-time-budget=3000 --dump-dom \
-            http://127.0.0.1:4173/tests/project-journey-lifecycle.browser.html >/tmp/hnm-pages-browser-result.html
-          grep -q 'data-result="pass"' /tmp/hnm-pages-browser-result.html
+          for fixture in project-journey-lifecycle.browser.html project-journey-model-reference.browser.html; do
+            result="/tmp/hnm-pages-browser-${fixture//[^A-Za-z0-9]/-}.html"
+            "$browser_bin" --headless --no-sandbox --disable-gpu --virtual-time-budget=8000 --dump-dom \
+              "http://127.0.0.1:4173/tests/$fixture" >"$result"
+            grep -q 'data-result="pass"' "$result"
+          done
       - name: Build exact public artifact
         run: node scripts/build-public-pages.mjs
       - name: Browser-smoke every public HTML page
