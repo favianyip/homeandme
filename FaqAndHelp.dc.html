@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>FAQ &amp; Help — Home &amp; Me</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -33,11 +34,11 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
         <a href="Home AI.dc.html">HOME</a>
         <a href="AboutUs.dc.html">ABOUT US</a>
         <a href="Home AI.dc.html#portfolio">SHOWROOM</a>
-        <a href="Journey.html">3D JOURNEY</a>
+        <a href="ProjectJourney.html">3D JOURNEY</a>
         <a href="FaqAndHelp.dc.html" style="color: #5a7e8a; border-bottom: 1px solid #5a7e8a; padding-bottom: 3px;">FAQ &amp; HELP</a>
         <a href="ContactUs.dc.html">CONTACT US</a>
-        <a href="Login.dc.html" style="color: #5a7e8a;">LOGIN</a>
-        <a href="Journey.html" style="background: #1a2023; color: #f6f4ef; padding: 12px 26px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START YOUR RENOVATION</a>
+        <a href="ProjectJourney.html" style="color: #5a7e8a;">PROJECT ATELIER</a>
+        <a href="ProjectJourney.html" style="background: #1a2023; color: #f6f4ef; padding: 12px 26px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START YOUR RENOVATION</a>
       </nav>
       <button id="navBurger" type="button" onClick="{{ toggleMenu }}" style="display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid rgba(26,32,35,0.25); border-radius: 999px; background: none; cursor: pointer; font-size: 17px; color: #1a2023;">{{ menuIcon }}</button>
     </div>
@@ -50,8 +51,8 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
         <a href="Home AI.dc.html#portfolio">VIRTUAL SHOWROOM</a>
         <a href="FaqAndHelp.dc.html" style="color: #5a7e8a;">FAQ &amp; HELP</a>
         <a href="ContactUs.dc.html">CONTACT US</a>
-        <a href="Login.dc.html">LOGIN</a>
-        <a href="Journey.html" style="margin-top: 12px; justify-self: start; background: #1a2023; color: #f6f4ef; padding: 16px 32px; border-radius: 999px; font-size: 15px;">START YOUR RENOVATION</a>
+        <a href="ProjectJourney.html">PROJECT ATELIER</a>
+        <a href="ProjectJourney.html" style="margin-top: 12px; justify-self: start; background: #1a2023; color: #f6f4ef; padding: 16px 32px; border-radius: 999px; font-size: 15px;">START YOUR RENOVATION</a>
       </nav>
     </div>
   </sc-if>
@@ -101,7 +102,7 @@ a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
         <a href="Home AI.dc.html">HOME</a>
         <a href="AboutUs.dc.html">ABOUT US</a>
         <a href="ContactUs.dc.html">CONTACT US</a>
-        <a href="Login.dc.html">LOGIN</a>
+        <a href="ProjectJourney.html">PROJECT ATELIER</a>
       </nav>
       <div style="display: flex; gap: 10px; align-items: center;">
         <a href="https://www.facebook.com/share/19EwNzh3n5/?mibextid=wwXIfr" target="_blank" aria-label="Facebook" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(26,32,35,0.2); display: flex; align-items: center; justify-content: center;"><img src="assets/images/fb-icon-teal.svg" alt="Facebook" style="height: 16px;"></a>
@@ -119,19 +120,19 @@ class Component extends DCLogic {
   faqGroups() {
     return [
       { title: 'GETTING STARTED', items: [
-        { q: 'Do I need to sign up to start designing?', a: 'No. You can configure your home, pick a theme and design every room without an account. You only sign up at checkout, so your project is saved to you.' },
-        { q: 'What do I need to prepare?', a: 'A soft copy of your floor plan or layout plan. You upload it at checkout so our partners can confirm site measurements before work begins.' },
-        { q: 'Which property types do you cover?', a: 'HDB flats, condominiums and landed homes — new or resale. The configurator adapts scopes and pricing to your property type.' },
+        { q: 'Do I need to sign up to start?', a: 'The public Project Atelier page explains the review-gated concept. Customer accounts and self-service checkout are not released; contact a designer for a real engagement.' },
+        { q: 'What do I need to prepare?', a: 'An authorised soft copy of your floor plan or layout plan and any independent measurements you have. A designer must confirm suitability and site-measurement needs.' },
+        { q: 'Which property types do you cover?', a: 'Project Atelier is being evaluated with HDB floor plans first. Coverage for any specific home is not guaranteed and must be confirmed by a designer.' },
       ]},
       { title: 'PRICING & PAYMENT', items: [
-        { q: 'How accurate is the pricing?', a: 'Every scope of work you select is priced live and itemised — hacking, masonry, carpentry, plumbing, electrical and finishes. The total you see at checkout is the price you pay.' },
-        { q: 'Are there hidden costs?', a: 'No. Your quote lists every line item before you commit. If site conditions genuinely require a change, it is re-quoted transparently for your approval first.' },
-        { q: 'How do payments work?', a: 'You pay a deposit at checkout and the balance in milestones as work is completed and verified. Payments are made securely through the platform.' },
+        { q: 'How accurate is the pricing?', a: 'Live self-service pricing and checkout are not released. Any displayed amount is an illustrative planning example, not a current quote; a designer-reviewed scope and formal quote are required.' },
+        { q: 'Are there hidden costs?', a: 'No binding quote is issued by this site. A future engagement should document scope, assumptions, exclusions and any approved changes in its formal contract.' },
+        { q: 'How do payments work?', a: 'This site does not accept deposits or other online payments. Checkout and milestone payment services are planned and not released; payment terms can only come from a formal engagement.' },
       ]},
       { title: 'DURING YOUR RENOVATION', items: [
-        { q: 'Who carries out the renovation?', a: 'Vetted contractors and partners on the Home & Me platform. They are assigned to your project and managed through the platform, and you track milestones from your dashboard.' },
-        { q: 'Can I change my design after checkout?', a: 'Yes — speak with your assigned project coordinator. Changes are re-quoted transparently as itemised additions or reductions before you approve them.' },
-        { q: 'How do I track progress?', a: 'Your project dashboard shows every milestone from hacking to handover, with updates as each stage is completed.' },
+        { q: 'Who carries out the renovation?', a: 'Contractor due diligence and assignment through this site are planned and not released. Any appointed party and its responsibilities must be named in a formal engagement.' },
+        { q: 'Can I change my design?', a: 'For a real engagement, changes should be reviewed with the responsible designer and documented before work proceeds. This site does not issue or revise binding quotes.' },
+        { q: 'How do I track progress?', a: 'A customer milestone dashboard is planned and not released. Progress updates for a real engagement must come through its agreed project channel.' },
       ]},
     ];
   }

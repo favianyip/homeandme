@@ -1,11 +1,71 @@
 # Private source floor plans — customer/source material. NEVER commit to this public repo.
 uploads/
+plans/
+docs/
+
+# Quarantined legacy detector stack derived from customer/research material.
+# Preserved locally; excluded from the public repository until provenance review.
+journey-3d.js
+journey-address.js
+journey-archetype.js
+journey-config.js
+journey-contract.js
+journey-faithful.js
+journey-fidelity.js
+journey-housing.js
+journey-intake.js
+journey-ml.js
+journey-ocr.js
+journey-regularise.js
+journey-resale.js
+journey-store.js
+journey-validate.js
+journey-vision.js
+journey-wallnet.js
 
 # Local design-handoff / review artifacts (kept out of the deployed site)
 design_handoff_plan_faithful_journey/
 screenshots/
 tools/
 .thumbnail
+_site/
+
+# Local/private research and review output. Never publish from this site repo.
+.understand-anything/
+research/
+/*.png
+/*.jpg
+/detect.html
+/usb-model-review.html
+/Marina Root Cause.dc.html
+/AUTODESK_ACCELERATION_BLUEPRINT.md
+/COOHOM_CLEAN_ROOM_INTEGRATION.md
+/FLOORPLAN_TO_3D_EXECUTION_SUMMARY.md
+/HOME_AND_ME_GEOMETRY_RENDER_PIPELINE.md
+
+# Legacy interior/floor-plan media pending publication-rights provenance.
+assets/enhanced/
+assets/renders/
+assets/images/MODERN_CLASSIC_3_ROOM_MASTER_BATHROOM_MA57650P.jpg
+assets/images/about-us-bg.png
+assets/images/design-config-img-1.jpg
+assets/images/design-config-img-2.jpg
+assets/images/design-config-img-3.jpg
+assets/images/dummy-calender.png
+assets/images/dummy-loan-calc.png
+assets/images/dummy-preview.jpg
+assets/images/google-map.png
+assets/images/home-bg.jpg
+assets/images/login-bg.jpg
+assets/images/master-bathroom.jpg
+assets/images/modern-classic-bathroom-1_aboutus.jpg
+assets/images/modern-classic-bathroom-blog.jpg
+assets/images/modern-classic-bathroom.jpg
+assets/images/modern-classic-bathroom_aboutus.jpg
+assets/images/modern-classic-kitchen_aboutus.jpg
+assets/images/payment-detail-table.png
+assets/images/qr-img.png
+assets/images/sample-floorplan.png
 
 # Env / secrets
 .env

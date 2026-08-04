@@ -1,0 +1,41 @@
+{
+  "schema": "hnm-render-request/1",
+  "projectId": "HNM-1",
+  "projectRevision": 3,
+  "geometrySha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "modelVersion": 2,
+  "modelSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "createdAt": "2026-08-05T12:00:00+08:00",
+  "mode": "perspective",
+  "camera": {
+    "position": [4.0, 1.2, 5.0],
+    "target": [0.0, 1.0, 0.0],
+    "up": [0.0, 1.0, 0.0],
+    "fovDegrees": 65.0,
+    "near": 0.01,
+    "far": 1000.0
+  },
+  "output": {
+    "width": 1024,
+    "height": 768,
+    "quality": "preview",
+    "format": "image/png"
+  },
+  "scene": {
+    "viewerState": null,
+    "lightingPreset": "approved-scene",
+    "environmentPreset": "approved-scene",
+    "materialRevision": "palette-scandinavian-1"
+  },
+  "conditioning": {
+    "colorArtifactRole": null,
+    "depthArtifactRole": null,
+    "normalArtifactRole": null,
+    "preserveGeometry": true
+  },
+  "prompt": {
+    "positive": "",
+    "negative": ""
+  },
+  "renderer": "blender-approved-scene/1"
+}

@@ -1,199 +1,34 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta http-equiv="refresh" content="0; url=ProjectJourney.html">
+  <link rel="canonical" href="ProjectJourney.html">
+  <title>Route retired — Home &amp; Me</title>
+  <style>
+    :root { color-scheme: light; --paper: #f2efe7; --ink: #172124; --quiet: #66706c; --survey: #4f7780; --line: rgba(23,33,36,.16); }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; color: var(--ink); background: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px), var(--paper); background-size: 48px 48px; font-family: "Trebuchet MS", sans-serif; }
+    main { width: min(660px, 100%); padding: clamp(30px, 7vw, 64px); border: 1px solid var(--line); background: rgba(250,248,242,.96); box-shadow: 0 24px 70px rgba(23,33,36,.12); }
+    p:first-child { margin: 0 0 14px; color: var(--survey); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0; font: 400 clamp(2.4rem, 8vw, 4.8rem)/.95 Georgia, serif; letter-spacing: -.04em; }
+    .copy { margin: 22px 0 0; color: var(--quiet); line-height: 1.7; }
+    nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    a { min-height: 46px; display: inline-flex; align-items: center; padding: 12px 18px; border: 1px solid var(--ink); color: white; background: var(--ink); text-decoration: none; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
+    a + a { color: var(--ink); background: transparent; border-color: var(--line); }
+  </style>
 </head>
-<body>
-<x-dc>
-<helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<script src="./doc-page.js"></script>
-<style>
-  doc-page:not(:defined) { visibility: hidden; }
-  body { margin: 0; }
-  a { color: #14545f; text-decoration: underline; text-underline-offset: 2px; }
-  a:hover { color: #0c383f; }
-</style>
-</helmet>
-<doc-page margin="0.85in">
-<div slot="footer" style="display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Sans',sans-serif;font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;color:#8b929c;padding-top:8px;border-top:1px solid #e3e6eb">
-  <span>HomeandMe · labels, doors, balconies, furniture</span>
-  <span>Plan · for approval before build</span>
-</div>
-
-<h1 style="font-family:'Newsreader',serif;font-weight:600;font-size:40px;line-height:1.1;letter-spacing:-0.015em;color:#17191d;margin:0 0 14px">Making the model readable, then furnishing it</h1>
-
-<div style="display:flex;flex-wrap:wrap;gap:18px;font-family:'IBM Plex Sans',sans-serif;font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:#6a7280;padding-bottom:20px;border-bottom:2px solid #17191d;margin-bottom:26px">
-  <span>Build plan</span>
-  <span>1 August 2026</span>
-  <span>Four features, four phases</span>
-</div>
-
-<div style="break-inside:avoid;background:#f1f6f6;border-left:3px solid #14545f;padding:20px 22px;margin:0 0 30px;font-family:'IBM Plex Sans',sans-serif">
-  <p style="margin:0 0 12px;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#14545f;font-weight:600">The plan in short</p>
-  <p style="margin:0 0 10px;font-size:15px;line-height:1.6;color:#2a2e35">Build in the order the dependencies force, not the order of interest. <strong>Labels and the entrance door first</strong> — they cost little and make everything else legible. <strong>Balcony parapets second</strong> — small, visible, and it is the one change that opens a wall, so it needs its own guard. <strong>Furniture last</strong>, because a decorating system is only as good as the room types it is decorating, and room typing is the weakest link we have.</p>
-  <p style="margin:0;font-size:15px;line-height:1.6;color:#2a2e35">The one thing I would push back on: furnishing makes a broken model look finished. Every gate must keep running on the bare shell, and a "bare shell" toggle has to stay in the product, or we lose the ability to see what we are actually building.</p>
-</div>
-
-<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:24px;line-height:1.2;color:#17191d;margin:34px 0 10px">1. Room labels in the 3D</h2>
-
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">The data already exists — every contract room carries a name, an area and a polygon, so this is presentation only. Two label surfaces, because they serve different jobs:</p>
-
-<ul style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.6;color:#2a2e35;margin:0 0 14px;padding-left:22px">
-  <li style="margin-bottom:8px"><strong>Floor lettering</strong> — the room name and area laid flat on the floor, aligned to the room's long axis. Right for the dollhouse view, for screenshots and for anything printed, and it survives export as real geometry.</li>
-  <li style="margin-bottom:8px"><strong>Floating tags</strong> — a small billboard at eye height that turns to face the camera, for the walkthrough view where floor text is edge-on and unreadable.</li>
-</ul>
-
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 22px">Two rules that matter more than the typography. A room whose name came from the WC inference reads <strong>"BATH / WC — suggested"</strong>, never a bare name; the label is the most likely place for a guess to launder itself into a fact. And an unnamed room reads <strong>"UNNAMED"</strong> with its area, rather than being left blank — a blank room looks like a rendering bug, whereas "UNNAMED · 6.1 m²" reads as a thing to fix and points at the dropdown that fixes it.</p>
-
-<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:24px;line-height:1.2;color:#17191d;margin:34px 0 10px">2. The entrance door</h2>
-
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">You are right that it is missing, and the cause is a classification rule rather than a detection failure. An opening with a room on only one side is currently called a <em>window</em> — so the front door, which by definition has the outside on one side, can never be a door. The panel duly reports "0 entrance".</p>
-
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">The test for an entrance, in order: an opening on the outer boundary, <strong>850–1200 mm wide</strong>, with <strong>no wall ink below it</strong> (a window sits on a cill — HDB requires cills of at least 1.0 m — while a door runs to the floor), giving onto a hall, foyer or living space. Where more than one candidate survives, prefer the facade carrying the fewest windows: that is the access corridor side, because corridor elevations are largely blank. Exactly one entrance per flat.</p>
-
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 22px">Rendered as a real leaf with its swing arc on the floor, in a distinct finish, tagged <code style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f2f4f7;padding:1px 4px;border-radius:2px">ENTRANCE</code>, with the HDB metal gate as an option. It also repairs something structural: the walkability check currently starts from the largest room when it cannot find an entrance, so it has been proving "you can reach everything from the living room" rather than from the front door. This is a detection change, so it goes through the corpus with doors and clicks-to-fix measured before and after.</p>
-
-<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:24px;line-height:1.2;color:#17191d;margin:34px 0 10px">3. Balconies: a parapet, not a wall</h2>
-
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">Correct, and it is a real modelling error rather than a cosmetic one: the extruder gives every boundary the same 2.6 m, so a balcony comes out as a sealed box. What it should be is a low parapet with open air above and no ceiling.</p>
-
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">HDB's own technical requirements give the numbers to build against. <strong>Parapets and railings at access corridors, lift lobbies and common areas must be at least 1.20 m above finished floor level</strong> (1.25 m from structural level, allowing 50 mm for screed). <strong>Window cills must be at least 1.0 m</strong> above internal finished floor. <strong>Gaps in a parapet or railing must not exceed 100 mm</strong>, the barrier must not be climbable — so no horizontal railings — and where a parapet is part solid, <strong>the solid portion must be at least 500 mm high</strong>. HDB also does not permit glass for parapets, which decides the default infill for us.</p>
-
-<div style="break-inside:avoid;background:#fdf7ec;border-left:3px solid #8a5a12;padding:16px 20px;margin:0 0 16px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6;color:#2a2e35">
-  Note what those figures do and do not cover. The 1.20 m is written for <em>common</em> areas — corridors, lobbies, roof gardens. For a <em>private</em> balcony inside a flat, HDB's renovation guidance sets the parapet wall at not less than <strong>1,000 mm above finished floor level</strong>, the same figure as a window cill. So we build private balcony parapets to 1.10 m by default — comfortably above the minimum rather than exactly on it — and expose the height as a tweak. For condominium plans a full-height glazed balustrade is the norm and the HDB glass restriction does not apply; that is a mode switch, not a different algorithm.
-</div>
-
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">One correction fell out of reading those requirements, and is <strong>already applied</strong> rather than planned: the extruder had been building window cills at 0.9 m, 100 mm below the standard. Nobody would notice it in a walkthrough, but it mattered twice over — a stated requirement quietly missed, and the furniture solver's rule for what may stand in front of a window is written against the cill height. It now builds at 1.0 m, clamped to the wall height so the dollhouse cut does not leave glazing floating above the cut walls.</p>
-
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 22px">The guard on this feature matters as much as the feature. Opening a wall on a guess puts a hole in a walkthrough, so the parapet is only substituted when the room is confidently a balcony — named as one, or a perimeter space with no windows sitting outside the flat's enclosed line. Otherwise the wall stays full height and the room is flagged for review. Failing closed is the right default when the failure mode is a hole in a wall.</p>
-
-<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:24px;line-height:1.2;color:#17191d;margin:34px 0 10px">4. The automatic decorating system</h2>
-
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">This is the substantial piece, and it has one hard dependency worth stating before any of the design: <strong>furniture quality is bounded by room typing.</strong> A bed placed in a kitchen is a worse experience than an empty room, and right now some rooms carry no name at all while others carry a name that rode along with a merge. So the first component is not furniture.</p>
-
-<h3 style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:15px;color:#17191d;margin:22px 0 6px">4.1 Room typing</h3>
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 14px">Infer a type for every unnamed room from evidence we already hold: floor area, minor dimension, fixture ink, position relative to the entrance, and adjacency. The largest space adjoining the entrance is living/dining; a 9–14 m² room off a hallway is a bedroom; a room carrying kitchen fixture ink next to the service side is the kitchen. Each inference carries a confidence, and <strong>only rooms above the confidence bar get furnished</strong> — the rest stay empty and say why, which is honest and also stops one bad guess from producing an absurd room.</p>
-
-<h3 style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:15px;color:#17191d;margin:22px 0 6px">4.2 The catalogue</h3>
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 12px">Parametric modern pieces at HDB dimensions — no imported models, so everything stays light and exportable. Each piece declares its footprint, height, where it may sit, and the clearance it needs. A representative slice:</p>
-
-<table style="width:100%;border-collapse:collapse;font-family:'IBM Plex Sans',sans-serif;font-size:13px;line-height:1.45;color:#2a2e35;margin:0 0 10px">
-  <thead>
-    <tr>
-      <th style="text-align:left;font-weight:600;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#6a7280;border-bottom:1.5px solid #17191d;padding:0 10px 7px 0">Room</th>
-      <th style="text-align:left;font-weight:600;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#6a7280;border-bottom:1.5px solid #17191d;padding:0 10px 7px 0">Pieces (m)</th>
-      <th style="text-align:left;font-weight:600;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#6a7280;border-bottom:1.5px solid #17191d;padding:0 0 7px">Placement rule</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3;font-weight:500">Living</td>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3">sofa 2.0 × 0.85 · coffee table 1.1 × 0.6 · TV console 1.6 × 0.4 · armchair 0.8 × 0.8 · rug</td>
-      <td style="vertical-align:top;padding:8px 0;border-bottom:1px solid #eef0f3">Sofa on the longest free wall; console on the wall it faces, 2.4–3.2 m apart; table 0.4 m off the sofa</td>
-    </tr>
-    <tr>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3;font-weight:500">Dining</td>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3">table 1.4 × 0.8 (4 seats) or 1.6 × 0.9 (6) · chairs 0.45 × 0.45</td>
-      <td style="vertical-align:top;padding:8px 0;border-bottom:1px solid #eef0f3">Centred in its zone with 0.75 m chair pull-out all round</td>
-    </tr>
-    <tr>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3;font-weight:500">Main bedroom</td>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3">queen 1.53 × 1.9 · wardrobe 1.8 × 0.6 · bedside 0.45 × 0.4 · desk 1.2 × 0.6</td>
-      <td style="vertical-align:top;padding:8px 0;border-bottom:1px solid #eef0f3">Head to the longest wall, ideally opposite the door; 0.6 m clear at one side and the foot; wardrobe on a windowless wall with 0.9 m to open</td>
-    </tr>
-    <tr>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3;font-weight:500">Bedroom</td>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3">single 0.9 × 1.9 or super single 1.07 × 1.9 · wardrobe 1.2 × 0.6 · desk</td>
-      <td style="vertical-align:top;padding:8px 0;border-bottom:1px solid #eef0f3">As above; bed size steps down if clearance fails</td>
-    </tr>
-    <tr>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3;font-weight:500">Kitchen</td>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3">counter run 0.6 deep · fridge 0.7 × 0.7 · hob · sink · upper cabinets</td>
-      <td style="vertical-align:top;padding:8px 0;border-bottom:1px solid #eef0f3">Continuous run along the longest wall; 1.0 m clear aisle; sink and hob follow the traced fixture ink where it exists</td>
-    </tr>
-    <tr>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3;font-weight:500">Bath / WC</td>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3">WC 0.4 × 0.7 · basin 0.5 × 0.4 · shower 0.9 × 0.9</td>
-      <td style="vertical-align:top;padding:8px 0;border-bottom:1px solid #eef0f3">Shower in the corner furthest from the door; WC against a plumbing wall</td>
-    </tr>
-    <tr>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3;font-weight:500">Balcony</td>
-      <td style="vertical-align:top;padding:8px 10px 8px 0;border-bottom:1px solid #eef0f3">two chairs 0.6 × 0.6 · side table 0.5 × 0.5 · planter</td>
-      <td style="vertical-align:top;padding:8px 0;border-bottom:1px solid #eef0f3">Against the parapet, clear of the door swing</td>
-    </tr>
-  </tbody>
-</table>
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;line-height:1.5;color:#6a7280;margin:0 0 20px">Table 1 — Dimensions are the ones that make a small flat work; they are the constraint, not a style choice. Finishes: light oak, off-white, charcoal, one brass accent — four materials for the whole catalogue.</p>
-
-<h3 style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:15px;color:#17191d;margin:22px 0 6px">4.3 The placement solver</h3>
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 12px">Deterministic and rule-driven — the same instinct that fixed the geometry. No learned model, so every placement can be explained and any bad one traced to the rule that caused it.</p>
-<ol style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.6;color:#2a2e35;margin:0 0 14px;padding-left:22px">
-  <li style="margin-bottom:7px"><strong>Occupancy grid</strong> at 100 mm over the room polygon; walls, columns and fixtures blocked.</li>
-  <li style="margin-bottom:7px"><strong>Reserve circulation before placing anything.</strong> A 900 mm route linking every door in the room, plus 600 mm clear in front of each door's swing. Furniture may never intrude — the walkthrough has to stay walkable with the furniture in it.</li>
-  <li style="margin-bottom:7px"><strong>Place anchors by rule</strong> — bed, sofa, dining table, kitchen run. These are the pieces with a correct answer; get them right and the rest follows.</li>
-  <li style="margin-bottom:7px"><strong>Fill companions greedily, with backtracking</strong>, scored on wall contact, alignment to the room's axes, clearance margin and distance to their anchor.</li>
-  <li><strong>Hard rejections</strong>: overlap, blocking a door swing, breaking circulation, crossing a room boundary, or standing in front of a window when the piece is taller than the 1.0 m cill. A piece that cannot be placed legally is not placed, and the room reports what it could not fit.</li>
-</ol>
-
-<h3 style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:15px;color:#17191d;margin:22px 0 6px">4.4 New gates</h3>
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.62;color:#2a2e35;margin:0 0 22px">Furnishing earns its own checks, on the same principle as the geometry ones: <strong>walkable when furnished</strong> (the route survives with everything in place), <strong>no piece overlapping a wall, door swing or another piece</strong>, and <strong>every confident bedroom has a bed that fits</strong>. Critically, the existing watertight and reachability gates keep running on the <em>bare</em> shell. Furniture must never be able to mask a hole in a wall.</p>
-
-<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:24px;line-height:1.2;color:#17191d;margin:34px 0 10px">5. Sequence</h2>
-
-<table style="width:100%;border-collapse:collapse;font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;line-height:1.45;color:#2a2e35;margin:0 0 10px">
-  <thead>
-    <tr>
-      <th style="text-align:left;font-weight:600;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#6a7280;border-bottom:1.5px solid #17191d;padding:0 10px 7px 0;width:88px">Phase</th>
-      <th style="text-align:left;font-weight:600;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#6a7280;border-bottom:1.5px solid #17191d;padding:0 10px 7px 0">Work</th>
-      <th style="text-align:left;font-weight:600;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#6a7280;border-bottom:1.5px solid #17191d;padding:0 0 7px">Exit criterion</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">1 · labels + entrance</td>
-      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3">Floor lettering, floating tags, entrance classification and leaf</td>
-      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3">Every room named or marked UNNAMED in 3D; an entrance found on at least 12 of the 14 corpus sheets with no loss of doors or clicks</td>
-    </tr>
-    <tr>
-      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">2 · balcony</td>
-      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3">Parapet substitution, no ceiling, floor finish, threshold, condo mode</td>
-      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3">Balconies read as open on every sheet that has one, and no flat gains a hole anywhere else</td>
-    </tr>
-    <tr>
-      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">3 · furnish core</td>
-      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3">Room typing, catalogue, solver; living, dining and bedrooms only</td>
-      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3">Furnished flats still walkable on all 14; zero overlaps; every confident bedroom has a bed</td>
-    </tr>
-    <tr>
-      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3;font-weight:500">4 · furnish rest</td>
-      <td style="vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #eef0f3">Kitchen run, sanitaryware, balcony set, staging polish, tweaks</td>
-      <td style="vertical-align:top;padding:9px 0;border-bottom:1px solid #eef0f3">A 4-room flat furnishes end to end with no manual correction</td>
-    </tr>
-  </tbody>
-</table>
-<p style="font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;line-height:1.5;color:#6a7280;margin:0 0 22px">Table 2 — Phases 1 and 2 are independent and could run together. Phase 3 depends on room typing and on nothing else. Nothing in this table is built yet; the only change already applied is the 1.0 m window cill described in §3, which was a correction rather than a feature.</p>
-
-<h2 style="font-family:'Newsreader',serif;font-weight:600;font-size:24px;line-height:1.2;color:#17191d;margin:34px 0 10px">6. What worries me, and what I need</h2>
-
-<ul style="font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.6;color:#2a2e35;margin:0 0 16px;padding-left:22px">
-  <li style="margin-bottom:8px"><strong>Furniture flatters a broken model.</strong> A sofa and a rug make a leaking room look like a finished home. Bare-shell toggle stays, gates keep running on the shell, and the panel keeps reporting geometry faults even when the view is furnished.</li>
-  <li style="margin-bottom:8px"><strong>Room typing is the real risk</strong>, not the furniture. Absurd placements will almost always be a typing error wearing a sofa. Hence the confidence bar and the visibly empty room.</li>
-  <li style="margin-bottom:8px"><strong>Your two plans are still outstanding.</strong> The hollow-wall style branch and the envelope problem both remain unverified, and furnishing a model whose walls are fragmentary will look far worse than furnishing a clean one. If those sheets are representative of what customers upload, fixing them should come before phase 3.</li>
-  <li><strong>Two decisions from you.</strong> Should furnishing be on by default or opt-in? And does condominium mode — glazed balustrades, different room mix — matter in this build, or is HDB the whole scope for now?</li>
-</ul>
-
-<div style="break-inside:avoid;border-top:1px solid #e3e6eb;padding-top:14px;font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;line-height:1.55;color:#6a7280">
-  <p style="margin:0 0 6px;font-weight:600;color:#2a2e35">Sources</p>
-  <p style="margin:0 0 4px">HDB, <em>Architectural Technical Requirements</em> — parapet and railing height at access corridors, lift lobbies and common areas not less than 1.20 m above finished floor level; window cills not less than 1.0 m; gaps in parapets or railings not more than 100 mm; barriers not to facilitate climbing; solid portion of a parapet not less than 500 mm; glass not permitted for parapets. <a href="https://www.hdb.gov.sg/-/media/doc/BQG/hdb-arch-technical-requirements.pdf">hdb.gov.sg</a></p>
-  <p style="margin:0 0 4px">HDB renovation guidance — a private balcony parapet wall not less than 1,000 mm above finished floor level; parapet or window sill height at least 1 m from finished floor level.</p>
-  <p style="margin:0">BCA Singapore, <em>Approved Document</em> (Building Control Regulations, reg. 27) — the governing reference for barrier design where HDB's own requirements do not apply. <a href="https://www1.bca.gov.sg/docs/default-source/docs-corp-regulatory/building-control/approved-document-v7-06.pdf">bca.gov.sg</a></p>
-</div>
-</doc-page>
-</x-dc>
+<body data-retired-route="true">
+  <main>
+    <p>Home &amp; Me route notice</p>
+    <h1>This prototype route is retired.</h1>
+    <p class="copy">This legacy page could expose unsupported claims, local-only success state or research results that do not describe a released customer service. Project Atelier is the authoritative service-status path.</p>
+    <nav aria-label="Safe destinations">
+      <a href="ProjectJourney.html">Open Project Atelier</a>
+      <a href="Home AI.dc.html">Read current capability notes</a>
+    </nav>
+  </main>
 </body>
 </html>

@@ -1,124 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>Housing-Type Accuracy Benchmark</title>
-<style>
-  body { font-family: "Helvetica Neue", Arial, sans-serif; background: #f6f4ef; color: #1a2023; margin: 0; padding: 24px; }
-  h1 { font-size: 16px; letter-spacing: 1px; margin: 0 0 4px; }
-  .note { font-size: 11.5px; color: #8a908c; max-width: 860px; margin: 0 0 14px; line-height: 1.5; }
-  table { border-collapse: collapse; font-size: 12px; margin-bottom: 18px; background: #fff; }
-  th, td { border: 1px solid rgba(26,32,35,0.12); padding: 5px 9px; text-align: left; }
-  th { font-size: 10px; letter-spacing: 1.2px; color: #8a908c; }
-  .pass { color: #2e7d54; } .fail { color: #b4533a; font-weight: 600; } .skip { color: #a8afa8; }
-  #sum { font-size: 14px; font-weight: 600; margin: 10px 0; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta http-equiv="refresh" content="0; url=../ProjectJourney.html">
+  <link rel="canonical" href="../ProjectJourney.html">
+  <title>Internal test route retired — Home &amp; Me</title>
+  <style>
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; color: #172124; background: #f2efe7; font-family: "Trebuchet MS", sans-serif; }
+    main { width: min(620px, 100%); padding: clamp(30px, 7vw, 60px); border: 1px solid rgba(23,33,36,.16); background: #fbfaf6; }
+    p:first-child { color: #4f7780; font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { font: 400 clamp(2.2rem, 7vw, 4.4rem)/.96 Georgia, serif; letter-spacing: -.04em; }
+    .copy { color: #66706c; line-height: 1.7; }
+    a { min-height: 46px; display: inline-flex; align-items: center; margin-top: 20px; padding: 12px 18px; color: white; background: #172124; text-decoration: none; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
+  </style>
 </head>
-<body>
-<h1>HOUSING-TYPE ACCURACY BENCHMARK</h1>
-<p class="note">Runs the LIVE pipeline (OneMap search → register/snapshot → resale → footprint → identify) against labelled ground truth:
-a stratified sample of the HDB register (ground truth by construction — every sampled block IS HDB), plus hand-labelled strata developments
-(incl. Singapore's largest condos), DBSS, landed estates and unnamed landed streets. Accuracy is claimed on THIS benchmark, not on
-addresses never tested. Skipped = OneMap returned no hit for the probe string (counted separately, shown, never hidden).</p>
-<div id="sum">Running…</div>
-<div id="out"></div>
-<script type="module">
-import { searchAddress } from '../journey-address.js';
-import { identify } from '../journey-housing.js';
-import { dataGovHeaders } from '../journey-config.js';
-
-const $ = (s) => document.querySelector(s);
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const REG = 'd_17f5382f26140b1fdae0ba2ef6239d2f';
-
-// classifier output → coarse category actually used by verification
-function category(ident) {
-  const t = ident.type;
-  if (t === 'hdb_flat' || t === 'dbss' || t === 'hdb_nonres') return 'hdb';
-  if (t === 'landed' || t === 'terrace' || t === 'semid' || t === 'detached' || t === 'strata_landed') return 'landed';
-  if (t === null && ident.confidence === 'ambiguous' && ident.candidates.length) return 'strata';
-  if (t) return 'strata';
-  return 'unknown';
-}
-
-/* Hand-labelled private ground truth. Only unambiguous, well-known cases. */
-const PRIVATE = [
-  ['M66', 'strata'], ["D'LEEDON", 'strata'], ['TREASURE AT TAMPINES', 'strata'],
-  ['THE INTERLACE', 'strata'], ['REFLECTIONS AT KEPPEL BAY', 'strata'], ['THE SAIL @ MARINA BAY', 'strata'],
-  ['THE WOODGROVE', 'strata'],
-  // CityLife@Tampines: genuinely absent from the register (all blocks 51–69 checked), so
-  // UNCONFIRMED it is ask-first strata; but one resident confirmation in the learned index
-  // legitimately flips it to dbss → hdb category. Both are correct states — which one a run
-  // sees depends on whether a confirmation exists in this browser.
-  ['CITYLIFE@TAMPINES', ['strata', 'hdb']], ['THE PREMIERE @ TAMPINES', 'hdb'],
-  ['CITY VIEW @ BOON KENG', 'hdb'], ['PARK CENTRAL @ AMK', 'hdb'],
-  // VERANDA (5 cluster houses, Lor K Telok Kurau) is strata-landed: landed geometry under an
-  // MCST. UNCONFIRMED, the correct answer is the ask-first strata path — no open signal can
-  // separate a 5-unit cluster from a 5-unit apartment block; one resident confirmation flips
-  // it to landed for everyone after. So the pre-confirmation expectation IS 'strata'.
-  ['VERANDA', 'strata'],
-  ['37 SUNBIRD AVENUE', 'landed'], ['33 SWAN LAKE AVENUE', 'landed'],
-  ['18 JALAN KEMBANGAN', 'landed'], ['1 BINJAI RISE', 'landed'],
-  ['12 CHUAN GARDEN', 'landed'], ['8 BURGHLEY DRIVE', 'landed'],
-];
-
-const rows = [];
-let nPass = 0, nFail = 0, nSkip = 0;
-const perCat = {};
-function tally(cat, ok) { const c = perCat[cat] || (perCat[cat] = { pass: 0, fail: 0 }); ok ? c.pass++ : c.fail++; ok ? nPass++ : nFail++; }
-
-async function probe(label, query, expected) {
-  try {
-    const hits = await searchAddress(query);
-    if (!hits.length) { nSkip++; rows.push({ label, query, expected: Array.isArray(expected) ? expected.join(' | ') : expected, got: 'NO ONEMAP HIT', ok: null }); return; }
-    const ident = await identify(hits[0]);
-    const got = category(ident);
-    const exp = Array.isArray(expected) ? expected : [expected];
-    const ok = exp.includes(got);
-    tally(exp[0], ok);
-    rows.push({ label, query: hits[0].address, expected: exp.join(' | '), got: got + (ident.type ? ` (${ident.type})` : ''), ok });
-  } catch (e) { nSkip++; rows.push({ label, query, expected, got: 'ERR ' + e.message.slice(0, 40), ok: null }); }
-}
-
-function draw(done) {
-  const cats = Object.entries(perCat).map(([k, v]) => {
-    const t = v.pass + v.fail;
-    return `${k}: ${v.pass}/${t} (${t ? (100 * v.pass / t).toFixed(1) : '—'}%)`;
-  }).join(' · ');
-  const total = nPass + nFail;
-  $('#sum').innerHTML = `${done ? 'DONE — ' : ''}ACCURACY ${total ? (100 * nPass / total).toFixed(2) : '—'}% (${nPass}/${total} scored, ${nSkip} skipped) · ${cats}`;
-  $('#out').innerHTML = `<table><tr><th>CASE</th><th>RESOLVED AS</th><th>EXPECTED</th><th>GOT</th><th></th></tr>`
-    + rows.map((r) => `<tr><td>${r.label}</td><td>${r.query}</td><td>${r.expected}</td><td>${r.got}</td>
-        <td class="${r.ok === null ? 'skip' : r.ok ? 'pass' : 'fail'}">${r.ok === null ? 'SKIP' : r.ok ? 'PASS' : 'FAIL'}</td></tr>`).join('') + '</table>';
-}
-
-(async () => {
-  // ---- stratified HDB sample: every Nth block of the whole register ----
-  const all = [];
-  for (let off = 0; off < 14000; off += 2000) {
-    const r = await fetch(`https://data.gov.sg/api/action/datastore_search?resource_id=${REG}&limit=2000&offset=${off}`, { headers: dataGovHeaders() });
-    const recs = ((await r.json()).result || {}).records || [];
-    all.push(...recs);
-    if (recs.length < 2000) break;
-  }
-  const residential = all.filter((r) => r.residential === 'Y' && (parseInt(r.total_dwelling_units, 10) || 0) > 0);
-  const STEP = Math.floor(residential.length / 110) || 1;
-  const sample = residential.filter((_, i) => i % STEP === 0).slice(0, 110);
-  window.__ACC = { running: true };
-  for (const b of sample) {
-    await probe(`HDB register: ${b.blk_no} ${b.street}`, `${b.blk_no} ${b.street}`, 'hdb');
-    if (rows.length % 10 === 0) draw(false);
-    await sleep(220);
-  }
-  for (const [q, expected] of PRIVATE) { await probe(`labelled: ${q}`, q, expected); await sleep(300); }
-  draw(true);
-  window.__ACC = {
-    running: false, pass: nPass, fail: nFail, skip: nSkip,
-    accuracy: +(100 * nPass / (nPass + nFail)).toFixed(2),
-    perCat, failures: rows.filter((r) => r.ok === false), skips: rows.filter((r) => r.ok === null),
-  };
-  console.log('[ACC]', JSON.stringify({ acc: window.__ACC.accuracy, pass: nPass, fail: nFail, skip: nSkip }));
-})();
-</script>
+<body data-retired-route="true">
+  <main>
+    <p>Home &amp; Me test-route notice</p>
+    <h1>This browser test page is retired.</h1>
+    <p class="copy">Local benchmark and demo results do not describe a released customer service and are not published as accuracy evidence. Project Atelier is the authoritative service-status path.</p>
+    <a href="../ProjectJourney.html">Open Project Atelier</a>
+  </main>
 </body>
 </html>

@@ -1,237 +1,34 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Home &amp; Me — Housing Identity</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  * { box-sizing: border-box; }
-  body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-  a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
-  .osw { font-family: 'Oswald', sans-serif; }
-  .lbl { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; }
-  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
-  header { position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.93); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1); }
-  .navrow { height: 72px; display: flex; align-items: center; gap: 26px; }
-  .navrow nav { display: flex; gap: 22px; margin-left: auto; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; }
-  .card { background: #fff; border: 1px solid rgba(26,32,35,0.1); }
-  .pill { border-radius: 999px; padding: 12px 26px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2px; cursor: pointer; border: 1px solid transparent; }
-  .pill-d { background: #1a2023; color: #f6f4ef; } .pill-d:hover { background: #5a7e8a; }
-  .pill-g { background: none; color: #1a2023; border-color: rgba(26,32,35,0.25); } .pill-g:hover { border-color: #5a7e8a; color: #5a7e8a; }
-  input { font: inherit; }
-  .sug { position: absolute; left: 0; right: 0; top: calc(100% + 6px); background: #fff; border: 1px solid rgba(26,32,35,0.14); z-index: 40; max-height: 290px; overflow: auto; box-shadow: 0 18px 40px -22px rgba(26,32,35,0.4); }
-  .sug div { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid rgba(26,32,35,0.06); font-size: 14px; }
-  .sug div:hover { background: #f6f4ef; }
-  .conf { font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.8px; padding: 5px 10px; }
-  .c-certain { background: #e2efe7; color: #2e7d54; }
-  .c-likely { background: #eaf0f2; color: #3f6675; }
-  .c-ambiguous { background: #f6ecd8; color: #8a6118; }
-  .opt { text-align: left; background: #fdfcf9; border: 1px solid rgba(26,32,35,0.14); padding: 12px 14px; cursor: pointer; display: block; }
-  .opt:hover { border-color: #5a7e8a; }
-  .opt[data-sel="1"] { border-color: #1a2023; background: #fff; box-shadow: inset 0 0 0 1px #1a2023; }
-  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-  th { text-align: left; font-family: 'Oswald', sans-serif; font-weight: 400; letter-spacing: 1.4px; font-size: 10.5px; color: #8a908c; border-bottom: 1px solid rgba(26,32,35,0.12); padding: 9px 10px; }
-  td { padding: 10px; border-bottom: 1px solid rgba(26,32,35,0.06); vertical-align: top; }
-  .ev { font-size: 13px; color: #4a5350; line-height: 1.65; margin: 0 0 7px; padding-left: 15px; position: relative; }
-  .ev::before { content: '—'; position: absolute; left: 0; color: #b6bab5; }
-  @media (max-width: 900px) { .navrow nav { display: none; } .two { grid-template-columns: 1fr !important; } }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta http-equiv="refresh" content="0; url=ProjectJourney.html">
+  <link rel="canonical" href="ProjectJourney.html">
+  <title>Route retired — Home &amp; Me</title>
+  <style>
+    :root { color-scheme: light; --paper: #f2efe7; --ink: #172124; --quiet: #66706c; --survey: #4f7780; --line: rgba(23,33,36,.16); }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; color: var(--ink); background: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px), var(--paper); background-size: 48px 48px; font-family: "Trebuchet MS", sans-serif; }
+    main { width: min(660px, 100%); padding: clamp(30px, 7vw, 64px); border: 1px solid var(--line); background: rgba(250,248,242,.96); box-shadow: 0 24px 70px rgba(23,33,36,.12); }
+    p:first-child { margin: 0 0 14px; color: var(--survey); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0; font: 400 clamp(2.4rem, 8vw, 4.8rem)/.95 Georgia, serif; letter-spacing: -.04em; }
+    .copy { margin: 22px 0 0; color: var(--quiet); line-height: 1.7; }
+    nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    a { min-height: 46px; display: inline-flex; align-items: center; padding: 12px 18px; border: 1px solid var(--ink); color: white; background: var(--ink); text-decoration: none; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
+    a + a { color: var(--ink); background: transparent; border-color: var(--line); }
+  </style>
 </head>
-<body>
-<header><div class="wrap navrow">
-  <a href="Home AI.dc.html" class="osw" style="font-size:15px;letter-spacing:3px;">HOME &amp; ME</a>
-  <nav>
-    <a href="Home AI.dc.html">HOME</a><a href="Journey.html">3D JOURNEY</a>
-    <a href="PlanLookup.html">FIND MY PLAN</a>
-    <a href="PlanIntake.html">VERIFY A PLAN</a>
-    <a href="HousingIdentity.html" style="color:#5a7e8a;border-bottom:1px solid #5a7e8a;padding-bottom:3px;">HOUSING IDENTITY</a>
-    <a href="ContactUs.dc.html">CONTACT US</a>
-  </nav>
-</div></header>
-
-<section class="wrap" style="padding: clamp(40px,6vw,60px) clamp(18px,4vw,40px) 24px;">
-  <p class="lbl" style="margin:0 0 16px;">LOCATION-BASED HOUSING IDENTITY</p>
-  <div class="two" style="display:grid;grid-template-columns:1.05fr 0.95fr;gap:clamp(28px,5vw,64px);align-items:end;">
-    <div>
-      <h1 class="osw" style="font-weight:400;font-size:clamp(30px,4.2vw,46px);line-height:1.12;margin:0 0 14px;">One address in, one housing type out</h1>
-      <p style="font-size:16px;line-height:1.7;color:#4a5350;margin:0;text-wrap:pretty;">Housing type decides who approves the renovation — HDB, the MCST, or URA. This resolves it from the address, states the evidence, and asks only when the public data genuinely cannot tell.</p>
-    </div>
-    <div class="card" style="padding:18px 20px;">
-      <p class="lbl" style="margin:0 0 10px;font-size:10px;">CONFIRMED INDEX</p>
-      <div style="display:flex;gap:26px;">
-        <div><p class="osw" id="ixA" style="margin:0;font-size:30px;font-weight:300;">0</p><p style="margin:0;font-size:11.5px;color:#8a908c;">addresses</p></div>
-        <div><p class="osw" id="ixD" style="margin:0;font-size:30px;font-weight:300;">0</p><p style="margin:0;font-size:11.5px;color:#8a908c;">developments</p></div>
-      </div>
-      <p style="margin:12px 0 0;font-size:11.5px;color:#8a908c;line-height:1.55;">Each confirmation answers for every other unit in the same development.</p>
-    </div>
-  </div>
-</section>
-
-<section class="wrap" style="padding-bottom:20px;">
-  <div class="card" style="padding:clamp(18px,3vw,26px);">
-    <div style="position:relative;">
-      <input id="q" type="text" autocomplete="off" placeholder="Any Singapore address or postal code — 530683, 66 Moonstone Lane, 18 Jalan Kembangan"
-             style="width:100%;padding:16px 18px;border:1px solid rgba(26,32,35,0.22);background:#fdfcf9;font-size:15px;outline:none;">
-      <div class="sug" id="sug" style="display:none;"></div>
-    </div>
-    <p style="margin:13px 0 0;font-size:12px;color:#8a908c;line-height:1.6;">Addresses from OneMap. Public housing confirmed against HDB Property Information (data.gov.sg), queried live.</p>
-  </div>
-</section>
-
-<section class="wrap" id="res" style="display:none;padding-bottom:26px;">
-  <div class="two" style="display:grid;grid-template-columns:1.25fr 0.75fr;gap:22px;align-items:start;">
-    <div class="card" style="padding:clamp(20px,3vw,26px);">
-      <div style="display:flex;gap:11px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">
-        <span class="conf" id="cBadge"></span><span id="cAuth" style="font-size:12.5px;color:#8a908c;"></span>
-      </div>
-      <h2 class="osw" id="cType" style="font-weight:400;font-size:29px;margin:0 0 3px;line-height:1.15;"></h2>
-      <p id="cAddr" style="margin:0 0 18px;font-size:13.5px;color:#8a908c;"></p>
-      <p class="lbl" style="margin:0 0 9px;font-size:10px;">EVIDENCE</p>
-      <div id="cEv"></div>
-      <div id="cPick" style="display:none;margin-top:18px;padding-top:18px;border-top:1px solid rgba(26,32,35,0.1);">
-        <p class="lbl" style="margin:0 0 4px;font-size:10px;">WHICH IS IT?</p>
-        <p style="margin:0 0 12px;font-size:13px;color:#4a5350;line-height:1.6;">The open registers cannot separate these. Your answer is stored against the development, so the next resident here will not be asked.</p>
-        <div id="cOpts" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:9px;"></div>
-        <div style="display:flex;gap:12px;align-items:center;margin-top:15px;flex-wrap:wrap;">
-          <button class="pill pill-d" id="save" type="button" disabled style="opacity:0.4;">CONFIRM HOUSING TYPE</button>
-          <span id="saveNote" style="font-size:12.5px;color:#8a908c;"></span>
-        </div>
-      </div>
-    </div>
-    <div class="card" style="padding:clamp(20px,3vw,26px);">
-      <p class="lbl" style="margin:0 0 12px;font-size:10px;">WHAT THIS MEANS FOR WORKS</p>
-      <table><tbody id="cMeta"></tbody></table>
-      <div id="cNext" style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;"></div>
-    </div>
-  </div>
-</section>
-
-<section class="wrap" style="padding-bottom:clamp(50px,7vw,80px);">
-  <div class="card" style="padding:clamp(18px,3vw,24px);">
-    <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
-      <p class="lbl" style="margin:0;">THE INDEX AS IT BUILDS</p>
-      <p style="margin:0;font-size:12.5px;color:#8a908c;">Confirmations, newest first — the location→type database, built from real answers rather than bought.</p>
-    </div>
-    <div style="overflow:auto;"><table id="ixTable"></table></div>
-  </div>
-</section>
-
-<footer style="border-top:1px solid rgba(26,32,35,0.1);padding:26px 0;">
-  <div class="wrap" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;font-size:11.5px;color:#8a908c;">
-    <span>Housing type is indicative. Confirm approving authority before committing to works.</span>
-    <span>OneMap · HDB Property Information (data.gov.sg)</span>
-  </div>
-</footer>
-
-<script type="module">
-import { searchAddress, splitUnit } from './journey-address.js';
-import { identify, indexConfirm, indexRead, indexStats, TYPES, typeLabel } from './journey-housing.js';
-
-const $ = (s) => document.querySelector(s);
-const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-let hits = [], seq = 0, timer = null, current = null, chosen = null;
-
-function suggest(v) {
-  clearTimeout(timer);
-  const s = $('#sug');
-  if (String(v).trim().length < 3) { s.style.display = 'none'; return; }
-  timer = setTimeout(async () => {
-    const my = ++seq;
-    const parsed = splitUnit(v);
-    if (!parsed.query) { s.style.display = 'none'; return; }
-    s.innerHTML = '<div style="color:#8a908c;cursor:default;">Searching OneMap…</div>'; s.style.display = '';
-    try { hits = await searchAddress(parsed.query); }
-    catch (e) { if (my === seq) s.innerHTML = '<div style="color:#b4533a;cursor:default;">Address search unavailable.</div>'; return; }
-    if (my !== seq) return;
-    if (!hits.length) { s.innerHTML = `<div style="color:#8a908c;cursor:default;">OneMap has no address matching "${esc(v)}".</div>`; return; }
-    s.innerHTML = hits.map((r, i) => `<div data-i="${i}"><b style="font-weight:600;">${esc(r.address)}</b><span style="color:#8a908c;"> · ${esc(r.postal)}</span></div>`).join('');
-    s.querySelectorAll('div[data-i]').forEach((el) => el.addEventListener('click', async () => {
-      const hit = hits[+el.dataset.i];
-      $('#q').value = hit.address; s.style.display = 'none';
-      $('#res').style.display = '';
-      $('#cType').textContent = 'Resolving…'; $('#cEv').innerHTML = ''; $('#cPick').style.display = 'none';
-      try { render(await identify(hit)); }
-      catch (e) { $('#cType').textContent = 'Could not resolve'; $('#cEv').innerHTML = `<p class="ev">${esc(e.message)}</p>`; }
-    }));
-  }, 320);
-}
-
-function render(r) {
-  current = r; chosen = null;
-  const t = r.type ? TYPES[r.type] : null;
-  $('#cBadge').className = `conf c-${r.confidence}`;
-  $('#cBadge').textContent = { certain: 'CONFIRMED', likely: 'MOST LIKELY', ambiguous: 'NEEDS YOUR ANSWER' }[r.confidence];
-  if (r.type === 'landed') $('#cBadge').textContent = 'SUBTYPE NEEDED';
-  $('#cType').textContent = r.type ? typeLabel(r.type) : 'Housing type not established';
-  $('#cAddr').textContent = r.address.street_address || r.address.address || r.address.label;
-  $('#cAuth').textContent = t ? `Renovation approved by ${t.authority}` : '';
-  $('#cEv').innerHTML = r.evidence.map((e) => `<p class="ev">${esc(e)}</p>`).join('');
-
-  $('#cMeta').innerHTML = t ? `
-    <tr><th style="width:44%;">Category</th><td>${esc(t.group)}</td></tr>
-    <tr><th>Approving body</th><td>${esc(t.authority)}</td></tr>
-    <tr><th>HDB renovation rules</th><td>${t.hdb_rules ? 'Apply' : 'Do not apply'}</td></tr>
-    <tr><th>Basis</th><td>${r.confirmed ? 'Register or confirmation' : 'Inference — unconfirmed'}</td></tr>`
-    : `<tr><td style="color:#8a908c;">Nothing can be stated until the type is established.</td></tr>`;
-
-  const next = [];
-  if (r.type === 'hdb_flat') next.push('<a class="pill pill-d" href="PlanLookup.html">FIND MY LAYOUT</a>');
-  if (r.type && r.type !== 'hdb_nonres' && r.type !== 'nonres') next.push('<a class="pill pill-g" href="PlanIntake.html">VERIFY MY PLAN</a>');
-  $('#cNext').innerHTML = next.join('');
-
-  if (r.candidates.length && r.confidence !== 'certain') {
-    $('#cPick').style.display = '';
-    $('#cOpts').innerHTML = r.candidates.map((c) => `
-      <button class="opt" type="button" data-t="${c}" ${c === r.type ? 'data-sel="1"' : ''}>
-        <span class="osw" style="font-size:13.5px;letter-spacing:0.5px;display:block;">${esc(typeLabel(c))}</span>
-        <span style="font-size:11.5px;color:#8a908c;">${esc(TYPES[c].authority)}</span></button>`).join('');
-    chosen = r.candidates.includes(r.type) ? r.type : null;
-    syncSave();
-    $('#cOpts').querySelectorAll('.opt').forEach((el) => el.addEventListener('click', () => {
-      $('#cOpts').querySelectorAll('.opt').forEach((x) => x.removeAttribute('data-sel'));
-      el.setAttribute('data-sel', '1'); chosen = el.dataset.t; syncSave();
-    }));
-  } else { $('#cPick').style.display = 'none'; $('#cOpts').innerHTML = ''; chosen = null; }
-  drawIndex();
-}
-
-function syncSave() {
-  const ok = !!chosen;
-  $('#save').disabled = !ok; $('#save').style.opacity = ok ? '1' : '0.4';
-  $('#saveNote').textContent = chosen && current.address.building
-    ? `Will answer for every unit in ${current.address.building}.` : '';
-}
-
-$('#save').addEventListener('click', () => {
-  if (!chosen || !current) return;
-  indexConfirm(current.address, chosen, 'customer');
-  const again = Object.assign({}, current, {
-    type: chosen, confidence: 'likely', confirmed: true,
-    evidence: current.evidence.slice(0, 1).concat(['Confirmed by the resident at this address.']),
-  });
-  render(again);
-  $('#saveNote').textContent = 'Saved to the index.';
-});
-
-function drawIndex() {
-  const s = indexStats(), ix = indexRead();
-  $('#ixA').textContent = s.addresses; $('#ixD').textContent = s.developments;
-  const rows = Object.entries(ix.byAddress).sort((a, b) => (b[1].at || '').localeCompare(a[1].at || ''));
-  $('#ixTable').innerHTML = rows.length
-    ? `<tr><th>POSTAL</th><th>HOUSING TYPE</th><th>APPROVING BODY</th><th>SOURCE</th><th>CONFIRMED</th></tr>`
-      + rows.map(([p, r]) => `<tr><td>${esc(p)}</td><td>${esc(typeLabel(r.type))}</td>
-        <td style="color:#8a908c;">${esc((TYPES[r.type] || {}).authority || '—')}</td>
-        <td style="color:#8a908c;">${esc(r.source)}</td>
-        <td style="color:#8a908c;">${new Date(r.at).toLocaleDateString('en-SG', { day: '2-digit', month: 'short', year: 'numeric' })}</td></tr>`).join('')
-    : `<tr><td style="color:#8a908c;padding:16px 10px;">Nothing confirmed yet. Resolve an address above — HDB blocks resolve outright; a named development will ask once, then remember.</td></tr>`;
-}
-
-$('#q').addEventListener('input', (e) => suggest(e.target.value));
-$('#q').addEventListener('focus', (e) => suggest(e.target.value));
-document.addEventListener('click', (e) => { if (!e.target.closest('#q') && !e.target.closest('#sug')) $('#sug').style.display = 'none'; });
-drawIndex();
-</script>
+<body data-retired-route="true">
+  <main>
+    <p>Home &amp; Me route notice</p>
+    <h1>This prototype route is retired.</h1>
+    <p class="copy">This browser-only floor-plan prototype could show incomplete or unverified walls, doors and windows. It cannot verify an address, plan, geometry or 3D model. Project Atelier is the current service-gated path.</p>
+    <nav aria-label="Safe destinations">
+      <a href="ProjectJourney.html">Open Project Atelier</a>
+      <a href="ContactUs.dc.html">Contact a designer</a>
+    </nav>
+  </main>
 </body>
 </html>

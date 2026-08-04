@@ -1,0 +1,141 @@
+name: deploy-privacy-scoped-pages
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Scan tracked release source for secrets
+        uses: trufflesecurity/trufflehog@v3.95.9
+        with:
+          path: ./
+          extra_args: --results=verified,unknown
+      - name: Verify public runtime contracts
+        run: |
+          node --check config.js
+          node --check journey-api.js
+          node --check journey-geometry-ops.js
+          node --check journey-service-workflow.js
+          node --check journey-topology-gate.js
+          node --check project-journey-model.js
+          node --check project-journey.js
+          node --check editor.js
+          node --check three-d-stage.js
+          node --test tests/*.test.mjs
+      - name: Verify inline DC modules
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, subprocess
+          targets = tuple((name, r'<script\b(?=[^>]*\bdata-dc-script\b)[^>]*>(.*?)</script\s*>') for name in (
+              'Home AI.dc.html',
+              'AboutUs.dc.html',
+              'FaqAndHelp.dc.html',
+              'Home Redesign.dc.html',
+              'Legal.dc.html',
+          ))
+          for name, pattern in targets:
+              source = Path(name).read_text()
+              scripts = re.findall(pattern, source, re.I | re.S)
+              if not scripts:
+                  raise RuntimeError(f'No expected inline script found in {name}')
+              for index, script in enumerate(scripts):
+                  target = Path('/tmp') / f'{name.replace(".", "-")}-{index}.js'
+                  target.write_text(script)
+                  subprocess.run(['node', '--check', str(target)], check=True)
+          PY
+      - name: Verify correction-source lifecycle in Chromium
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/hnm-pages-browser-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          browser_bin="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          test -n "$browser_bin"
+          server_ready=false
+          for attempt in {1..20}; do
+            if curl -fsS http://127.0.0.1:4173/tests/project-journey-lifecycle.browser.html >/dev/null; then
+              server_ready=true
+              break
+            fi
+            sleep 0.1
+          done
+          test "$server_ready" = true
+          "$browser_bin" --headless --no-sandbox --disable-gpu --virtual-time-budget=3000 --dump-dom \
+            http://127.0.0.1:4173/tests/project-journey-lifecycle.browser.html >/tmp/hnm-pages-browser-result.html
+          grep -q 'data-result="pass"' /tmp/hnm-pages-browser-result.html
+      - name: Build exact public artifact
+        run: node scripts/build-public-pages.mjs
+      - name: Browser-smoke every public HTML page
+        run: |
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory _site >/tmp/hnm-pages-artifact-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          browser_bin="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          test -n "$browser_bin"
+          server_ready=false
+          for attempt in {1..20}; do
+            if curl -fsS http://127.0.0.1:4174/index.html >/dev/null; then
+              server_ready=true
+              break
+            fi
+            sleep 0.1
+          done
+          test "$server_ready" = true
+          while IFS= read -r page; do
+            url_path="${page// /%20}"
+            result="/tmp/hnm-pages-smoke-${url_path//\//-}.html"
+            "$browser_bin" --headless --no-sandbox --disable-gpu --virtual-time-budget=3000 --dump-dom \
+              "http://127.0.0.1:4174/$url_path" >"$result"
+          done < <(find _site -type f -name '*.html' -printf '%P\n' | sort)
+          if grep -Eq 'code 404, message File not found|"GET [^ ]+ HTTP/[0-9.]+" 404' /tmp/hnm-pages-artifact-server.log; then
+            cat /tmp/hnm-pages-artifact-server.log >&2
+            exit 1
+          fi
+      - name: Prove private and research paths are absent
+        run: |
+          test ! -e _site/plans
+          test ! -e _site/tests
+          test ! -e _site/docs
+          test ! -e _site/research
+          if find _site -type f -print0 | xargs -0 grep -IinE 'customer-uploaded plan corpus|private source plan \(on file\)|cleaned-review corpus|source_reference|teacher_layout_count'; then
+            echo 'Private or research-derived marker found in public artifact.' >&2
+            exit 1
+          fi
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy privacy-scoped artifact
+        id: deployment
+        uses: actions/deploy-pages@v4

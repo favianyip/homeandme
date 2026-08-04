@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en" data-service-embed="pending">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<noscript><meta http-equiv="refresh" content="0; url=ProjectJourney.html"></noscript>
+<title>Home &amp; Me — Geometry Review (Internal)</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+/* ── reset + tokens ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:     #f6f4ef;
+  --surface:#fff;
+  --border: rgba(26,32,35,0.11);
+  --text:   #1a2023;
+  --muted:  #69736c;
+  --teal:   #5a7e8a;
+  --green:  #3a7f5c;
+  --amber:  #b07c2a;
+  --red:    #c0392b;
+  --font:   'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono:   'SF Mono', 'Consolas', monospace;
+}
+body   { background: var(--bg); color: var(--text); font-family: var(--font);
+         -webkit-font-smoothing: antialiased; overflow: hidden; height: 100dvh; }
+[data-service-embed="pending"] body { visibility: hidden; }
+button { font-family: var(--font); cursor: pointer; }
+input, select { font-family: var(--font); }
+
+/* ── layout ──────────────────────────────────────────────────────── */
+#shell { display: grid; grid-template-rows: 44px 1fr; height: 100dvh; }
+#toolbar {
+  display: flex; align-items: center; gap: 8px; padding: 0 14px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+#body { display: grid; grid-template-columns: 1fr 280px; min-height: 0; }
+
+/* ── toolbar ─────────────────────────────────────────────────────── */
+.t-brand { font-size: 12px; letter-spacing: 2.5px; font-weight: 600;
+           color: var(--teal); text-transform: uppercase; margin-right: 4px; }
+.t-tag   { font-size: 10px; letter-spacing: 1.8px; background: #ffe9c7;
+           color: #8a5a00; border-radius: 4px; padding: 2px 7px; }
+.t-sep   { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
+.t-btn   {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 0 11px; height: 28px; border-radius: 6px; font-size: 11px;
+  letter-spacing: 0.5px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text);
+  transition: border-color .15s, background .15s;
+}
+.t-btn:hover:not(:disabled) { border-color: var(--teal); color: var(--teal); }
+.t-btn.active                { border-color: var(--teal); background: #e7f0f2; color: var(--teal); }
+.t-btn:disabled              { opacity: 0.38; cursor: default; }
+.t-btn.primary {
+  background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 600;
+}
+.t-btn.primary:hover:not(:disabled) { background: #4a6e7a; }
+#status-area { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.badge     { font-size: 10px; letter-spacing: 1px; border-radius: 999px;
+             padding: 3px 10px; font-weight: 600; }
+.badge.warn { background: #fff3cd; color: var(--amber); }
+.badge.ok   { background: #d4edda; color: var(--green); }
+#statusMsg  { font-size: 10px; color: var(--red); letter-spacing: 0.5px; }
+
+/* ── canvas column ───────────────────────────────────────────────── */
+#canvas-col { position: relative; background: #eae8e2; overflow: hidden; }
+#editorSvg  { position: absolute; inset: 0; width: 100%; height: 100%;
+               touch-action: none; user-select: none; }
+
+/* ── right panel ─────────────────────────────────────────────────── */
+#panel { border-left: 1px solid var(--border); background: var(--surface);
+         display: flex; flex-direction: column; overflow: hidden; }
+#panel-head { padding: 12px 14px 8px; border-bottom: 1px solid var(--border);
+              font-size: 10px; letter-spacing: 2px; color: var(--muted);
+              text-transform: uppercase; flex-shrink: 0; }
+#propPanel  { flex: 1; overflow-y: auto; padding: 14px; }
+
+/* ── property panel typography ───────────────────────────────────── */
+.prop-title { font-size: 14px; font-weight: 600; color: var(--text);
+              margin-bottom: 12px; letter-spacing: 0.3px; }
+.prop-row   { display: flex; align-items: center; justify-content: space-between;
+              gap: 8px; margin-bottom: 9px; }
+.prop-label { font-size: 10px; letter-spacing: 1.2px; color: var(--muted);
+              text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
+.prop-val   { font-size: 12px; color: var(--text); text-align: right; }
+.prop-val.mono { font-family: var(--mono); font-size: 11px; }
+.prop-input { font-size: 12px; border: 1px solid var(--border); border-radius: 5px;
+              padding: 4px 8px; background: #fafafa; color: var(--text); width: 130px; }
+.prop-input:focus { outline: none; border-color: var(--teal); }
+.prop-btn   { margin-top: 8px; width: 100%; padding: 8px; border-radius: 6px;
+              background: var(--teal); color: #fff; font-size: 12px; font-weight: 600;
+              border: none; letter-spacing: 0.5px; }
+.prop-btn:hover { background: #4a6e7a; }
+.hint { font-size: 11px; color: var(--muted); line-height: 1.55; margin-top: 10px; }
+.review-callout { margin-top: 10px; border-left: 3px solid var(--amber); padding: 8px 9px;
+                  background: #fff8e8; color: #765316; font-size: 11px; line-height: 1.45; }
+
+/* ── explicit fail-closed checklist ─────────────────────────────── */
+#gate { border-top: 1px solid var(--border); padding: 11px 14px; flex: 0 1 42%;
+        min-height: 120px; overflow-y: auto; background: #fbfaf7; }
+#gate h2 { font-size: 10px; letter-spacing: 2px; color: var(--muted);
+           text-transform: uppercase; font-weight: 600; }
+#gateSummary { margin-top: 5px; font-size: 11px; line-height: 1.45; color: var(--text); }
+#gateIssues { list-style: none; display: grid; gap: 7px; margin-top: 10px; }
+#gateIssues li { border-left: 3px solid var(--red); padding-left: 8px; }
+#gateIssues li b { display: block; color: var(--red); font-size: 9px;
+                   letter-spacing: 1px; font-weight: 700; }
+#gateIssues li span { display: block; margin-top: 2px; color: var(--muted);
+                      font-size: 10px; line-height: 1.35; }
+#gateIssues li.gate-ok { border-left-color: var(--green); }
+#gateIssues li.gate-ok b { color: var(--green); }
+
+/* ── legend ──────────────────────────────────────────────────────── */
+#legend { border-top: 1px solid var(--border); padding: 10px 14px; flex-shrink: 0; }
+.leg-row { display: flex; align-items: center; gap: 7px; margin-bottom: 5px;
+           font-size: 10px; letter-spacing: 0.5px; color: var(--muted); }
+.leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── instruction banner ──────────────────────────────────────────── */
+#banner { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+          background: rgba(26,32,35,0.78); backdrop-filter: blur(6px);
+          color: #fff; font-size: 10px; letter-spacing: 1.5px; border-radius: 8px;
+          padding: 8px 16px; pointer-events: none; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="shell">
+
+  <!-- toolbar -->
+  <div id="toolbar">
+    <span class="t-brand">Home &amp; Me</span>
+    <span class="t-tag">OPS REVIEW</span>
+    <span class="t-sep"></span>
+    <button class="t-btn" id="btnUndo" disabled>↩ Undo</button>
+    <button class="t-btn" id="btnRedo" disabled>↪ Redo</button>
+    <button class="t-btn" id="btnAddWall">＋ Add missing wall</button>
+    <span class="t-sep"></span>
+    <div id="status-area">
+      <span id="unresolvedBadge" class="badge warn">Loading…</span>
+      <span id="statusMsg"></span>
+    <button class="t-btn primary" id="btnApprove" disabled>✓ Submit correction revision</button>
+    </div>
+  </div>
+
+  <!-- main body -->
+  <div id="body">
+
+    <!-- SVG canvas -->
+    <div id="canvas-col">
+      <svg id="editorSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="banner">Drag endpoint handles · Click openings or room labels to edit</div>
+    </div>
+
+    <!-- right property panel -->
+    <div id="panel">
+      <div id="panel-head">Properties</div>
+      <div id="propPanel">
+        <p class="hint">Click an endpoint handle (circle), an opening (coloured bar), or a room label to select it.</p>
+      </div>
+      <section id="gate" aria-live="polite" aria-label="Corrected 3D readiness">
+        <h2>Corrected 3D gate</h2>
+        <p id="gateSummary">Checking the current revision…</p>
+        <ul id="gateIssues"></ul>
+      </section>
+      <div id="legend">
+        <div class="leg-row"><span class="leg-dot" style="background:#3a7f5c"></span>High confidence wall (≥ 85%)</div>
+        <div class="leg-row"><span class="leg-dot" style="background:#b07c2a"></span>Uncertain — review required (50–85%)</div>
+        <div class="leg-row"><span class="leg-dot" style="background:#c0392b"></span>Low confidence (< 50%)</div>
+        <div class="leg-row"><span class="leg-dot" style="background:#8b5cf6"></span>Door / archway</div>
+        <div class="leg-row"><span class="leg-dot" style="background:#3b82f6"></span>Window</div>
+      </div>
+    </div>
+
+  </div><!-- #body -->
+</div><!-- #shell -->
+
+<script type="module">
+  const requestedServiceEmbed = new URLSearchParams(location.search).get('mode') === 'service';
+  let sameOriginParent = false;
+  try {
+    sameOriginParent = parent !== window && new URL(document.referrer).origin === location.origin;
+  } catch {
+    sameOriginParent = false;
+  }
+  if (!requestedServiceEmbed || !sameOriginParent) {
+    location.replace('ProjectJourney.html');
+  } else {
+    document.documentElement.dataset.serviceEmbed = 'ready';
+    const { init } = await import('./editor.js');
+    document.querySelector('.t-tag').textContent = 'SERVICE CORRECTION';
+    document.getElementById('statusMsg').textContent = 'Waiting for the hash-bound geometry revision…';
+    let started = false;
+    addEventListener('message', (event) => {
+      if (started || event.origin !== location.origin || event.source !== parent
+        || event.data?.type !== 'hnm:editor-load-project') return;
+      started = true;
+      init({ project: event.data.project });
+      document.getElementById('statusMsg').textContent = 'Edits create a new revision; they do not approve it.';
+    });
+    document.addEventListener('hnm:approve-geometry', (event) => {
+      if (!started) return;
+      parent.postMessage({
+        type: 'hnm:editor-submit-project',
+        project: event.detail.project,
+        revision: event.detail.revision,
+      }, location.origin);
+    });
+    parent.postMessage({ type: 'hnm:editor-ready' }, location.origin);
+  }
+</script>
+</body>
+</html>

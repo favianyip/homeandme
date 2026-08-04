@@ -1,127 +1,34 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta http-equiv="refresh" content="0; url=ProjectJourney.html">
+  <link rel="canonical" href="ProjectJourney.html">
+  <title>Route retired — Home &amp; Me</title>
+  <style>
+    :root { color-scheme: light; --paper: #f2efe7; --ink: #172124; --quiet: #66706c; --survey: #4f7780; --line: rgba(23,33,36,.16); }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; color: var(--ink); background: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px), var(--paper); background-size: 48px 48px; font-family: "Trebuchet MS", sans-serif; }
+    main { width: min(660px, 100%); padding: clamp(30px, 7vw, 64px); border: 1px solid var(--line); background: rgba(250,248,242,.96); box-shadow: 0 24px 70px rgba(23,33,36,.12); }
+    p:first-child { margin: 0 0 14px; color: var(--survey); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0; font: 400 clamp(2.4rem, 8vw, 4.8rem)/.95 Georgia, serif; letter-spacing: -.04em; }
+    .copy { margin: 22px 0 0; color: var(--quiet); line-height: 1.7; }
+    nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    a { min-height: 46px; display: inline-flex; align-items: center; padding: 12px 18px; border: 1px solid var(--ink); color: white; background: var(--ink); text-decoration: none; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
+    a + a { color: var(--ink); background: transparent; border-color: var(--line); }
+  </style>
 </head>
-<body>
-<x-dc>
-<helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lekton:wght@400;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="assets/css/style.css">
-<style>
-a { color: #5a7e8a; } a:hover { color: #43616c; }
-body { margin: 0; }
-</style>
-</helmet>
-<header class="hnm-header">
-  <div class="content-wrapper">
-    <nav class="navbar navbar-expand-lg">
-      <button class="navbar-toggler" type="button" aria-label="Toggle navigation">
-        <span class="hnm-header__humberger-line"></span>
-        <span class="hnm-header__humberger-line"></span>
-        <span class="hnm-header__humberger-line"></span>
-      </button>
-      <div class="hnm-header__fade"></div>
-      <div class="navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active"><a class="nav-link" href="#about">ABOUT US</a></li>
-          <li class="nav-item"><a class="nav-link" href="#start">START YOUR RENOVATION</a></li>
-          <li class="nav-item"><a class="nav-link" href="#faq">FAQ &amp; HELP</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contact">CONTACT US</a></li>
-          <li class="nav-item"><a class="nav-link" href="#login">LOGIN</a></li>
-        </ul>
-      </div>
-      <a class="hnm-header__logo-link" href="#home">
-        <img src="assets/images/hnm-logo.png" alt="logo" class="hnm-header__logo">
-      </a>
+<body data-retired-route="true">
+  <main>
+    <p>Home &amp; Me route notice</p>
+    <h1>This prototype route is retired.</h1>
+    <p class="copy">This legacy page could expose unsupported claims, local-only success state or research results that do not describe a released customer service. Project Atelier is the authoritative service-status path.</p>
+    <nav aria-label="Safe destinations">
+      <a href="ProjectJourney.html">Open Project Atelier</a>
+      <a href="Home AI.dc.html">Read current capability notes</a>
     </nav>
-  </div>
-</header>
-<div class="hnm-home" style="background-image: url(assets/images/home-bg.jpg);">
-  <div class="hnm-home__box">
-    <div class="content-wrapper">
-      <h1 class="hnm-home__head">COMPLETING HOME WITH ME</h1>
-      <p class="hnm-home__desc">Create the home of your dreams. Get started with Home &amp; Me now.</p>
-      <div class="hnm-home__customize">
-        I am looking to renovate my
-        <select class="hnm-home__select">
-          <option>HDB</option>
-          <option>Condominium</option>
-        </select>
-        having
-        <select class="hnm-home__select">
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
-        and is a
-        <select class="hnm-home__select">
-          <option>Resale</option>
-          <option>New</option>
-        </select>
-        unit
-      </div>
-      <a class="hnm-button" href="javascript:void(0)" onClick="{{ openModal }}">PROCEED TO NEXT</a>
-    </div>
-  </div>
-</div>
-<sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
-  <div class="modal fade hnm-modal show" id="reminderModal" tabindex="-1" style="display:block; background: rgba(0,0,0,0.5);">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">REMINDER</h5>
-          <button type="button" class="close" aria-label="Close" onClick="{{ closeModal }}"><span aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="modal-body">
-          <p class="hnm-modal__desc">Please ensure you have a soft copy of your home floor plan or layout plan with you for document upload upon check out.</p>
-          <p class="hnm-modal__desc">Home And Me online platform is a portal for you to complete your home with cost transparency.</p>
-          <p class="hnm-modal__desc">You don't have to sign up at this stage for your convenience but be reminded you are required to sign up and login upon check out to save your project.</p>
-          <div class="hnm-modal__btn">
-            <a class="hnm-button" href="javascript:void(0)" onClick="{{ closeModal }}">PROCEED TO NEXT</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</sc-if>
-<footer class="hnm-footer">
-  <div class="hnm-footer__social">
-    <div class="content-wrapper hnm-footer__social-inner">
-      <a href="javascript:void(0)" class="hnm-footer__social-link">
-        <img src="assets/images/fb-icon.svg" alt="fb" class="hnm-footer__social-icon">
-      </a>
-    </div>
-  </div>
-  <div class="hnm-footer__quick">
-    <div class="content-wrapper hnm-footer__quick-wrapper">
-      <div class="hnm-footer__quick-inner">
-        <a href="javascript:void(0)" title="Privacy and legal" class="hnm-footer__quick-link">Privacy and legal</a>
-        <a href="javascript:void(0)" title="Terms" class="hnm-footer__quick-link">Terms</a>
-        <a href="javascript:void(0)" title="Cookie policy" class="hnm-footer__quick-link">Cookie policy</a>
-      </div>
-      <p class="hnm-footer__copyright">Copyright {{ year }} HOME&amp;ME</p>
-    </div>
-  </div>
-</footer>
-</x-dc>
-<script type="text/x-dc" data-dc-script>
-class Component extends DCLogic {
-  state = { modalOpen: false };
-  renderVals() {
-    return {
-      modalOpen: this.state.modalOpen,
-      openModal: () => this.setState({ modalOpen: true }),
-      closeModal: () => this.setState({ modalOpen: false }),
-      year: new Date().getFullYear(),
-    };
-  }
-}
-</script>
+  </main>
 </body>
 </html>

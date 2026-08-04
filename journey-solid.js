@@ -1,3 +1,6 @@
+import { junctionTrim } from './geometry-clipper.js';
+import { validateProject3dReadiness } from './journey-topology-gate.js';
+
 // The contract extruder — Stage 3.
 //
 // Reads ONLY the plan contract: one box per wall segment, a lintel over each door, a sill and
@@ -9,17 +12,228 @@
 
 const WET = /BATH|WC|TOILET|SHOWER/i;
 const TILE = /KITCHEN|YARD|UTILITY|SERVICE|STORE|SHELTER/i;
+const RATIO_EPS = 1e-9;
+
+const pointAtRatio = (wall, ratio) => [
+  wall.a[0] + (wall.b[0] - wall.a[0]) * ratio,
+  wall.a[1] + (wall.b[1] - wall.a[1]) * ratio,
+];
+
+function ratioAtPoint(wall, point) {
+  const dx = wall.b[0] - wall.a[0];
+  const dy = wall.b[1] - wall.a[1];
+  const lengthSquared = dx * dx + dy * dy;
+  return lengthSquared
+    ? ((point[0] - wall.a[0]) * dx + (point[1] - wall.a[1]) * dy) / lengthSquared
+    : 0;
+}
+
+/**
+ * Compile continuous host walls into deterministic solid and typed-opening intervals.
+ *
+ * Authoritative hnm-project openings reference a non-void host wall by ratio. Legacy experimental
+ * contracts may instead provide an already-split `void: true` wall with one opening keyed by the
+ * same ID; that representation remains supported, but ambiguous multi-opening legacy voids fail.
+ */
+export function compileWallOpeningSegments(walls = [], openings = []) {
+  const wallIds = new Set();
+  for (const wall of walls) {
+    if (!wall?.id || wallIds.has(wall.id)) throw new Error(`Wall IDs must be present and unique: ${wall?.id || 'missing'}.`);
+    wallIds.add(wall.id);
+  }
+  const openingIds = new Set();
+  const openingsByWall = new Map();
+  for (const opening of openings) {
+    if (!opening?.id || openingIds.has(opening.id)) {
+      throw new Error(`Opening IDs must be present and unique: ${opening?.id || 'missing'}.`);
+    }
+    openingIds.add(opening.id);
+    if (!wallIds.has(opening.wall)) throw new Error(`Opening ${opening.id} references missing wall ${opening.wall}.`);
+    const hosted = openingsByWall.get(opening.wall) || [];
+    hosted.push(opening);
+    openingsByWall.set(opening.wall, hosted);
+  }
+
+  const trimmed = junctionTrim(walls.filter((wall) => !wall.void));
+  const segments = [];
+  for (const wall of walls) {
+    const hosted = [...(openingsByWall.get(wall.id) || [])]
+      .sort((left, right) => (left.t0 - right.t0) || (left.t1 - right.t1)
+        || String(left.id).localeCompare(String(right.id)));
+    const adjusted = trimmed.get(wall.id) || { a: wall.a, b: wall.b };
+
+    if (wall.void) {
+      if (hosted.length > 1) {
+        throw new Error(`Experimental void wall ${wall.id} cannot represent multiple openings.`);
+      }
+      const opening = hosted[0] || null;
+      segments.push({
+        ...wall,
+        id: `${wall.id}::legacy-opening:0:${opening?.id || 'untyped'}`,
+        a: [...wall.a], b: [...wall.b],
+        hostWallId: wall.id,
+        segmentKind: 'opening',
+        opening,
+        t0: 0, t1: 1,
+        legacyExperimental: true,
+        hostA: [...wall.a], hostB: [...wall.b],
+      });
+      continue;
+    }
+
+    if (!hosted.length) {
+      const startRatio = ratioAtPoint(wall, adjusted.a);
+      const endRatio = ratioAtPoint(wall, adjusted.b);
+      segments.push({
+        ...wall,
+        a: [...adjusted.a], b: [...adjusted.b],
+        hostWallId: wall.id,
+        segmentKind: 'solid',
+        t0: startRatio, t1: endRatio,
+        hostA: [...adjusted.a], hostB: [...adjusted.b],
+      });
+      continue;
+    }
+
+    const trimStart = ratioAtPoint(wall, adjusted.a);
+    const trimEnd = ratioAtPoint(wall, adjusted.b);
+    if (trimStart < -RATIO_EPS || trimEnd > 1 + RATIO_EPS || trimStart >= trimEnd - RATIO_EPS) {
+      throw new Error(`Trimmed host wall ${wall.id} has an invalid usable interval.`);
+    }
+    let cursor = Math.max(0, trimStart);
+    let solidIndex = 0;
+    for (let openingIndex = 0; openingIndex < hosted.length; openingIndex += 1) {
+      const opening = hosted[openingIndex];
+      const start = opening.t0; const end = opening.t1;
+      if (!Number.isFinite(start) || !Number.isFinite(end)
+        || start < cursor - RATIO_EPS || start < trimStart - RATIO_EPS
+        || end > trimEnd + RATIO_EPS || start >= end - RATIO_EPS) {
+        throw new Error(`Opening ${opening.id} has an invalid or overlapping host interval.`);
+      }
+      if (start > cursor + RATIO_EPS) {
+        segments.push({
+          ...wall,
+          id: `${wall.id}::solid:${solidIndex}`,
+          a: pointAtRatio(wall, cursor), b: pointAtRatio(wall, start),
+          hostWallId: wall.id,
+          segmentKind: 'solid',
+          t0: cursor, t1: start,
+          hostA: [...adjusted.a], hostB: [...adjusted.b],
+        });
+        solidIndex += 1;
+      }
+      segments.push({
+        ...wall,
+        id: `${wall.id}::opening:${openingIndex}:${opening.id}`,
+        a: pointAtRatio(wall, start), b: pointAtRatio(wall, end),
+        void: true,
+        hostWallId: wall.id,
+        openingId: opening.id,
+        segmentKind: 'opening',
+        opening,
+        t0: start, t1: end,
+        hostA: [...adjusted.a], hostB: [...adjusted.b],
+      });
+      cursor = end;
+    }
+    if (cursor < trimEnd - RATIO_EPS) {
+      segments.push({
+        ...wall,
+        id: `${wall.id}::solid:${solidIndex}`,
+        a: pointAtRatio(wall, cursor), b: [...adjusted.b],
+        hostWallId: wall.id,
+        segmentKind: 'solid',
+        t0: cursor, t1: trimEnd,
+        hostA: [...adjusted.a], hostB: [...adjusted.b],
+      });
+    }
+  }
+  return segments;
+}
+
+/** Convert one hnm-project storey to the proven contract-shaped input used by buildSolid.
+ *  Curved paths fail visibly until the production curve mesher lands; silently chord-cutting them
+ *  would make an approved project dimensionally dishonest. */
+export function projectToSolidContract(project, storeyId) {
+  if (!project || project.schema !== 'hnm-project/1') {
+    throw new TypeError('projectToSolidContract expects hnm-project/1');
+  }
+  const storey = storeyId
+    ? (project.storeys || []).find((item) => item.id === storeyId)
+    : (project.storeys || [])[0];
+  if (!storey) throw new Error('The requested project storey does not exist.');
+  const belongs = (item) => !item.storeyId || item.storeyId === storey.id;
+  const projectWalls = (project.geometry?.walls || []).filter(belongs);
+  const curved = projectWalls.filter((wall) => wall.path?.kind !== 'line');
+  if (curved.length) throw new Error(`${curved.length} curved wall(s) require the curve mesh compiler.`);
+  const readiness = validateProject3dReadiness(project);
+  if (!readiness.ok) {
+    const issues = [...readiness.blocking, ...readiness.warnings]
+      .map((item) => `${item.code}: ${item.message}`);
+    throw new Error(`Corrected 3D concept is blocked: ${issues.join(' ')}`);
+  }
+
+  const walls = projectWalls.map((wall) => ({
+    id: wall.id,
+    a: wall.path.start,
+    b: wall.path.end,
+    thickness: wall.thickness,
+    height: wall.height,
+    type: wall.structuralClass,
+    void: !!wall.isVoid,
+    confidence: wall.confidence,
+  }));
+  const openings = (project.geometry?.openings || []).filter(belongs).map((opening) => ({
+    id: opening.id,
+    wall: opening.wallId,
+    t0: opening.span?.startRatio,
+    t1: opening.span?.endRatio,
+    width: opening.span?.width,
+    kind: opening.kind,
+    height: opening.height,
+    sill: opening.sill,
+    between: opening.between || [],
+    confidence: opening.confidence,
+  }));
+  const rooms = (project.geometry?.spaces || []).filter(belongs).map((space) => ({
+    id: space.id,
+    cycle: space.wallIds || [],
+    poly: space.boundary || [],
+    areaM2: space.areaM2,
+    cls: space.type,
+    label: space.name,
+    confidence: space.confidence,
+  }));
+
+  return {
+    schema: 'hnm-plan-contract/1', ok: true, units: 'mm',
+    source: project.provenance?.source || null,
+    envelope: storey.envelope,
+    walls, openings, rooms,
+    adjacency: project.relationships?.adjacency || [],
+    issues: project.issues || [],
+  };
+}
+
+export function buildProjectSolid(project, THREE, opts = {}) {
+  return buildSolid(projectToSolidContract(project, opts.storeyId), THREE, opts);
+}
 
 export function buildSolid(c, THREE, opts) {
   const O = Object.assign({
-    wallH: 2.6, doorH: 2.1, sillH: 1.0, headH: 2.1, slab: 0.02, parapetH: 1.1, diagnostic: false, labels: true,
+    wallH: null, doorH: 2.1, sillH: 1.0, headH: 2.1, slab: 0.02,
+    parapetH: 1.1, diagnostic: false, labels: true,
   }, opts || {});
   const g = new THREE.Group();
-  const stats = { walls: 0, floors: 0, doors: 0, windows: 0, lintels: 0, thresholds: 0, labels: 0, entrance: 0 };
+  const stats = {
+    hostWalls: 0, walls: 0, solidSegments: 0, openingVoids: 0, legacyExperimentalVoids: 0,
+    floors: 0, doors: 0, windows: 0, lintels: 0, sills: 0, heads: 0,
+    glazings: 0, thresholds: 0, doorLeaves: 0, labels: 0, entrance: 0,
+    parapets: 0, topH: 0,
+  };
   if (!c || !c.ok || !c.walls.length) return { group: g, stats };
 
   const M = (mm) => mm / 1000;
-  const H = O.wallH;
   const [EW, ED] = (c.envelope || [0, 0]).map(M);
   const ox = -EW / 2, oz = -ED / 2;
 
@@ -40,19 +254,17 @@ export function buildSolid(c, THREE, opts) {
     timber: mat('#b8895a', { side: THREE.DoubleSide }),
   };
 
-  const box = (w, h, d, x, y, z, material, name) => {
+  const box = (w, h, d, x, y, z, material, name, userData = null) => {
     if (w <= 0.001 || h <= 0.001 || d <= 0.001) return null;
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
     m.position.set(x, y, z);
     m.name = name;
+    if (userData) m.userData = { ...(m.userData || {}), ...userData };
     m.castShadow = true;
     m.receiveShadow = true;
     g.add(m);
     return m;
   };
-
-  const openBy = new Map();
-  for (const o of (c.openings || [])) openBy.set(o.wall, o);
 
   // A balcony is not a sealed box: its outer edges are a parapet with open air above. HDB requires
   // at least 1.20 m at access corridors and common areas and window cills of at least 1.0 m; the
@@ -67,93 +279,160 @@ export function buildSolid(c, THREE, opts) {
       owners.get(id).push(r);
     }
   }
-  const parapetOf = (w) => {
-    const own = owners.get(w.id) || [];
+  const wallHeight = (wall) => Number.isFinite(O.wallH)
+    ? O.wallH : (Number.isFinite(wall?.height) ? M(wall.height) : 2.6);
+  const parapetOf = (hostWall) => {
+    const own = owners.get(hostWall.id) || [];
     if (own.length !== 1) return 0;
     const r = own[0];
     if (!/BALCON|TERRACE|PATIO/i.test(r.label || '')) return 0;
     if (!(r.areaM2 >= 1.5) || (r.minDim && r.minDim < 800)) return 0;
-    return Math.min(O.parapetH, H);
+    return Math.min(O.parapetH, wallHeight(hostWall));
   };
 
-  for (const w of c.walls) {
-    const horiz = w.a[1] === w.b[1];
-    const len = M(Math.abs(horiz ? w.b[0] - w.a[0] : w.b[1] - w.a[1]));
+  const hostById = new Map(c.walls.map((wall) => [wall.id, wall]));
+  const compiledWalls = compileWallOpeningSegments(c.walls, c.openings || []);
+  const renderedParapets = new Set();
+  const countedWallHosts = new Set();
+  stats.hostWalls = c.walls.filter((wall) => !wall.void).length;
+
+  for (const segment of compiledWalls) {
+    const hostWall = hostById.get(segment.hostWallId) || segment;
+    const pH = parapetOf(hostWall);
+    if (pH && segment.segmentKind === 'opening') {
+      throw new Error(`Parapet wall ${segment.hostWallId} cannot silently discard opening ${segment.opening?.id || segment.id}.`);
+    }
+    if (pH) {
+      if (renderedParapets.has(segment.hostWallId)) continue;
+      renderedParapets.add(segment.hostWallId);
+    }
+    const a = pH ? segment.hostA : segment.a;
+    const b = pH ? segment.hostB : segment.b;
+    const horiz = Math.abs(a[1] - b[1]) < 1;
+    const vert = Math.abs(a[0] - b[0]) < 1;
+    if (!horiz && !vert) {
+      throw new Error(`Diagonal wall ${segment.hostWallId} requires the oriented wall mesher.`);
+    }
+    const len = M(Math.abs(horiz ? b[0] - a[0] : b[1] - a[1]));
     if (len < 0.02) continue;
-    const th = Math.max(0.05, M(w.thickness));
-    const cx = M((w.a[0] + w.b[0]) / 2) + ox;
-    const cz = M((w.a[1] + w.b[1]) / 2) + oz;
+    const th = Math.max(0.05, M(segment.thickness));
+    const cx = M((a[0] + b[0]) / 2) + ox;
+    const cz = M((a[1] + b[1]) / 2) + oz;
+    const H = wallHeight(hostWall);
     const dims = (h) => (horiz ? [len, h, th] : [th, h, len]);
 
     // Decided BEFORE the solid/void branch: a balustrade has no window in it, so a balcony's whole
     // outer edge becomes parapet with open air above — otherwise an opening on that edge builds
     // full-height glazing and the balcony reads sealed along its longest side.
-    const pH = parapetOf(w);
     if (pH) {
-      box(...dims(pH), cx, pH / 2, cz, MATS.parapet, 'Parapet_' + w.id);
-      stats.parapets = (stats.parapets || 0) + 1;
-      stats.topH = Math.max(stats.topH || 0, H);
+      box(...dims(pH), cx, pH / 2, cz, MATS.parapet, 'Parapet_' + segment.hostWallId, {
+        wallId: segment.hostWallId, component: 'parapet',
+      });
+      stats.parapets++;
+      stats.topH = Math.max(stats.topH, H);
       continue;
     }
 
-    if (!w.void) {
-      box(...dims(H), cx, H / 2, cz, MATS[w.type] || MATS.partition, 'Wall_' + w.type + '_' + w.id);
+    if (!hostWall.void && !countedWallHosts.has(segment.hostWallId)) {
+      countedWallHosts.add(segment.hostWallId);
       stats.walls++;
-      stats.topH = Math.max(stats.topH || 0, H);
+    }
+
+    if (!segment.void) {
+      box(...dims(H), cx, H / 2, cz, MATS[segment.type] || MATS.partition,
+        `Wall_${segment.type || 'partition'}_${segment.id}`, {
+          wallId: segment.hostWallId, segmentId: segment.id,
+          component: 'wall-solid', t0: segment.t0, t1: segment.t1,
+        });
+      stats.solidSegments++;
+      stats.topH = Math.max(stats.topH, H);
       continue;
     }
-    const kind = (openBy.get(w.id) || {}).kind || 'door';
+    const opening = segment.opening || {};
+    const kind = opening.kind || 'door';
+    const openingMeta = {
+      wallId: segment.hostWallId,
+      segmentId: segment.id,
+      openingId: opening.id || null,
+      openingKind: kind,
+      legacyExperimental: segment.legacyExperimental === true,
+      t0: segment.t0,
+      t1: segment.t1,
+    };
+    const sill = Math.min(H, Math.max(0,
+      Number.isFinite(opening.sill) ? M(opening.sill) : (kind === 'window' ? O.sillH : 0)));
+    const fallbackHeight = kind === 'window' ? Math.max(0, O.headH - O.sillH) : O.doorH;
+    const openingHeight = Number.isFinite(opening.height) ? M(opening.height) : fallbackHeight;
+    const head = Math.min(H, sill + Math.max(0, openingHeight));
+    if (head <= sill + 0.001) throw new Error(`Opening ${opening.id || segment.id} has no usable vertical span.`);
+    stats.openingVoids++;
+    if (segment.legacyExperimental) stats.legacyExperimentalVoids++;
+    stats.topH = Math.max(stats.topH, H);
+
     if (kind === 'window') {
-      // clamp to the wall height we were actually given: the dollhouse cut passes 1.15 m, and an
-      // unclamped 1.0 m sill with a 2.1 m head leaves the glazing hovering above the cut wall
-      const sill = Math.min(O.sillH, H);
-      const head = Math.min(O.headH, H);
-      box(...dims(sill), cx, sill / 2, cz, MATS.trim, 'Sill_' + w.id);
-      if (H > O.headH) box(...dims(H - O.headH), cx, (H + O.headH) / 2, cz, MATS.trim, 'Head_' + w.id);
+      if (sill > 0.001) {
+        box(...dims(sill), cx, sill / 2, cz, MATS.trim, 'Sill_' + segment.id,
+          { ...openingMeta, component: 'window-sill' });
+        stats.sills++;
+      }
+      if (H > head + 0.001) {
+        box(...dims(H - head), cx, (H + head) / 2, cz, MATS.trim, 'Head_' + segment.id,
+          { ...openingMeta, component: 'window-head' });
+        stats.heads++;
+      }
       if (head - sill > 0.01) {
         const paneT = Math.min(0.03, th * 0.5);
         box(...(horiz ? [len, head - sill, paneT] : [paneT, head - sill, len]),
-          cx, (sill + head) / 2, cz, MATS.glass, 'Glazing_' + w.id);
+          cx, (sill + head) / 2, cz, MATS.glass, 'Glazing_' + segment.id,
+          { ...openingMeta, component: 'window-glazing' });
+        stats.glazings++;
       }
       stats.windows++;
       continue;
     }
     // door or wide opening: head over it, and a threshold so the floor runs through
-    if (H > O.doorH) {
-      box(...dims(H - O.doorH), cx, (H + O.doorH) / 2, cz, MATS.trim, 'Lintel_' + w.id);
+    if (H > head + 0.001) {
+      box(...dims(H - head), cx, (H + head) / 2, cz, MATS.trim, 'Lintel_' + segment.id,
+        { ...openingMeta, component: 'opening-lintel' });
       stats.lintels++;
     }
-    box(...(horiz ? [len, O.slab, th] : [th, O.slab, len]), cx, O.slab / 2, cz, MATS.threshold, 'Threshold_' + w.id);
+    box(...(horiz ? [len, O.slab, th] : [th, O.slab, len]),
+      cx, O.slab / 2, cz, MATS.threshold, 'Threshold_' + segment.id,
+      { ...openingMeta, component: 'opening-threshold' });
     stats.thresholds++;
     if (kind === 'door') {
       stats.doors++;
       // a leaf on every interior door too — a bare gap reads as a missing wall, not a doorway.
       // Height clamps to the wall exactly as the glazing and the entrance leaf do, or the leaf
       // hangs above the walls in the dollhouse cut.
-      const lh = Math.min(O.doorH, H);
-      const lf = new THREE.Mesh(new THREE.BoxGeometry(len * 0.93, Math.max(0.05, lh - O.slab), 0.042), MATS.leaf);
+      const leafHeight = Math.max(0.05, head - sill - O.slab);
+      const lf = new THREE.Mesh(new THREE.BoxGeometry(len * 0.93, leafHeight, 0.042), MATS.leaf);
       lf.geometry.translate(len * 0.465, 0, 0);
-      lf.position.set(cx - (horiz ? len / 2 : 0), (lh + O.slab) / 2, cz - (horiz ? 0 : len / 2));
+      lf.position.set(cx - (horiz ? len / 2 : 0), sill + O.slab + leafHeight / 2,
+        cz - (horiz ? 0 : len / 2));
       // the hinge sits at the opening's low end and the leaf runs toward +X or +Z from there:
       // rotation.y maps local +X to (cos θ, 0, −sin θ), so a vertical wall needs −π/2, not +π/2
       lf.rotation.y = horiz ? -0.6 : -Math.PI / 2 + 0.6;
       lf.castShadow = true;
-      lf.name = 'DoorLeaf_' + w.id;
+      lf.name = 'DoorLeaf_' + segment.id;
+      lf.userData = { ...(lf.userData || {}), ...openingMeta, component: 'door-leaf' };
       g.add(lf);
-      stats.topH = Math.max(stats.topH || 0, H);
+      stats.doorLeaves++;
     }
     if (kind === 'entrance') {
       // a real leaf, ajar, so the front door is unmistakable in the model
-      const leafH = Math.min(O.doorH, H);
-      const leaf = new THREE.Mesh(new THREE.BoxGeometry(len * 0.94, leafH, 0.045), MATS.entrance);
-      leaf.position.set(cx, leafH / 2, cz);
+      const leafHeight = head - sill;
+      const leaf = new THREE.Mesh(new THREE.BoxGeometry(len * 0.94, leafHeight, 0.045), MATS.entrance);
+      leaf.position.set(cx, sill + leafHeight / 2, cz);
       leaf.rotation.y = (horiz ? 0 : Math.PI / 2) - (horiz ? 0.55 : -0.55);
       leaf.geometry.translate(len * 0.47, 0, 0);
       leaf.castShadow = true;
-      leaf.name = 'EntranceLeaf_' + w.id;
+      leaf.name = 'EntranceLeaf_' + segment.id;
+      leaf.userData = { ...(leaf.userData || {}), ...openingMeta, component: 'entrance-leaf' };
       g.add(leaf);
       stats.doors++;
       stats.entrance++;
+      stats.doorLeaves++;
     }
   }
 

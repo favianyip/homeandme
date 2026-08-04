@@ -1,0 +1,40 @@
+# Exact GitHub Pages artifact. Source files not listed here are not public.
+CNAME
+favicon.svg
+index.html
+Home AI.dc.html
+AboutUs.dc.html
+FaqAndHelp.dc.html
+Home Redesign.dc.html
+Legal.dc.html
+ContactUs.dc.html
+ProjectJourney.html
+
+# Public runtime
+config.js
+support.js
+three-d-stage.js
+project-journey.js
+project-journey-model.js
+journey-api.js
+journey-service-workflow.js
+journey-render-contract.js
+journey-project.js
+journey-solid.js
+journey-topology-gate.js
+journey-geometry-ops.js
+geometry-clipper.js
+editor.html
+editor.js
+
+# Project Atelier presentation
+assets/css/project-journey.css
+assets/fonts/Centaur.woff2
+assets/fonts/Balibold-Regular.woff2
+assets/images/hnm-logo.png
+assets/images/publication-rights-placeholder.svg
+
+# Public marketing imagery referenced by the selected pages
+assets/images/fb-icon-teal.svg
+assets/images/ig-logo-teal.svg
+assets/images/fb-icon.svg

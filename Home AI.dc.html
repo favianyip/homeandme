@@ -2,18 +2,19 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Home &amp; Me — AI-First Renovation, Singapore</title>
+<title>Home &amp; Me — Review-First Renovation, Singapore</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Home &amp; Me — Singapore's AI-first renovation platform. Upload your floor plan, explore photoreal designs of your exact home, get a live itemised quote, and start with a PayNow deposit.">
-<meta property="og:title" content="Home &amp; Me — AI-First Renovation, Singapore">
-<meta property="og:description" content="Upload your floor plan. See your home designed in 3D. Pay only when you're convinced.">
-<meta property="og:image" content="assets/images/login-bg.jpg">
+<meta name="description" content="Explore Home &amp; Me's planned review-first floor-plan journey. Public upload, 3D generation, quotation and payment remain service-gated.">
+<meta property="og:title" content="Home &amp; Me — Review-First Renovation, Singapore">
+<meta property="og:description" content="A planned review-first path from an authorised plan to confirmed geometry. Check Project Atelier for current service availability.">
+<meta property="og:image" content="assets/images/publication-rights-placeholder.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script type="application/ld+json">
@@ -37,18 +38,14 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
     <div style="max-width: 1360px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); height: 74px; display: flex; align-items: center; gap: 22px;">
       <a href="#top" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 42px; width: auto; filter: var(--logo-filter);"></a>
       <nav id="nv" style="display: flex; gap: 26px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px;">
-        <a href="#assistant">AI ASSISTANT</a>
-        <a href="#portfolio">PORTFOLIO</a>
+        <a href="#assistant">SERVICE OVERVIEW</a>
+        <a href="#portfolio">IMAGERY STATUS</a>
         <a href="#process">PROCESS</a>
-        <a href="#pricing">PRICING</a>
+        <a href="#pricing">PRICING STATUS</a>
         <a href="#faq">FAQ</a>
         <a href="#contact">CONTACT</a>
-        <a href="PlanLookup.html" style="color: var(--accent);">FIND MY PLAN</a>
-        <a href="PlanIntake.html">VERIFY A PLAN</a>
-        <a href="HousingIdentity.html">HOUSING IDENTITY</a>
-        <a href="Login.dc.html">LOGIN</a>
         <button type="button" onClick="{{ toggleTheme }}" aria-label="Toggle dark mode" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: none; color: var(--ink); cursor: pointer; font-size: 15px;">{{ themeIcon }}</button>
-        <a href="PlanIntake.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: var(--accent); color: var(--accent-ink); padding: 13px 24px; border-radius: 999px;" style-hover="background: var(--ink); color: var(--bg);">UPLOAD YOUR FLOOR PLAN</a>
+        <a href="ProjectJourney.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: var(--accent); color: var(--accent-ink); padding: 13px 24px; border-radius: 999px;" style-hover="background: var(--ink); color: var(--bg);">OPEN PROJECT ATELIER</a>
       </nav>
       <button id="bg" type="button" onClick="{{ toggleMenu }}" style="display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid var(--line); border-radius: 999px; background: none; cursor: pointer; font-size: 17px; color: var(--ink);">{{ menuIcon }}</button>
     </div>
@@ -56,36 +53,32 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
   <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
     <div style="position: fixed; inset: 0; z-index: 55; background: var(--bg); padding: 110px clamp(24px, 6vw, 48px) 40px; overflow: auto;">
       <nav style="display: grid; gap: 20px; font-family: 'Oswald', sans-serif; font-size: 21px; letter-spacing: 2.4px;">
-        <a href="#assistant" onClick="{{ closeMenu }}">AI ASSISTANT</a>
-        <a href="#portfolio" onClick="{{ closeMenu }}">PORTFOLIO</a>
+        <a href="#assistant" onClick="{{ closeMenu }}">SERVICE OVERVIEW</a>
+        <a href="#portfolio" onClick="{{ closeMenu }}">IMAGERY STATUS</a>
         <a href="#process" onClick="{{ closeMenu }}">PROCESS</a>
-        <a href="#pricing" onClick="{{ closeMenu }}">PRICING</a>
+        <a href="#pricing" onClick="{{ closeMenu }}">PRICING STATUS</a>
         <a href="#faq" onClick="{{ closeMenu }}">FAQ</a>
         <a href="#contact" onClick="{{ closeMenu }}">CONTACT</a>
-        <a href="PlanLookup.html" style="color: var(--accent);">FIND MY PLAN</a>
-        <a href="PlanIntake.html">VERIFY A PLAN</a>
-        <a href="HousingIdentity.html">HOUSING IDENTITY</a>
-        <a href="Login.dc.html">LOGIN</a>
-        <a href="PlanIntake.html" style="margin-top: 10px; justify-self: start; background: var(--accent); color: var(--accent-ink); padding: 16px 30px; border-radius: 999px; font-size: 15px;">UPLOAD YOUR FLOOR PLAN</a>
+        <a href="ProjectJourney.html" style="margin-top: 10px; justify-self: start; background: var(--accent); color: var(--accent-ink); padding: 16px 30px; border-radius: 999px; font-size: 15px;">OPEN PROJECT ATELIER</a>
       </nav>
     </div>
   </sc-if>
 
   <section id="top" style="position: relative; min-height: 92vh; display: flex; align-items: flex-end; overflow: hidden;">
-    <img src="assets/images/login-bg.jpg" alt="Modern classic living room by Home &amp; Me" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: hnmKen 14s linear infinite alternate;">
+    <img src="assets/images/publication-rights-placeholder.svg" alt="Interior imagery withheld pending publication-rights verification" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: hnmKen 14s linear infinite alternate;">
     <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,17,18,0.86) 0%, rgba(13,17,18,0.25) 55%, rgba(13,17,18,0.35) 100%);"></div>
     <div style="position: relative; width: 100%; max-width: 1360px; margin: 0 auto; padding: 140px clamp(20px, 4vw, 40px) clamp(48px, 7vw, 84px); color: #f6f4ef;">
-      <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.6px; color: #8fb0bb; margin: 0 0 18px;">SINGAPORE'S AI-FIRST RENOVATION PLATFORM · EST. 2017</p>
-      <h1 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(38px, 6vw, 74px); line-height: 1.06; margin: 0 0 20px; max-width: 13ch;">Your home, designed before you pay a cent</h1>
-      <p data-reveal="1" style="font-size: clamp(16px, 2vw, 19px); line-height: 1.65; color: rgba(246,244,239,0.85); margin: 0 0 34px; max-width: 52ch; text-wrap: pretty;">Upload your floor plan. Watch your exact rooms take shape in 3D, dressed in photoreal designs, priced line by line — then lock it in with PayNow or card.</p>
+      <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.6px; color: #8fb0bb; margin: 0 0 18px;">REVIEW-FIRST RENOVATION JOURNEY CONCEPT · EST. 2017</p>
+      <h1 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(38px, 6vw, 74px); line-height: 1.06; margin: 0 0 20px; max-width: 13ch;">Review the plan before any 3D or quote</h1>
+      <p data-reveal="1" style="font-size: clamp(16px, 2vw, 19px); line-height: 1.65; color: rgba(246,244,239,0.85); margin: 0 0 34px; max-width: 52ch; text-wrap: pretty;">This page describes the intended service path. Public upload and 3D generation are unavailable unless Project Atelier explicitly reports them enabled; walls, openings, scale and measurements must then be confirmed before approval.</p>
       <div data-reveal="1" style="display: flex; align-items: center; gap: 22px; flex-wrap: wrap;">
-        <a href="PlanIntake.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: var(--accent); color: #fff; padding: 19px 38px; border-radius: 999px;" style-hover="background: #f6f4ef; color: #1a2023;">UPLOAD YOUR FLOOR PLAN →</a>
-        <a href="#assistant" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; color: #f6f4ef; border-bottom: 1px solid rgba(246,244,239,0.5); padding-bottom: 4px;">MEET THE AI ASSISTANT ↓</a>
+        <a href="ProjectJourney.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: var(--accent); color: #fff; padding: 19px 38px; border-radius: 999px;" style-hover="background: #f6f4ef; color: #1a2023;">OPEN PROJECT ATELIER →</a>
+        <a href="#assistant" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; color: #f6f4ef; border-bottom: 1px solid rgba(246,244,239,0.5); padding-bottom: 4px;">READ SERVICE LIMITS ↓</a>
       </div>
       <div style="display: flex; gap: clamp(20px, 4vw, 48px); flex-wrap: wrap; margin-top: clamp(36px, 5vw, 56px); border-top: 1px solid rgba(246,244,239,0.2); padding-top: 22px;">
         <span style="font-size: 13.5px; color: rgba(246,244,239,0.75);">HDB · Condo · Landed</span>
-        <span style="font-size: 13.5px; color: rgba(246,244,239,0.75);">Itemised live pricing</span>
-        <span style="font-size: 13.5px; color: rgba(246,244,239,0.75);">3D walkthrough of your unit</span>
+        <span style="font-size: 13.5px; color: rgba(246,244,239,0.75);">Planned itemised scope review</span>
+        <span style="font-size: 13.5px; color: rgba(246,244,239,0.75);">Planned 3D after geometry review</span>
         <span style="font-size: 13.5px; color: rgba(246,244,239,0.75);">Toh Guan Centre, Singapore</span>
       </div>
     </div>
@@ -94,32 +87,32 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
   <section id="assistant" style="padding: clamp(72px, 10vw, 116px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
     <div data-mq2="1" style="max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 84px); align-items: center;">
       <div data-reveal="1">
-        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 16px;">AI RENOVATION ASSISTANT</p>
-        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 20px; line-height: 1.12;">One upload. The whole renovation, planned.</h2>
-        <p style="margin: 0 0 26px; font-size: 17px; line-height: 1.7; color: var(--ink2); text-wrap: pretty;">Our platform reads your floor plan, verifies the property, and builds a live 3D model of your rooms. You dress each one, the quote itemises itself — and soon, our AI renders photoreal previews of <em>your</em> flat, not a showflat.</p>
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 16px;">ASSISTANT CONCEPT · NOT A LIVE CHAT SERVICE</p>
+        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 20px; line-height: 1.12;">One source plan. Explicit review at every gate.</h2>
+        <p style="margin: 0 0 26px; font-size: 17px; line-height: 1.7; color: var(--ink2); text-wrap: pretty;">The public configuration currently provides no upload, detector, model generator, render service or assistant. These panels illustrate a future workflow only; Project Atelier is the authority for current service availability.</p>
         <div style="display: grid; gap: 14px;">
-          <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 5px 12px;">LIVE</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">3D floor-plan journey — walls rise from your plan, orbit freely</p></div>
-          <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 5px 12px;">LIVE</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">Room-by-room themes with live itemised pricing</p></div>
-          <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 4px 11px;">SOON</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">AI photoreal renders generated from your uploaded plan</p></div>
-          <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 4px 11px;">SOON</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">Project dashboard — milestones, payments and site photos</p></div>
+          <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 4px 11px;">PLANNED</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">Floor-plan proposal with explicit geometry confidence and correction</p></div>
+          <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 4px 11px;">PLANNED</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">Room-theme and scope discussion after review</p></div>
+          <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 4px 11px;">PLANNED</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">Photoreal design workflow after measured geometry approval</p></div>
+          <div style="display: flex; gap: 14px; align-items: baseline;"><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 4px 11px;">NOT RELEASED</span><p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--ink2);">Project dashboard, milestones, payments and site photos</p></div>
         </div>
-        <a href="PlanIntake.html" style="display: inline-block; margin-top: 30px; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: var(--ink); color: var(--bg); padding: 16px 32px; border-radius: 999px;" style-hover="background: var(--accent); color: var(--accent-ink);">START WITH YOUR ADDRESS →</a>
+        <a href="ProjectJourney.html" style="display: inline-block; margin-top: 30px; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: var(--ink); color: var(--bg); padding: 16px 32px; border-radius: 999px;" style-hover="background: var(--accent); color: var(--accent-ink);">OPEN PROJECT ATELIER →</a>
       </div>
       <div data-reveal="1" style="background: var(--dark); color: var(--dark-ink); border-radius: 10px; padding: clamp(22px, 3vw, 32px); box-shadow: 0 40px 80px -48px rgba(0,0,0,0.55);">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(246,244,239,0.14); padding-bottom: 14px; margin-bottom: 18px;">
-          <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8fb0bb;">HOME&amp;ME ASSISTANT</span>
-          <span style="display: flex; align-items: center; gap: 7px; font-size: 12px; color: rgba(246,244,239,0.6);"><span style="width: 7px; height: 7px; border-radius: 50%; background: #7fb069; animation: hnmPulse 2.2s infinite;"></span>Online</span>
+          <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8fb0bb;">ILLUSTRATIVE ASSISTANT PANEL</span>
+          <span style="display: flex; align-items: center; gap: 7px; font-size: 12px; color: rgba(246,244,239,0.6);"><span style="width: 7px; height: 7px; border-radius: 50%; background: #b07c2a;"></span>Not released</span>
         </div>
         <div style="display: grid; gap: 12px;">
-          <div style="justify-self: end; max-width: 85%; background: var(--accent); color: #fff; border-radius: 12px 12px 3px 12px; padding: 12px 16px; font-size: 14.5px; line-height: 1.55;">4-room resale in Bishan, Scandinavian look, around S$50k?</div>
-          <div style="justify-self: start; max-width: 90%; background: rgba(246,244,239,0.08); border-radius: 12px 12px 12px 3px; padding: 12px 16px; font-size: 14.5px; line-height: 1.6; color: rgba(246,244,239,0.9);">Plan received ✓ — 6 rooms detected on your 92 sqm layout. Scandinavian prices at S$48.9k with full carpentry. Want to see your living room in 3D first?</div>
+          <div style="justify-self: end; max-width: 85%; background: var(--accent); color: #fff; border-radius: 12px 12px 3px 12px; padding: 12px 16px; font-size: 14.5px; line-height: 1.55;">Illustrative future question: how would a 4-room resale plan be reviewed?</div>
+          <div style="justify-self: start; max-width: 90%; background: rgba(246,244,239,0.08); border-radius: 12px 12px 12px 3px; padding: 12px 16px; font-size: 14.5px; line-height: 1.6; color: rgba(246,244,239,0.9);">Example only — no plan was uploaded or analysed. A released service must confirm source, scale, closed walls, rooms and every door/window before any 3D approval.</div>
           <div style="justify-self: start; display: flex; gap: 8px; flex-wrap: wrap;">
-            <a href="SketchMyFlat.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">SEE MY 3D MODEL</a>
-            <a href="PlanIntake.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">ITEMISE MY QUOTE</a>
+            <a href="ProjectJourney.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">OPEN PROJECT ATELIER</a>
+            <a href="ProjectJourney.html" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; border: 1px solid rgba(246,244,239,0.35); color: #f6f4ef; border-radius: 999px; padding: 9px 16px;" style-hover="background: rgba(246,244,239,0.12);">REVIEW THE SERVICE PATH</a>
           </div>
         </div>
         <div style="display: flex; gap: 10px; margin-top: 18px; border-top: 1px solid rgba(246,244,239,0.14); padding-top: 16px;">
-          <a href="Assistant.dc.html" style="flex: 1; text-align: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: #f6f4ef; background: rgba(246,244,239,0.1); border: 1px solid rgba(246,244,239,0.32); border-radius: 999px; padding: 14px 18px;" style-hover="background: rgba(246,244,239,0.2);">CHAT WITH THE LIVE ASSISTANT →</a>
+          <a href="ProjectJourney.html" style="flex: 1; text-align: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: #f6f4ef; background: rgba(246,244,239,0.1); border: 1px solid rgba(246,244,239,0.32); border-radius: 999px; padding: 14px 18px;" style-hover="background: rgba(246,244,239,0.2);">OPEN PROJECT ATELIER →</a>
         </div>
       </div>
     </div>
@@ -129,15 +122,15 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
     <div style="max-width: 1360px; margin: 0 auto;">
       <div data-reveal="1" style="display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 44px;">
         <div>
-          <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 14px;">PORTFOLIO</p>
-          <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0; line-height: 1.12;">Rooms we've already made real</h2>
+          <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 14px;">SHOWROOM ON HOLD</p>
+          <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0; line-height: 1.12;">Interior imagery pending rights verification</h2>
         </div>
-        <a href="PlanIntake.html" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 4px;">APPLY ANY OF THESE TO YOUR PLAN →</a>
+        <a href="ProjectJourney.html" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 4px;">REVIEW IN PROJECT ATELIER →</a>
       </div>
       <div data-mq3="1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;">
         <sc-for list="{{ portfolio }}" as="p" hint-placeholder-count="6">
           <figure data-reveal="1" style="margin: 0;">
-            <div style="overflow: hidden; border-radius: 5px;"><img src="{{ p.src }}" alt="{{ p.alt }}" loading="lazy" style="width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"></div>
+            <div style="overflow: hidden; border-radius: 5px;"><img sc-camel-src="{{ p.src }}" alt="{{ p.alt }}" loading="lazy" style="width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; transition: transform 0.8s ease;" style-hover="transform: scale(1.05);"></div>
             <figcaption style="display: flex; justify-content: space-between; gap: 10px; padding-top: 11px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--mut);"><span>{{ p.room }}</span><span style="color: var(--accent);">{{ p.theme }}</span></figcaption>
           </figure>
         </sc-for>
@@ -151,7 +144,7 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
       <h2 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 54px; text-align: center; line-height: 1.12;">From floor plan to keys-in-hand</h2>
       <div data-mq3="1" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px;">
         <sc-for list="{{ steps }}" as="st" hint-placeholder-count="5">
-          <a data-reveal="1" href="{{ st.href }}" style="display: block; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 24px 20px 26px; transition: transform 0.35s ease, border-color 0.35s ease;" style-hover="transform: translateY(-5px); border-color: var(--accent);">
+          <a data-reveal="1" sc-camel-href="{{ st.href }}" style="display: block; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 24px 20px 26px; transition: transform 0.35s ease, border-color 0.35s ease;" style-hover="transform: translateY(-5px); border-color: var(--accent);">
             <span style="font-family: 'Oswald', sans-serif; font-size: 13px; color: var(--accent);">{{ st.n }}</span>
             <span style="display: block; font-family: 'Oswald', sans-serif; font-size: 15px; letter-spacing: 1.8px; margin: 10px 0 8px; color: var(--ink);">{{ st.t }}</span>
             <span style="display: block; font-size: 13.5px; line-height: 1.6; color: var(--mut);">{{ st.d }}</span>
@@ -163,12 +156,12 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
 
   <section id="reviews" style="background: var(--dark); color: var(--dark-ink); padding: clamp(72px, 10vw, 116px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
     <div style="max-width: 1360px; margin: 0 auto;">
-      <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #8fb0bb; margin: 0 0 14px;">CUSTOMER REVIEWS</p>
-      <h2 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 48px; line-height: 1.12;">Convinced before they paid</h2>
+      <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #8fb0bb; margin: 0 0 14px;">PROTOTYPE REVIEW SCENARIOS</p>
+      <h2 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 48px; line-height: 1.12;">What the review gates are designed to support</h2>
       <div data-mq3="1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;">
         <sc-for list="{{ reviews }}" as="rv" hint-placeholder-count="3">
           <blockquote data-reveal="1" style="margin: 0; border: 1px solid rgba(246,244,239,0.16); border-radius: 8px; padding: 26px 24px; display: flex; flex-direction: column; gap: 16px;">
-            <span style="font-family: 'Oswald', sans-serif; letter-spacing: 3px; color: var(--accent); font-size: 13px;">★★★★★</span>
+            <span style="font-family: 'Oswald', sans-serif; letter-spacing: 3px; color: var(--accent); font-size: 13px;">ILLUSTRATIVE · NOT A TESTIMONIAL</span>
             <p style="margin: 0; font-size: 15.5px; line-height: 1.7; color: rgba(246,244,239,0.88); flex: 1;">{{ rv.quote }}</p>
             <footer style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: rgba(246,244,239,0.55);">{{ rv.who }}</footer>
           </blockquote>
@@ -179,26 +172,26 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
 
   <section id="pricing" style="padding: clamp(72px, 10vw, 116px) clamp(20px, 4vw, 40px); scroll-margin-top: 76px;">
     <div style="max-width: 1360px; margin: 0 auto;">
-      <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 14px; text-align: center;">PRICING</p>
-      <h2 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 16px; text-align: center; line-height: 1.12;">Whole-home themes, honest numbers</h2>
-      <p data-reveal="1" style="margin: 0 auto 52px; font-size: 16px; color: var(--mut); text-align: center; max-width: 56ch;">Guide prices for a full 4-room HDB renovation — identical to the 3D journey’s live price book — every line itemises in the 3D journey before you commit.</p>
+      <p data-reveal="1" style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 14px; text-align: center;">ILLUSTRATIVE LEGACY PLANNING EXAMPLES</p>
+      <h2 data-reveal="1" style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 16px; text-align: center; line-height: 1.12;">Whole-home themes for scope discussion</h2>
+      <p data-reveal="1" style="margin: 0 auto 52px; font-size: 16px; color: var(--mut); text-align: center; max-width: 62ch;">These hardcoded amounts are legacy interface examples only. They are not live or current prices, quotes or offers, and they are not connected to a price book. A designer-reviewed scope and formal quote are required.</p>
       <div data-mq3="1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: stretch;">
         <sc-for list="{{ plans }}" as="pl" hint-placeholder-count="3">
           <div data-reveal="1" style="background: var(--card); border: 1px solid {{ pl.border }}; border-radius: 10px; padding: 30px 26px; display: flex; flex-direction: column; gap: 14px; position: relative;">
-            <sc-if value="{{ pl.tag }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: -12px; left: 24px; font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.8px; background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 6px 14px;">MOST POPULAR</span></sc-if>
+            <sc-if value="{{ pl.tag }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: -12px; left: 24px; font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.8px; background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 6px 14px;">LEGACY EXAMPLE</span></sc-if>
             <span style="font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: 2.2px; color: var(--ink);">{{ pl.name }}</span>
             <span style="font-family: 'Oswald', sans-serif; font-size: 34px; color: var(--accent);">{{ pl.price }}</span>
-            <span style="font-size: 12.5px; color: var(--mut); margin-top: -8px;">from · 4-room whole home · materials + labour</span>
+            <span style="font-size: 12.5px; color: var(--mut); margin-top: -8px;">illustrative legacy amount · not a current quote</span>
             <div style="border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 9px;">
               <sc-for list="{{ pl.feats }}" as="f" hint-placeholder-count="4">
                 <span style="font-size: 14px; line-height: 1.55; color: var(--ink2);">— {{ f }}</span>
               </sc-for>
             </div>
-            <a href="PlanIntake.html" style="margin-top: auto; text-align: center; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 12px; background: {{ pl.btnBg }}; color: {{ pl.btnInk }}; border: 1px solid var(--accent); padding: 15px 20px; border-radius: 999px;" style-hover="background: var(--ink); color: var(--bg); border-color: var(--ink);">PRICE MY PLAN →</a>
+            <a href="ProjectJourney.html" style="margin-top: auto; text-align: center; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 12px; background: {{ pl.btnBg }}; color: {{ pl.btnInk }}; border: 1px solid var(--accent); padding: 15px 20px; border-radius: 999px;" style-hover="background: var(--ink); color: var(--bg); border-color: var(--ink);">OPEN PROJECT ATELIER →</a>
           </div>
         </sc-for>
       </div>
-      <p data-reveal="1" style="margin: 26px 0 0; font-size: 13px; color: var(--mut); text-align: center;">Mix themes room by room — pricing follows each room's theme. PayNow deposit locks your slot.</p>
+      <p data-reveal="1" style="margin: 26px 0 0; font-size: 13px; color: var(--mut); text-align: center;">Mix themes room by room as a design exercise. Confirmed scope and an approved quote must come before any payment.</p>
     </div>
   </section>
 
@@ -228,29 +221,20 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
         <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: var(--accent); margin: 0 0 16px;">CONTACT</p>
         <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0 0 22px; line-height: 1.12;">Talk to a human, any time</h2>
         <div style="display: grid; gap: 16px; margin-bottom: 30px;">
-          <div style="display: flex; gap: 14px; align-items: center;"><span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--mut); width: 92px;">CALL / TEXT</span><a href="tel:+6594235227" style="font-size: 16px;">+65 9423 5227</a><a href="https://wa.me/6594235227" target="_blank" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 8px 14px;" style-hover="background: var(--accent); color: var(--accent-ink);">WHATSAPP</a></div>
+          <div style="display: flex; gap: 14px; align-items: center;"><span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--mut); width: 92px;">CALL / TEXT</span><a href="tel:+6594235227" style="font-size: 16px;">+65 9423 5227</a><a href="https://wa.me/6594235227" target="_blank" rel="noopener noreferrer" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 8px 14px;" style-hover="background: var(--accent); color: var(--accent-ink);">WHATSAPP</a></div>
           <div style="display: flex; gap: 14px; align-items: center;"><span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--mut); width: 92px;">EMAIL</span><a href="mailto:homeandme25@gmail.com" style="font-size: 16px;">homeandme25@gmail.com</a></div>
           <div style="display: flex; gap: 14px; align-items: start;"><span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--mut); width: 92px; padding-top: 2px;">VISIT</span><span style="font-size: 16px; line-height: 1.6;">21 Toh Guan Road East, #03-02<br>Toh Guan Centre, Singapore 608609</span></div>
           <div style="display: flex; gap: 14px; align-items: center;"><span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--mut); width: 92px;">FOLLOW</span>
-            <a href="https://www.facebook.com/share/19EwNzh3n5/?mibextid=wwXIfr" target="_blank" aria-label="Facebook" style="width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center;" style-hover="border-color: var(--accent);"><img src="assets/images/fb-icon-teal.svg" alt="Facebook" style="height: 16px;"></a>
-            <a href="https://www.instagram.com/homeandme2017?igsh=dXF5cnNjYjI3dWZn&amp;utm_source=qr" target="_blank" aria-label="Instagram" style="width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center;" style-hover="border-color: var(--accent);"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 17px;"></a>
+            <a href="https://www.facebook.com/share/19EwNzh3n5/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style="width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center;" style-hover="border-color: var(--accent);"><img src="assets/images/fb-icon-teal.svg" alt="Facebook" style="height: 16px;"></a>
+            <a href="https://www.instagram.com/homeandme2017?igsh=dXF5cnNjYjI3dWZn&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center;" style-hover="border-color: var(--accent);"><img src="assets/images/ig-logo-teal.svg" alt="Instagram" style="height: 17px;"></a>
           </div>
         </div>
-        <div style="overflow: hidden; border-radius: 6px; border: 1px solid var(--line);">
-          <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=103.74872%2C1.33361%2C103.76072%2C1.34161&amp;layer=mapnik&amp;marker=1.33761%2C103.75472" title="Map — 21 Toh Guan Road East, Toh Guan Centre" loading="lazy" style="width: 100%; aspect-ratio: 16 / 8; border: 0; display: block;"></iframe>
-        </div>
-        <a href="https://maps.google.com/?q=21+Toh+Guan+Road+East+%2303-02+Toh+Guan+Centre+Singapore+608609" target="_blank" style="display: inline-block; margin-top: 10px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 3px;">OPEN IN GOOGLE MAPS →</a>
+        <a href="https://maps.google.com/?q=21+Toh+Guan+Road+East+%2303-02+Toh+Guan+Centre+Singapore+608609" target="_blank" rel="noopener noreferrer" style="display: inline-block; margin-top: 10px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 3px;">OPEN ADDRESS IN GOOGLE MAPS →</a>
       </div>
       <div data-reveal="1" style="background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: clamp(24px, 4vw, 38px); align-self: start;">
-        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px; color: var(--mut); margin: 0 0 20px;">SEND AN ENQUIRY</p>
-        <div style="display: grid; gap: 16px;">
-          <input value="{{ cName }}" onChange="{{ setCName }}" placeholder="Your name" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); color: var(--ink); outline-color: var(--accent);">
-          <input value="{{ cPhone }}" onChange="{{ setCPhone }}" placeholder="Mobile (for WhatsApp reply)" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); color: var(--ink); outline-color: var(--accent);">
-          <textarea value="{{ cMsg }}" onChange="{{ setCMsg }}" placeholder="Tell us about your home — property type, timeline, budget" rows="5" style="font-family: inherit; font-size: 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); color: var(--ink); outline-color: var(--accent); resize: vertical;"></textarea>
-          <a href="{{ mailtoHref }}" style="text-align: center; font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: var(--accent); color: var(--accent-ink); padding: 17px 24px; border-radius: 999px;" style-hover="background: var(--ink); color: var(--bg);">EMAIL US THIS ENQUIRY →</a>
-          <a href="{{ waHref }}" target="_blank" style="text-align: center; font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; border: 1px solid var(--accent); color: var(--accent); padding: 16px 24px; border-radius: 999px;" style-hover="background: var(--accent); color: var(--accent-ink);">OR WHATSAPP IT INSTEAD</a>
-          <p style="margin: 0; font-size: 12.5px; color: var(--mut); text-align: center;">Opens your mail or WhatsApp app with the message pre-filled — we reply within one working day.</p>
-        </div>
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px; color: var(--mut); margin: 0 0 20px;">DIRECT CONTACT ONLY</p>
+        <p style="margin: 0 0 22px; font-size: 16px; line-height: 1.7; color: var(--ink2);">This page has no enquiry form and does not collect your name, phone number, message or floor plan. Use the static Contact page to choose the published phone or email details yourself.</p>
+        <a href="ContactUs.dc.html" style="display: block; text-align: center; font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: var(--accent); color: var(--accent-ink); padding: 17px 24px; border-radius: 999px;" style-hover="background: var(--ink); color: var(--bg);">OPEN CONTACT DETAILS →</a>
       </div>
     </div>
   </section>
@@ -263,13 +247,7 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
       </div>
       <nav style="display: flex; gap: 20px; flex-wrap: wrap; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
         
-        <a href="Journey.html">3D JOURNEY</a>
-        
-        <a href="PlanLookup.html">FIND MY PLAN</a>
-        
-        <a href="PlanIntake.html">VERIFY A PLAN</a>
-        
-        <a href="MyProject.dc.html">MY PROJECT</a>
+        <a href="ProjectJourney.html">PROJECT ATELIER</a>
         <a href="FaqAndHelp.dc.html">HELP</a>
         <a href="Legal.dc.html">PRIVACY &amp; LEGAL</a>
       </nav>
@@ -279,7 +257,7 @@ a { color: var(--ink); text-decoration: none; } a:hover { color: var(--accent); 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;light&quot;, &quot;dark&quot;], &quot;default&quot;: &quot;light&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Appearance&quot;}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;options&quot;: [&quot;#5a7e8a&quot;, &quot;#b08a5e&quot;, &quot;#7f97a0&quot;, &quot;#3d6270&quot;], &quot;default&quot;: &quot;#5a7e8a&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Appearance&quot;}, &quot;animations&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Appearance&quot;}}">
 class Component extends DCLogic {
-  state = { mode: null, menuOpen: false, faqOpen: 0, cName: '', cPhone: '', cMsg: '' };
+  state = { mode: null, menuOpen: false, faqOpen: 0 };
 
   _show(el) {
     el.dataset.revealed = '1';
@@ -308,7 +286,6 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state;
     const mode = s.mode ?? (this.props.theme ?? 'light');
-    const body = encodeURIComponent([`Name: ${s.cName || '-'}`, `Mobile: ${s.cPhone || '-'}`, '', s.cMsg || 'Hi Home&Me, I would like a renovation quote.'].join('\n'));
     return {
       themeMode: mode,
       themeIcon: mode === 'dark' ? '☀' : '◐',
@@ -320,24 +297,24 @@ class Component extends DCLogic {
       closeMenu: () => this.setState({ menuOpen: false }),
       year: new Date().getFullYear(),
       portfolio: [
-        { src: 'assets/renders/living-luxe-dark.jpg', room: 'LIVING & DINING', theme: 'MODERN LUXE', alt: 'Dark luxe living and dining room' },
-        { src: 'assets/renders/bedroom-scandinavian.jpg', room: 'MASTER BEDROOM', theme: 'SCANDINAVIAN', alt: 'Scandinavian master bedroom' },
-        { src: 'assets/renders/kitchen-mono.jpg', room: 'KITCHEN', theme: 'MONOCHROME', alt: 'Monochrome kitchen' },
-        { src: 'assets/renders/dining-classic-wood.jpg', room: 'DINING', theme: 'WOOD CLASSIC', alt: 'Wood classic dining' },
-        { src: 'assets/renders/bedroom-luxe-marble.jpg', room: 'MASTER BEDROOM', theme: 'LUXE MARBLE', alt: 'Luxe marble master bedroom' },
-        { src: 'assets/renders/bathroom-stone.jpg', room: 'BATHROOM', theme: 'GREY STONE', alt: 'Grey stone bathroom' },
+        { src: 'assets/images/publication-rights-placeholder.svg', room: 'IMAGE 01', theme: 'RIGHTS CHECK', alt: 'Interior imagery withheld pending publication-rights verification' },
+        { src: 'assets/images/publication-rights-placeholder.svg', room: 'IMAGE 02', theme: 'RIGHTS CHECK', alt: 'Interior imagery withheld pending publication-rights verification' },
+        { src: 'assets/images/publication-rights-placeholder.svg', room: 'IMAGE 03', theme: 'RIGHTS CHECK', alt: 'Interior imagery withheld pending publication-rights verification' },
+        { src: 'assets/images/publication-rights-placeholder.svg', room: 'IMAGE 04', theme: 'RIGHTS CHECK', alt: 'Interior imagery withheld pending publication-rights verification' },
+        { src: 'assets/images/publication-rights-placeholder.svg', room: 'IMAGE 05', theme: 'RIGHTS CHECK', alt: 'Interior imagery withheld pending publication-rights verification' },
+        { src: 'assets/images/publication-rights-placeholder.svg', room: 'IMAGE 06', theme: 'RIGHTS CHECK', alt: 'Interior imagery withheld pending publication-rights verification' },
       ],
       steps: [
-        { n: '01', t: 'YOUR ADDRESS', d: 'Postal code and unit. We confirm the property against the HDB register before anything else.', href: 'PlanIntake.html' },
-        { n: '02', t: 'YOUR FLOOR PLAN', d: 'Submit the plan. It is checked against your address, so the wrong plan never reaches a quote.', href: 'PlanIntake.html' },
-        { n: '03', t: 'SEE IT IN 3D', d: 'Your layout is built with real walls, doors and windows.', href: 'PlanIntake.html' },
-        { n: '04', t: 'CHOOSE YOUR DESIGN', d: 'Theme every room, mix freely, priced line by line.', href: 'PlanIntake.html' },
-        { n: '05', t: 'QUOTE & PAY', d: '5% PayNow deposit locks your slot and your quote. Card also accepted.', href: 'PlanIntake.html' },
+        { n: '01', t: 'YOUR ADDRESS', d: 'Address context and the authorised plan remain separate evidence inputs.', href: 'ProjectJourney.html' },
+        { n: '02', t: 'YOUR FLOOR PLAN', d: 'A released service must keep the upload private and bind analysis to its source.', href: 'ProjectJourney.html' },
+        { n: '03', t: 'REVIEW IT IN 3D', d: 'Confirm scale, closed walls, rooms and every opening before the model is approved.', href: 'ProjectJourney.html' },
+        { n: '04', t: 'CHOOSE YOUR DESIGN', d: 'Explore room themes only after approved geometry and safe layout review.', href: 'ProjectJourney.html' },
+        { n: '05', t: 'REQUEST A FORMAL QUOTE', d: 'A designer-reviewed scope and quote are required. Public checkout and payment are not released.', href: 'ContactUs.dc.html' },
       ],
       reviews: [
-        { quote: 'We saw our actual flat in 3D before signing anything. The quote never changed from what the customizer showed.', who: 'SAMPLE REVIEW — REPLACE WITH GOOGLE REVIEW' },
-        { quote: 'Uploaded our floor plan on a Tuesday, walked through three themes that night, paid the deposit by Friday.', who: 'SAMPLE REVIEW — REPLACE WITH GOOGLE REVIEW' },
-        { quote: 'The itemised pricing ended the quote-comparison nightmare. Every dollar was accounted for.', who: 'SAMPLE REVIEW — REPLACE WITH GOOGLE REVIEW' },
+        { quote: 'A future customer should review the source plan, scale, walls and every opening before approving a version-bound 3D model.', who: 'PROTOTYPE SCENARIO — NOT A CUSTOMER REVIEW' },
+        { quote: 'A future customer should be able to compare design directions without any concept image being presented as the final build.', who: 'PROTOTYPE SCENARIO — NOT A CUSTOMER REVIEW' },
+        { quote: 'A real price should follow confirmed measurements and scope in a formal quote, never a hardcoded interface amount.', who: 'PROTOTYPE SCENARIO — NOT A CUSTOMER REVIEW' },
       ],
       plans: this.plansData().map((p) => ({
         ...p,
@@ -351,11 +328,6 @@ class Component extends DCLogic {
         mark: s.faqOpen === i ? '−' : '+',
         toggle: () => this.setState({ faqOpen: s.faqOpen === i ? -1 : i }),
       })),
-      cName: s.cName, setCName: (e) => this.setState({ cName: e.target.value }),
-      cPhone: s.cPhone, setCPhone: (e) => this.setState({ cPhone: e.target.value }),
-      cMsg: s.cMsg, setCMsg: (e) => this.setState({ cMsg: e.target.value }),
-      mailtoHref: `mailto:homeandme25@gmail.com?subject=${encodeURIComponent('Renovation enquiry — homeandme.sg')}&body=${body}`,
-      waHref: `https://wa.me/6594235227?text=${body}`,
     };
   }
 
@@ -369,11 +341,11 @@ class Component extends DCLogic {
 
   faqData() {
     return [
-      { q: 'What happens after I upload my floor plan?', a: 'The journey verifies your postal district and property type, builds a live 3D model of your layout, and lets you dress every room in a theme. You end with an itemised quote you can lock in with a PayNow deposit — no site visit needed to get real numbers.' },
-      { q: 'When do the AI photoreal renders arrive?', a: 'Our AI rendering engine is in private testing. Once live, every design you pick will be re-rendered photorealistically onto your actual floor plan — same rooms, your windows, your walls. Everything you configure today carries over automatically.' },
-      { q: 'What file formats do you accept for floor plans?', a: 'PDF, JPG or PNG — the colour plan from HDB, your developer brochure, or even a clear photo of the printed plan.' },
-      { q: 'Is the deposit refundable?', a: 'The 5% PayNow deposit reserves your renovation slot and locks your quoted pricing for 60 days. It is fully refundable within 7 days if you change your mind.' },
-      { q: 'Can I mix themes between rooms?', a: 'Yes — every room is themed independently. A Scandinavian master bedroom next to a Modern Luxe living room is normal; pricing follows each room\u2019s theme.' },
+      { q: 'Is public floor-plan upload live?', a: 'No. Upload and analysis stay unavailable while Project Atelier reports the service flags off. When released, any proposal must remain blocked until source, scale, closed topology, rooms and every door/window are reviewed.' },
+      { q: 'When do photoreal renders arrive?', a: 'A deterministic approved-scene renderer is implemented in local staging, not on the public site. A future public render service will remain downstream of geometry and model approval and will be labelled when released.' },
+      { q: 'Which floor-plan formats are planned for the review client?', a: 'When the service is explicitly enabled, the current client is limited to authorised JPG and PNG raster plans. PDF review cannot be approved in this client and remains unavailable.' },
+      { q: 'When can I make a deposit?', a: 'Public deposit and payment collection are not released on this site. Any future payment request must follow an approved quote and provide the exact cancellation and refund terms before you pay.' },
+      { q: 'Can I mix themes between rooms?', a: 'Theme directions can be explored independently by room as a design exercise. This public site does not price those selections; a formal quote requires a confirmed scope.' },
     ];
   }
 }
