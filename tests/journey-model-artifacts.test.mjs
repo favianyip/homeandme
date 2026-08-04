@@ -65,7 +65,7 @@ function dynamicModelFixture() {
     })),
   ];
   const previewArtifactRoles = views.map((_, index) => `preview-angle-${index + 1}`);
-  const previewHashes = views.map((_, index) => `${(index + 1).toString(16)}`.repeat(64));
+  const previewHashes = views.map((_, index) => (index + 1).toString(16).padStart(2, '0').repeat(32));
   const coveredRoomIds = DYNAMIC_ROOMS.map((room) => room.id);
   return {
     modelVersion: 8,

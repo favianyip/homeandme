@@ -131,7 +131,7 @@
     legacyModel.modelVersion = 6;
     legacyModel.modelSha256 = '9'.repeat(64);
     legacyModel.previewArtifactRoles = previewRoles.slice(0, 4);
-    legacyModel.artifactManifest = [...model.artifactManifest.slice(0, 3), ...model.artifactManifest.slice(3, 7)];
+    legacyModel.artifactManifest = legacyModel.artifactManifest.slice(0, 7);
     delete legacyModel.previewViews;
     delete legacyModel.referenceViewCoverage;
     const fixture = document.querySelector('#modelReviewFixture');

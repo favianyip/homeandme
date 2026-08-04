@@ -1458,7 +1458,7 @@ export class ProjectJourneyApp {
       if (artifactSha256 !== descriptor.sha256) throw new Error('SHA-256 does not match the model manifest.');
       const url = URL.createObjectURL(new Blob([bytes], { type: contentType }));
       const image = element('img', { attrs: {
-        alt: `${descriptor.label}, service-rendered reference${descriptor.roomId ? ` for ${descriptor.roomId}` : ''}`,
+        alt: `${descriptor.label}, service-rendered reference${descriptor.roomName ? ` for ${descriptor.roomName}` : ''}`,
         decoding: 'async',
       } });
       try {

@@ -8,7 +8,11 @@ import {
   WorkflowGuardError,
   WorkflowPhase,
 } from '../journey-service-workflow.js';
-import { modelArtifactContract } from '../journey-model-artifacts.js';
+import {
+  DYNAMIC_REFERENCE_VIEW_CONTRACT,
+  DYNAMIC_REFERENCE_VIEW_ORDER,
+  modelArtifactContract,
+} from '../journey-model-artifacts.js';
 import { createRenderRequest } from '../journey-render-contract.js';
 
 const SHA = {
@@ -299,11 +303,11 @@ class FakeProjectApi {
         },
       ],
       referenceViewCoverage: {
-        contract: 'canonical-room-complete-reference-coverage/1',
+        contract: DYNAMIC_REFERENCE_VIEW_CONTRACT,
         authoritativeRoomIds: ['room-1'], coveredRoomIds: ['room-1'],
         uncoveredRoomIds: [], uncoveredRooms: [], complete: true,
         roomViewCount: 1, totalViewCount: 2,
-        orderingContract: 'legacy-primary-roles-then-canonical-room-id/1',
+        orderingContract: DYNAMIC_REFERENCE_VIEW_ORDER,
       },
       artifactManifest: [
         { role: 'model-1-glb', sha256: SHA.glb, byteSize: 4096 },
