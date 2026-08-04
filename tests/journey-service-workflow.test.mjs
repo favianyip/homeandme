@@ -25,8 +25,6 @@ const SHA = {
   scene: '5'.repeat(64),
   preview1: '6'.repeat(64),
   preview2: '7'.repeat(64),
-  preview3: '8'.repeat(64),
-  preview4: '9'.repeat(64),
 };
 
 function memoryStorage() {
@@ -287,15 +285,32 @@ class FakeProjectApi {
       glbArtifactRole: 'model-1-glb', sceneArtifactRole: 'model-1-blend',
       sceneManifestArtifactRole: 'model-1-scene-manifest',
       sceneManifestSha256: SHA.sceneManifest,
-      previewArtifactRoles: ['model-1-p1', 'model-1-p2', 'model-1-p3', 'model-1-p4'],
+      previewArtifactRoles: ['model-1-p1', 'model-1-p2'],
+      previewViews: [
+        {
+          view: 'overview', roomId: null, roomName: null, roomFunction: null,
+          artifactRole: 'model-1-p1',
+          artifactFilename: 'render-angle-1.png', artifactSha256: SHA.preview1,
+        },
+        {
+          view: 'living', roomId: 'room-1', roomName: 'Living', roomFunction: 'living',
+          artifactRole: 'model-1-p2',
+          artifactFilename: 'render-angle-2.png', artifactSha256: SHA.preview2,
+        },
+      ],
+      referenceViewCoverage: {
+        contract: 'canonical-room-complete-reference-coverage/1',
+        authoritativeRoomIds: ['room-1'], coveredRoomIds: ['room-1'],
+        uncoveredRoomIds: [], uncoveredRooms: [], complete: true,
+        roomViewCount: 1, totalViewCount: 2,
+        orderingContract: 'legacy-primary-roles-then-canonical-room-id/1',
+      },
       artifactManifest: [
         { role: 'model-1-glb', sha256: SHA.glb, byteSize: 4096 },
         { role: 'model-1-blend', sha256: SHA.scene, byteSize: 8192 },
         { role: 'model-1-scene-manifest', sha256: SHA.sceneManifest, byteSize: 1024 },
         { role: 'model-1-p1', sha256: SHA.preview1, byteSize: 2048 },
         { role: 'model-1-p2', sha256: SHA.preview2, byteSize: 2048 },
-        { role: 'model-1-p3', sha256: SHA.preview3, byteSize: 2048 },
-        { role: 'model-1-p4', sha256: SHA.preview4, byteSize: 2048 },
       ],
       approvalStatus: this.dashboard.approvedModelVersion === 1 ? 'approved' : 'ready',
       ...this.modelOverrides,

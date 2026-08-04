@@ -1255,6 +1255,9 @@ export class ProjectJourneyApp {
       this.renderStopped({ blockedReason: error.message });
       return;
     }
+    const dynamicCoverage = contract.mode === 'dynamic';
+    const roomViewCount = dynamicCoverage ? contract.coverage.roomViewCount : null;
+    const referenceCount = contract.previews.length;
     this.previewReceipts.model = null;
     const epoch = this.previewEpoch;
     const stageHost = element('div', { className: 'model-stage', id: 'modelStageHost', dataset: { status: 'loading' } }, [
@@ -1265,11 +1268,26 @@ export class ProjectJourneyApp {
     contract.previews.forEach((descriptor, index) => {
       const card = element('article', {
         className: 'model-reference-card',
-        dataset: { status: 'loading', view: descriptor.viewId },
+        dataset: {
+          status: 'loading',
+          view: descriptor.viewId,
+          kind: dynamicCoverage
+            ? (descriptor.roomId === null ? 'overview' : 'room')
+            : (descriptor.viewId === 'overview' ? 'overview' : 'legacy'),
+          roomFunction: dynamicCoverage ? (descriptor.roomFunction || 'none') : 'legacy',
+        },
       }, [
         element('header', {}, [
           element('span', { className: 'micro-label', text: `Reference ${String(index + 1).padStart(2, '0')}` }),
           element('strong', { text: descriptor.label }),
+          element('span', {
+            className: 'model-reference-room',
+            text: dynamicCoverage
+              ? (descriptor.roomId === null
+                ? 'Whole unit · no room or function binding'
+                : `Room ID · ${descriptor.roomId} · Function · ${descriptor.roomFunction}`)
+              : 'Legacy view · no canonical room binding',
+          }),
         ]),
         element('div', { className: 'model-reference-media' }, [
           element('div', { className: 'processing-line' }, element('span')),
@@ -1291,18 +1309,37 @@ export class ProjectJourneyApp {
       element('span', { className: 'model-artifact-count', text: `0/${contract.reviewArtifacts.length}` }),
       element('div', {}, [
         element('strong', { className: 'model-artifact-title', text: 'Verifying authoritative review artifacts' }),
-        element('small', { text: 'Approval remains locked until the GLB and all four fixed server previews match this model manifest.' }),
+        element('small', { text: dynamicCoverage
+          ? `Approval remains locked until the GLB and all ${referenceCount} ordered server PNGs match this model manifest.`
+          : 'Legacy artifacts remain inspectable, but approval requires a regenerated complete-room coverage ledger.' }),
+      ]),
+    ]);
+    const coverageLedger = element('div', {
+      className: 'model-coverage-ledger',
+      dataset: { complete: dynamicCoverage },
+    }, [
+      element('span', { className: 'coverage-ledger-mark', text: dynamicCoverage ? '✓' : '!' }),
+      element('div', {}, [
+        element('strong', { text: dynamicCoverage
+          ? `${roomViewCount}/${roomViewCount} canonical rooms represented`
+          : 'Legacy fixed-angle model · room-complete coverage not declared' }),
+        element('small', { text: dynamicCoverage
+          ? `One ordered PNG per canonical room · uncovered room IDs: [] · ${contract.coverage.orderingContract}`
+          : 'The older response has no canonical-room ledger, so its uncovered room count is unknown.' }),
       ]),
     ]);
     const referenceBoard = element('section', { className: 'model-reference-board', attrs: { 'aria-labelledby': 'modelReferenceTitle' } }, [
       element('header', { className: 'model-reference-head' }, [
         element('div', {}, [
-          element('span', { className: 'micro-label', text: 'Fixed reference angles' }),
-          element('h4', { id: 'modelReferenceTitle', text: 'Cross-check four fixed angles' }),
+          element('span', { className: 'micro-label', text: dynamicCoverage ? 'Canonical coverage set' : 'Legacy reference angles' }),
+          element('h4', { id: 'modelReferenceTitle', text: dynamicCoverage
+            ? `Cross-check the whole unit and ${roomViewCount} rooms`
+            : 'Cross-check four fixed angles' }),
         ]),
-        element('span', { className: 'reference-origin', text: 'Review aids · not proof' }),
+        element('span', { className: 'reference-origin', text: dynamicCoverage ? 'Review-view ledger complete' : 'Review aids · not proof' }),
       ]),
       referenceGrid,
+      coverageLedger,
     ]);
     const confirm = element('input', { type: 'checkbox', disabled: true });
     const approve = button('Approve this exact model', 'approve-model', { disabled: true });
@@ -1316,9 +1353,9 @@ export class ProjectJourneyApp {
       });
       $('.model-artifact-count', evidenceSummary).textContent = `${readiness.verifiedCount}/${readiness.requiredCount}`;
       $('.model-artifact-title', evidenceSummary).textContent = readiness.ready
-        ? 'All visual reference artifacts verified'
+        ? (dynamicCoverage ? 'All visual reference artifacts verified' : 'Legacy artifacts verified · regeneration required')
         : 'Verifying authoritative review artifacts';
-      evidenceSummary.dataset.ready = String(readiness.ready);
+      evidenceSummary.dataset.ready = String(readiness.ready && dynamicCoverage);
       confirm.disabled = !readiness.canConfirm;
       approve.disabled = !readiness.canApprove;
     };
@@ -1337,11 +1374,17 @@ export class ProjectJourneyApp {
     approve.addEventListener('click', () => this.approveModel(confirm));
     this.workbench.replaceChildren(element('div', { className: 'section-panel model-review-panel' }, [
       element('h3', { className: 'panel-title', text: 'Inspect the whole unit before any image is rendered' }),
-      element('p', { className: 'panel-copy', text: `Model v${model.modelVersion} · ${shortHash(model.modelSha256)} · material ${model.materialVersion}. The interactive viewer and four fixed review aids come only from this version-bound service output.` }),
+      element('p', { className: 'panel-copy', text: dynamicCoverage
+        ? `Model v${model.modelVersion} · ${shortHash(model.modelSha256)} · material ${model.materialVersion}. The interactive viewer and ${referenceCount} ordered references come only from this version-bound service output; its ledger covers ${roomViewCount}/${roomViewCount} canonical rooms.`
+        : `Model v${model.modelVersion} · ${shortHash(model.modelSha256)} · material ${model.materialVersion}. The interactive viewer and four legacy review aids come only from this version-bound service output.` }),
       element('div', { className: 'model-proof-layout' }, [stageHost, referenceBoard]),
       evidenceSummary,
-      element('p', { className: 'model-proof-boundary', text: 'These four views can help find a missing wall, door or window before approval. They do not cover every room or prove the model matches the as-built flat; site verification remains required.' }),
-      element('label', { className: 'consent' }, [confirm, element('span', { text: 'I inspected the interactive model and all four fixed reference angles, including the shell, opening voids and furnishing layout, and confirm the exact model version and hash shown.' })]),
+      element('p', { className: 'model-proof-boundary', text: dynamicCoverage
+        ? `The service declares one reference for every canonical room in this model (${roomViewCount} covered, 0 uncovered). That is review coverage—not proof of detector accuracy, hidden construction, dimensions or the as-built flat; site verification remains required.`
+        : 'These four legacy views can help find a missing wall, door or window, but they do not declare coverage for every canonical room or prove the as-built flat; site verification remains required.' }),
+      element('label', { className: 'consent' }, [confirm, element('span', { text: dynamicCoverage
+        ? `I inspected the interactive model, whole-unit overview and all ${roomViewCount} canonical-room references, including shell, opening voids and furnishing layout, and confirm the exact model version and hash shown.`
+        : 'I inspected the interactive model and all four legacy reference angles, including the shell, opening voids and furnishing layout, and confirm the exact model version and hash shown.' })]),
       element('div', { className: 'actions' }, approve),
     ]));
     this.previewReceipts.model = {
@@ -1415,7 +1458,7 @@ export class ProjectJourneyApp {
       if (artifactSha256 !== descriptor.sha256) throw new Error('SHA-256 does not match the model manifest.');
       const url = URL.createObjectURL(new Blob([bytes], { type: contentType }));
       const image = element('img', { attrs: {
-        alt: `${descriptor.label}, fixed service-rendered reference`,
+        alt: `${descriptor.label}, service-rendered reference${descriptor.roomId ? ` for ${descriptor.roomId}` : ''}`,
         decoding: 'async',
       } });
       try {
@@ -1465,7 +1508,13 @@ export class ProjectJourneyApp {
       return;
     }
     const readiness = modelReviewApprovalState({ contract, receipt, confirmed: confirmation.checked, busy: this.busy });
-    if (!readiness.canApprove) { this.error = new Error('Verify and inspect the exact private GLB and all four fixed reference views before approval.'); this.render(); return; }
+    if (!readiness.canApprove) {
+      this.error = new Error(contract.mode === 'dynamic'
+        ? `Verify and inspect the exact private GLB and all ${contract.previews.length} manifest-bound reference views before approval.`
+        : 'This legacy model can be inspected, but it must be regenerated with complete canonical-room coverage before approval.');
+      this.render();
+      return;
+    }
     await this.execute(async () => this.setState(await this.workflow.approveModel({
       modelVersion: model.modelVersion,
       modelSha256: model.modelSha256,
