@@ -7,6 +7,6 @@ window.HNM_CONFIG = Object.freeze({
     AI_RENDERING_ENABLED: false,
     QUOTATION_ENABLED: false,
     PAYMENTS_ENABLED: false,
-    DEMO_FALLBACK_ENABLED: true,
+    DEMO_FALLBACK_ENABLED: false,
   }),
 });

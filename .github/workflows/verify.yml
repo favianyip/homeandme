@@ -22,23 +22,57 @@ jobs:
         run: |
           node --check config.js
           node --check journey-api.js
+          node --check journey-intake-policy.js
+          node --check journey-geometry-ops.js
+          node --check journey-service-workflow.js
+          node --check journey-topology-gate.js
+          node --check project-journey-model.js
+          node --check project-journey.js
+          node --check assistant-llm.js
+          node --check editor.js
           node --check three-d-stage.js
-          node --test tests/journey-api.test.mjs
+          node --test tests/*.test.mjs
       - name: Inline module syntax
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import re, subprocess
-          for name in ('Journey.html', 'MyProject.dc.html'):
+          targets = tuple((name, r'<script\b(?=[^>]*\bdata-dc-script\b)[^>]*>(.*?)</script\s*>', '.js') for name in (
+              'Home AI.dc.html',
+              'AboutUs.dc.html',
+              'FaqAndHelp.dc.html',
+              'Home Redesign.dc.html',
+              'Legal.dc.html',
+          ))
+          for name, pattern, suffix in targets:
               source = Path(name).read_text()
-              modules = re.findall(r'<script\b[^>]*\btype\s*=\s*["\x27]module["\x27][^>]*>(.*?)</script\s*>', source, re.I | re.S)
-              if not modules:
-                  raise RuntimeError(f'No inline module found in {name}')
-              for index, module in enumerate(modules):
-                  target = Path('/tmp') / f'{name.replace(".", "-")}-{index}.mjs'
-                  target.write_text(module)
+              scripts = re.findall(pattern, source, re.I | re.S)
+              if not scripts:
+                  raise RuntimeError(f'No expected inline script found in {name}')
+              for index, script in enumerate(scripts):
+                  target = Path('/tmp') / f'{name.replace(".", "-")}-{index}{suffix}'
+                  target.write_text(script)
                   subprocess.run(['node', '--check', str(target)], check=True)
           PY
+      - name: Correction source browser lifecycle
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/hnm-browser-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          browser_bin="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          test -n "$browser_bin"
+          server_ready=false
+          for attempt in {1..20}; do
+            if curl -fsS http://127.0.0.1:4173/tests/project-journey-lifecycle.browser.html >/dev/null; then
+              server_ready=true
+              break
+            fi
+            sleep 0.1
+          done
+          test "$server_ready" = true
+          "$browser_bin" --headless --no-sandbox --disable-gpu --virtual-time-budget=3000 --dump-dom \
+            http://127.0.0.1:4173/tests/project-journey-lifecycle.browser.html >/tmp/hnm-browser-result.html
+          grep -q 'data-result="pass"' /tmp/hnm-browser-result.html
       - name: Reject backend files from public Pages source
         run: |
           if git ls-files | grep -E '\.(aspx|ashx|asmx|cs|config)$|^App_Code/|^App_Data/' ; then

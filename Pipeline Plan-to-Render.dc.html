@@ -1,103 +1,27 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta http-equiv="refresh" content="0; url=ProjectJourney.html">
+  <link rel="canonical" href="ProjectJourney.html">
+  <title>Research route retired — Home &amp; Me</title>
+  <style>
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; color: #172124; background: #f2efe7; font-family: "Trebuchet MS", sans-serif; }
+    main { width: min(650px, 100%); padding: clamp(30px, 7vw, 62px); border: 1px solid rgba(23,33,36,.16); background: #fbfaf6; }
+    p:first-child { color: #4f7780; font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { font: 400 clamp(2.3rem, 7vw, 4.7rem)/.96 Georgia, serif; letter-spacing: -.04em; }
+    .copy { color: #66706c; line-height: 1.7; }
+    a { min-height: 46px; display: inline-flex; align-items: center; margin-top: 20px; padding: 12px 18px; color: white; background: #172124; text-decoration: none; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
+  </style>
 </head>
-<body>
-<x-dc>
-<helmet>
-<title>Home &amp; Me — Plan → 3D → Render Pipeline</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-* { box-sizing: border-box; }
-body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Arial, sans-serif; }
-a { color: #5a7e8a; text-decoration: none; }
-a:hover { color: #3f5d67; }
-</style>
-</helmet>
-<div data-screen-label="Pipeline map" style="max-width: 1240px; margin: 0 auto; padding: clamp(32px, 5vw, 56px) clamp(18px, 4vw, 40px) 72px;">
-  <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 12px;">SYSTEM BRAINSTORM</p>
-  <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 48px); margin: 0 0 14px; line-height: 1.1;">Floor plan → detection → 3D sketch → render</h1>
-  <p style="margin: 0 0 36px; font-size: 16.5px; line-height: 1.7; color: rgba(26,32,35,0.72); max-width: 72ch; text-wrap: pretty;">Six stages. One JSON contract in the middle that every stage reads and writes — detection improves, sketching improves, rendering improves, independently. Chips show what already runs on the platform today.</p>
-
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin-bottom: 44px;">
-    <div style="background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 10px; padding: 22px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;"><span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px; color: rgba(26,32,35,0.45);">01 · INGEST &amp; NORMALIZE</span><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; background: #5a7e8a; color: #fff; border-radius: 999px; padding: 4px 11px;">LIVE</span></div>
-      <p style="margin: 0 0 10px; font-size: 15px; line-height: 1.6;">Accept a phone photo, PDF page or scan. Fix rotation, deskew off the dominant wall angle, adaptive threshold, despeckle.</p>
-      <p style="margin: 0; font-size: 13.5px; line-height: 1.6; color: rgba(26,32,35,0.6);">On platform: PlanIntake upload + preprocessing in journey-vision. Add later: PDF page picker, multi-page sale packs.</p>
-    </div>
-    <div style="background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 10px; padding: 22px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;"><span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px; color: rgba(26,32,35,0.45);">02 · DETECT INK</span><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; background: #5a7e8a; color: #fff; border-radius: 999px; padding: 4px 11px;">LIVE</span></div>
-      <p style="margin: 0 0 10px; font-size: 15px; line-height: 1.6;">Cascade, cheapest first: classical CV (threshold + morphology) → learned wall classifier (AUC 0.89) on ambiguous sheets → LLM vision as referee for semantics.</p>
-      <p style="margin: 0; font-size: 13.5px; line-height: 1.6; color: rgba(26,32,35,0.6);">Walls, room regions (flood fill), doors (gap + swing arc), windows (double-line — the known weak spot). Later: proper segmentation net server-side, trained on the corpus.</p>
-    </div>
-    <div style="background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 10px; padding: 22px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;"><span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px; color: rgba(26,32,35,0.45);">03 · SCALE &amp; NAME</span><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; background: #5a7e8a; color: #fff; border-radius: 999px; padding: 4px 11px;">LIVE</span></div>
-      <p style="margin: 0 0 10px; font-size: 15px; line-height: 1.6;">Read printed dimensions (digit OCR) and the HDB title-block code (445 = New Flat, 452 = Model A…), reconcile both against the archetype library.</p>
-      <p style="margin: 0; font-size: 13.5px; line-height: 1.6; color: rgba(26,32,35,0.6);">Room naming: 12-feature classifier + LLM cross-check. Fallbacks, in order: door-width prior (~0.85 m) → user two-click calibration.</p>
-    </div>
-    <div style="background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 10px; padding: 22px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;"><span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px; color: rgba(26,32,35,0.45);">04 · VECTORIZE → CONTRACT</span><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid #5a7e8a; color: #5a7e8a; border-radius: 999px; padding: 3px 10px;">NEXT</span></div>
-      <p style="margin: 0 0 10px; font-size: 15px; line-height: 1.6;">Raster wall mask → centerlines → snap to orthogonal polylines → room polygons with shared edges. Output is the plan JSON below — the single contract everything downstream consumes.</p>
-      <p style="margin: 0; font-size: 13.5px; line-height: 1.6; color: rgba(26,32,35,0.6);">Snap exists today; shared-edge cleanup and topology validation (every room closed, every opening on a wall) are the next build.</p>
-    </div>
-    <div style="background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 10px; padding: 22px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;"><span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px; color: rgba(26,32,35,0.45);">05 · 3D SKETCH</span><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; background: #5a7e8a; color: #fff; border-radius: 999px; padding: 4px 11px;">LIVE</span></div>
-      <p style="margin: 0 0 10px; font-size: 15px; line-height: 1.6;">Extrude walls 1:1 from the traced ink to 2.6 m, cut door and window holes, lay floor slabs per room. Orbit freely in the Studio.</p>
-      <p style="margin: 0; font-size: 13.5px; line-height: 1.6; color: rgba(26,32,35,0.6);">Customer confirms here — drag a wall, rename a room — before anything renders. Confirmed traces feed the corpus (training loop).</p>
-    </div>
-    <div style="background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 10px; padding: 22px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;"><span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px; color: rgba(26,32,35,0.45);">06 · RENDER HANDOFF</span><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid #5a7e8a; color: #5a7e8a; border-radius: 999px; padding: 3px 10px;">NEXT</span></div>
-      <p style="margin: 0 0 10px; font-size: 15px; line-height: 1.6;">Export the confirmed scene as glTF/GLB + the contract JSON + a theme id, push to a render lane (three options, right below).</p>
-      <p style="margin: 0; font-size: 13.5px; line-height: 1.6; color: rgba(26,32,35,0.6);">Geometry stays the ground truth — whichever renderer runs, it renders <em>this</em> flat.</p>
-    </div>
-  </div>
-
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; align-items: start; margin-bottom: 44px;">
-    <div style="background: #1a2023; color: #f6f4ef; border-radius: 10px; padding: 22px 24px;">
-      <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px; color: #8fb0bb; margin: 0 0 14px;">THE CONTRACT — plan.json</p>
-      <pre style="margin: 0; font: 12.5px/1.7 ui-monospace, Menlo, Consolas, monospace; color: rgba(246,244,239,0.88); white-space: pre-wrap; overflow-wrap: anywhere;">{
-  "units": "m",
-  "source": { "kind": "hdb", "code": "445", "confidence": 0.92 },
-  "scale": { "px_per_m": 41.2, "method": "ocr+archetype" },
-  "walls": [ { "a": [0,0], "b": [3.2,0], "t": 0.15, "h": 2.6 } ],
-  "openings": [ { "wall": 0, "type": "door", "at": 1.1, "w": 0.85 } ],
-  "rooms": [ { "label": "LIVING", "poly": [[0,0],[3.2,0],[3.2,4.1],[0,4.1]], "area": 13.1 } ],
-  "theme": "scandi-01",
-  "cameras": [ "living-corner", "kitchen-wide" ]
-}</pre>
-      <p style="margin: 14px 0 0; font-size: 13px; line-height: 1.6; color: rgba(246,244,239,0.55);">Versioned, tiny, human-readable. Detection writes it, the Studio edits it, renderers and the quote engine only ever read it.</p>
-    </div>
-    <div style="display: grid; gap: 14px;">
-      <div style="background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 10px; padding: 20px 22px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.4px;">RENDER LANE A — INTERACTIVE</span><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; background: #5a7e8a; color: #fff; border-radius: 999px; padding: 4px 11px;">LIVE</span></div>
-        <p style="margin: 0; font-size: 14px; line-height: 1.65; color: rgba(26,32,35,0.72);">three.js materials + theme packs in the Studio. Instant, free, orbitable — this is the sales floor. Every other lane is an upgrade on top of it.</p>
-      </div>
-      <div style="background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 10px; padding: 20px 22px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.4px;">RENDER LANE B — PHOTOREAL CGI</span><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid rgba(26,32,35,0.35); color: rgba(26,32,35,0.55); border-radius: 999px; padding: 3px 10px;">LATER</span></div>
-        <p style="margin: 0; font-size: 14px; line-height: 1.65; color: rgba(26,32,35,0.72);">Headless Blender/Cycles on a server queue eats the glTF, applies a material library, renders the camera list. True lighting; minutes per shot; predictable. Good for the final proposal PDF.</p>
-      </div>
-      <div style="background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 10px; padding: 20px 22px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.4px;">RENDER LANE C — AI RENDER</span><span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.6px; border: 1px solid #5a7e8a; color: #5a7e8a; border-radius: 999px; padding: 3px 10px;">NEXT</span></div>
-        <p style="margin: 0; font-size: 14px; line-height: 1.65; color: rgba(26,32,35,0.72);">Capture the Studio viewport + its depth map, run image-to-image with structure control (depth/edge-guided diffusion) per theme. Seconds per shot — this is the homepage's "photoreal previews of <em>your</em> flat" promise. Geometry from the contract keeps it honest; needs a GPU API server-side.</p>
-      </div>
-    </div>
-  </div>
-
-  <div style="background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 10px; padding: 22px 24px; margin-bottom: 16px;">
-    <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.6px; color: #5a7e8a; margin: 0 0 14px;">WHERE IT PLUGS INTO THE PLATFORM</p>
-    <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 14px;">
-      <a href="Assistant.dc.html" style="border: 1px solid rgba(90,126,138,0.5); border-radius: 999px; padding: 9px 16px;">Assistant chat — attach plan</a><span style="color: rgba(26,32,35,0.4);">→</span>
-      <a href="PlanIntake.html" style="border: 1px solid rgba(90,126,138,0.5); border-radius: 999px; padding: 9px 16px;">PlanIntake — verify + upload</a><span style="color: rgba(26,32,35,0.4);">→</span>
-      <a href="PlanDetect.html" style="border: 1px solid rgba(90,126,138,0.5); border-radius: 999px; padding: 9px 16px;">PlanDetect — stages 01–04</a><span style="color: rgba(26,32,35,0.4);">→</span>
-      <a href="Studio.html" style="border: 1px solid rgba(90,126,138,0.5); border-radius: 999px; padding: 9px 16px;">Studio — sketch, confirm, themes</a><span style="color: rgba(26,32,35,0.4);">→</span>
-      <span style="border: 1px dashed rgba(26,32,35,0.35); color: rgba(26,32,35,0.6); border-radius: 999px; padding: 9px 16px;">/api/render — queue (future)</span>
-    </div>
-    <p style="margin: 16px 0 0; font-size: 13.5px; line-height: 1.65; color: rgba(26,32,35,0.6); max-width: 80ch;">Today the whole pipeline runs in the browser. At launch, stages 02–04 and both heavy render lanes move behind your server (/api/detect, /api/render) — keys and models server-side — while the Studio stays client-side. Every customer-confirmed trace flows back into the corpus, so detection gets better with every job.</p>
-  </div>
-</div>
-</x-dc>
+<body data-retired-route="true">
+  <main>
+    <p>Home &amp; Me research-route notice</p>
+    <h1>This research page is retired.</h1>
+    <p class="copy">Internal research notes do not describe a released customer service and are not published as customer evidence. Project Atelier is the authoritative service-status path.</p>
+    <a href="ProjectJourney.html">Open Project Atelier</a>
+  </main>
 </body>
 </html>

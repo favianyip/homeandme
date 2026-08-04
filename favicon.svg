@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Home and Me">
+  <rect width="64" height="64" rx="12" fill="#172124"/>
+  <path d="M14 45V24l18-13 18 13v21h-8V28L32 20l-10 8v17z" fill="#f2efe7"/>
+  <path d="M27 45V33h10v12z" fill="#5a7e8a"/>
+</svg>

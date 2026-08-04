@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Home & Me Project Atelier shows the planned approval-gated floor-plan journey and current service status. Public capabilities remain off unless explicitly enabled by an authenticated service.">
+  <title>Home &amp; Me — Project Atelier</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+      "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+      "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+      "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js",
+      "three/addons/loaders/GLTFLoader.js": "https://unpkg.com/three@0.184.0/examples/jsm/loaders/GLTFLoader.js"
+    },
+    "integrity": {
+      "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+      "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+      "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+      "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+      "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ",
+      "https://unpkg.com/three@0.184.0/examples/jsm/loaders/GLTFLoader.js": "sha384-3CnKaFWE2emo2DOUQi/yFm4SMemUgSZ9IAJe/V2pyJTw9KXWYSmR0MiX/7RoPyiJ"
+    }
+  }
+  </script>
+  <link rel="stylesheet" href="assets/css/project-journey.css">
+  <script src="config.js"></script>
+  <script src="three-d-stage.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#workbench">Skip to current project step</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="Home AI.dc.html" aria-label="Home and Me home">
+        <img src="assets/images/hnm-logo.png" alt="Home &amp; Me">
+      </a>
+      <span class="header-rule" aria-hidden="true"></span>
+      <span class="product-name">Project atelier / service status</span>
+      <div class="header-meta">
+        <span class="project-ref" id="projectRef">No project opened</span>
+        <span class="runtime-badge" id="runtimeBadge" data-live="false">Checking service</span>
+        <a class="exit-link" href="Home AI.dc.html">Exit atelier ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="pageTitle">
+      <div>
+        <p class="eyebrow">Planned path · source review → correction → 3D → render</p>
+        <h1 id="pageTitle">Your home,<br><em>one verified line</em><br>at a time.</h1>
+      </div>
+      <aside class="hero-note">
+        <span class="truth-mark">Release standard 01</span>
+        <div>A floor plan begins as evidence—not certainty. The service must close every wall, host every door and window, confirm scale and vertical measurements, then bind furniture and rendering to the approved revision.</div>
+      </aside>
+    </section>
+
+    <section class="journey-shell" aria-label="Home and Me project workflow">
+      <nav class="journey-rail" aria-label="Project stages">
+        <div class="rail-head">
+          <span class="micro-label">Project sequence</span>
+          <span class="rail-scroll-hint">Swipe stages →</span>
+          <div class="rail-progress" aria-hidden="true"><span id="railProgress"></span></div>
+        </div>
+        <ol class="act-list" id="workflowRail"></ol>
+      </nav>
+
+      <section class="work-area" aria-labelledby="stageTitle">
+        <header class="work-head" id="workHead" data-index="01">
+          <p class="eyebrow" id="stageEyebrow">Service status</p>
+          <h2 id="stageTitle">Public workflow capabilities are currently gated</h2>
+          <p class="stage-copy" id="stageCopy">No upload, detection, model, render, quotation or payment action is available unless the authenticated service explicitly enables it.</p>
+        </header>
+
+        <div class="blocker" id="blocker" data-visible="false" role="status" aria-live="polite">
+          <span class="blocker-mark" aria-hidden="true">◇</span>
+          <span id="blockerText"></span>
+        </div>
+
+        <div class="workbench" id="workbench" aria-live="polite"></div>
+      </section>
+
+      <aside class="evidence-rail" aria-label="Release evidence">
+        <div class="evidence-head">
+          <h3>Evidence ledger</h3>
+          <span class="micro-label">Release truth</span>
+        </div>
+        <div class="evidence-list" id="evidenceList"></div>
+        <div class="promise">
+          <b>Accuracy promise</b><br>
+          95–99% real-life fidelity is not claimed from a brochure plan. It requires a rights-cleared plan, corrected geometry, confirmed verticals, an as-built/site survey, approved assets and held-out acceptance evidence.
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="page-foot">
+    <div>Home &amp; Me project evidence remains version-bound. Browser previews are never the authority.</div>
+    <span>Concept visualisation ≠ as-built survey ≠ renovation approval</span>
+  </footer>
+
+  <dialog class="dialog" id="editorDialog" aria-labelledby="editorDialogTitle">
+    <div class="dialog-head">
+      <strong id="editorDialogTitle">Geometry correction desk</strong>
+      <span>Submitting edits creates a new server revision. Approval still follows.</span>
+      <button class="dialog-close" id="editorClose" type="button" aria-label="Close correction desk">×</button>
+    </div>
+    <iframe id="editorFrame" title="Floor-plan geometry correction editor"></iframe>
+  </dialog>
+
+  <script type="module" src="project-journey.js"></script>
+</body>
+</html>

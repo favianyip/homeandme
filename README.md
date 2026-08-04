@@ -4,28 +4,29 @@ Sanitized static deployment source for [homeandme.sg](https://homeandme.sg). Bac
 
 ## Runtime modes
 
-- The committed `config.js` keeps service-backed AI/payment features disabled on the public site until production gates pass.
-- `DEMO_FALLBACK_ENABLED` preserves the clearly labelled visual journey.
-- Environment-specific staging may provide a private API URL and enable tested flags.
+- The committed `config.js` has no API URL and keeps analysis, geometry review, 3D, rendering, quotation, payment and demo fallback disabled.
+- `ProjectJourney.html` therefore renders a static, truthful service-status page. It cannot upload, analyse, correct, model, quote or accept payment in the public configuration.
+- A controlled environment may provide a private HTTPS API URL and enable tested flags only after the corresponding backend contract and dependency gates pass.
+- Capability flags are dependency-ordered: analysis → geometry review → live 3D → rendering → quotation → payment. Enabling an earlier stage never exposes later stages implicitly.
+- Retired browser-only intake, detector, Studio, account and checkout routes redirect to Project Atelier and cannot create local success or approval state.
 
-## Implemented staging journey
+## Current proof boundary
 
-A controlled local staging test has passed:
+The repository contains deterministic geometry, topology, model, render-request and service-workflow contract tests. Those tests prove fail-closed state transitions and immutable bindings in code; they are not evidence that a public customer service or a complete renovation workflow is deployed.
 
-```text
-floor-plan upload → analysis → geometry approval → measured layout → GLB
-→ four render views → design approval → quote approval → sandbox checkout
-→ verified webhook → receipt → paid dashboard → browser reload
-```
+No end-to-end held-out real HDB floor plan has yet passed the full public path from authorised source through exact wall/door/window correction, scale and vertical review, approved layout, decoded model, deterministic render and final human acceptance. The site must not claim complete detection, measured 3D, photoreal output, live pricing, checkout, payment or contractor fulfilment until that evidence exists and the relevant service flags are explicitly enabled.
 
-See `docs/HERMES_CURRENT_STATUS.md` and `docs/END_TO_END_TEST_REPORT.md` for exact scope and evidence. This is not yet a production-ready arbitrary-floor-plan or photoreal-render release.
+Backend proof, customer data, credentials and private research must remain outside the public Pages source.
 
 ## Frontend checks
 
 ```bash
 node --check journey-api.js
+node --check journey-service-workflow.js
+node --check project-journey-model.js
+node --check project-journey.js
 node --check three-d-stage.js
-node --test tests/journey-api.test.mjs
+node --test tests/*.test.mjs
 ```
 
 The private legacy ASP.NET archive is maintained separately and must never be published through GitHub Pages.
