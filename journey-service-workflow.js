@@ -817,7 +817,7 @@ export class JourneyServiceWorkflow {
         receipt: artifactReceipt,
         confirmed: true,
       });
-      guard(artifactContract.ok && artifactReadiness.canApprove, 'UNVERIFIED_MODEL_ARTIFACTS', 'Approval requires verified receipts for the exact GLB and all four model reference renders.');
+      guard(artifactContract.ok && artifactReadiness.canApprove, 'UNVERIFIED_MODEL_ARTIFACTS', 'Approval requires verified receipts for the exact GLB and every manifest-bound canonical-room reference render.');
       guard(typeof this.api.approveModel === 'function', 'API_CONTRACT_MISSING', 'The service client has no hash-bound model approval method.');
       const approved = await this.api.approveModel(modelVersion, modelSha256, reviewerActorId);
       guard(approved?.state === 'MODEL_APPROVED' && approved.approvedModelVersion === modelVersion, 'INVALID_TRANSITION', 'Model approval did not bind the current model.');

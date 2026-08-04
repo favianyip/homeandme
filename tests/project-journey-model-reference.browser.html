@@ -36,12 +36,28 @@
       revokeObjectUrl(url);
     };
 
-    const hashes = ['b', 'c', 'd'].map((value) => value.repeat(64));
-    const previewRoles = ['preview-overview', 'preview-living', 'preview-bedroom', 'preview-kitchen'];
-    const previewNames = ['OVERVIEW', 'LIVING', 'BEDROOM', 'KITCHEN'];
+    const hashes = ['b'.repeat(64), 'c'.repeat(64), '697d5b51e48de5281b97f8715e66eab348286eb54c0fd6378094f57d1cc9f406'];
+    // Mirrors the rights-safe measured eight-room backend fixture's view/room shape.
+    // Every PNG below is generated in this browser; no backend or user image is copied.
+    const roomViews = [
+      { view: 'living', roomId: 'room-living', roomName: 'Living & Dining <East>', roomFunction: 'living' },
+      { view: 'bedroom', roomId: 'room-bedroom-2', roomName: 'Bedroom 2', roomFunction: 'bedroom' },
+      { view: 'kitchen', roomId: 'room-kitchen', roomName: 'Kitchen', roomFunction: 'kitchen' },
+      { view: 'room-room-bath-common', roomId: 'room-bath-common', roomName: 'Common Bathroom', roomFunction: 'bathroom' },
+      { view: 'room-room-bath-master', roomId: 'room-bath-master', roomName: 'Master Bathroom', roomFunction: 'bathroom' },
+      { view: 'room-room-master-bedroom', roomId: 'room-master-bedroom', roomName: 'Master Bedroom', roomFunction: 'bedroom' },
+      { view: 'room-room-service-yard', roomId: 'room-service-yard', roomName: 'Service Yard', roomFunction: 'service_yard' },
+      { view: 'room-room-store', roomId: 'room-store', roomName: 'Household Shelter Store', roomFunction: 'store' },
+    ];
+    const viewSpecs = [{ view: 'overview', roomId: null, roomName: null, roomFunction: null }, ...roomViews];
+    const previewRoles = viewSpecs.map((_, index) => `preview-angle-${index + 1}`);
+    const previewNames = viewSpecs.map((view) => view.view.toUpperCase());
     const palettes = [
       ['#dce7e6', '#315f68'], ['#e9dfd2', '#8c694e'],
       ['#e5dfeb', '#655a75'], ['#e3e7dc', '#5f7259'],
+      ['#e8ddd8', '#8d594c'], ['#dbe3e8', '#4f6f82'],
+      ['#e8e4d6', '#84733f'], ['#dce5df', '#4f7663'],
+      ['#e6dfd9', '#765e4f'],
     ];
     const sha256 = async (bytes) => [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))]
       .map((value) => value.toString(16).padStart(2, '0')).join('');
@@ -84,6 +100,23 @@
       sceneManifestArtifactRole: 'approved-scene-manifest',
       sceneManifestSha256: hashes[2],
       previewArtifactRoles: previewRoles,
+      previewViews: viewSpecs.map((view, index) => ({
+        ...view,
+        artifactRole: previewRoles[index],
+        artifactFilename: `render-angle-${index + 1}.png`,
+        artifactSha256: previewPayloads.get(previewRoles[index]).sha256,
+      })),
+      referenceViewCoverage: {
+        contract: 'canonical-room-complete-reference-coverage/1',
+        authoritativeRoomIds: roomViews.map((view) => view.roomId).sort(),
+        coveredRoomIds: roomViews.map((view) => view.roomId),
+        uncoveredRoomIds: [],
+        uncoveredRooms: [],
+        complete: true,
+        roomViewCount: roomViews.length,
+        totalViewCount: viewSpecs.length,
+        orderingContract: 'legacy-primary-roles-then-canonical-room-id/1',
+      },
       artifactManifest: [
         { role: 'approved-model-glb', sha256: hashes[0], byteSize: 24000 },
         { role: 'approved-scene-blend', sha256: hashes[1], byteSize: 64000 },
@@ -94,6 +127,13 @@
         }),
       ],
     };
+    const legacyModel = structuredClone(model);
+    legacyModel.modelVersion = 6;
+    legacyModel.modelSha256 = '9'.repeat(64);
+    legacyModel.previewArtifactRoles = previewRoles.slice(0, 4);
+    legacyModel.artifactManifest = legacyModel.artifactManifest.slice(0, 7);
+    delete legacyModel.previewViews;
+    delete legacyModel.referenceViewCoverage;
     const fixture = document.querySelector('#modelReviewFixture');
     fixture.id = 'workbench';
     const app = Object.create(ProjectJourneyApp.prototype);
@@ -139,9 +179,9 @@
       const approval = document.querySelector('[data-action="approve-model"]');
       const reviewIsSettled = () => {
         const cards = [...document.querySelectorAll('.model-reference-card')];
-        return cards.length === 4
+        return cards.length === 9
           && cards.every((card) => card.dataset.status === 'verified')
-          && document.querySelector('.model-artifact-count')?.textContent === '5/5'
+          && document.querySelector('.model-artifact-count')?.textContent === '10/10'
           && confirmation?.disabled === false
           && approval?.disabled === true;
       };
@@ -158,16 +198,47 @@
         const statuses = cards.map((card) => card.dataset.status || 'missing').join(',');
         throw new Error(`Review did not settle: cards=${cards.length} [${statuses}], count=${document.querySelector('.model-artifact-count')?.textContent || 'missing'}, confirmationDisabled=${confirmation?.disabled}, approvalDisabled=${approval?.disabled}.`);
       }
-      if (document.querySelector('.model-artifact-count')?.textContent !== '5/5') throw new Error('Artifact count did not reach 5/5.');
+      if (document.querySelector('.model-artifact-count')?.textContent !== '10/10') throw new Error('Artifact count did not reach 10/10.');
+      if (document.querySelector('.model-coverage-ledger')?.dataset.complete !== 'true') throw new Error('Complete room coverage ledger is not visible.');
+      if (!document.querySelector('.model-coverage-ledger')?.textContent.includes('uncovered room IDs: []')) throw new Error('Zero-uncovered ledger is not stated exactly.');
+      if (cards[1].querySelector('east')) throw new Error('Server room label was parsed as markup instead of safe text.');
+      if (!cards[1].querySelector('strong')?.textContent.includes('<East>')) throw new Error('Server room label was not rendered through textContent.');
+      if (!cards[1].querySelector('.model-reference-room')?.textContent.includes('Function · living')) throw new Error('Canonical room function is not visible.');
+      if (!cards[1].querySelector('.model-reference-copy')?.textContent.includes('Living & Dining <East> (living)')) throw new Error('Local guidance is not bound to canonical room metadata.');
       if (confirmation.disabled || !approval.disabled) throw new Error('Approval controls did not start fail-closed.');
       confirmation.checked = true;
       confirmation.dispatchEvent(new Event('change', { bubbles: true }));
       await Promise.resolve();
       if (approval.disabled) throw new Error('Exact verified review did not unlock approval.');
       if (document.documentElement.scrollWidth > document.documentElement.clientWidth + 1) throw new Error('Model reference board overflows the viewport.');
-      if (app.objectUrls.length !== 4) throw new Error('Verified private PNG URLs were not tracked for cleanup.');
+      if (app.objectUrls.length !== 9) throw new Error('Verified private PNG URLs were not tracked for cleanup.');
       app.clearObjectUrls();
-      if (app.objectUrls.length !== 0 || revokedUrls.length !== 4) throw new Error('Verified private PNG URLs were not revoked.');
+      if (app.objectUrls.length !== 0 || revokedUrls.length !== 9) throw new Error('Verified dynamic PNG URLs were not revoked.');
+
+      app.phaseData.model = legacyModel;
+      app.previewEpoch += 1;
+      app.renderModelReview();
+      const legacyConfirmation = document.querySelector('.consent input');
+      const legacyApproval = document.querySelector('[data-action="approve-model"]');
+      const legacyReviewIsSettled = () => {
+        const legacyCards = [...document.querySelectorAll('.model-reference-card')];
+        return legacyCards.length === 4
+          && legacyCards.every((card) => card.dataset.status === 'verified')
+          && document.querySelector('.model-artifact-count')?.textContent === '5/5'
+          && legacyConfirmation?.disabled === true
+          && legacyApproval?.disabled === true;
+      };
+      for (let attempt = 0; attempt < 24 && !legacyReviewIsSettled(); attempt += 1) {
+        const turn = await fetch(`../favicon.svg?legacy-model-review-turn=${attempt}`, { cache: 'no-store' });
+        if (!turn.ok) throw new Error('Legacy browser fixture network turn failed.');
+        await turn.arrayBuffer();
+      }
+      if (!legacyReviewIsSettled()) throw new Error('Legacy four-view read compatibility did not settle.');
+      if (document.querySelector('.model-coverage-ledger')?.dataset.complete !== 'false') throw new Error('Legacy coverage was presented as complete.');
+      if (!document.querySelector('.model-coverage-ledger')?.textContent.includes('uncovered room count is unknown')) throw new Error('Legacy coverage limitation is not stated honestly.');
+      if (app.objectUrls.length !== 4) throw new Error('Verified legacy PNG URLs were not tracked for cleanup.');
+      app.clearObjectUrls();
+      if (app.objectUrls.length !== 0 || revokedUrls.length !== 13) throw new Error('Verified legacy PNG URLs were not revoked.');
       document.body.dataset.result = 'pass';
     } catch (error) {
       document.body.dataset.result = 'fail';
