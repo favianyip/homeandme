@@ -9,6 +9,7 @@ Home Redesign.dc.html
 Legal.dc.html
 ContactUs.dc.html
 ProjectJourney.html
+ReviewedReferences.html
 
 # Public runtime
 config.js
@@ -25,15 +26,64 @@ journey-solid.js
 journey-topology-gate.js
 journey-geometry-ops.js
 geometry-clipper.js
+reviewed-reference-gallery.js
 editor.html
 editor.js
 
 # Project Atelier presentation
 assets/css/project-journey.css
+assets/css/reviewed-references.css
 assets/fonts/Centaur.woff2
 assets/fonts/Balibold-Regular.woff2
 assets/images/hnm-logo.png
 assets/images/publication-rights-placeholder.svg
+
+# Hash-pinned, rights-safe synthetic whole-unit reference proof
+assets/reviewed-whole-unit/proof-manifest.json
+assets/reviewed-whole-unit/network-audit.json
+assets/reviewed-whole-unit/evidence/canonical-geometry.json
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/approved-scene.glb
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/design-reference.json
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/requested-camera.png
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/scene-manifest.json
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/views/01-overview.png
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/views/02-living.png
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/views/03-bedroom.png
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/views/04-kitchen.png
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/views/05-room-room-common-bath.png
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/views/06-room-room-master-bedroom.png
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/views/07-room-room-master-ensuite.png
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/views/08-room-room-public-circulation.png
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/views/09-room-room-service-yard.png
+assets/reviewed-whole-unit/assets/hnm-scandinavian-calm-v1/views/10-room-room-store.png
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/approved-scene.glb
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/design-reference.json
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/requested-camera.png
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/scene-manifest.json
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/views/01-overview.png
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/views/02-living.png
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/views/03-bedroom.png
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/views/04-kitchen.png
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/views/05-room-room-common-bath.png
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/views/06-room-room-master-bedroom.png
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/views/07-room-room-master-ensuite.png
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/views/08-room-room-public-circulation.png
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/views/09-room-room-service-yard.png
+assets/reviewed-whole-unit/assets/hnm-warm-contemporary-v1/views/10-room-room-store.png
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/approved-scene.glb
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/design-reference.json
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/requested-camera.png
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/scene-manifest.json
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/views/01-overview.png
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/views/02-living.png
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/views/03-bedroom.png
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/views/04-kitchen.png
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/views/05-room-room-common-bath.png
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/views/06-room-room-master-bedroom.png
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/views/07-room-room-master-ensuite.png
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/views/08-room-room-public-circulation.png
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/views/09-room-room-service-yard.png
+assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/views/10-room-room-store.png
 
 # Public marketing imagery referenced by the selected pages
 assets/images/fb-icon-teal.svg
