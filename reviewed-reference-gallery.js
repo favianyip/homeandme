@@ -214,75 +214,11 @@ export function validateProofManifest(proof) {
   return proof;
 }
 
-function sha256Fallback(bytes) {
-  const rotate = (value, amount) => (value >>> amount) | (value << (32 - amount));
-  const constants = [];
-  const initial = [];
-  const composite = {};
-  let candidate = 2;
-  while (constants.length < 64) {
-    if (!composite[candidate]) {
-      if (initial.length < 8) initial.push((Math.sqrt(candidate) * 0x100000000) | 0);
-      constants.push((Math.cbrt(candidate) * 0x100000000) | 0);
-      for (let multiple = candidate * candidate; multiple < 312; multiple += candidate) composite[multiple] = true;
-    }
-    candidate += 1;
-  }
-  const bitLength = bytes.length * 8;
-  const paddedLength = (((bytes.length + 9 + 63) >> 6) << 6);
-  const padded = new Uint8Array(paddedLength);
-  padded.set(bytes);
-  padded[bytes.length] = 0x80;
-  const data = new DataView(padded.buffer);
-  data.setUint32(paddedLength - 4, bitLength >>> 0, false);
-  data.setUint32(paddedLength - 8, Math.floor(bitLength / 0x100000000), false);
-  const state = initial.slice();
-  const words = new Int32Array(64);
-  for (let offset = 0; offset < paddedLength; offset += 64) {
-    for (let index = 0; index < 16; index += 1) words[index] = data.getInt32(offset + index * 4, false);
-    for (let index = 16; index < 64; index += 1) {
-      const a = words[index - 15];
-      const b = words[index - 2];
-      const sigma0 = rotate(a, 7) ^ rotate(a, 18) ^ (a >>> 3);
-      const sigma1 = rotate(b, 17) ^ rotate(b, 19) ^ (b >>> 10);
-      words[index] = (words[index - 16] + sigma0 + words[index - 7] + sigma1) | 0;
-    }
-    let [a, b, c, d, e, f, g, h] = state;
-    for (let index = 0; index < 64; index += 1) {
-      const big1 = rotate(e, 6) ^ rotate(e, 11) ^ rotate(e, 25);
-      const choose = (e & f) ^ (~e & g);
-      const temp1 = (h + big1 + choose + constants[index] + words[index]) | 0;
-      const big0 = rotate(a, 2) ^ rotate(a, 13) ^ rotate(a, 22);
-      const majority = (a & b) ^ (a & c) ^ (b & c);
-      const temp2 = (big0 + majority) | 0;
-      h = g;
-      g = f;
-      f = e;
-      e = (d + temp1) | 0;
-      d = c;
-      c = b;
-      b = a;
-      a = (temp1 + temp2) | 0;
-    }
-    state[0] = (state[0] + a) | 0;
-    state[1] = (state[1] + b) | 0;
-    state[2] = (state[2] + c) | 0;
-    state[3] = (state[3] + d) | 0;
-    state[4] = (state[4] + e) | 0;
-    state[5] = (state[5] + f) | 0;
-    state[6] = (state[6] + g) | 0;
-    state[7] = (state[7] + h) | 0;
-  }
-  return state.map((value) => (value >>> 0).toString(16).padStart(8, '0')).join('');
-}
-
 export async function sha256Hex(value) {
   const bytes = asBytes(value);
-  if (globalThis.crypto?.subtle) {
-    const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
-    return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
-  }
-  return sha256Fallback(bytes);
+  invariant(globalThis.crypto?.subtle, 'Web Crypto SHA-256 is unavailable; evidence verification cannot continue.');
+  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
+  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
 }
 
 function parseJson(bytes, label) {
@@ -370,6 +306,25 @@ export function validateGlbBytes(value, label = 'GLB artifact') {
   invariant((json.buffers || []).every((buffer) => buffer.uri === undefined), `${label} references an external GLB buffer.`);
   invariant((json.images || []).every((image) => image.uri === undefined), `${label} references an external GLB image.`);
   return json;
+}
+
+// Geometry and design-reference extras are semantic content hashes. Exact-file
+// hashes remain separately pinned by each proof-manifest file descriptor.
+export function validateGlbBindings(glb, style, proof, sceneManifest) {
+  const sceneIndex = Number.isSafeInteger(glb?.scene) ? glb.scene : 0;
+  const extras = glb?.scenes?.[sceneIndex]?.extras;
+  invariant(extras && typeof extras === 'object' && !Array.isArray(extras), `${style.label} GLB has no scene binding ledger.`);
+  invariant(extras.spatialforge_project_id === sceneManifest?.projectId, `${style.label} GLB project binding differs from its scene manifest.`);
+  invariant(extras.spatialforge_geometry_revision === sceneManifest?.geometryRevision, `${style.label} GLB geometry revision differs from its scene manifest.`);
+  invariant(extras.spatialforge_geometry_sha256 === proof.fixture.geometrySha256 && extras.spatialforge_geometry_sha256 === sceneManifest?.geometrySha256, `${style.label} GLB semantic geometry binding differs from the reviewed fixture.`);
+  invariant(extras.spatialforge_style === style.styleKey && extras.spatialforge_style === sceneManifest?.style, `${style.label} GLB style binding differs from the proof.`);
+  invariant(extras.spatialforge_design_reference_id === style.referenceId && extras.spatialforge_design_reference_sha256 === style.referenceSha256, `${style.label} GLB semantic design-reference binding differs from the proof.`);
+  invariant(extras.spatialforge_layout_id === sceneManifest?.layout?.layoutId && extras.spatialforge_layout_sha256 === style.bindings.layoutSha256 && extras.spatialforge_layout_sha256 === sceneManifest?.layout?.layoutSha256, `${style.label} GLB layout binding differs from the scene manifest.`);
+  invariant(extras.spatialforge_asset_library_version === sceneManifest?.layout?.assetLibraryVersion, `${style.label} GLB asset-library binding differs from the scene manifest.`);
+  invariant(extras.spatialforge_scene_manifest_sha256 === style.bindings.sceneManifestSha256 && extras.spatialforge_scene_manifest_schema === sceneManifest?.schema, `${style.label} GLB scene-manifest binding differs from the published artifact.`);
+  invariant(extras.spatialforge_whole_unit_topology_sha256 === sceneManifest?.wholeUnitTopologySha256, `${style.label} GLB topology binding differs from the scene manifest.`);
+  invariant(extras.spatialforge_render_profile === sceneManifest?.renderProfile && extras.spatialforge_render_profile === style.renderer?.profile && extras.spatialforge_render_samples === style.renderer?.samples, `${style.label} GLB render-profile binding differs from the proof.`);
+  return glb;
 }
 
 export function validateDesignReference(reference, style) {
@@ -700,8 +655,10 @@ async function recoverPublication(update) {
       invariant(url.origin === location.origin && url.href.startsWith(root.href), `Artifact path escaped the proof root: ${descriptor.path}`);
       const bytes = await fetchLocalBytes(url);
       await verifyDescriptorBytes(descriptor, bytes);
+      const glb = descriptor.mediaType === 'model/gltf-binary' ? validateGlbBytes(bytes, descriptor.path) : null;
       const blob = new Blob([bytes], { type: descriptor.mediaType });
-      assets.set(descriptor.path, { bytes, url: URL.createObjectURL(blob) });
+      const retainedBytes = descriptor.mediaType === 'application/json' ? bytes : null;
+      assets.set(descriptor.path, { bytes: retainedBytes, glb, url: URL.createObjectURL(blob) });
       verifiedByteSize += bytes.byteLength;
       completed += 1;
     }
@@ -718,6 +675,7 @@ async function recoverPublication(update) {
     const scene = parseJson(assets.get(style.files.sceneManifest.path).bytes, `${style.label} scene manifest`);
     validateDesignReference(reference, style);
     validateSceneManifest(scene, style, proof);
+    validateGlbBindings(assets.get(style.files.glb.path).glb, style, proof, scene);
   }
 
   const manifestUrl = URL.createObjectURL(new Blob([manifestBytes], { type: 'application/json' }));

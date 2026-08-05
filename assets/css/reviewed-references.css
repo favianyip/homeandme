@@ -88,7 +88,7 @@ button { font: inherit; }
 .header-rule { width: 1px; height: 28px; background: var(--line); }
 .product-name { color: var(--ink-soft); white-space: nowrap; }
 .back-link { margin-left: auto; color: var(--survey-dark); text-decoration: none; border-bottom: 1px solid transparent; }
-.back-link:hover, .back-link:focus-visible { border-color: currentColor; }
+.back-link:hover, .back-link:focus-visible { border-color: currentcolor; }
 
 .product-name,
 .back-link,

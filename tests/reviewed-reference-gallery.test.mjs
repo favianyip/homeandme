@@ -12,11 +12,14 @@ import {
   isSafeProofPath,
   validateCanonicalGeometry,
   validateDesignReference,
+  validateGlbBindings,
+  validateGlbBytes,
   validateManifestBytes,
   validateNetworkAudit,
   validateProofManifest,
   validateSceneManifest,
   verifyDescriptorBytes,
+  sha256Hex,
 } from '../reviewed-reference-gallery.js';
 
 const proofRoot = new URL('../assets/reviewed-whole-unit/', import.meta.url);
@@ -57,8 +60,10 @@ test('reviewed whole-unit publication is exactly manifest-bound and semantically
   validateCanonicalGeometry(JSON.parse(contents.get(proof.fixture.geometryArtifact.path).toString('utf8')), proof);
   validateNetworkAudit(JSON.parse(contents.get(proof.networkAudit.path).toString('utf8')));
   for (const style of proof.styles) {
+    const scene = JSON.parse(contents.get(style.files.sceneManifest.path).toString('utf8'));
     validateDesignReference(JSON.parse(contents.get(style.files.designReference.path).toString('utf8')), style);
-    validateSceneManifest(JSON.parse(contents.get(style.files.sceneManifest.path).toString('utf8')), style, proof);
+    validateSceneManifest(scene, style, proof);
+    validateGlbBindings(validateGlbBytes(contents.get(style.files.glb.path), style.label), style, proof, scene);
   }
 
   const actualTree = (await walk(proofRootPath)).sort();
@@ -93,6 +98,32 @@ test('reviewed reference validation fails closed on manifest, flag, path and art
     assert.equal(isSafeProofPath(unsafe), false, unsafe);
   }
   assert.equal(isSafeProofPath('assets/hnm-modern-luxe-v1/views/01-overview.png'), true);
+
+  const style = proof.styles[0];
+  const scene = JSON.parse(await readFile(new URL(style.files.sceneManifest.path, proofRoot), 'utf8'));
+  const parsedGlb = validateGlbBytes(await readFile(new URL(style.files.glb.path, proofRoot)), style.label);
+  const mutations = [
+    ['spatialforge_design_reference_sha256', 'semantic design-reference binding differs'],
+    ['spatialforge_geometry_sha256', 'semantic geometry binding differs'],
+    ['spatialforge_layout_sha256', 'layout binding differs'],
+    ['spatialforge_scene_manifest_sha256', 'scene-manifest binding differs'],
+  ];
+  for (const [field, message] of mutations) {
+    const changedGlb = structuredClone(parsedGlb);
+    changedGlb.scenes[changedGlb.scene].extras[field] = '0'.repeat(64);
+    assert.throws(() => validateGlbBindings(changedGlb, style, proof, scene), new RegExp(message, 'i'));
+  }
+});
+
+test('reviewed reference verifier fails closed when Web Crypto SHA-256 is unavailable', async () => {
+  const cryptoDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'crypto');
+  assert.equal(cryptoDescriptor?.configurable, true);
+  Object.defineProperty(globalThis, 'crypto', { configurable: true, value: undefined });
+  try {
+    await assert.rejects(() => sha256Hex(new Uint8Array([1, 2, 3])), /Web Crypto SHA-256 is unavailable/i);
+  } finally {
+    Object.defineProperty(globalThis, 'crypto', cryptoDescriptor);
+  }
 });
 
 test('reviewed reference page states its evidence boundary and has no external runtime asset path', async () => {
@@ -115,6 +146,8 @@ test('reviewed reference page states its evidence boundary and has no external r
 
   assert.match(runtime, new RegExp(PROOF_MANIFEST_SHA256));
   assert.match(runtime, /const publication = await recoverPublication/);
+  assert.doesNotMatch(runtime, /sha256Fallback/);
+  assert.match(runtime, /descriptor\.mediaType === 'application\/json' \? bytes : null/);
   assert.match(runtime, /gallery\.append\(buildGallery/);
   assert.match(runtime, /There is no static, stale-image or demo fallback/i);
   assert.match(runtime, /not detector accuracy, HDB-likeness, an as-built survey/i);
