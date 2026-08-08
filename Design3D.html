@@ -210,6 +210,8 @@ $('#q').addEventListener('input', (e) => {
 
 function pick(b) {
   block = b;
+  const dl = $('#detectLink');
+  if (dl) dl.href = 'Detect.html?' + new URLSearchParams({ addr: b.street_address || b.address || '', postal: b.postal || '' });
   if (b.class === 'hdb') {
     $('#addrOut').textContent = `HDB block confirmed — ${b.street_address || b.address}. Completed ${b.year_completed || '—'}, ${b.total_dwelling_units || '—'} units.`;
     showFlats(b.flat_mix || {});
@@ -317,8 +319,9 @@ async function showDesigns() {
   $('#ps4').classList.add('on');
   const data = await (await fetch('portfolio-data.json')).json();
   const flatKey = flat === 'Executive' ? '5-Room' : flat;
-  let pool = data.filter((d) => d.flat.startsWith(flatKey));
-  if (!pool.length) pool = data.filter((d) => d.flat.startsWith('4-Room'));
+  // STRICT: only designs made for this flat type. A 4-room render sold to a
+  // 3-room customer misrepresents what fits — never cross-fill from other flats.
+  const pool = data.filter((d) => d.flat.startsWith(flatKey));
   const groups = new Map();
   for (const d of pool) {
     const key = `${d.style} · ${d.design}`;
@@ -328,6 +331,22 @@ async function showDesigns() {
   const list = [...groups.values()].filter((r) => r.style !== 'Room Showcase').concat([...groups.values()].filter((r) => r.style === 'Room Showcase')).slice(0, 8);
   $('#recFlat').textContent = `${flatKey} HDB flats`;
   const wrapEl = $('#designs'); wrapEl.innerHTML = '';
+  if (!list.length) {
+    const empty = document.createElement('div');
+    empty.className = 'card';
+    empty.style.cssText = 'grid-column:1/-1;padding:24px;';
+    empty.innerHTML = `<p class="osw" style="margin:0 0 8px;font-size:17px;">Our ${flatKey} design collection is being prepared</p>
+      <p style="margin:0 0 14px;font-size:14px;color:#4a5350;max-width:64ch;line-height:1.7;">We only show designs created for your exact flat type — designs for other layouts would not fit your home. Talk to us and we'll design for your ${flatKey} directly.</p>`;
+    const talk = document.createElement('a');
+    talk.className = 'pill pill-d';
+    talk.textContent = 'TALK TO US ABOUT MY ' + flatKey.toUpperCase() + ' →';
+    talk.target = '_blank'; talk.rel = 'noopener';
+    talk.href = 'https://wa.me/6594235227?text=' + encodeURIComponent(`Hi Home & Me! I have a ${flatKey} HDB and would like design options.`);
+    empty.appendChild(talk);
+    wrapEl.appendChild(empty);
+    $('#designSec').style.display = '';
+    return;
+  }
   for (const rec of list) {
     const price = priceRange(flatKey, rec.style);
     const card = document.createElement('div'); card.className = 'designcard';

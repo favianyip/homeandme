@@ -53,7 +53,10 @@
   // If the studio backend is unreachable the iframe renders a browser error page we
   // cannot read cross-origin — probe the origin instead and swap in the fallback.
   // Retry before giving up: a restart or cold start must not strand the customer.
-  const URL = 'https://spark-792d-old.tail223b04.ts.net:10000/detect';
+  // Forward the site's query string (addr/postal picked in step 1) into the studio
+  // so the customer is never asked for their address twice.
+  const URL = 'https://spark-792d-old.tail223b04.ts.net:10000/detect' + location.search;
+  document.getElementById('studio').src = URL;
   let tries = 0;
   const fail = () => { document.getElementById('offline').style.display = 'grid'; document.getElementById('studio').style.display = 'none'; };
   const recover = () => {
