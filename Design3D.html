@@ -70,7 +70,7 @@
 <section class="wrap" style="padding: clamp(36px,5vw,56px) clamp(18px,4vw,40px) 20px;">
   <p class="lbl" style="margin:0 0 14px;">YOUR HOME IN 3D · DESIGN &amp; APPROXIMATE PRICE</p>
   <h1 class="osw" style="font-weight:400;font-size:clamp(30px,4.4vw,46px);line-height:1.1;margin:0 0 12px;">Upload your plan, see your flat, pick a design</h1>
-  <p style="font-size:16px;line-height:1.7;color:#4a5350;margin:0;max-width:74ch;">Everything runs in your browser — your floor plan is never uploaded to a server. Prices shown are approximate ranges for budgeting; the final quote follows a site visit.</p>
+  <p style="font-size:16px;line-height:1.7;color:#4a5350;margin:0;max-width:74ch;">Drop your floor plan and our detector traces it — you review and confirm every wall before the 3D model is built. Your plan is used only for your model and quote. Prices shown are approximate ranges; the final quote follows a site visit.</p>
   <div style="display:flex;gap:clamp(14px,2.4vw,28px);flex-wrap:wrap;margin-top:24px;">
     <div class="step on" id="ps1"><b>1</b>ADDRESS</div>
     <div class="step" id="ps2"><b>2</b>FLOOR PLAN</div>
@@ -98,19 +98,17 @@
     <div class="card" style="padding:22px;">
       <p class="lbl" style="margin:0 0 4px;">STEP 2</p>
       <h2 class="osw" style="font-weight:400;font-size:20px;margin:0 0 14px;">Your floor plan (optional but recommended)</h2>
-      <div class="drop" id="drop">
-        <p class="osw" style="margin:0 0 6px;font-size:15px;letter-spacing:1.6px;">DROP YOUR FLOOR PLAN HERE</p>
-        <p style="margin:0;font-size:13px;color:#8a908c;">or click to choose a photo / screenshot (JPG or PNG). It stays on your device.</p>
-        <input id="file" type="file" accept="image/png,image/jpeg,image/webp" style="display:none;">
-      </div>
-      <img id="planPrev" alt="Your floor plan" style="display:none;width:100%;margin-top:14px;border:1px solid rgba(26,32,35,0.12);border-radius:8px;max-height:300px;object-fit:contain;background:#fff;">
-      <div class="card" style="margin-top:14px;padding:16px 18px;background:#f2f6f5;border-color:rgba(90,126,138,0.35);">
-        <p class="lbl" style="margin:0 0 6px;color:#5a7e8a;">WANT EXACT WALLS FROM YOUR PLAN?</p>
-        <p style="margin:0 0 12px;font-size:13px;color:#4a5350;line-height:1.6;">Our AI detection studio traces your actual floor plan — you review every wall, remove or adjust marks, and verify the layout before the 3D model is built from it.</p>
-        <a class="pill pill-g" id="detectLink" href="Detect.html" style="display:inline-block;">OPEN AI PLAN DETECTION →</a>
-      </div>
+      <form id="planForm" method="post" action="https://spark-792d-old.tail223b04.ts.net:10000/detect" enctype="multipart/form-data" style="margin:0;">
+        <div class="drop" id="drop">
+          <p class="osw" style="margin:0 0 6px;font-size:15px;letter-spacing:1.6px;">DROP YOUR FLOOR PLAN HERE</p>
+          <p style="margin:0;font-size:13px;color:#8a908c;">or click to choose a PDF, photo or screenshot. Detection starts right away — you review and confirm every wall before the 3D model is built.</p>
+          <input id="file" name="plan" type="file" accept="image/png,image/jpeg,image/webp,application/pdf,.pdf" style="display:none;">
+          <input type="hidden" name="address" id="fAddr"><input type="hidden" name="postal" id="fPostal">
+        </div>
+      </form>
+      <p id="detectNote" style="display:none;margin:12px 0 0;font-size:13px;color:#5a7e8a;">Detecting your walls, doors and windows…</p>
       <div style="margin-top:18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
-        <button class="pill pill-d" id="confirm" disabled>CONFIRM &amp; BUILD MY 3D MODEL →</button>
+        <button class="pill pill-d" id="confirm" disabled>NO PLAN? BUILD FROM MY FLAT TYPE →</button>
         <span id="confirmNote" style="font-size:12.5px;color:#8a908c;">Pick your flat type (left panel) to enable this.</span>
       </div>
     </div>
@@ -210,8 +208,6 @@ $('#q').addEventListener('input', (e) => {
 
 function pick(b) {
   block = b;
-  const dl = $('#detectLink');
-  if (dl) dl.href = 'Detect.html?' + new URLSearchParams({ addr: b.street_address || b.address || '', postal: b.postal || '' });
   if (b.class === 'hdb') {
     $('#addrOut').textContent = `HDB block confirmed — ${b.street_address || b.address}. Completed ${b.year_completed || '—'}, ${b.total_dwelling_units || '—'} units.`;
     showFlats(b.flat_mix || {});
@@ -236,7 +232,7 @@ function showFlats(mix) {
       grid.querySelectorAll('.flatbtn').forEach((x) => x.removeAttribute('data-sel'));
       btn.setAttribute('data-sel', '1'); flat = name;
       $('#confirm').disabled = false;
-      $('#confirmNote').textContent = planImg ? 'Ready — build your 3D model.' : 'You can also add your floor plan photo for our records.';
+      $('#confirmNote').textContent = 'Or drop your floor plan on the right for exact walls.';
     });
     grid.appendChild(btn);
     if (flat === name) { btn.setAttribute('data-sel', '1'); } // keep selection across address refresh
@@ -244,17 +240,23 @@ function showFlats(mix) {
   if (flat) { $('#confirm').disabled = false; }
 }
 
-/* ---------- step 2: plan upload (client-side only) ---------- */
-const drop = $('#drop'), file = $('#file');
+/* ---------- step 2: plan upload -> straight into the detection system ---------- */
+const drop = $('#drop'), file = $('#file'), planForm = $('#planForm');
+const sendToDetection = () => {
+  if (!file.files.length) return;
+  $('#fAddr').value = block ? (block.street_address || block.address || '') : '';
+  $('#fPostal').value = block ? (block.postal || '') : '';
+  $('#detectNote').style.display = '';
+  drop.querySelector('p.osw').textContent = 'STARTING DETECTION…';
+  planForm.submit();
+};
 drop.addEventListener('click', () => file.click());
 drop.addEventListener('dragover', (e) => { e.preventDefault(); });
-drop.addEventListener('drop', (e) => { e.preventDefault(); if (e.dataTransfer.files[0]) loadPlan(e.dataTransfer.files[0]); });
-file.addEventListener('change', () => { if (file.files[0]) loadPlan(file.files[0]); });
-function loadPlan(f) {
-  const rd = new FileReader();
-  rd.onload = () => { planImg = rd.result; $('#planPrev').src = planImg; $('#planPrev').style.display = ''; drop.querySelector('p').textContent = 'FLOOR PLAN LOADED — CLICK TO REPLACE'; };
-  rd.readAsDataURL(f);
-}
+drop.addEventListener('drop', (e) => {
+  e.preventDefault();
+  if (e.dataTransfer.files[0]) { const dt = new DataTransfer(); dt.items.add(e.dataTransfer.files[0]); file.files = dt.files; sendToDetection(); }
+});
+file.addEventListener('change', sendToDetection);
 
 /* ---------- step 3: 3D model ---------- */
 let three = null;
