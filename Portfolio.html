@@ -40,6 +40,10 @@
   #lightbox img { max-width: 96vw; max-height: 82vh; border-radius: 4px; }
   #lbcap { color: #f6f4ef; font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 14px; margin-top: 16px; text-align: center; }
   #lbclose { position: absolute; top: 18px; right: 22px; background: none; border: 1px solid rgba(246,244,239,0.4); color: #f6f4ef; width: 44px; height: 44px; border-radius: 50%; font-size: 17px; cursor: pointer; }
+  .lbnav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(246,244,239,0.08); border: 1px solid rgba(246,244,239,0.4); color: #f6f4ef; width: 52px; height: 52px; border-radius: 50%; font-size: 26px; line-height: 1; cursor: pointer; z-index: 101; }
+  .lbnav:hover { background: rgba(246,244,239,0.22); }
+  #lbprev { left: 20px; } #lbnext { right: 20px; }
+  @media (max-width: 640px) { .lbnav { width: 42px; height: 42px; font-size: 21px; } #lbprev { left: 8px; } #lbnext { right: 8px; } }
   footer { margin-top: 60px; border-top: 1px solid rgba(26,32,35,0.12); padding: 26px 0 40px; font-size: 13px; color: #8a908c; }
   @media (max-width: 900px) { .navrow nav { display: none; } }
 </style>
@@ -69,7 +73,9 @@
 
 <div id="lightbox" role="dialog" aria-label="Render viewer">
   <button id="lbclose" aria-label="Close">✕</button>
+  <button id="lbprev" class="lbnav" aria-label="Previous render">‹</button>
   <img id="lbimg" alt="">
+  <button id="lbnext" class="lbnav" aria-label="Next render">›</button>
   <p id="lbcap"></p>
 </div>
 
@@ -82,6 +88,8 @@
   const styles = [...new Set(data.map(d => d.style))].sort((a,b) => STYLE_ORDER.indexOf(a) - STYLE_ORDER.indexOf(b));
   const tabs = document.getElementById('tabs');
   const gallery = document.getElementById('gallery');
+  const viewItems = [];
+  let activeStyle = 'ALL';
 
   const mkTab = (label, target) => {
     const b = document.createElement('button');
@@ -89,6 +97,7 @@
     b.onclick = () => {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
       b.classList.add('on');
+      activeStyle = target;
       if (target === 'ALL') { document.querySelectorAll('.styleblock').forEach(s => s.style.display = ''); window.scrollTo({top:0,behavior:'smooth'}); }
       else document.querySelectorAll('.styleblock').forEach(s => s.style.display = (s.dataset.style === target ? '' : 'none'));
     };
@@ -126,7 +135,9 @@
         const sp = document.createElement('span'); sp.textContent = style === 'Room Showcase' ? d.flat : d.design;
         fc.append(b, sp);
         fig.append(img, fc);
-        fig.onclick = () => openLb(d.file, `${style} · ${d.flat}${style === 'Room Showcase' ? '' : ' · ' + d.design} · ${cap}`);
+        const idx = viewItems.length;
+        viewItems.push({ file: d.file, style, caption: `${style} · ${d.flat}${style === 'Room Showcase' ? '' : ' · ' + d.design} · ${cap}` });
+        fig.onclick = () => openLb(idx);
         grid.appendChild(fig);
       }
       grp.appendChild(grid); block.appendChild(grp);
@@ -135,12 +146,42 @@
   }
 
   const lb = document.getElementById('lightbox');
-  const openLb = (src, cap) => { document.getElementById('lbimg').src = encodeURI(src); document.getElementById('lbcap').textContent = cap; lb.classList.add('open'); };
-  window.openLb = openLb;
-  const close = () => { lb.classList.remove('open'); document.getElementById('lbimg').src = ''; };
+  let current = -1;
+  const show = (i) => {
+    current = i;
+    const it = viewItems[i];
+    document.getElementById('lbimg').setAttribute('src', encodeURI(it.file));
+    document.getElementById('lbcap').textContent = it.caption;
+  };
+  const openLb = (i) => { show(i); lb.classList.add('open'); };
+  const visible = (it) => activeStyle === 'ALL' || it.style === activeStyle;
+  const step = (dir) => {
+    if (current < 0) return;
+    let i = current;
+    for (let n = 0; n < viewItems.length; n++) {
+      i = (i + dir + viewItems.length) % viewItems.length;
+      if (visible(viewItems[i])) { show(i); return; }
+    }
+  };
+  const close = () => { lb.classList.remove('open'); current = -1; document.getElementById('lbimg').src = ''; };
   document.getElementById('lbclose').onclick = close;
+  document.getElementById('lbprev').onclick = (e) => { e.stopPropagation(); step(-1); };
+  document.getElementById('lbnext').onclick = (e) => { e.stopPropagation(); step(1); };
   lb.onclick = (e) => { if (e.target === lb) close(); };
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft') step(-1);
+    else if (e.key === 'ArrowRight') step(1);
+  });
+  let touchX = null;
+  lb.addEventListener('touchstart', (e) => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', (e) => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 48) step(dx > 0 ? -1 : 1);
+    touchX = null;
+  }, { passive: true });
 })();
 </script>
 </body>
