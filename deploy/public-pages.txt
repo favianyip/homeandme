@@ -10,8 +10,20 @@ Legal.dc.html
 ContactUs.dc.html
 ProjectJourney.html
 ReviewedReferences.html
+HousingIdentity.html
+PlanLookup.html
+Login.dc.html
+Assistant.dc.html
+MyProject.dc.html
 
 # Public runtime
+assistant-llm.js
+assistant-soul.js
+journey-address.js
+journey-housing.js
+journey-config.js
+journey-resale.js
+journey-store.js
 config.js
 support.js
 three-d-stage.js
@@ -36,6 +48,15 @@ assets/css/reviewed-references.css
 assets/fonts/Centaur.woff2
 assets/fonts/Balibold-Regular.woff2
 assets/images/hnm-logo.png
+assets/images/login-bg.jpg
+assets/images/fb-icon-teal.svg
+assets/images/ig-logo-teal.svg
+assets/renders/bathroom-stone.jpg
+assets/renders/bedroom-luxe-marble.jpg
+assets/renders/bedroom-scandinavian.jpg
+assets/renders/dining-classic-wood.jpg
+assets/renders/kitchen-mono.jpg
+assets/renders/living-luxe-dark.jpg
 assets/images/publication-rights-placeholder.svg
 
 # Hash-pinned, rights-safe synthetic whole-unit reference proof
@@ -86,6 +107,4 @@ assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/views/09-room-room-service-
 assets/reviewed-whole-unit/assets/hnm-modern-luxe-v1/views/10-room-room-store.png
 
 # Public marketing imagery referenced by the selected pages
-assets/images/fb-icon-teal.svg
-assets/images/ig-logo-teal.svg
 assets/images/fb-icon.svg

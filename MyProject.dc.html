@@ -1,34 +1,208 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta http-equiv="refresh" content="0; url=ProjectJourney.html">
-  <link rel="canonical" href="ProjectJourney.html">
-  <title>Route retired — Home &amp; Me</title>
-  <style>
-    :root { color-scheme: light; --paper: #f2efe7; --ink: #172124; --quiet: #66706c; --survey: #4f7780; --line: rgba(23,33,36,.16); }
-    * { box-sizing: border-box; }
-    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; color: var(--ink); background: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px), var(--paper); background-size: 48px 48px; font-family: "Trebuchet MS", sans-serif; }
-    main { width: min(660px, 100%); padding: clamp(30px, 7vw, 64px); border: 1px solid var(--line); background: rgba(250,248,242,.96); box-shadow: 0 24px 70px rgba(23,33,36,.12); }
-    p:first-child { margin: 0 0 14px; color: var(--survey); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; }
-    h1 { margin: 0; font: 400 clamp(2.4rem, 8vw, 4.8rem)/.95 Georgia, serif; letter-spacing: -.04em; }
-    .copy { margin: 22px 0 0; color: var(--quiet); line-height: 1.7; }
-    nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
-    a { min-height: 46px; display: inline-flex; align-items: center; padding: 12px 18px; border: 1px solid var(--ink); color: white; background: var(--ink); text-decoration: none; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
-    a + a { color: var(--ink); background: transparent; border-color: var(--line); }
-  </style>
+<meta charset="utf-8">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>My Project — Home &amp; Me</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
 </head>
-<body data-retired-route="true">
-  <main>
-    <p>Home &amp; Me route notice</p>
-    <h1>This prototype route is retired.</h1>
-    <p class="copy">This archived dashboard cannot report payments, approvals or renovation milestones. Project Atelier is the current review-gated project path; only authenticated server records may represent project status when that service is released.</p>
-    <nav aria-label="Safe destinations">
-      <a href="ProjectJourney.html">Open Project Atelier</a>
-      <a href="ContactUs.dc.html">Contact a designer</a>
-    </nav>
-  </main>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+@media (max-width: 1020px) { [data-mq2] { grid-template-columns: 1fr !important; } }
+</style>
+</helmet>
+<div style="min-width: 0; min-height: 100vh; display: flex; flex-direction: column;">
+  <header style="position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1);">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); height: 72px; display: flex; align-items: center; gap: 20px;">
+      <a href="Home AI.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 40px; width: auto;"></a>
+      <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #8a908c; border-left: 1px solid rgba(26,32,35,0.15); padding-left: 20px;">MY ACCOUNT</span>
+      <nav style="margin-left: auto; display: flex; gap: 22px; align-items: center; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
+        <a href="ProjectJourney.html">3D JOURNEY</a>
+        <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+        <a href="Login.dc.html" style="color: #5a7e8a;">LOG OUT</a>
+      </nav>
+    </div>
+  </header>
+
+  <div style="max-width: 1200px; width: 100%; margin: 0 auto; padding: clamp(20px, 3.5vw, 40px) clamp(16px, 3vw, 32px); flex: 1;">
+    <div style="display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(22px, 3.5vw, 36px);">
+      <div>
+        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3px; color: #5a7e8a; margin: 0 0 10px;">WELCOME BACK</p>
+        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(28px, 4vw, 38px); margin: 0;">My projects</h1>
+      </div>
+      <span style="font-size: 14px; color: #8a908c;">demo@homeandme.sg · <a href="ContactUs.dc.html" style="color: #5a7e8a;">Need help?</a></span>
+    </div>
+
+    <sc-if value="{{ hasNone }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width: 640px; margin: clamp(20px, 6vw, 60px) auto; background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: clamp(28px, 5vw, 48px); text-align: center;">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.8px; color: #5a7e8a; margin: 0 0 12px;">NO PROJECT YET</p>
+        <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 28px; margin: 0 0 12px;">Every project starts with your floor plan</h2>
+        <p style="margin: 0 auto 26px; font-size: 15px; line-height: 1.65; color: #4a5350; max-width: 46ch;">Upload your plan at Station 01, verify your address, and design room by room — your project appears here as you go.</p>
+        <a href="ProjectJourney.html" style="display: inline-block; font-family: 'Oswald', sans-serif; letter-spacing: 2.2px; font-size: 13px; background: #1a2023; color: #f6f4ef; padding: 16px 34px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">STATION 01 — UPLOAD FLOOR PLAN →</a>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ hasProj }}" hint-placeholder-val="{{ true }}">
+    <div data-mq2="1" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(20px, 3.5vw, 40px); align-items: start;">
+      <div style="display: grid; gap: 20px;">
+        <div style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; overflow: hidden;">
+          <div style="position: relative;">
+            <img src="assets/renders/living-luxe-dark.jpg" alt="Project render" style="width: 100%; aspect-ratio: 16 / 6.5; object-fit: cover; display: block;">
+            <span style="position: absolute; top: 14px; left: 16px; font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 2px; background: rgba(26,32,35,0.6); color: #fff; padding: 8px 14px; border-radius: 999px; backdrop-filter: blur(6px);">{{ statusPill }}</span>
+          </div>
+          <div style="padding: clamp(18px, 3vw, 28px);">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px;">
+              <h2 style="font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 18px; letter-spacing: 1.8px; margin: 0;">{{ projTitle }}</h2>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 15px; color: #5a7e8a;">{{ projTotal }}</span>
+            </div>
+            <p style="margin: 0 0 6px; font-size: 13px; color: #5a7e8a; font-family: 'Oswald', sans-serif; letter-spacing: 1.6px;">{{ projThemes }}</p>
+            <p style="margin: 0 0 20px; font-size: 14px; color: #8a908c;">{{ projSub }}</p>
+            <sc-if value="{{ isPaid }}" hint-placeholder-val="{{ false }}">
+              <div style="display: grid; gap: 0;">
+                <sc-for list="{{ milestones }}" as="ms" hint-placeholder-count="5">
+                  <div style="display: flex; gap: 14px; align-items: flex-start;">
+                    <span style="display: flex; flex-direction: column; align-items: center;">
+                      <span style="width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-family: 'Oswald', sans-serif; background: {{ ms.bg }}; color: {{ ms.color }}; border: 1px solid {{ ms.border }};">{{ ms.mark }}</span>
+                      <span style="width: 1px; height: 26px; background: rgba(26,32,35,0.15); display: {{ ms.lineDisplay }};"></span>
+                    </span>
+                    <span style="padding-bottom: 10px;">
+                      <span style="display: block; font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 1.8px; color: #1a2023;">{{ ms.label }}</span>
+                      <span style="display: block; font-size: 13px; color: #8a908c; margin-top: 2px;">{{ ms.sub }}</span>
+                    </span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ isDraft }}" hint-placeholder-val="{{ true }}">
+              <p style="margin: 0; font-size: 13.5px; line-height: 1.6; color: #4a5350; border: 1px solid rgba(90,126,138,0.35); background: rgba(90,126,138,0.06); border-radius: 6px; padding: 12px 14px;">Your spec — floor plan, layout, themes — is saved on this device only. Nothing is submitted until you finish Station 05 (Quote &amp; Pay).</p>
+            </sc-if>
+            <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 16px;">
+              <a href="ProjectJourney.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: #1a2023; color: #f6f4ef; padding: 13px 26px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">{{ act1Label }}</a>
+              <a sc-camel-href="{{ act2Href }}" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; border: 1px solid rgba(26,32,35,0.25); color: #1a2023; padding: 13px 26px; border-radius: 999px;" style-hover="border-color: #5a7e8a; color: #5a7e8a;">{{ act2Label }}</a>
+            </div>
+          </div>
+        </div>
+        <a href="ProjectJourney.html" style="border: 1px dashed rgba(90,126,138,0.5); border-radius: 8px; padding: 24px; text-align: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: #5a7e8a; background: rgba(90,126,138,0.04);" style-hover="background: rgba(90,126,138,0.1); color: #3f5c66;">+ START A NEW PROJECT — FROM YOUR FLOOR PLAN</a>
+      </div>
+
+      <div style="display: grid; gap: 20px;">
+        <div style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: 24px;">
+          <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 16px;">PAYMENTS</p>
+          <sc-for list="{{ payRows }}" as="pr" hint-placeholder-count="3">
+            <div style="display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid rgba(26,32,35,0.08); font-size: 14px;"><span>{{ pr.label }}</span><span style="font-family: 'Oswald', sans-serif; font-size: 13px; white-space: nowrap; color: {{ pr.color }};">{{ pr.val }}</span></div>
+          </sc-for>
+        </div>
+        <div style="background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; padding: 24px;">
+          <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 16px;">MY PROFILE</p>
+          <div style="display: grid; gap: 10px; font-size: 14px;">
+            <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8a908c;">Name</span><span>Demo User</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8a908c;">Email</span><span>demo@homeandme.sg</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8a908c;">Site address</span><span style="text-align: right;">{{ profAddr }}</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8a908c;">Floor plan</span><span style="text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;">{{ planName }}</span></div>
+          </div>
+          <a href="ContactUs.dc.html" style="display: inline-block; margin-top: 16px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; border-bottom: 1px solid rgba(90,126,138,0.4); padding-bottom: 2px;">REQUEST A CHANGE →</a>
+        </div>
+        <div style="background: #171d1f; color: #f6f4ef; border-radius: 8px; padding: 24px;">
+          <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8fb0bb; margin: 0 0 10px;">YOUR COORDINATOR</p>
+          <p style="margin: 0 0 4px; font-size: 15px;">Sarah Lim · Project Coordinator</p>
+          <p style="margin: 0 0 16px; font-size: 13px; color: rgba(246,244,239,0.6);">Replies within 1 working day</p>
+          <a href="ContactUs.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 12px; background: #f6f4ef; color: #1a2023; padding: 12px 24px; border-radius: 999px; display: inline-block;" style-hover="background: #5a7e8a; color: #fff;">MESSAGE →</a>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+  </div>
+
+  <footer style="border-top: 1px solid rgba(26,32,35,0.1); padding: 28px clamp(16px, 3vw, 32px);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #8a908c;">
+      <span>Copyright {{ year }} HOME&amp;ME</span>
+      <nav style="display: flex; gap: 18px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">
+        <a href="Home AI.dc.html">HOME</a>
+        <a href="Legal.dc.html#privacy">PRIVACY</a>
+        <a href="Legal.dc.html#terms">TERMS</a>
+      </nav>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { project: null, quote: null, loaded: false };
+
+  componentDidMount() {
+    try {
+      this.setState({
+        project: JSON.parse(localStorage.getItem('hnm_project_v1') || 'null'),
+        quote: JSON.parse(localStorage.getItem('hnm_quote_v1') || 'null'),
+        loaded: true,
+      });
+    } catch (e) { this.setState({ loaded: true }); }
+  }
+
+  fmt(n) { return 'S$ ' + Math.round(n).toLocaleString('en-SG'); }
+
+  renderVals() {
+    const proj = this.state.project;
+    const spec = proj && proj.spec ? proj.spec : this.state.quote;
+    const isPaid = !!(proj && proj.spec);
+    const isDraft = !isPaid && !!spec;
+    const total = spec ? spec.total || 0 : 0;
+    const dep = Math.round(total * 0.1);
+    const done = { bg: '#5a7e8a', color: '#fff', border: '#5a7e8a', mark: '\u2713' };
+    const active = { bg: 'rgba(90,126,138,0.12)', color: '#5a7e8a', border: '#5a7e8a', mark: '\u25cf' };
+    const todo = { bg: 'transparent', color: '#8a908c', border: 'rgba(26,32,35,0.25)', mark: '' };
+    const paidDate = isPaid ? new Date(proj.paidAt).toLocaleDateString('en-SG', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+    const ms = [
+      { label: 'DEPOSIT & SPEC CONFIRMED', sub: 'Received ' + paidDate + ' \u00b7 ' + this.fmt(isPaid ? proj.deposit || dep : dep), st: done },
+      { label: 'SITE MEASUREMENT', sub: 'Scheduling \u2014 within 2 working days', st: active },
+      { label: 'HACKING & MASONRY', sub: 'After site measurement', st: todo },
+      { label: 'CARPENTRY INSTALLATION', sub: 'After wet works', st: todo },
+      { label: 'PAINTING, CLEANING & HANDOVER', sub: 'Final milestone', st: todo },
+    ];
+    const themes = spec ? [...new Set((spec.rooms || []).map((r) => r.themeLabel))] : [];
+    return {
+      hasNone: this.state.loaded && !spec,
+      hasProj: !!spec,
+      isPaid, isDraft,
+      statusPill: isPaid ? proj.ref + ' \u00b7 IN PROGRESS' : 'DRAFT \u00b7 STATION 05 PENDING',
+      projTitle: spec ? spec.layoutLabel + ' ' + spec.propertyLabel + ' \u00b7 ' + (spec.area || 'SINGAPORE').toUpperCase() : '',
+      projThemes: themes.join(' \u00b7 '),
+      projTotal: this.fmt(total),
+      projSub: isPaid
+        ? 'Deposit received \u00b7 Balance billed by milestone \u00b7 Your coordinator will schedule site measurement'
+        : 'Estimate from your verified plan \u00b7 Finish Station 05 (Quote & Pay) to confirm your slot',
+      act1Label: isPaid ? 'OPEN 3D MODEL' : 'RESUME 3D JOURNEY \u2192',
+      act2Href: isPaid ? 'Home AI.dc.html#portfolio' : 'Checkout.dc.html',
+      act2Label: isPaid ? 'WALK THROUGH RENDERS' : 'PROCEED TO CHECKOUT',
+      milestones: ms.map((m, i) => ({
+        label: m.label, sub: m.sub,
+        bg: m.st.bg, color: m.st.color, border: m.st.border,
+        mark: m.st.mark || String(i + 1),
+        lineDisplay: i < ms.length - 1 ? 'block' : 'none',
+      })),
+      payRows: isPaid ? [
+        { label: 'Deposit (10%) \u2014 ' + this.fmt(proj.deposit || dep), val: 'PAID \u2713', color: '#5a7e8a' },
+        { label: 'Milestone 1 \u2014 Hacking & masonry', val: 'AFTER MEASUREMENT', color: '#8a908c' },
+        { label: 'Milestone 2 \u2014 Carpentry', val: '\u2014', color: '#8a908c' },
+        { label: 'Final \u2014 Handover', val: '\u2014', color: '#8a908c' },
+      ] : [
+        { label: 'Deposit (10%) \u2014 ' + this.fmt(dep), val: 'DUE AT CHECKOUT', color: '#8a908c' },
+        { label: 'Balance \u2014 billed by milestone', val: '\u2014', color: '#8a908c' },
+      ],
+      profAddr: spec && (spec.addr || spec.postal) ? ((spec.addr || 'Singapore') + (spec.postal ? ' S(' + spec.postal + ')' : '')) : '\u2014',
+      planName: spec && spec.planName ? spec.planName : '\u2014',
+      year: new Date().getFullYear(),
+    };
+  }
+}
+</script>
 </body>
 </html>
