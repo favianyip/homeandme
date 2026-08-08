@@ -9,6 +9,7 @@ Home Redesign.dc.html
 Legal.dc.html
 ContactUs.dc.html
 Design3D.html
+Detect.html
 ReviewedReferences.html
 HousingIdentity.html
 PlanLookup.html

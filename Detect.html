@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home &amp; Me — AI Floor-Plan Detection</title>
+<meta name="description" content="Upload your floor plan, review and correct the AI-detected walls, doors and windows, then confirm to generate your 3D model.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; display: flex; flex-direction: column; }
+  a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+  header { background: rgba(246,244,239,0.96); border-bottom: 1px solid rgba(26,32,35,0.1); }
+  .navrow { max-width: 1360px; margin: 0 auto; padding: 0 clamp(18px,4vw,40px); height: 70px; display: flex; align-items: center; gap: 22px; }
+  .navrow nav { display: flex; gap: 24px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; }
+  .bar { max-width: 1360px; margin: 0 auto; width: 100%; padding: 10px clamp(18px,4vw,40px); display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; }
+  .bar p { margin: 0; font-size: 12.5px; color: #8a908c; }
+  #frameWrap { flex: 1; min-height: 0; position: relative; }
+  #studio { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+  #offline { position: absolute; inset: 0; display: none; place-items: center; background: #f6f4ef; padding: 30px; text-align: center; }
+  @media (max-width: 900px) { .navrow nav { display: none; } }
+</style>
+</head>
+<body>
+<header><div class="navrow">
+  <a href="Home AI.dc.html" style="display:flex;align-items:center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height:40px;width:auto;"></a>
+  <nav>
+    <a href="Home AI.dc.html">HOME</a>
+    <a href="Portfolio.html">PORTFOLIO</a>
+    <a href="PlanLookup.html">FIND MY PLAN</a>
+    <a href="Design3D.html">3D DESIGN</a>
+    <a href="Detect.html" style="color:#5a7e8a;border-bottom:1px solid #5a7e8a;padding-bottom:3px;">AI DETECTION</a>
+    <a href="ContactUs.dc.html">CONTACT US</a>
+  </nav>
+</div></header>
+<div class="bar">
+  <p style="font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2.4px;color:#5a7e8a;">AI FLOOR-PLAN DETECTION STUDIO</p>
+  <p>Upload your plan → review every detected wall, door and window — move, resize, remove or add marks → confirm → your 3D model is built from the verified layout. After the 3D model, continue in <a href="Design3D.html" style="color:#5a7e8a;">3D Design</a> to pick a Home &amp; Me design and get an indicative price.</p>
+</div>
+<div id="frameWrap">
+  <iframe id="studio" src="https://spark-792d-old.tail223b04.ts.net:10000/detect" title="Home & Me AI floor-plan detection studio" allow="fullscreen"></iframe>
+  <div id="offline"><div>
+    <p style="font-family:'Oswald',sans-serif;font-size:18px;letter-spacing:2px;margin:0 0 10px;">THE DETECTION STUDIO IS TEMPORARILY OFFLINE</p>
+    <p style="font-size:14px;color:#4a5350;max-width:52ch;margin:0 0 18px;">You can still build a representative 3D model of your flat type and browse designs with prices while we bring it back.</p>
+    <a href="Design3D.html" style="font-family:'Oswald',sans-serif;letter-spacing:2px;font-size:12px;background:#1a2023;color:#f6f4ef;padding:14px 28px;border-radius:999px;">CONTINUE IN 3D DESIGN →</a>
+  </div></div>
+</div>
+<script>
+(() => {
+  // If the studio backend is unreachable the iframe renders a browser error page we
+  // cannot read cross-origin — probe the origin instead and swap in the fallback.
+  const probe = () => fetch('https://spark-792d-old.tail223b04.ts.net:10000/detect', { method: 'HEAD', mode: 'no-cors' })
+    .catch(() => { document.getElementById('offline').style.display = 'grid'; document.getElementById('studio').style.display = 'none'; });
+  probe();
+})();
+</script>
+</body>
+</html>
