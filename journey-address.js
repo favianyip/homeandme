@@ -137,13 +137,35 @@ export async function buildingFootprint(name) {
   return p;
 }
 
+/**
+ * OneMap's elastic search returns ZERO hits when the query contains filler words customers
+ * naturally type — measured: "Blk 447B Jalan Kayu" → 0 while "447B Jalan Kayu" → 1. Same for
+ * "block", "hdb", a trailing "Singapore", commas, and the "S123456" postal form. Strip that
+ * noise so the natural input works Singapore-wide.
+ */
+function cleanQuery(raw) {
+  return String(raw || '')
+    .replace(/[,;]+/g, ' ')
+    .replace(/\b(?:blk|block|blok|hdb|apt|apartment|tower|unit|no\.?)\b\.?/gi, ' ')
+    .replace(/\bs(\d{6})\b/gi, '$1')
+    .replace(/\bsingapore\b/gi, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
 /** Address search. Returns up to `limit` OneMap hits, normalised. */
 export async function searchAddress(query, limit = 6) {
   const q = String(query || '').trim();
   if (q.length < 3) return [];
   // OneMap drops requests under load exactly as the register does — observed mid-test as a
   // bare "Failed to fetch". Same retry budget, or the address step becomes the flaky one.
-  const data = await fetchJSON(`${ONEMAP}?searchVal=${encodeURIComponent(q)}&returnGeom=Y&getAddrDetails=Y&pageNum=1`);
+  let data = await fetchJSON(`${ONEMAP}?searchVal=${encodeURIComponent(q)}&returnGeom=Y&getAddrDetails=Y&pageNum=1`);
+  if (!(data.results || []).length) {
+    const cleaned = cleanQuery(q);
+    if (cleaned && cleaned.toUpperCase() !== q.toUpperCase() && cleaned.length >= 3) {
+      data = await fetchJSON(`${ONEMAP}?searchVal=${encodeURIComponent(cleaned)}&returnGeom=Y&getAddrDetails=Y&pageNum=1`);
+    }
+  }
   return (data.results || []).filter((r) => r.POSTAL && r.POSTAL !== 'NIL').slice(0, limit).map((r) => {
     const building = r.BUILDING && r.BUILDING !== 'NIL' ? r.BUILDING : '';
     const address = String(r.ADDRESS || '').replace(/ SINGAPORE \d{6}$/, '');

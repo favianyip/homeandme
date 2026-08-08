@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home &amp; Me — Your Home in 3D</title>
+<meta name="description" content="Upload your floor plan, confirm your flat type, see your home in 3D, then pick a Home & Me design with an approximate renovation price.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+  "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js"
+} }
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+  .osw { font-family: 'Oswald', sans-serif; }
+  .lbl { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
+  header { position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1); }
+  .navrow { height: 76px; display: flex; align-items: center; gap: 22px; }
+  .navrow nav { display: flex; gap: 24px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; }
+  .card { background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 8px; }
+  .pill { border-radius: 999px; padding: 14px 30px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2px; cursor: pointer; border: 1px solid transparent; }
+  .pill-d { background: #1a2023; color: #f6f4ef; } .pill-d:hover { background: #5a7e8a; }
+  .pill-d:disabled { opacity: 0.4; cursor: not-allowed; }
+  .pill-g { background: none; color: #1a2023; border-color: rgba(26,32,35,0.25); } .pill-g:hover { border-color: #5a7e8a; color: #5a7e8a; }
+  .step { display: flex; align-items: center; gap: 10px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #b6bab5; }
+  .step b { width: 22px; height: 22px; border-radius: 50%; border: 1px solid currentColor; display: grid; place-items: center; font-size: 10px; font-weight: 400; }
+  .step.on { color: #1a2023; } .step.on b { background: #1a2023; color: #f6f4ef; border-color: #1a2023; }
+  .fld { width: 100%; padding: 16px 18px; border: 1px solid rgba(26,32,35,0.22); background: #fdfcf9; font-size: 15px; outline: none; }
+  .sug { position: absolute; left: 0; right: 0; top: calc(100% + 6px); background: #fff; border: 1px solid rgba(26,32,35,0.14); z-index: 40; max-height: 280px; overflow: auto; box-shadow: 0 18px 40px -22px rgba(26,32,35,0.4); }
+  .sug div { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid rgba(26,32,35,0.06); font-size: 14px; }
+  .sug div:hover { background: #f6f4ef; }
+  .flatbtn { text-align: left; background: #fff; border: 1px solid rgba(26,32,35,0.14); border-radius: 8px; cursor: pointer; padding: 18px; font: inherit; }
+  .flatbtn:hover { border-color: #5a7e8a; }
+  .flatbtn[data-sel="1"] { border-color: #1a2023; box-shadow: inset 0 0 0 1px #1a2023; }
+  .drop { border: 2px dashed rgba(26,32,35,0.25); border-radius: 8px; padding: 28px 20px; text-align: center; cursor: pointer; background: #fdfcf9; }
+  .drop:hover { border-color: #5a7e8a; }
+  #stage { width: 100%; height: clamp(340px, 52vh, 560px); border-radius: 8px; background: #eceae2; display: block; }
+  .designcard { background: #fff; border: 1px solid rgba(26,32,35,0.12); border-radius: 8px; overflow: hidden; cursor: pointer; }
+  .designcard:hover { border-color: #5a7e8a; }
+  .designcard[data-sel="1"] { border-color: #1a2023; box-shadow: inset 0 0 0 2px #1a2023; }
+  .designcard .imgs { display: grid; grid-template-columns: 2fr 1fr; gap: 2px; }
+  .designcard .imgs img { width: 100%; aspect-ratio: 2/1; object-fit: cover; display: block; }
+  .designcard .imgs .side { display: grid; grid-template-rows: 1fr 1fr; gap: 2px; }
+  .designcard .imgs .side img { height: 100%; aspect-ratio: auto; }
+  .price { font-family: 'Oswald', sans-serif; font-size: 21px; letter-spacing: 1px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+  @media (max-width: 940px) { .two { grid-template-columns: 1fr; } .navrow nav { display: none; } }
+</style>
+</head>
+<body>
+<header><div class="wrap navrow">
+  <a href="Home AI.dc.html" style="display:flex;align-items:center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height:44px;width:auto;"></a>
+  <nav>
+    <a href="Home AI.dc.html">HOME</a>
+    <a href="Portfolio.html">PORTFOLIO</a>
+    <a href="PlanLookup.html">FIND MY PLAN</a>
+    <a href="Design3D.html" style="color:#5a7e8a;border-bottom:1px solid #5a7e8a;padding-bottom:3px;">3D DESIGN</a>
+    <a href="FaqAndHelp.dc.html">FAQ</a>
+    <a href="ContactUs.dc.html">CONTACT US</a>
+  </nav>
+</div></header>
+
+<section class="wrap" style="padding: clamp(36px,5vw,56px) clamp(18px,4vw,40px) 20px;">
+  <p class="lbl" style="margin:0 0 14px;">YOUR HOME IN 3D · DESIGN &amp; APPROXIMATE PRICE</p>
+  <h1 class="osw" style="font-weight:400;font-size:clamp(30px,4.4vw,46px);line-height:1.1;margin:0 0 12px;">Upload your plan, see your flat, pick a design</h1>
+  <p style="font-size:16px;line-height:1.7;color:#4a5350;margin:0;max-width:74ch;">Everything runs in your browser — your floor plan is never uploaded to a server. Prices shown are approximate ranges for budgeting; the final quote follows a site visit.</p>
+  <div style="display:flex;gap:clamp(14px,2.4vw,28px);flex-wrap:wrap;margin-top:24px;">
+    <div class="step on" id="ps1"><b>1</b>ADDRESS</div>
+    <div class="step" id="ps2"><b>2</b>FLOOR PLAN</div>
+    <div class="step" id="ps3"><b>3</b>3D MODEL</div>
+    <div class="step" id="ps4"><b>4</b>DESIGN &amp; PRICE</div>
+  </div>
+</section>
+
+<section class="wrap" style="padding-bottom:26px;">
+  <div class="two">
+    <div class="card" style="padding:22px;">
+      <p class="lbl" style="margin:0 0 4px;">STEP 1</p>
+      <h2 class="osw" style="font-weight:400;font-size:20px;margin:0 0 14px;">Your address</h2>
+      <div style="position:relative;">
+        <input id="q" class="fld" type="text" autocomplete="off" placeholder="Postal code, or block and street — e.g. 447B Jalan Kayu">
+        <div class="sug" id="sug" style="display:none;"></div>
+      </div>
+      <p id="addrOut" style="margin:12px 0 0;font-size:13.5px;color:#4a5350;line-height:1.6;"></p>
+      <div id="flatWrap" style="display:none;margin-top:14px;">
+        <p class="lbl" style="margin:0 0 10px;">CONFIRM YOUR FLAT TYPE</p>
+        <div id="flatGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;"></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:22px;">
+      <p class="lbl" style="margin:0 0 4px;">STEP 2</p>
+      <h2 class="osw" style="font-weight:400;font-size:20px;margin:0 0 14px;">Your floor plan (optional but recommended)</h2>
+      <div class="drop" id="drop">
+        <p class="osw" style="margin:0 0 6px;font-size:15px;letter-spacing:1.6px;">DROP YOUR FLOOR PLAN HERE</p>
+        <p style="margin:0;font-size:13px;color:#8a908c;">or click to choose a photo / screenshot (JPG or PNG). It stays on your device.</p>
+        <input id="file" type="file" accept="image/png,image/jpeg,image/webp" style="display:none;">
+      </div>
+      <img id="planPrev" alt="Your floor plan" style="display:none;width:100%;margin-top:14px;border:1px solid rgba(26,32,35,0.12);border-radius:8px;max-height:300px;object-fit:contain;background:#fff;">
+      <div style="margin-top:18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+        <button class="pill pill-d" id="confirm" disabled>CONFIRM &amp; BUILD MY 3D MODEL →</button>
+        <span id="confirmNote" style="font-size:12.5px;color:#8a908c;">Pick your flat type first.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="stageSec" style="display:none;padding-bottom:26px;">
+  <div class="card" style="padding:22px;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;">
+      <div><p class="lbl" style="margin:0 0 4px;">STEP 3</p>
+      <h2 class="osw" style="font-weight:400;font-size:20px;margin:0 0 6px;">Your flat in 3D <span id="stageFlat" style="color:#5a7e8a;"></span></h2></div>
+      <p style="margin:0;font-size:12.5px;color:#8a908c;">Drag to orbit · scroll to zoom. Representative layout for your flat type — dimensions confirmed on site.</p>
+    </div>
+    <canvas id="stage"></canvas>
+  </div>
+</section>
+
+<section class="wrap" id="designSec" style="display:none;padding-bottom:30px;">
+  <p class="lbl" style="margin:0 0 4px;">STEP 4</p>
+  <h2 class="osw" style="font-weight:400;font-size:clamp(22px,3vw,30px);margin:0 0 8px;">Designs for your flat type, with approximate prices</h2>
+  <p style="margin:0 0 20px;font-size:14px;color:#4a5350;max-width:74ch;">Real Home &amp; Me renders for <b id="recFlat"></b>. Prices are indicative full-home renovation ranges — final quote after site measurement.</p>
+  <div id="designs" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;"></div>
+  <div class="card" id="quoteBox" style="display:none;margin-top:26px;padding:24px;">
+    <h3 class="osw" style="font-weight:400;font-size:19px;margin:0 0 8px;">Your selection</h3>
+    <p id="quoteSummary" style="margin:0 0 16px;font-size:14.5px;color:#4a5350;line-height:1.7;"></p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;">
+      <a class="pill pill-d" id="waQuote" target="_blank" rel="noopener">GET MY EXACT QUOTE ON WHATSAPP →</a>
+      <a class="pill pill-g" href="ContactUs.dc.html">OR CONTACT US ANOTHER WAY</a>
+    </div>
+    <p style="margin:14px 0 0;font-size:12px;color:#8a908c;">No payment is taken on this website. Deposit and schedule are agreed after your quote is confirmed.</p>
+  </div>
+</section>
+
+<footer style="border-top:1px solid rgba(26,32,35,0.12);padding:26px 0 40px;"><div class="wrap" style="font-size:13px;color:#8a908c;">HOME AND ME PTE. LTD. · 21 Toh Guan Road East #03-02 Toh Guan Centre, Singapore 608609</div></footer>
+
+<script type="module">
+import { searchAddress, resolveProperty, splitUnit } from './journey-address.js';
+const $ = (s) => document.querySelector(s);
+
+/* ---------- representative HDB layouts (published typical dimensions, metres) ---------- */
+const LAYOUTS = {
+  '2-Room': { w: 8.4, d: 5.4, rooms: [
+    ['Living / Dining', 0, 0, 4.6, 3.4], ['Kitchen', 4.6, 0, 2.2, 3.4], ['Bathroom', 6.8, 0, 1.6, 3.4],
+    ['Bedroom', 0, 3.4, 3.8, 2.0], ['Household Shelter', 3.8, 3.4, 1.6, 2.0], ['Service Yard', 5.4, 3.4, 3.0, 2.0] ] },
+  '3-Room': { w: 9.8, d: 6.6, rooms: [
+    ['Living / Dining', 0, 0, 5.0, 4.0], ['Kitchen', 5.0, 0, 2.6, 4.0], ['Service Yard', 7.6, 0, 2.2, 2.0], ['Bathroom', 7.6, 2.0, 2.2, 2.0],
+    ['Main Bedroom', 0, 4.0, 3.6, 2.6], ['Bedroom 2', 3.6, 4.0, 3.2, 2.6], ['WC', 6.8, 4.0, 1.4, 2.6], ['Store', 8.2, 4.0, 1.6, 2.6] ] },
+  '4-Room': { w: 11.4, d: 8.0, rooms: [
+    ['Living / Dining', 0, 0, 5.6, 4.6], ['Kitchen', 5.6, 0, 3.0, 4.6], ['Service Yard', 8.6, 0, 2.8, 2.2], ['Common Bathroom', 8.6, 2.2, 2.8, 2.4],
+    ['Main Bedroom', 0, 4.6, 4.0, 3.4], ['Main Ensuite', 4.0, 4.6, 1.8, 3.4], ['Bedroom 2', 5.8, 4.6, 2.9, 3.4], ['Bedroom 3', 8.7, 4.6, 2.7, 3.4] ] },
+  '5-Room': { w: 12.6, d: 8.8, rooms: [
+    ['Living', 0, 0, 4.4, 5.0], ['Dining', 4.4, 0, 3.2, 5.0], ['Kitchen', 7.6, 0, 2.8, 5.0], ['Service Yard', 10.4, 0, 2.2, 2.6], ['Common Bathroom', 10.4, 2.6, 2.2, 2.4],
+    ['Main Bedroom', 0, 5.0, 4.2, 3.8], ['Main Ensuite', 4.2, 5.0, 1.8, 3.8], ['Bedroom 2', 6.0, 5.0, 3.0, 3.8], ['Bedroom 3', 9.0, 5.0, 2.8, 3.8], ['Store', 11.8, 5.0, 0.8, 3.8] ] },
+};
+LAYOUTS['Executive'] = LAYOUTS['5-Room'];
+
+/* ---------- rough pricing (SGD, whole-home, indicative only) ---------- */
+const BASE = { '2-Room': 26000, '3-Room': 34000, '4-Room': 44000, '5-Room': 52000, 'Executive': 58000 };
+const STYLE_FACTOR = { 'Muji': 1.0, 'Minimalist': 0.95, 'Scandinavian': 1.0, 'Contemporary': 1.1, 'Modern': 1.1, 'Modern Classic': 1.22, 'Modern Oriental': 1.2, 'Industrial': 1.05, 'Room Showcase': 1.05 };
+const fmt = (n) => '$' + (Math.round(n / 500) * 500).toLocaleString('en-SG');
+const priceRange = (flat, style) => {
+  const base = (BASE[flat] || 44000) * (STYLE_FACTOR[style] || 1.05);
+  return `${fmt(base * 0.9)} – ${fmt(base * 1.15)}`;
+};
+
+/* ---------- state ---------- */
+let block = null, flat = null, planImg = null, chosenDesign = null;
+
+/* ---------- step 1: address ---------- */
+let hits = [], seq = 0, timer = null;
+$('#q').addEventListener('input', (e) => {
+  clearTimeout(timer);
+  const v = e.target.value;
+  const s = $('#sug');
+  if (v.trim().length < 3) { s.style.display = 'none'; return; }
+  timer = setTimeout(async () => {
+    const my = ++seq;
+    const { query } = splitUnit(v);
+    try { hits = await searchAddress(query); } catch { if (my === seq) s.style.display = 'none'; return; }
+    if (my !== seq) return;
+    s.style.display = '';
+    s.innerHTML = hits.length ? '' : '<div style="color:#8a908c;cursor:default;">No address found — try block number and street, or your postal code.</div>';
+    hits.forEach((r, i) => {
+      const el = document.createElement('div');
+      el.innerHTML = `<b style="font-weight:600;"></b><span style="color:#8a908c;"></span>`;
+      el.querySelector('b').textContent = r.address;
+      el.querySelector('span').textContent = ` · ${r.postal}`;
+      el.addEventListener('click', async () => {
+        $('#q').value = r.address; s.style.display = 'none';
+        $('#addrOut').textContent = 'Checking the HDB property register…';
+        try { pick(await resolveProperty(r)); } catch { $('#addrOut').textContent = 'Could not reach the HDB register — pick your flat type below.'; showFlats({}); }
+      });
+      s.appendChild(el);
+    });
+  }, 300);
+});
+
+function pick(b) {
+  block = b;
+  if (b.class === 'hdb') {
+    $('#addrOut').textContent = `HDB block confirmed — ${b.street_address || b.address}. Completed ${b.year_completed || '—'}, ${b.total_dwelling_units || '—'} units.`;
+    showFlats(b.flat_mix || {});
+  } else {
+    $('#addrOut').textContent = 'This address is not an HDB block. Pick the closest flat size below — we cover condos and landed with a site visit.';
+    showFlats({});
+  }
+  $('#ps1').classList.add('on'); $('#ps2').classList.add('on');
+}
+
+function showFlats(mix) {
+  const grid = $('#flatGrid'); grid.innerHTML = ''; $('#flatWrap').style.display = '';
+  const known = Object.keys(LAYOUTS);
+  const inBlock = Object.keys(mix).map((k) => known.find((n) => k.toUpperCase().includes(n.split('-')[0].toUpperCase()) || k.toUpperCase().includes(n.toUpperCase()))).filter(Boolean);
+  for (const name of known.filter((n, i, a) => a.indexOf(n) === i)) {
+    const btn = document.createElement('button');
+    btn.className = 'flatbtn'; btn.type = 'button';
+    const count = Object.entries(mix).find(([k]) => k.toUpperCase().includes(name.split('-')[0].toUpperCase()));
+    btn.innerHTML = `<span class="osw" style="font-size:16px;letter-spacing:1px;display:block;">${name}</span>
+      <span style="font-size:11.5px;color:#8a908c;">${count ? count[1] + ' units in this block' : (inBlock.length ? 'not in this block' : 'HDB flat type')}</span>`;
+    btn.addEventListener('click', () => {
+      grid.querySelectorAll('.flatbtn').forEach((x) => x.removeAttribute('data-sel'));
+      btn.setAttribute('data-sel', '1'); flat = name;
+      $('#confirm').disabled = false;
+      $('#confirmNote').textContent = planImg ? 'Ready — build your 3D model.' : 'You can also add your floor plan photo for our records.';
+    });
+    grid.appendChild(btn);
+  }
+}
+
+/* ---------- step 2: plan upload (client-side only) ---------- */
+const drop = $('#drop'), file = $('#file');
+drop.addEventListener('click', () => file.click());
+drop.addEventListener('dragover', (e) => { e.preventDefault(); });
+drop.addEventListener('drop', (e) => { e.preventDefault(); if (e.dataTransfer.files[0]) loadPlan(e.dataTransfer.files[0]); });
+file.addEventListener('change', () => { if (file.files[0]) loadPlan(file.files[0]); });
+function loadPlan(f) {
+  const rd = new FileReader();
+  rd.onload = () => { planImg = rd.result; $('#planPrev').src = planImg; $('#planPrev').style.display = ''; drop.querySelector('p').textContent = 'FLOOR PLAN LOADED — CLICK TO REPLACE'; };
+  rd.readAsDataURL(f);
+}
+
+/* ---------- step 3: 3D model ---------- */
+let three = null;
+$('#confirm').addEventListener('click', async () => {
+  if (!flat) return;
+  $('#ps3').classList.add('on');
+  $('#stageSec').style.display = ''; $('#stageFlat').textContent = `— ${flat} HDB`;
+  await build3D(LAYOUTS[flat]);
+  showDesigns();
+  $('#stageSec').scrollIntoView({ behavior: 'smooth' });
+});
+
+async function build3D(layout) {
+  const THREE = await import('three');
+  const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+  const canvas = $('#stage');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xeceae2);
+  const cam = new THREE.PerspectiveCamera(52, 2, 0.1, 200);
+  const W = layout.w, D = layout.d, H = 2.6, T = 0.12;
+  cam.position.set(W * 0.75, H * 3.4, D * 1.55);
+  const controls = new OrbitControls(cam, canvas);
+  controls.target.set(W / 2, 0.6, D / 2); controls.maxPolarAngle = Math.PI / 2.05; controls.enableDamping = true;
+  scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+  const sun = new THREE.DirectionalLight(0xfff4e0, 1.15); sun.position.set(W, H * 4, D * 1.5); scene.add(sun);
+  const floorMat = new THREE.MeshStandardMaterial({ color: 0xd9cfbc });
+  const wallMat = new THREE.MeshStandardMaterial({ color: 0xf3f1ea });
+  const innerMat = new THREE.MeshStandardMaterial({ color: 0xdcd7cb });
+  scene.add(new THREE.Mesh(new THREE.BoxGeometry(W + 0.6, 0.2, D + 0.6), floorMat).translateX(W / 2).translateZ(D / 2).translateY(-0.1));
+  const wall = (x1, z1, x2, z2, mat, h = H) => {
+    const len = Math.hypot(x2 - x1, z2 - z1);
+    const m = new THREE.Mesh(new THREE.BoxGeometry(len, h, T), mat);
+    m.position.set((x1 + x2) / 2, h / 2, (z1 + z2) / 2);
+    m.rotation.y = -Math.atan2(z2 - z1, x2 - x1);
+    scene.add(m);
+  };
+  wall(0, 0, W, 0, wallMat); wall(0, D, W, D, wallMat); wall(0, 0, 0, D, wallMat); wall(W, 0, W, D, wallMat);
+  const loader = new THREE.TextureLoader();
+  for (const [name, x, z, w, d] of layout.rooms) {
+    wall(x, z, x + w, z, innerMat, H * 0.72); wall(x, z, x, z + d, innerMat, H * 0.72);
+    const cvs = document.createElement('canvas'); cvs.width = 512; cvs.height = 128;
+    const g = cvs.getContext('2d');
+    g.fillStyle = '#1a2023'; g.font = '500 44px Oswald, Arial'; g.textAlign = 'center'; g.fillText(name.toUpperCase(), 256, 82);
+    const tex = new THREE.CanvasTexture(cvs);
+    const lab = new THREE.Mesh(new THREE.PlaneGeometry(Math.min(w * 0.9, 3.4), Math.min(w * 0.9, 3.4) / 4),
+      new THREE.MeshBasicMaterial({ map: tex, transparent: true }));
+    lab.rotation.x = -Math.PI / 2; lab.position.set(x + w / 2, 0.02, z + d / 2);
+    scene.add(lab);
+  }
+  const resize = () => {
+    const r = canvas.getBoundingClientRect();
+    renderer.setSize(r.width, r.height, false);
+    cam.aspect = r.width / r.height; cam.updateProjectionMatrix();
+  };
+  resize(); window.addEventListener('resize', resize);
+  (function loop() { controls.update(); renderer.render(scene, cam); requestAnimationFrame(loop); })();
+}
+
+/* ---------- step 4: designs + rough prices ---------- */
+async function showDesigns() {
+  $('#ps4').classList.add('on');
+  const data = await (await fetch('portfolio-data.json')).json();
+  const flatKey = flat === 'Executive' ? '5-Room' : flat;
+  let pool = data.filter((d) => d.flat.startsWith(flatKey));
+  if (!pool.length) pool = data.filter((d) => d.flat.startsWith('4-Room'));
+  const groups = new Map();
+  for (const d of pool) {
+    const key = `${d.style} · ${d.design}`;
+    if (!groups.has(key)) groups.set(key, { style: d.style, design: d.design, flat: d.flat, imgs: [] });
+    groups.get(key).imgs.push(d);
+  }
+  const list = [...groups.values()].filter((r) => r.style !== 'Room Showcase').concat([...groups.values()].filter((r) => r.style === 'Room Showcase')).slice(0, 8);
+  $('#recFlat').textContent = `${flatKey} HDB flats`;
+  const wrapEl = $('#designs'); wrapEl.innerHTML = '';
+  for (const rec of list) {
+    const price = priceRange(flatKey, rec.style);
+    const card = document.createElement('div'); card.className = 'designcard';
+    const main = rec.imgs.find((i) => /living/i.test(i.room)) || rec.imgs[0];
+    const side = rec.imgs.filter((i) => i !== main).slice(0, 2);
+    const imgs = document.createElement('div'); imgs.className = 'imgs';
+    const mk = (rrec) => { const im = document.createElement('img'); im.loading = 'lazy'; im.alt = `${rec.style} ${rec.design} — ${rrec.room}`; im.setAttribute('src', encodeURI(rrec.file)); return im; };
+    imgs.appendChild(mk(main));
+    const sideBox = document.createElement('div'); sideBox.className = 'side';
+    side.forEach((sImg) => sideBox.appendChild(mk(sImg)));
+    imgs.appendChild(sideBox);
+    const info = document.createElement('div'); info.style.padding = '16px 18px 18px';
+    info.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;">
+        <span class="osw" style="font-size:17px;letter-spacing:1px;"></span><span class="price"></span></div>
+      <p style="margin:6px 0 0;font-size:12px;color:#8a908c;"></p>`;
+    info.querySelector('span.osw').textContent = rec.style === 'Room Showcase' ? 'Signature Rooms' : `${rec.style} — ${rec.design}`;
+    info.querySelector('span.price').textContent = price;
+    info.querySelector('p').textContent = `Approx. whole-home range for a ${flatKey} flat · ${rec.imgs.length} renders · tap to select`;
+    card.append(imgs, info);
+    card.addEventListener('click', () => {
+      wrapEl.querySelectorAll('.designcard').forEach((x) => x.removeAttribute('data-sel'));
+      card.setAttribute('data-sel', '1');
+      chosenDesign = { ...rec, price };
+      const addr = block ? (block.street_address || block.address || '') : '';
+      $('#quoteBox').style.display = '';
+      $('#quoteSummary').textContent = `${flatKey} HDB${addr ? ' at ' + addr : ''} · ${info.querySelector('span.osw').textContent} · approximate range ${price}. Final pricing follows a free site measurement.`;
+      const msg = encodeURIComponent(`Hi Home & Me! I used your 3D design tool.\nFlat: ${flatKey} HDB${addr ? '\nAddress: ' + addr : ''}\nDesign: ${info.querySelector('span.osw').textContent}\nIndicative range shown: ${price}\nI'd like an exact quote.`);
+      $('#waQuote').href = `https://wa.me/6594235227?text=${msg}`;
+      $('#quoteBox').scrollIntoView({ behavior: 'smooth' });
+    });
+    wrapEl.appendChild(card);
+  }
+  $('#designSec').style.display = '';
+}
+
+/* deep-link from PlanLookup: ?flat=4-Room&addr=... */
+const qp = new URLSearchParams(location.search);
+if (qp.get('addr')) { $('#q').value = qp.get('addr'); }
+</script>
+</body>
+</html>

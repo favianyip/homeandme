@@ -8,7 +8,7 @@ FaqAndHelp.dc.html
 Home Redesign.dc.html
 Legal.dc.html
 ContactUs.dc.html
-ProjectJourney.html
+Design3D.html
 ReviewedReferences.html
 HousingIdentity.html
 PlanLookup.html
