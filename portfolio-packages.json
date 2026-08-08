@@ -1,0 +1,489 @@
+[
+ {
+  "id": "contemporary-3-room-hdb-design-01",
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "scheme": 1,
+  "label": "Contemporary \u00b7 Scheme 01",
+  "cover": "assets/portfolio/contemporary-3-room-hdb-design-01-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Master Bathroom",
+   "Bedroom 2",
+   "Common Bathroom"
+  ],
+  "roomCount": 7,
+  "imageCount": 7,
+  "tier": "full"
+ },
+ {
+  "id": "modern-classic-3-room-hdb-design-01",
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "scheme": 1,
+  "label": "Modern Classic \u00b7 Scheme 01",
+  "cover": "assets/portfolio/modern-classic-3-room-hdb-design-01-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Kitchen",
+   "Master Bedroom",
+   "Master Bathroom",
+   "Bedroom 2",
+   "Common Bathroom",
+   "Foyer"
+  ],
+  "roomCount": 7,
+  "imageCount": 7,
+  "tier": "full"
+ },
+ {
+  "id": "contemporary-3-room-hdb-design-02",
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "scheme": 2,
+  "label": "Contemporary \u00b7 Scheme 02",
+  "cover": "assets/portfolio/contemporary-3-room-hdb-design-02-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Master Bathroom",
+   "Study"
+  ],
+  "roomCount": 6,
+  "imageCount": 6,
+  "tier": "full"
+ },
+ {
+  "id": "contemporary-3-room-hdb-design-03",
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "scheme": 3,
+  "label": "Contemporary \u00b7 Scheme 03",
+  "cover": "assets/portfolio/contemporary-3-room-hdb-design-03-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Master Bathroom",
+   "Common Bathroom"
+  ],
+  "roomCount": 6,
+  "imageCount": 7,
+  "tier": "full"
+ },
+ {
+  "id": "modern-classic-3-room-hdb-design-03",
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "scheme": 3,
+  "label": "Modern Classic \u00b7 Scheme 03",
+  "cover": "assets/portfolio/modern-classic-3-room-hdb-design-03-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Master Bathroom",
+   "Bedroom 2"
+  ],
+  "roomCount": 6,
+  "imageCount": 6,
+  "tier": "full"
+ },
+ {
+  "id": "modern-classic-3-room-hdb-design-02",
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "scheme": 2,
+  "label": "Modern Classic \u00b7 Scheme 02",
+  "cover": "assets/portfolio/modern-classic-3-room-hdb-design-02-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Master Bathroom"
+  ],
+  "roomCount": 5,
+  "imageCount": 5,
+  "tier": "full"
+ },
+ {
+  "id": "modern-oriental-3-room-hdb-design-01",
+  "style": "Modern Oriental",
+  "flat": "3-Room HDB",
+  "scheme": 1,
+  "label": "Modern Oriental \u00b7 Scheme 01",
+  "cover": "assets/portfolio/modern-oriental-3-room-hdb-design-01-living-hall-view-i.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom"
+  ],
+  "roomCount": 4,
+  "imageCount": 5,
+  "tier": "partial"
+ },
+ {
+  "id": "muji-3-room-hdb-design-01",
+  "style": "Muji",
+  "flat": "3-Room HDB",
+  "scheme": 1,
+  "label": "Muji \u00b7 Scheme 01",
+  "cover": "assets/portfolio/muji-3-room-hdb-design-01-living-room-view-i.jpg",
+  "rooms": [
+   "Living",
+   "Kitchen"
+  ],
+  "roomCount": 2,
+  "imageCount": 3,
+  "tier": "preview"
+ },
+ {
+  "id": "contemporary-4-room-hdb-design-04",
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "scheme": 4,
+  "label": "Contemporary \u00b7 Scheme 04",
+  "cover": "assets/portfolio/contemporary-4-room-hdb-design-04-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Walk-in Wardrobe",
+   "Study",
+   "Shoe Cabinet"
+  ],
+  "roomCount": 7,
+  "imageCount": 7,
+  "tier": "full"
+ },
+ {
+  "id": "contemporary-4-room-hdb-design-01",
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "scheme": 1,
+  "label": "Contemporary \u00b7 Scheme 01",
+  "cover": "assets/portfolio/contemporary-4-room-hdb-design-01-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Bedroom 2"
+  ],
+  "roomCount": 5,
+  "imageCount": 8,
+  "tier": "full"
+ },
+ {
+  "id": "contemporary-4-room-hdb-design-02",
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "scheme": 2,
+  "label": "Contemporary \u00b7 Scheme 02",
+  "cover": "assets/portfolio/contemporary-4-room-hdb-design-02-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Bedroom 2"
+  ],
+  "roomCount": 5,
+  "imageCount": 9,
+  "tier": "full"
+ },
+ {
+  "id": "contemporary-4-room-hdb-design-06",
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "scheme": 6,
+  "label": "Contemporary \u00b7 Scheme 06",
+  "cover": "assets/portfolio/contemporary-4-room-hdb-design-06-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Master Bathroom"
+  ],
+  "roomCount": 5,
+  "imageCount": 6,
+  "tier": "full"
+ },
+ {
+  "id": "industrial-4-room-hdb-design-01",
+  "style": "Industrial",
+  "flat": "4-Room HDB",
+  "scheme": 1,
+  "label": "Industrial \u00b7 Scheme 01",
+  "cover": "assets/portfolio/industrial-4-room-hdb-design-01-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Kitchen",
+   "Master Bedroom",
+   "Master Bathroom",
+   "Common Bathroom"
+  ],
+  "roomCount": 5,
+  "imageCount": 6,
+  "tier": "full"
+ },
+ {
+  "id": "modern-4-room-hdb-design-01",
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "scheme": 1,
+  "label": "Modern \u00b7 Scheme 01",
+  "cover": "assets/portfolio/modern-4-room-hdb-design-01-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bathroom",
+   "Common Bathroom"
+  ],
+  "roomCount": 5,
+  "imageCount": 5,
+  "tier": "full"
+ },
+ {
+  "id": "modern-4-room-hdb-design-03",
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "scheme": 3,
+  "label": "Modern \u00b7 Scheme 03",
+  "cover": "assets/portfolio/modern-4-room-hdb-design-03-living-hall-view-i.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Bedroom 2"
+  ],
+  "roomCount": 5,
+  "imageCount": 8,
+  "tier": "full"
+ },
+ {
+  "id": "contemporary-4-room-hdb-design-05",
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "scheme": 5,
+  "label": "Contemporary \u00b7 Scheme 05",
+  "cover": "assets/portfolio/contemporary-4-room-hdb-design-05-living-room.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bathroom"
+  ],
+  "roomCount": 4,
+  "imageCount": 4,
+  "tier": "partial"
+ },
+ {
+  "id": "modern-4-room-hdb-design-02",
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "scheme": 2,
+  "label": "Modern \u00b7 Scheme 02",
+  "cover": "assets/portfolio/modern-4-room-hdb-design-02-living-hall-view-i.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom"
+  ],
+  "roomCount": 4,
+  "imageCount": 7,
+  "tier": "partial"
+ },
+ {
+  "id": "modern-classic-4-room-hdb-design-01",
+  "style": "Modern Classic",
+  "flat": "4-Room HDB",
+  "scheme": 1,
+  "label": "Modern Classic \u00b7 Scheme 01",
+  "cover": "assets/portfolio/modern-classic-4-room-hdb-design-01-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom"
+  ],
+  "roomCount": 4,
+  "imageCount": 4,
+  "tier": "partial"
+ },
+ {
+  "id": "scandinavian-4-room-hdb-design-01",
+  "style": "Scandinavian",
+  "flat": "4-Room HDB",
+  "scheme": 1,
+  "label": "Scandinavian \u00b7 Scheme 01",
+  "cover": "assets/portfolio/scandinavian-4-room-hdb-design-01-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom"
+  ],
+  "roomCount": 4,
+  "imageCount": 4,
+  "tier": "partial"
+ },
+ {
+  "id": "contemporary-4-room-hdb-design-03",
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "scheme": 3,
+  "label": "Contemporary \u00b7 Scheme 03",
+  "cover": "assets/portfolio/contemporary-4-room-hdb-design-03-living-hall-view-i.jpg",
+  "rooms": [
+   "Living"
+  ],
+  "roomCount": 1,
+  "imageCount": 2,
+  "tier": "preview"
+ },
+ {
+  "id": "contemporary-5-room-hdb-design-01",
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "scheme": 1,
+  "label": "Contemporary \u00b7 Scheme 01",
+  "cover": "assets/portfolio/contemporary-5-room-hdb-design-01-living-hall-view-i.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Master Bathroom",
+   "Bedroom 2",
+   "Common Bathroom"
+  ],
+  "roomCount": 7,
+  "imageCount": 7,
+  "tier": "full"
+ },
+ {
+  "id": "modern-oriental-5-room-hdb-design-01",
+  "style": "Modern Oriental",
+  "flat": "5-Room HDB",
+  "scheme": 1,
+  "label": "Modern Oriental \u00b7 Scheme 01",
+  "cover": "assets/portfolio/modern-oriental-5-room-hdb-design-01-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Master Bathroom",
+   "Study",
+   "Common Bathroom"
+  ],
+  "roomCount": 7,
+  "imageCount": 8,
+  "tier": "full"
+ },
+ {
+  "id": "muji-5-room-hdb-design-01",
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "scheme": 1,
+  "label": "Muji \u00b7 Scheme 01",
+  "cover": "assets/portfolio/muji-5-room-hdb-design-01-living-room-view-i.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Master Bathroom",
+   "Bedroom 2",
+   "Common Bathroom"
+  ],
+  "roomCount": 7,
+  "imageCount": 9,
+  "tier": "full"
+ },
+ {
+  "id": "contemporary-5-room-hdb-design-02",
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "scheme": 2,
+  "label": "Contemporary \u00b7 Scheme 02",
+  "cover": "assets/portfolio/contemporary-5-room-hdb-design-02-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Study"
+  ],
+  "roomCount": 5,
+  "imageCount": 6,
+  "tier": "full"
+ },
+ {
+  "id": "minimalist-5-room-hdb-design-01",
+  "style": "Minimalist",
+  "flat": "5-Room HDB",
+  "scheme": 1,
+  "label": "Minimalist \u00b7 Scheme 01",
+  "cover": "assets/portfolio/minimalist-5-room-hdb-design-01-living-hall.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom",
+   "Bedroom 2"
+  ],
+  "roomCount": 5,
+  "imageCount": 7,
+  "tier": "full"
+ },
+ {
+  "id": "modern-classic-5-room-hdb-design-01",
+  "style": "Modern Classic",
+  "flat": "5-Room HDB",
+  "scheme": 1,
+  "label": "Modern Classic \u00b7 Scheme 01",
+  "cover": "assets/portfolio/modern-classic-5-room-hdb-design-01-living-room.jpg",
+  "rooms": [
+   "Living",
+   "Kitchen",
+   "Master Bedroom",
+   "Study"
+  ],
+  "roomCount": 4,
+  "imageCount": 5,
+  "tier": "partial"
+ },
+ {
+  "id": "muji-5-room-hdb-design-02",
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "scheme": 2,
+  "label": "Muji \u00b7 Scheme 02",
+  "cover": "assets/portfolio/muji-5-room-hdb-design-02-living-room.jpg",
+  "rooms": [
+   "Living",
+   "Dining",
+   "Kitchen",
+   "Master Bedroom"
+  ],
+  "roomCount": 4,
+  "imageCount": 8,
+  "tier": "partial"
+ }
+]

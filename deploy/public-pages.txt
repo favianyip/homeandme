@@ -113,6 +113,7 @@ assets/images/fb-icon.svg
 # Design portfolio (segregated + labeled from owner's render library, 2026-08-08)
 Portfolio.html
 portfolio-data.json
+portfolio-packages.json
 assets/portfolio/contemporary-3-room-hdb-design-01-bedroom-2.jpg
 assets/portfolio/contemporary-3-room-hdb-design-01-common-bathroom.jpg
 assets/portfolio/contemporary-3-room-hdb-design-01-dining.jpg

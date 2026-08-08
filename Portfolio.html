@@ -104,13 +104,19 @@
     tabs.appendChild(b); return b;
   };
   mkTab('All styles', 'ALL').classList.add('on');
-  styles.forEach(s => mkTab(s, s));
+  styles.forEach(s => mkTab(s === 'Room Showcase' ? 'Room Ideas' : s, s));
 
   for (const style of styles) {
     const block = document.createElement('section');
     block.className = 'styleblock'; block.dataset.style = style;
     const inStyle = data.filter(d => d.style === style);
-    block.innerHTML = `<div class="stylehead"><h2>${style}</h2><span class="lbl">${inStyle.length} RENDERS</span></div>`;
+    block.innerHTML = `<div class="stylehead"><h2>${style === 'Room Showcase' ? 'Room Ideas' : style}</h2><span class="lbl">${inStyle.length} RENDERS</span></div>`;
+    if (style === 'Room Showcase') {
+      const note = document.createElement('p');
+      note.style.cssText = 'margin:10px 0 0;font-size:13px;color:#8a908c;max-width:78ch;';
+      note.textContent = 'Individual room ideas, grouped by flat type — not a complete design package. The named schemes above are the full packages you can choose on Design My Home.';
+      block.appendChild(note);
+    }
     const groups = new Map();
     for (const d of inStyle) {
       const key = style === 'Room Showcase' ? d.flat : `${d.flat} · ${d.design}`;

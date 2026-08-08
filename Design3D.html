@@ -513,11 +513,13 @@ async function showDesigns({ fromPlan }) {
   if (!flat) return;
   stepOn('ps5');
   const key = flatKeyOf(flat);
-  let data;
-  try { data = await (await fetch('portfolio-data.json')).json(); }
-  catch (err) {
-    // Without this the whole post-confirm render dies silently and the customer
-    // is left staring at a 3D model with no way forward.
+  let packs, imgs;
+  try {
+    [packs, imgs] = await Promise.all([
+      fetch('portfolio-packages.json').then((r) => r.json()),
+      fetch('portfolio-data.json').then((r) => r.json()),
+    ]);
+  } catch (err) {
     const host = $('#designs'); host.innerHTML = '';
     const box = document.createElement('div');
     box.className = 'card'; box.style.cssText = 'grid-column:1/-1;padding:22px;';
@@ -525,86 +527,130 @@ async function showDesigns({ fromPlan }) {
     t.textContent = 'We could not load the design packages just now';
     const a = document.createElement('a'); a.className = 'pill pill-d'; a.target = '_blank'; a.rel = 'noopener';
     a.textContent = 'SEND MY PLAN TO A DESIGNER →';
-    a.href = `https://wa.me/${PAYMENT.whatsapp}?text=` + encodeURIComponent(`Hi Home & Me! I verified my ${key} floor plan on your website and would like design options.`);
+    a.href = 'https://wa.me/' + PAYMENT.whatsapp + '?text=' + encodeURIComponent('Hi Home & Me! I verified my ' + key + ' floor plan on your website and would like design options.');
     box.append(t, a); host.appendChild(box);
     $('#designSec').style.display = '';
     return;
   }
-  // STRICT: only packages designed for this flat type. Showing a 4-room design
-  // to a 3-room customer misrepresents what fits — never cross-fill.
-  const pool = data.filter((d) => d.flat.startsWith(key));
-  const groups = new Map();
-  for (const d of pool) {
-    const gk = `${d.style} · ${d.design}`;
-    if (!groups.has(gk)) groups.set(gk, { style: d.style, design: d.design, imgs: [] });
-    groups.get(gk).imgs.push(d);
-  }
-  const list = [...groups.values()].filter((r) => r.style !== 'Room Showcase')
-    .concat([...groups.values()].filter((r) => r.style === 'Room Showcase')).slice(0, 8);
+
+  // STRICT: only packages built for this flat type. Whole-home packages first,
+  // so a 7-room scheme is never shown beside a single render as if they were
+  // the same kind of thing.
+  const RANK = { full: 0, partial: 1, preview: 2 };
+  const mine = packs.filter((p) => p.flat.startsWith(key))
+    .sort((a, b) => (RANK[a.tier] - RANK[b.tier]) || (b.roomCount - a.roomCount) || a.label.localeCompare(b.label));
+  const byPkg = new Map();
+  imgs.forEach((i) => { if (!byPkg.has(i.packageId)) byPkg.set(i.packageId, []); byPkg.get(i.packageId).push(i); });
 
   const intro = $('#designIntro'); intro.innerHTML = '';
   const line = document.createElement('span');
-  line.textContent = `Showing the Home & Me packages designed for ${key} HDB flats — we never show designs made for a different flat size.`;
+  line.textContent = mine.length + ' Home & Me package' + (mine.length === 1 ? '' : 's')
+    + ' designed for ' + key + ' HDB flats. Every room shown was designed for this flat size — we never show designs made for a different one.';
   intro.appendChild(line);
   const change = document.createElement('a');
   change.href = '#'; change.style.cssText = 'color:#5a7e8a;margin-left:6px;border-bottom:1px solid currentColor;';
   change.textContent = 'Not your flat type? Change it.';
   change.addEventListener('click', (ev) => { ev.preventDefault(); $('#flatGrid').scrollIntoView({ behavior: 'smooth', block: 'center' }); });
   intro.appendChild(change);
-  // Detection disagreeing with the customer is worth saying out loud, not hiding.
   if (fromPlan && detectedFlat && detectedFlat !== flat) {
     const warn = document.createElement('span');
     warn.style.cssText = 'display:block;margin-top:8px;color:#8a6118;';
-    warn.textContent = `Your floor plan looks closer to a ${detectedFlat} (${planConfirmed.beds} bedrooms detected). We are showing ${key} because that is what you selected — change it above if the plan is right.`;
+    warn.textContent = 'Your floor plan looks closer to a ' + detectedFlat + ' (' + planConfirmed.beds
+      + ' bedrooms detected). We are showing ' + key + ' because that is what you selected — change it above if the plan is right.';
     intro.appendChild(warn);
   } else if (fromPlan && detectedFlat) {
     const ok = document.createElement('span');
     ok.style.cssText = 'display:block;margin-top:8px;color:#5a7e8a;';
-    ok.textContent = `Read from your confirmed plan: ${planConfirmed.beds} bedroom${planConfirmed.beds === 1 ? '' : 's'}, ${planConfirmed.rooms} enclosed areas.`;
+    ok.textContent = 'Read from your confirmed plan: ' + planConfirmed.beds + ' bedroom'
+      + (planConfirmed.beds === 1 ? '' : 's') + ', ' + planConfirmed.rooms + ' enclosed areas.';
     intro.appendChild(ok);
   }
 
   const host = $('#designs'); host.innerHTML = '';
-  if (!list.length) {
+  if (!mine.length) {
     const empty = document.createElement('div');
     empty.className = 'card'; empty.style.cssText = 'grid-column:1/-1;padding:24px;';
     const h = document.createElement('p'); h.className = 'osw'; h.style.cssText = 'margin:0 0 8px;font-size:17px;';
-    h.textContent = `Our ${key} package collection is being prepared`;
-    const p = document.createElement('p'); p.style.cssText = 'margin:0 0 14px;font-size:14px;color:#4a5350;max-width:64ch;line-height:1.7;';
-    p.textContent = `We only show designs created for your exact flat type — designs for other layouts would not fit your home. Talk to us and we will design for your ${key} directly.`;
+    h.textContent = 'Our ' + key + ' package collection is being prepared';
+    const t = document.createElement('p'); t.style.cssText = 'margin:0 0 14px;font-size:14px;color:#4a5350;max-width:64ch;line-height:1.7;';
+    t.textContent = 'We only show designs created for your exact flat type — designs for other layouts would not fit your home. Talk to us and we will design for your ' + key + ' directly.';
     const a = document.createElement('a'); a.className = 'pill pill-d'; a.target = '_blank'; a.rel = 'noopener';
-    a.textContent = `TALK TO US ABOUT MY ${key.toUpperCase()} →`;
-    a.href = `https://wa.me/${PAYMENT.whatsapp}?text=` + encodeURIComponent(`Hi Home & Me! I have a ${key} HDB and would like design options.`);
-    empty.append(h, p, a); host.appendChild(empty);
+    a.textContent = 'TALK TO US ABOUT MY ' + key.toUpperCase() + ' →';
+    a.href = 'https://wa.me/' + PAYMENT.whatsapp + '?text=' + encodeURIComponent('Hi Home & Me! I have a ' + key + ' HDB and would like design options.');
+    empty.append(h, t, a); host.appendChild(empty);
     $('#designSec').style.display = '';
     return;
   }
 
-  for (const rec of list) {
-    const band = priceBand(key, rec.style);
-    const name = rec.style === 'Room Showcase' ? 'Signature Rooms' : `${rec.style} — ${rec.design}`;
+  const TIER = {
+    full: ['WHOLE-HOME PACKAGE', '#e2efe7', '#22643f'],
+    partial: ['KEY ROOMS', '#f6ecd8', '#8a6118'],
+    preview: ['PREVIEW ONLY', '#efedea', '#66706c'],
+  };
+
+  for (const pkg of mine) {
+    const band = priceBand(key, pkg.style);
+    const rooms = byPkg.get(pkg.id) || [];
     const card = document.createElement('div'); card.className = 'pkg';
-    const main = rec.imgs.find((i) => /living/i.test(i.room)) || rec.imgs[0];
-    const side = rec.imgs.filter((i) => i !== main).slice(0, 2);
-    const imgs = document.createElement('div'); imgs.className = 'imgs';
-    const mk = (r) => { const im = document.createElement('img'); im.loading = 'lazy'; im.alt = `${name} — ${r.room}`; im.setAttribute('src', encodeURI(r.file)); return im; };
-    imgs.appendChild(mk(main));
-    const sideBox = document.createElement('div'); sideBox.className = 'side';
-    side.forEach((s) => sideBox.appendChild(mk(s)));
-    imgs.appendChild(sideBox);
+
+    const cover = document.createElement('img');
+    cover.loading = 'lazy'; cover.alt = pkg.label + ' — ' + (pkg.rooms[0] || 'design');
+    cover.setAttribute('src', encodeURI(pkg.cover));
+    cover.style.cssText = 'width:100%;aspect-ratio:2/1;object-fit:cover;display:block;';
+
     const info = document.createElement('div'); info.style.padding = '16px 18px 18px';
-    const row = document.createElement('div'); row.style.cssText = 'display:flex;justify-content:space-between;align-items:baseline;gap:10px;';
-    const t = document.createElement('span'); t.className = 'osw'; t.style.cssText = 'font-size:17px;letter-spacing:1px;'; t.textContent = name;
+    const top = document.createElement('div');
+    top.style.cssText = 'display:flex;justify-content:space-between;align-items:baseline;gap:10px;';
+    const nm = document.createElement('span'); nm.className = 'osw';
+    nm.style.cssText = 'font-size:17px;letter-spacing:1px;'; nm.textContent = pkg.label;
     const pr = document.createElement('span'); pr.className = 'price'; pr.textContent = band.text;
-    row.append(t, pr);
-    const sub = document.createElement('p'); sub.style.cssText = 'margin:6px 0 0;font-size:12px;color:#8a908c;';
-    sub.textContent = `Indicative whole-home range for a ${key} flat · ${rec.imgs.length} rooms designed · tap to select`;
-    info.append(row, sub);
-    card.append(imgs, info);
+    top.append(nm, pr);
+
+    const tier = TIER[pkg.tier] || TIER.partial;
+    const badge = document.createElement('span');
+    badge.style.cssText = 'display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;background:'
+      + tier[1] + ';color:' + tier[2] + ";font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:1.8px;";
+    badge.textContent = tier[0] + ' · ' + pkg.roomCount + ' ROOM' + (pkg.roomCount === 1 ? '' : 'S');
+
+    const chips = document.createElement('div');
+    chips.style.cssText = 'margin-top:10px;display:flex;flex-wrap:wrap;gap:5px;';
+    pkg.rooms.forEach((r) => {
+      const c = document.createElement('span');
+      c.style.cssText = 'font-size:11.5px;color:#4a5350;background:#f6f4ef;border:1px solid rgba(26,32,35,.1);border-radius:999px;padding:3px 9px;';
+      c.textContent = r; chips.appendChild(c);
+    });
+
+    const more = document.createElement('button');
+    more.type = 'button'; more.className = 'pill pill-g';
+    more.style.cssText = 'margin-top:12px;padding:9px 18px;font-size:11px;';
+    more.textContent = 'SEE ALL ' + rooms.length + ' RENDERS';
+    const strip = document.createElement('div');
+    strip.style.cssText = 'display:none;margin-top:10px;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;';
+    more.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      const open = strip.style.display !== 'none';
+      strip.style.display = open ? 'none' : 'grid';
+      more.textContent = open ? ('SEE ALL ' + rooms.length + ' RENDERS') : 'HIDE RENDERS';
+      if (!open && !strip.childElementCount) {
+        rooms.forEach((r) => {
+          const fig = document.createElement('figure'); fig.style.margin = '0';
+          const im = document.createElement('img'); im.loading = 'lazy'; im.alt = r.room;
+          im.setAttribute('src', encodeURI(r.file));
+          im.style.cssText = 'width:100%;aspect-ratio:2/1;object-fit:cover;border-radius:4px;display:block;';
+          const cp = document.createElement('figcaption');
+          cp.style.cssText = 'font-size:10.5px;color:#8a908c;padding-top:3px;';
+          cp.textContent = r.room;
+          fig.append(im, cp); strip.appendChild(fig);
+        });
+      }
+    });
+
+    info.append(top, badge, chips, more, strip);
+    card.append(cover, info);
     card.addEventListener('click', () => {
       host.querySelectorAll('.pkg').forEach((x) => x.removeAttribute('data-sel'));
       card.setAttribute('data-sel', '1');
-      chosenPkg = { name, band, key };
+      chosenPkg = { name: pkg.label, band, key, rooms: pkg.rooms, tier: pkg.tier };
       stepOn('ps5', true);
       showReserve();
     });
@@ -612,8 +658,7 @@ async function showDesigns({ fromPlan }) {
   }
   $('#designSec').style.display = '';
   // Deliberately no auto-scroll on the plan path: the customer has just pressed
-  // Confirm and is looking at the 3D model built from their own plan. Yanking
-  // the page down to the packages takes that away, especially on a phone.
+  // Confirm and is looking at the 3D model built from their own plan.
 }
 
 /* ---------- step 6: reserve ---------- */
