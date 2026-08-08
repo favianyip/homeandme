@@ -55,7 +55,9 @@
   .pkg .imgs .side img { height: 100%; aspect-ratio: auto; }
   .price { font-family: 'Oswald', sans-serif; font-size: 21px; letter-spacing: 1px; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
-  section.stepsec { padding-bottom: 26px; }
+  /* every scrollIntoView target clears the 76px sticky header */
+  section.stepsec { padding-bottom: 26px; scroll-margin-top: 92px; }
+  #flatGrid, #studioSec, #stageSec, #designSec, #reserveSec { scroll-margin-top: 92px; }
   h2.sech { font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(21px, 2.9vw, 27px); margin: 0 0 12px; }
   @media (max-width: 940px) { .two { grid-template-columns: 1fr; } .navrow nav { display: none; } }
 </style>
@@ -76,7 +78,7 @@
 <section class="wrap" style="padding: clamp(34px,5vw,54px) clamp(18px,4vw,40px) 18px;">
   <p class="lbl" style="margin:0 0 12px;">Design my home · plan to price, in one place</p>
   <h1 class="osw" style="font-weight:400;font-size:clamp(29px,4.3vw,45px);line-height:1.1;margin:0 0 12px;">Your home, from floor plan to design package</h1>
-  <p style="font-size:16px;line-height:1.7;color:#4a5350;margin:0;max-width:76ch;">Confirm your flat, upload your floor plan, and our detector traces it — you check every wall and window before anything is built. Then see your home in 3D, choose a design package, and reserve your slot. Prices are indicative ranges; the final quote follows a site measurement.</p>
+  <p style="font-size:16px;line-height:1.7;color:#4a5350;margin:0;max-width:76ch;">Confirm your flat, upload your floor plan, and our detector traces it — you check every wall and window before anything is built. Then see your home in 3D, choose a design package, and reserve your slot. Prices are indicative ranges for budgeting; the final quote follows a site measurement.</p>
   <div class="rail">
     <div class="step on" id="ps1"><b>1</b>YOUR HOME</div>
     <div class="step" id="ps2"><b>2</b>FLOOR PLAN</div>
@@ -113,7 +115,9 @@
     <div class="card" style="padding:22px;">
       <p class="lbl" style="margin:0 0 4px;color:#5a7e8a;">Step 2</p>
       <h2 class="sech">Your floor plan</h2>
-      <form id="planForm" method="post" action="https://spark-792d-old.tail223b04.ts.net:10000/detect" enctype="multipart/form-data" target="studio" style="margin:0;">
+      <!-- embed=1 also on the URL: an over-size upload is rejected before the
+           body is parsed, so the query string is the only signal available. -->
+      <form id="planForm" method="post" action="https://spark-792d-old.tail223b04.ts.net:10000/detect?embed=1" enctype="multipart/form-data" target="studio" style="margin:0;">
         <div class="drop" id="drop">
           <p class="osw" style="margin:0 0 6px;font-size:15px;letter-spacing:1.6px;">DROP YOUR FLOOR PLAN HERE</p>
           <p style="margin:0;font-size:13px;color:#8a908c;">or click to choose a PDF, photo or screenshot. Detection starts immediately and you verify it below — nothing is built until you confirm.</p>
@@ -125,6 +129,7 @@
         </div>
       </form>
       <p id="dropNote" style="margin:12px 0 0;font-size:13px;color:#5a7e8a;display:none;">Detecting your walls, doors and windows…</p>
+      <p style="margin:12px 0 0;font-size:12px;color:#8a908c;line-height:1.7;">Your floor plan, address and unit are sent to Home &amp; Me's plan-detection service to build your model and quote, and are kept with your enquiry so a designer can follow up. A corrected plan may be reused to recognise the same standard layout for other customers — never with your address or unit attached. Ask us any time to delete yours.</p>
       <div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(26,32,35,0.1);">
         <p style="margin:0 0 10px;font-size:12.5px;color:#8a908c;">No floor plan handy?</p>
         <button class="pill pill-g" id="noplan" disabled>USE A STANDARD LAYOUT FOR MY FLAT TYPE →</button>
@@ -141,11 +146,16 @@
     <h2 class="sech">Verify your walls, then see your 3D model</h2>
     <p style="margin:0 0 14px;font-size:14px;color:#4a5350;line-height:1.7;max-width:78ch;">Our detector made a first pass. Check every wall, door and window — click to add what it missed, select and delete what is wrong, resize anything off. When it is right, press <b>Confirm plan</b> and your 3D model is built from exactly what you approved.</p>
     <div style="border:1px solid rgba(26,32,35,0.12);border-radius:8px;overflow:hidden;">
-      <iframe id="studio" name="studio" title="Floor-plan detection and verification"></iframe>
+      <!-- allow-top-navigation is deliberately NOT granted: the studio may run
+           the customer's own plan, but it must never move them off the page
+           they are about to reserve on. -->
+      <iframe id="studio" name="studio" title="Floor-plan detection and verification"
+              sandbox="allow-scripts allow-forms allow-same-origin allow-downloads"
+              referrerpolicy="no-referrer"></iframe>
     </div>
     <div id="studioOffline" class="card" style="display:none;margin-top:14px;padding:20px;background:#f6ecd8;border-color:rgba(176,138,94,0.4);">
-      <p class="osw" style="margin:0 0 8px;font-size:16px;">Plan detection is temporarily unavailable</p>
-      <p style="margin:0 0 14px;font-size:13.5px;color:#4a5350;line-height:1.7;">Your plan was not lost — try again in a moment, or continue with a standard layout for your flat type and we will trace your plan during the site visit.</p>
+      <p class="osw" id="studioOfflineTitle" style="margin:0 0 8px;font-size:16px;">Plan detection is temporarily unavailable</p>
+      <p id="studioOfflineBody" style="margin:0 0 14px;font-size:13.5px;color:#4a5350;line-height:1.7;">Your plan was not lost — try again in a moment, or continue with a standard layout for your flat type and we will trace your plan during the site visit.</p>
       <button class="pill pill-g" id="offlineFallback">CONTINUE WITH A STANDARD LAYOUT →</button>
     </div>
   </div>
@@ -248,7 +258,9 @@ const priceBand = (flatKey, style) => {
 /* ---------- state ---------- */
 let block = null, flat = null, chosenPkg = null, planConfirmed = null, detectedFlat = null;
 const stepOn = (id, done) => { const el = $('#' + id); el.classList.add(done ? 'done' : 'on'); if (done) el.classList.remove('on'); };
-const flatKeyOf = (f) => (f === 'Executive' ? '5-Room' : f);
+// No aliasing. An Executive flat is not a 5-Room, so it must not be shown
+// 5-Room packages or quoted at 5-Room prices — it gets the honest empty state.
+const flatKeyOf = (f) => f;
 
 /* ---------- step 1: address ---------- */
 let hits = [], seq = 0, timer = null;
@@ -284,9 +296,14 @@ function pickBlock(b) {
   block = b;
   if (b.class === 'hdb') {
     $('#addrOut').textContent = `HDB block confirmed — ${b.street_address || b.address}. Completed ${b.year_completed || '—'}, ${b.total_dwelling_units || '—'} units.`;
-    showFlats(b.flat_mix || {});
+    showFlats(b.m || {});          // the register's unit mix is `m`, not `flat_mix`
+  } else if (b.class === 'unknown') {
+    // The register was unreachable. Saying "not an HDB block" here would be an
+    // assertion we cannot support — the honest answer is that we do not know.
+    $('#addrOut').textContent = `Address set — ${b.street_address || b.address}. We could not reach the HDB register just now, so please pick your flat type below.`;
+    showFlats({});
   } else {
-    $('#addrOut').textContent = 'Not an HDB block — pick the closest flat size below. We cover condos and landed with a site visit.';
+    $('#addrOut').textContent = 'This address is not in the HDB block register — pick the closest flat size below. We cover condos and landed with a site visit.';
     showFlats({});
   }
 }
@@ -326,8 +343,17 @@ function setFlat(name, grid) {
   }
 }
 function enableNoPlan() {
-  $('#noplan').disabled = false;
-  $('#noplanNote').textContent = 'A standard layout is representative, not your exact unit — your floor plan gives exact walls.';
+  // Once a real plan is confirmed, offering a generic layout would only let the
+  // customer replace their own measured home with a stand-in by accident.
+  if (planConfirmed) {
+    $('#noplan').disabled = true;
+    $('#noplanNote').textContent = 'Your own floor plan is confirmed — the 3D model above is built from it.';
+  } else {
+    $('#noplan').disabled = false;
+    $('#noplanNote').textContent = 'A standard layout is representative, not your exact unit — your floor plan gives exact walls.';
+  }
+  $('#flatNote').textContent = 'We confirm this again from your floor plan.';
+  $('#flatNote').style.color = '#8a908c';
   stepOn('ps1', true); stepOn('ps2');
 }
 
@@ -338,6 +364,13 @@ function sendToDetection() {
   $('#fAddr').value = block ? (block.street_address || block.address || '') : $('#q').value.trim();
   $('#fPostal').value = block ? (block.postal || '') : '';
   $('#fUnit').value = $('#unit').value.trim();
+  // A second upload must not leave the previous plan's packages and reservation
+  // on screen — they belong to a plan that is no longer being reviewed.
+  planConfirmed = null; detectedFlat = null; chosenPkg = null;
+  $('#designSec').style.display = 'none';
+  $('#reserveSec').style.display = 'none';
+  $('#studioOffline').style.display = 'none';
+  ['ps5', 'ps6'].forEach((id) => $('#' + id).classList.remove('on', 'done'));
   $('#dropNote').style.display = '';
   $('#studioSec').style.display = '';
   $('#stageSec').style.display = 'none';
@@ -345,6 +378,9 @@ function sendToDetection() {
   planForm.submit();
   $('#studioSec').scrollIntoView({ behavior: 'smooth', block: 'start' });
   watchStudio();
+  // Clearing the input means re-choosing the SAME file still fires `change`,
+  // which is the only way a customer can retry after a failure.
+  setTimeout(() => { file.value = ''; }, 0);
 }
 drop.addEventListener('click', () => file.click());
 drop.addEventListener('dragover', (e) => e.preventDefault());
@@ -363,15 +399,41 @@ function watchStudio() {
     .catch(() => { if (++tries >= 3) { $('#studioOffline').style.display = ''; $('#dropNote').style.display = 'none'; } else setTimeout(probe, tries * 3000); });
   probe();
 }
-$('#offlineFallback').addEventListener('click', () => { $('#studioSec').style.display = 'none'; noPlanPath(); });
+$('#offlineFallback').addEventListener('click', () => {
+  if (!flat) {   // otherwise this button appears to do nothing at all
+    $('#flatNote').textContent = 'Pick your flat type here first, then we can build a standard layout for you.';
+    $('#flatNote').style.color = '#b4533a';
+    $('#flatGrid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  $('#studioSec').style.display = 'none';
+  noPlanPath();
+});
 
 /* ---------- the studio reports the confirmed plan back up ---------- */
 window.addEventListener('message', (e) => {
   if (e.origin !== STUDIO_ORIGIN) return;
   const d = e.data;
-  if (!d || d.type !== 'hnm:plan-confirmed') return;
-  planConfirmed = d;
-  detectedFlat = (d.flat && LAYOUTS[d.flat]) ? d.flat : null;
+  if (!d || typeof d !== 'object') return;
+  if (d.type === 'hnm:plan-failed') {
+    // The studio could not read the file. Say so and offer a way on, rather
+    // than leaving "Detecting your walls…" spinning forever.
+    $('#dropNote').style.display = 'none';
+    $('#studioOffline').style.display = '';
+    $('#studioOfflineTitle').textContent = 'We could not read that floor plan';
+    $('#studioOfflineBody').textContent = (typeof d.reason === 'string' ? d.reason.slice(0, 200) + ' ' : '') +
+      'Drop another file above (a PDF, JPG or PNG of the plan works best), or continue with a standard layout for your flat type.';
+    return;
+  }
+  if (d.type !== 'hnm:plan-confirmed') return;
+  planConfirmed = {
+    beds: Number(d.beds) || 0,
+    rooms: Number(d.rooms) || 0,
+    areaM2: Number(d.areaM2) || 0,
+  };
+  // Own-property check: `d.flat` is attacker-shaped data and `LAYOUTS['toString']`
+  // would otherwise look like a valid flat type.
+  detectedFlat = (typeof d.flat === 'string' && Object.prototype.hasOwnProperty.call(LAYOUTS, d.flat)) ? d.flat : null;
   // The customer's own step-1 choice wins. Room-area estimates carry a real
   // error band, so a detected "5-Room" must never silently overrule someone
   // who told us they live in a 4-Room — we surface the disagreement instead.
@@ -451,7 +513,23 @@ async function showDesigns({ fromPlan }) {
   if (!flat) return;
   stepOn('ps5');
   const key = flatKeyOf(flat);
-  const data = await (await fetch('portfolio-data.json')).json();
+  let data;
+  try { data = await (await fetch('portfolio-data.json')).json(); }
+  catch (err) {
+    // Without this the whole post-confirm render dies silently and the customer
+    // is left staring at a 3D model with no way forward.
+    const host = $('#designs'); host.innerHTML = '';
+    const box = document.createElement('div');
+    box.className = 'card'; box.style.cssText = 'grid-column:1/-1;padding:22px;';
+    const t = document.createElement('p'); t.className = 'osw'; t.style.cssText = 'margin:0 0 8px;font-size:17px;';
+    t.textContent = 'We could not load the design packages just now';
+    const a = document.createElement('a'); a.className = 'pill pill-d'; a.target = '_blank'; a.rel = 'noopener';
+    a.textContent = 'SEND MY PLAN TO A DESIGNER →';
+    a.href = `https://wa.me/${PAYMENT.whatsapp}?text=` + encodeURIComponent(`Hi Home & Me! I verified my ${key} floor plan on your website and would like design options.`);
+    box.append(t, a); host.appendChild(box);
+    $('#designSec').style.display = '';
+    return;
+  }
   // STRICT: only packages designed for this flat type. Showing a 4-room design
   // to a 3-room customer misrepresents what fits — never cross-fill.
   const pool = data.filter((d) => d.flat.startsWith(key));
@@ -533,7 +611,9 @@ async function showDesigns({ fromPlan }) {
     host.appendChild(card);
   }
   $('#designSec').style.display = '';
-  if (fromPlan) $('#designSec').scrollIntoView({ behavior: 'smooth' });
+  // Deliberately no auto-scroll on the plan path: the customer has just pressed
+  // Confirm and is looking at the 3D model built from their own plan. Yanking
+  // the page down to the packages takes that away, especially on a phone.
 }
 
 /* ---------- step 6: reserve ---------- */
@@ -541,9 +621,14 @@ function showReserve() {
   stepOn('ps6');
   const addr = block ? (block.street_address || block.address || '') : $('#q').value.trim();
   const unit = $('#unit').value.trim();
+  // Only claim the plan confirmed the flat type when it actually agreed.
+  let how = ' (you selected this)';
+  if (planConfirmed && detectedFlat === flat) how = ' (matches your floor plan)';
+  else if (planConfirmed && detectedFlat) how = ` (you selected this — your plan looks like a ${detectedFlat})`;
+  else if (planConfirmed) how = ' (you selected this — we could not read the type from the plan)';
   const rows = [
     ['Home', `${addr || '—'}${unit ? ' ' + unit : ''}`],
-    ['Flat type', `${chosenPkg.key} HDB${planConfirmed ? ' (confirmed from your floor plan)' : ' (standard layout)'}`],
+    ['Flat type', `${chosenPkg.key} HDB${how}`],
     ['Design package', chosenPkg.name],
     ['Indicative range', chosenPkg.band.text],
   ];
@@ -581,7 +666,7 @@ function showReserve() {
 
   const msg = `Hi Home & Me! I designed my home on your website.
 Home: ${addr || '—'}${unit ? ' ' + unit : ''}
-Flat: ${chosenPkg.key} HDB${planConfirmed ? ' (floor plan verified online)' : ''}
+Flat: ${chosenPkg.key} HDB${how}
 Package: ${chosenPkg.name}
 Indicative range: ${chosenPkg.band.text}
 I'd like to confirm my slot and get the exact quote.`;
@@ -589,6 +674,12 @@ I'd like to confirm my slot and get the exact quote.`;
   $('#reserveSec').style.display = '';
   $('#reserveSec').scrollIntoView({ behavior: 'smooth' });
 }
+
+/* Editing the unit or address after choosing a package must update the summary
+   and the WhatsApp message, or we hand the designer stale details. */
+const refreshReserve = () => { if (chosenPkg && $('#reserveSec').style.display !== 'none') showReserve(); };
+$('#unit').addEventListener('input', refreshReserve);
+$('#q').addEventListener('change', refreshReserve);
 
 /* ---------- boot ---------- */
 showFlats({});
