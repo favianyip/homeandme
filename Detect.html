@@ -52,8 +52,17 @@
 (() => {
   // If the studio backend is unreachable the iframe renders a browser error page we
   // cannot read cross-origin — probe the origin instead and swap in the fallback.
-  const probe = () => fetch('https://spark-792d-old.tail223b04.ts.net:10000/detect', { method: 'HEAD', mode: 'no-cors' })
-    .catch(() => { document.getElementById('offline').style.display = 'grid'; document.getElementById('studio').style.display = 'none'; });
+  // Retry before giving up: a restart or cold start must not strand the customer.
+  const URL = 'https://spark-792d-old.tail223b04.ts.net:10000/detect';
+  let tries = 0;
+  const fail = () => { document.getElementById('offline').style.display = 'grid'; document.getElementById('studio').style.display = 'none'; };
+  const recover = () => {
+    const off = document.getElementById('offline');
+    if (off.style.display === 'grid') { off.style.display = 'none'; const s = document.getElementById('studio'); s.style.display = ''; s.src = URL; }
+  };
+  const probe = () => fetch(URL, { method: 'HEAD', mode: 'no-cors', cache: 'no-store' })
+    .then(recover)
+    .catch(() => { tries += 1; if (tries >= 4) fail(); setTimeout(probe, Math.min(tries, 5) * 4000); });
   probe();
 })();
 </script>
