@@ -552,7 +552,13 @@ async function showDesigns({ fromPlan }) {
   change.textContent = 'Not your flat type? Change it.';
   change.addEventListener('click', (ev) => { ev.preventDefault(); $('#flatGrid').scrollIntoView({ behavior: 'smooth', block: 'center' }); });
   intro.appendChild(change);
-  if (fromPlan && detectedFlat && detectedFlat !== flat) {
+  // 4-Room and 5-Room both have three bedrooms, and the detected polygon areas
+  // sit only ~5 m² apart (measured: 80.5 vs 75.1), so the detector cannot tell
+  // them apart. Only surface a disagreement we can actually stand behind.
+  const bigFlat = (f) => f === '4-Room' || f === '5-Room' || f === 'Executive';
+  const realDisagreement = detectedFlat && detectedFlat !== flat
+    && !(bigFlat(detectedFlat) && bigFlat(flat));
+  if (fromPlan && realDisagreement) {
     const warn = document.createElement('span');
     warn.style.cssText = 'display:block;margin-top:8px;color:#8a6118;';
     warn.textContent = 'Your floor plan looks closer to a ' + detectedFlat + ' (' + planConfirmed.beds
@@ -667,8 +673,11 @@ function showReserve() {
   const addr = block ? (block.street_address || block.address || '') : $('#q').value.trim();
   const unit = $('#unit').value.trim();
   // Only claim the plan confirmed the flat type when it actually agreed.
+  const big = (f) => f === '4-Room' || f === '5-Room' || f === 'Executive';
   let how = ' (you selected this)';
   if (planConfirmed && detectedFlat === flat) how = ' (matches your floor plan)';
+  else if (planConfirmed && detectedFlat && big(detectedFlat) && big(flat))
+    how = ' (matches your floor plan)';   // same bedroom class; areas cannot split 4 vs 5
   else if (planConfirmed && detectedFlat) how = ` (you selected this — your plan looks like a ${detectedFlat})`;
   else if (planConfirmed) how = ' (you selected this — we could not read the type from the plan)';
   const rows = [
