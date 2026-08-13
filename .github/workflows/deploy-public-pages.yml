@@ -43,10 +43,11 @@ jobs:
           from pathlib import Path
           import re, subprocess
           targets = tuple((name, r'<script\b(?=[^>]*\bdata-dc-script\b)[^>]*>(.*?)</script\s*>') for name in (
-              'Home AI.dc.html',
+              'Home Direct.dc.html',
+              'Renovation Enquiry.dc.html',
               'AboutUs.dc.html',
+              'ContactUs.dc.html',
               'FaqAndHelp.dc.html',
-              'Home Redesign.dc.html',
               'Legal.dc.html',
           ))
           for name, pattern in targets:

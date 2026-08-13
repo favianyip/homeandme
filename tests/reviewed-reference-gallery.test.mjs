@@ -169,9 +169,19 @@ test('reviewed reference page states its evidence boundary and has no external r
   }
 
   const entries = new Set(allowlist.split(/\r?\n/).map((line) => line.trim()).filter((line) => line && !line.startsWith('#')));
-  for (const path of ['ReviewedReferences.html', 'reviewed-reference-gallery.js', 'assets/css/reviewed-references.css']) assert.equal(entries.has(path), true, path);
+  // The gallery is all-or-nothing. Publishing it half-way — the page without its
+  // hash-pinned proof, or proof files without the page that explains their limits —
+  // is the failure this guards against. Not publishing it at all is a valid state:
+  // the direct-contractor site does not link to it.
+  const galleryPublished = entries.has('ReviewedReferences.html');
   const proofFiles = await walk(proofRootPath);
-  for (const path of proofFiles) assert.equal(entries.has(`assets/reviewed-whole-unit/${path}`), true, path);
+  if (galleryPublished) {
+    for (const path of ['reviewed-reference-gallery.js', 'assets/css/reviewed-references.css']) assert.equal(entries.has(path), true, path);
+    for (const path of proofFiles) assert.equal(entries.has(`assets/reviewed-whole-unit/${path}`), true, path);
+  } else {
+    for (const path of ['reviewed-reference-gallery.js', 'assets/css/reviewed-references.css']) assert.equal(entries.has(path), false, path);
+    for (const path of proofFiles) assert.equal(entries.has(`assets/reviewed-whole-unit/${path}`), false, path);
+  }
   for (const forbidden of ['assets/reviewed-whole-unit/index.html', 'assets/reviewed-whole-unit/review.js', 'assets/reviewed-whole-unit/review.css', 'assets/reviewed-whole-unit/private.sqlite', 'assets/reviewed-whole-unit/scene.blend']) {
     assert.equal(entries.has(forbidden), false, basename(forbidden));
   }
