@@ -9,166 +9,183 @@
 <body>
 <x-dc>
 <helmet>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
-html { scroll-behavior: smooth; }
-body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-a { color: #5a7e8a; text-decoration: none; } a:hover { color: #1a2023; }
-input, select, textarea, button { font-family: inherit; font-size: inherit; color: inherit; }
-input, select, textarea { box-sizing: border-box; }
+body { margin: 0; background: #f2efe9; color: #14191b; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
+a { color: #5a7e8a; text-decoration: none; } a:hover { color: #14191b; }
+input, select, textarea, button { font-family: inherit; color: inherit; }
+input, select, textarea { box-sizing: border-box; font-size: 16px; }
 select { appearance: none; -webkit-appearance: none; }
-@keyframes hnmRise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-@media (max-width: 900px) {
-  [data-two] { grid-template-columns: 1fr !important; }
-  [data-rail] { display: none !important; }
-}
-@media (max-width: 620px) {
-  [data-fields] { grid-template-columns: 1fr !important; }
+@keyframes hnmIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes hnmPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+@media (min-width: 900px) {
+  [data-tabbar] { display: none !important; }
+  [data-actionbar] { bottom: 0 !important; }
+  [data-barinner] { flex-direction: row-reverse !important; align-items: center !important; }
+  [data-primary] { width: auto !important; min-width: 280px; }
+  [data-hint] { text-align: left !important; margin-right: auto !important; }
+  [data-fields] { grid-template-columns: 1fr 1fr !important; }
+  [data-wide] { grid-column: 1 / -1 !important; }
+  [data-plan] { grid-template-columns: 1.1fr 0.9fr !important; }
+  [data-styles] { grid-template-columns: repeat(4, 1fr) !important; }
+  [data-areas] { grid-template-columns: repeat(3, 1fr) !important; }
+  [data-review] { grid-template-columns: 1.1fr 0.9fr !important; align-items: start !important; }
+  [data-desk] { display: block !important; }
+  [data-shell] { padding-bottom: 130px !important; }
 }
 </style>
 </helmet>
-<div style="min-height: 100vh; display: flex; flex-direction: column;">
-  <header style="position: sticky; top: 0; z-index: 40; background: rgba(246,244,239,0.94); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(26,32,35,0.1);">
-    <div style="max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 36px); height: 70px; display: flex; align-items: center; gap: 20px;">
-      <a href="Home%20Direct.dc.html" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 38px; width: auto;"></a>
-      <span data-rail="1" style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #6d746f; border-left: 1px solid rgba(26,32,35,0.18); padding-left: 20px;">DIRECT CONTRACTOR ENQUIRY</span>
-      <a sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener" style="margin-left: auto; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; border: 1px solid rgba(26,32,35,0.25); border-radius: 999px; padding: 11px 20px; color: #1a2023;" style-hover="border-color: #5a7e8a; color: #5a7e8a;">ASK US ON WHATSAPP</a>
+<div data-shell="1" style="min-height: 100vh; padding-bottom: 210px; box-sizing: border-box;">
+
+  <header style="position: sticky; top: 0; z-index: 40; background: rgba(242,239,233,0.93); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(20,25,27,0.1);">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 0 clamp(14px, 4vw, 30px); height: 62px; display: flex; align-items: center; gap: 14px;">
+      <button type="button" onClick="{{ back }}" aria-label="Back" style="flex: none; width: 42px; height: 42px; border-radius: 999px; border: 1px solid rgba(20,25,27,0.18); background: #fff; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center; opacity: {{ backOpacity }};">←</button>
+      <a href="Home%20Direct.dc.html" title="Back to Home &amp; Me" style="flex: none; display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 32px; width: 32px; object-fit: contain;"></a>
+      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+        <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.6px; color: #5a7e8a;">{{ stepOf }}</span>
+        <span style="font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 1.6px; color: #14191b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ stepName }}</span>
+      </div>
+      <a sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener" aria-label="WhatsApp us" style="flex: none; height: 42px; padding: 0 18px; border-radius: 999px; background: #5a7e8a; color: #fff; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; display: flex; align-items: center;">CHAT</a>
     </div>
+    <div style="height: 3px; background: rgba(20,25,27,0.09);"><div style="height: 3px; background: #5a7e8a; width: {{ progress }}; transition: width 0.45s cubic-bezier(0.2,0.8,0.2,1);"></div></div>
   </header>
 
-  <div style="border-bottom: 1px solid rgba(26,32,35,0.1); background: #fff;">
-    <div style="max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 36px);">
-      <ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;">
-        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
-          <li style="padding: 16px 10px 15px; border-bottom: 3px solid {{ s.bar }}; display: flex; flex-direction: column; gap: 4px; min-width: 0;">
-            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: {{ s.num }};">{{ s.no }}</span>
-            <span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.6px; color: {{ s.fg }}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ s.label }}</span>
-          </li>
-        </sc-for>
-      </ol>
-    </div>
-  </div>
-
-  <main style="flex: 1; max-width: 1180px; width: 100%; margin: 0 auto; padding: clamp(28px, 5vw, 52px) clamp(16px, 4vw, 36px) 60px; box-sizing: border-box;">
+  <main style="max-width: 1100px; margin: 0 auto; padding: clamp(22px, 5vw, 40px) clamp(14px, 4vw, 30px) 0;">
 
     <sc-if value="{{ onStep1 }}" hint-placeholder-val="{{ true }}">
-      <section style="animation: hnmRise 0.5s ease both;">
-        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 14px;">STEP 01 — WHERE AND WHO</p>
-        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 46px); line-height: 1.1; letter-spacing: 0.6px; margin: 0 0 14px;">YOUR UNIT AND YOUR CONTACT</h1>
-        <p style="font-size: 16px; line-height: 1.6; color: #4a5350; max-width: 620px; margin: 0 0 34px; text-wrap: pretty;">The contractor needs the address to quote honestly — access, lift, floor level and town all change the price. Your details go to our team only, and we contact you once.</p>
-        <div data-fields="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px; max-width: 760px;">
-          <label style="display: flex; flex-direction: column; gap: 8px; grid-column: 1 / -1;">
-            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #6d746f;">BLOCK &amp; STREET</span>
-            <input type="text" value="{{ f.street }}" onInput="{{ setStreet }}" placeholder="e.g. 182 Bedok North Road" style="padding: 14px 15px; border: 1px solid rgba(26,32,35,0.2); border-radius: 3px; background: #fff;">
+      <section style="animation: hnmIn 0.45s ease both;">
+        <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 7vw, 46px); line-height: 1.05; letter-spacing: -0.8px; margin: 0 0 12px;">Your unit and your contact</h1>
+        <p style="font-size: 15.5px; line-height: 1.6; color: #6d746f; margin: 0 0 28px; max-width: 46ch; text-wrap: pretty;">Access, floor level and town all change the price — so the contractor needs the address before quoting. Your details reach our team only.</p>
+        <div data-fields="1" style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+          <label data-wide="1" style="display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #6d746f;">BLOCK &amp; STREET</span>
+            <input type="text" value="{{ f.street }}" onInput="{{ setStreet }}" placeholder="e.g. 182 Bedok North Road" style="padding: 17px 16px; border: 1px solid rgba(20,25,27,0.16); border-radius: 14px; background: #fff;" style-focus="border-color: #5a7e8a; outline: none;">
           </label>
           <label style="display: flex; flex-direction: column; gap: 8px;">
-            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #6d746f;">UNIT NO.</span>
-            <input type="text" value="{{ f.unit }}" onInput="{{ setUnit }}" placeholder="#07-182" style="padding: 14px 15px; border: 1px solid rgba(26,32,35,0.2); border-radius: 3px; background: #fff;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #6d746f;">UNIT NO.</span>
+            <input type="text" value="{{ f.unit }}" onInput="{{ setUnit }}" placeholder="#07-182" style="padding: 17px 16px; border: 1px solid rgba(20,25,27,0.16); border-radius: 14px; background: #fff;" style-focus="border-color: #5a7e8a; outline: none;">
           </label>
           <label style="display: flex; flex-direction: column; gap: 8px;">
-            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #6d746f;">POSTAL CODE</span>
-            <input type="text" inputmode="numeric" value="{{ f.postal }}" onInput="{{ setPostal }}" placeholder="460182" style="padding: 14px 15px; border: 1px solid rgba(26,32,35,0.2); border-radius: 3px; background: #fff;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #6d746f;">POSTAL CODE</span>
+            <input type="tel" inputmode="numeric" value="{{ f.postal }}" onInput="{{ setPostal }}" placeholder="460182" style="padding: 17px 16px; border: 1px solid rgba(20,25,27,0.16); border-radius: 14px; background: #fff;" style-focus="border-color: #5a7e8a; outline: none;">
           </label>
-          <label style="display: flex; flex-direction: column; gap: 8px; grid-column: 1 / -1;">
-            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #6d746f;">PROPERTY TYPE</span>
-            <div style="position: relative;">
-              <select value="{{ f.flatType }}" onChange="{{ setFlatType }}" style="width: 100%; padding: 14px 15px; border: 1px solid rgba(26,32,35,0.2); border-radius: 3px; background: #fff;">
-                <sc-for list="{{ flatTypes }}" as="t" hint-placeholder-count="8">
+          <label data-wide="1" style="display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #6d746f;">PROPERTY TYPE</span>
+            <span style="position: relative; display: block;">
+              <select value="{{ f.flatType }}" onChange="{{ setFlatType }}" style="width: 100%; padding: 17px 16px; border: 1px solid rgba(20,25,27,0.16); border-radius: 14px; background: #fff;">
+                <sc-for list="{{ flatTypes }}" as="t" hint-placeholder-count="9">
                   <option value="{{ t }}">{{ t }}</option>
                 </sc-for>
               </select>
-              <span style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #6d746f; font-size: 11px;">▼</span>
-            </div>
+              <span style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #6d746f; font-size: 10px;">▼</span>
+            </span>
           </label>
-          <label style="display: flex; flex-direction: column; gap: 8px; grid-column: 1 / -1;">
-            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #6d746f;">YOUR NAME</span>
-            <input type="text" value="{{ f.name }}" onInput="{{ setName }}" placeholder="Full name" style="padding: 14px 15px; border: 1px solid rgba(26,32,35,0.2); border-radius: 3px; background: #fff;">
-          </label>
-          <label style="display: flex; flex-direction: column; gap: 8px;">
-            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #6d746f;">MOBILE (WHATSAPP)</span>
-            <input type="tel" value="{{ f.phone }}" onInput="{{ setPhone }}" placeholder="9123 4567" style="padding: 14px 15px; border: 1px solid rgba(26,32,35,0.2); border-radius: 3px; background: #fff;">
+          <label data-wide="1" style="display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #6d746f;">YOUR NAME</span>
+            <input type="text" value="{{ f.name }}" onInput="{{ setName }}" placeholder="Full name" style="padding: 17px 16px; border: 1px solid rgba(20,25,27,0.16); border-radius: 14px; background: #fff;" style-focus="border-color: #5a7e8a; outline: none;">
           </label>
           <label style="display: flex; flex-direction: column; gap: 8px;">
-            <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #6d746f;">EMAIL</span>
-            <input type="email" value="{{ f.email }}" onInput="{{ setEmail }}" placeholder="you@email.com" style="padding: 14px 15px; border: 1px solid rgba(26,32,35,0.2); border-radius: 3px; background: #fff;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #6d746f;">MOBILE (WHATSAPP)</span>
+            <input type="tel" value="{{ f.phone }}" onInput="{{ setPhone }}" placeholder="9123 4567" style="padding: 17px 16px; border: 1px solid rgba(20,25,27,0.16); border-radius: 14px; background: #fff;" style-focus="border-color: #5a7e8a; outline: none;">
+          </label>
+          <label style="display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #6d746f;">EMAIL</span>
+            <input type="email" value="{{ f.email }}" onInput="{{ setEmail }}" placeholder="you@email.com" style="padding: 17px 16px; border: 1px solid rgba(20,25,27,0.16); border-radius: 14px; background: #fff;" style-focus="border-color: #5a7e8a; outline: none;">
           </label>
         </div>
       </section>
     </sc-if>
 
     <sc-if value="{{ onStep2 }}" hint-placeholder-val="{{ false }}">
-      <section style="animation: hnmRise 0.5s ease both;">
-        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 14px;">STEP 02 — PLAN AND LOOK</p>
-        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 46px); line-height: 1.1; letter-spacing: 0.6px; margin: 0 0 14px;">YOUR FLOOR PLAN, THEN YOUR STYLE</h1>
-        <p style="font-size: 16px; line-height: 1.6; color: #4a5350; max-width: 620px; margin: 0 0 30px; text-wrap: pretty;">Upload the HDB plan (PDF, PNG or JPG). We read the layout to size the job — you confirm what it says before anything moves on.</p>
-        <div data-two="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 44px;">
+      <section style="animation: hnmIn 0.45s ease both;">
+        <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 7vw, 46px); line-height: 1.05; letter-spacing: -0.8px; margin: 0 0 12px;">Your plan, then your style</h1>
+        <p style="font-size: 15.5px; line-height: 1.6; color: #6d746f; margin: 0 0 24px; max-width: 46ch; text-wrap: pretty;">Upload the HDB plan and we read the layout to size the job. You confirm what it says before anything moves on.</p>
+        <div data-plan="1" style="display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 36px;">
           <label style="display: block; cursor: pointer;">
             <input type="file" accept="image/*,application/pdf" onChange="{{ onFile }}" style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
-            <div style="border: 1px dashed rgba(26,32,35,0.3); border-radius: 4px; background: #fff; min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; text-align: center;" style-hover="border-color: #5a7e8a;">
+            <span style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; min-height: 210px; padding: 24px; box-sizing: border-box; border: 1.5px dashed rgba(20,25,27,0.26); border-radius: 20px; background: #fff;">
               {{ planImg }}
               <sc-if value="{{ noPlan }}" hint-placeholder-val="{{ true }}">
-                <span style="font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 2.2px; color: #1a2023;">UPLOAD FLOOR PLAN</span>
+                <span style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                  <span style="width: 54px; height: 54px; border-radius: 999px; background: rgba(90,126,138,0.12); color: #5a7e8a; display: flex; align-items: center; justify-content: center; font-size: 22px;">＋</span>
+                  <span style="font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 2.2px; color: #14191b;">UPLOAD FLOOR PLAN</span>
+                </span>
               </sc-if>
-              <span style="font-size: 13px; color: #6d746f;">{{ planNote }}</span>
-            </div>
+              <span style="font-size: 13px; line-height: 1.5; color: #8a908c;">{{ planNote }}</span>
+            </span>
           </label>
-          <div style="border: 1px solid rgba(26,32,35,0.12); border-radius: 4px; background: #fff; padding: 22px 22px 24px; display: flex; flex-direction: column; gap: 16px;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <span style="width: 7px; height: 7px; border-radius: 50%; background: {{ readDot }};"></span>
-              <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #6d746f;">{{ readTitle }}</span>
-            </div>
+          <div style="border: 1px solid rgba(20,25,27,0.12); border-radius: 20px; background: #fff; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+            <span style="display: flex; align-items: center; gap: 10px;">
+              <span style="width: 8px; height: 8px; border-radius: 999px; background: {{ readDot }}; animation: {{ readAnim }};"></span>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #6d746f;">{{ readTitle }}</span>
+            </span>
             <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #4a5350;">{{ readNote }}</p>
-            <div data-fields="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: auto;">
-              <label style="display: flex; flex-direction: column; gap: 8px;">
-                <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #6d746f;">LAYOUT READ AS</span>
-                <input type="text" value="{{ f.detectedType }}" onInput="{{ setDetectedType }}" placeholder="e.g. 4-room" style="padding: 12px 13px; border: 1px solid rgba(26,32,35,0.2); border-radius: 3px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: auto;">
+              <label style="display: flex; flex-direction: column; gap: 7px;">
+                <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2px; color: #6d746f;">LAYOUT</span>
+                <input type="text" value="{{ f.detectedType }}" onInput="{{ setDetectedType }}" placeholder="e.g. 4-room" style="padding: 14px 14px; border: 1px solid rgba(20,25,27,0.16); border-radius: 12px;" style-focus="border-color: #5a7e8a; outline: none;">
               </label>
-              <label style="display: flex; flex-direction: column; gap: 8px;">
-                <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #6d746f;">FLOOR AREA (SQM)</span>
-                <input type="text" inputmode="decimal" value="{{ f.sqm }}" onInput="{{ setSqm }}" placeholder="e.g. 93" style="padding: 12px 13px; border: 1px solid rgba(26,32,35,0.2); border-radius: 3px;">
+              <label style="display: flex; flex-direction: column; gap: 7px;">
+                <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2px; color: #6d746f;">AREA (SQM)</span>
+                <input type="tel" inputmode="decimal" value="{{ f.sqm }}" onInput="{{ setSqm }}" placeholder="e.g. 93" style="padding: 14px 14px; border: 1px solid rgba(20,25,27,0.16); border-radius: 12px;" style-focus="border-color: #5a7e8a; outline: none;">
               </label>
             </div>
             <p style="margin: 0; font-size: 12px; line-height: 1.55; color: #8a908c;">Correct either field if it is wrong — your typed value is what the contractor quotes against.</p>
           </div>
         </div>
 
-        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px;">
-          <h2 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(20px, 2.6vw, 26px); letter-spacing: 1px; margin: 0;">PICK THE LOOK YOU WANT</h2>
-          <span style="font-size: 13px; color: #6d746f;">{{ styleCount }}</span>
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 16px;">
+          <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(23px, 5vw, 30px); letter-spacing: -0.4px; margin: 0;">Select style</h2>
+          <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2px; color: #5a7e8a; white-space: nowrap;">{{ styleCount }}</span>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px;">
+        <div style="display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 14px; margin: 0 -2px;">
+          <sc-for list="{{ styleChips }}" as="c" hint-placeholder-count="6">
+            <button type="button" onClick="{{ c.pick }}" style="flex: none; cursor: pointer; border: 1px solid {{ c.border }}; background: {{ c.bg }}; color: {{ c.fg }}; border-radius: 999px; padding: 11px 16px; min-height: 42px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px;">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <div data-styles="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: 13px;">
           <sc-for list="{{ styleCards }}" as="c" hint-placeholder-count="0">
-            <button type="button" onClick="{{ c.pick }}" style="text-align: left; cursor: pointer; padding: 0; background: #fff; border: 1px solid {{ c.border }}; border-radius: 4px; overflow: hidden; box-shadow: {{ c.shadow }}; display: flex; flex-direction: column;">
-              {{ c.photos }}
-              <span style="padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px;">
-                <span style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                  <span style="font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: 1.4px;">{{ c.name }}</span>
-                  <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.6px; color: {{ c.tickFg }};">{{ c.tick }}</span>
-                </span>
-                <span style="font-size: 13px; line-height: 1.5; color: #6d746f;">{{ c.note }}</span>
+            <button type="button" onClick="{{ c.pick }}" style="position: relative; cursor: pointer; padding: 0; border: 2px solid {{ c.border }}; border-radius: 20px; background: #fff; overflow: hidden; display: flex; flex-direction: column; text-align: left; box-shadow: {{ c.shadow }}; transition: border-color 0.2s ease, box-shadow 0.3s ease;">
+              {{ c.photo }}
+              <span style="padding: 12px 13px 14px; display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.3px; color: #14191b; line-height: 1.25;">{{ c.name }}</span>
+                <span style="font-size: 12px; line-height: 1.45; color: #8a908c;">{{ c.note }}</span>
               </span>
+              <span style="position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; border-radius: 999px; background: {{ c.tickBg }}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px;">{{ c.tick }}</span>
             </button>
           </sc-for>
         </div>
-        <p style="font-size: 13px; color: #8a908c; margin: 20px 0 0; max-width: 680px;">Visuals are from Home &amp; Me projects, not renders of your unit. Your plan-to-3D preview is still in development — it is not part of this quote.</p>
+
+        <button type="button" onClick="{{ pickCustom }}" style="margin-top: 13px; width: 100%; cursor: pointer; display: flex; align-items: center; gap: 14px; text-align: left; padding: 18px; min-height: 64px; box-sizing: border-box; border: 1.5px dashed {{ customBorder }}; border-radius: 20px; background: {{ customBg }};">
+          <span style="flex: none; width: 34px; height: 34px; border-radius: 999px; background: rgba(90,126,138,0.14); color: #5a7e8a; display: flex; align-items: center; justify-content: center; font-size: 15px;">{{ customTick }}</span>
+          <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 1.4px;">CUSTOM — SOMETHING ELSE</span>
+            <span style="font-size: 13px; line-height: 1.45; color: #8a908c;">Describe the look yourself, or name a reference you have seen.</span>
+          </span>
+        </button>
+        <sc-if value="{{ customOn }}" hint-placeholder-val="{{ false }}">
+          <textarea rows="3" value="{{ f.customStyle }}" onInput="{{ setCustomStyle }}" placeholder="e.g. dark green kitchen with fluted oak, like the café at Duxton" style="margin-top: 11px; width: 100%; box-sizing: border-box; padding: 15px; border: 1px solid rgba(20,25,27,0.16); border-radius: 14px; resize: vertical; line-height: 1.55;" style-focus="border-color: #5a7e8a; outline: none;"></textarea>
+        </sc-if>
+        <p style="margin: 16px 0 0; font-size: 12.5px; line-height: 1.55; color: #8a908c;">Photos are Home &amp; Me projects, not renders of your unit. Cards tagged MOOD are material palettes for looks we have not built yet — no photo is repeated, so every room you see here is a different project.</p>
       </section>
     </sc-if>
 
     <sc-if value="{{ onStep3 }}" hint-placeholder-val="{{ false }}">
-      <section style="animation: hnmRise 0.5s ease both;">
-        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 14px;">STEP 03 — WHAT TO TOUCH</p>
-        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 46px); line-height: 1.1; letter-spacing: 0.6px; margin: 0 0 14px;">WHICH AREAS ARE IN SCOPE?</h1>
-        <p style="font-size: 16px; line-height: 1.6; color: #4a5350; max-width: 620px; margin: 0 0 30px; text-wrap: pretty;">Pick only what you want quoted. Leaving a room out keeps it out of the price — nobody adds it back later without telling you.</p>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px;">
+      <section style="animation: hnmIn 0.45s ease both;">
+        <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 7vw, 46px); line-height: 1.05; letter-spacing: -0.8px; margin: 0 0 12px;">Choose the areas</h1>
+        <p style="font-size: 15.5px; line-height: 1.6; color: #6d746f; margin: 0 0 26px; max-width: 46ch; text-wrap: pretty;">Only what you pick gets quoted. Leaving a room out keeps it out of the price — nobody adds it back without telling you.</p>
+        <div data-areas="1" style="display: grid; grid-template-columns: 1fr; gap: 11px;">
           <sc-for list="{{ areaCards }}" as="a" hint-placeholder-count="10">
-            <button type="button" onClick="{{ a.pick }}" style="cursor: pointer; text-align: left; background: {{ a.bg }}; border: 1px solid {{ a.border }}; border-radius: 4px; padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 7px;">
-              <span style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                <span style="font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: 1.4px; color: {{ a.fg }};">{{ a.name }}</span>
-                <span style="font-family: 'Oswald', sans-serif; font-size: 12px; color: {{ a.fg }};">{{ a.tick }}</span>
+            <button type="button" onClick="{{ a.pick }}" style="cursor: pointer; text-align: left; display: flex; align-items: center; gap: 14px; padding: 16px 18px; min-height: 62px; box-sizing: border-box; border: 1.5px solid {{ a.border }}; border-radius: 999px; background: {{ a.bg }}; transition: border-color 0.2s ease, background 0.2s ease;">
+              <span style="flex: none; display: flex; color: {{ a.fg }};">{{ a.icon }}</span>
+              <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 1.3px; color: {{ a.fg }};">{{ a.name }}</span>
+                <span style="font-size: 12.5px; line-height: 1.4; color: {{ a.sub }}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ a.note }}</span>
               </span>
-              <span style="font-size: 13px; line-height: 1.5; color: {{ a.sub }};">{{ a.note }}</span>
+              <span style="flex: none; width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid {{ a.dotBorder }}; background: {{ a.dotBg }}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px;">{{ a.tick }}</span>
             </button>
           </sc-for>
         </div>
@@ -176,138 +193,136 @@ select { appearance: none; -webkit-appearance: none; }
     </sc-if>
 
     <sc-if value="{{ onStep4 }}" hint-placeholder-val="{{ false }}">
-      <section style="animation: hnmRise 0.5s ease both;">
-        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 14px;">STEP 04 — SCOPE OF WORKS</p>
-        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 46px); line-height: 1.1; letter-spacing: 0.6px; margin: 0 0 14px;">WHICH TRADES, ROOM BY ROOM</h1>
-        <p style="font-size: 16px; line-height: 1.6; color: #4a5350; max-width: 640px; margin: 0 0 30px; text-wrap: pretty;">Tick what you know. Unsure about a trade? Leave it — the contractor will tell you on the walkthrough whether it is needed, and it appears as a line you can strike out.</p>
-        <div style="display: flex; flex-direction: column; gap: 18px;">
+      <section style="animation: hnmIn 0.45s ease both;">
+        <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 7vw, 46px); line-height: 1.05; letter-spacing: -0.8px; margin: 0 0 12px;">Scope of works</h1>
+        <p style="font-size: 15.5px; line-height: 1.6; color: #6d746f; margin: 0 0 26px; max-width: 46ch; text-wrap: pretty;">Tick what you know, room by room. Unsure about a trade? Leave it — the contractor tells you at the walkthrough and it appears as a line you can strike out.</p>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
           <sc-for list="{{ scopeGroups }}" as="g" hint-placeholder-count="2">
-            <div style="border: 1px solid rgba(26,32,35,0.12); border-radius: 4px; background: #fff; padding: 20px 20px 22px;">
-              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 15px;">
-                <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 17px; letter-spacing: 1.4px; margin: 0;">{{ g.name }}</h3>
-                <span style="font-size: 12px; color: #8a908c; font-family: 'Oswald', sans-serif; letter-spacing: 1.6px;">{{ g.count }}</span>
+            <div style="border: 1px solid rgba(20,25,27,0.12); border-radius: 20px; background: #fff; padding: 18px 18px 20px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px;">
+                <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 14.5px; letter-spacing: 1.4px; margin: 0;">{{ g.name }}</h3>
+                <span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.8px; color: {{ g.countFg }}; white-space: nowrap;">{{ g.count }}</span>
               </div>
-              <div style="display: flex; flex-wrap: wrap; gap: 9px;">
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                 <sc-for list="{{ g.trades }}" as="t" hint-placeholder-count="10">
-                  <button type="button" onClick="{{ t.pick }}" title="{{ t.note }}" style="cursor: pointer; border: 1px solid {{ t.border }}; background: {{ t.bg }}; color: {{ t.fg }}; border-radius: 999px; padding: 10px 17px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.4px;">{{ t.label }}</button>
+                  <button type="button" onClick="{{ t.pick }}" title="{{ t.note }}" style="cursor: pointer; border: 1.5px solid {{ t.border }}; background: {{ t.bg }}; color: {{ t.fg }}; border-radius: 999px; padding: 12px 16px; min-height: 44px; font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 1.3px;">{{ t.label }}</button>
                 </sc-for>
               </div>
             </div>
           </sc-for>
-        </div>
-        <div data-two="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 26px;">
-          <div style="border: 1px solid rgba(26,32,35,0.12); border-radius: 4px; background: #fff; padding: 20px;">
-            <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 15px; letter-spacing: 1.6px; margin: 0 0 14px;">WHEN DO YOU WANT TO START?</h3>
-            <div style="display: flex; flex-wrap: wrap; gap: 9px;">
+          <div style="border: 1px solid rgba(20,25,27,0.12); border-radius: 20px; background: #fff; padding: 18px;">
+            <h3 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 14.5px; letter-spacing: 1.4px; margin: 0 0 14px;">WHEN DO YOU WANT TO START?</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
               <sc-for list="{{ timings }}" as="t" hint-placeholder-count="4">
-                <button type="button" onClick="{{ t.pick }}" style="cursor: pointer; border: 1px solid {{ t.border }}; background: {{ t.bg }}; color: {{ t.fg }}; border-radius: 999px; padding: 10px 17px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.4px;">{{ t.label }}</button>
+                <button type="button" onClick="{{ t.pick }}" style="cursor: pointer; border: 1.5px solid {{ t.border }}; background: {{ t.bg }}; color: {{ t.fg }}; border-radius: 999px; padding: 12px 16px; min-height: 44px; font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 1.3px;">{{ t.label }}</button>
               </sc-for>
             </div>
           </div>
-          <label style="display: flex; flex-direction: column; gap: 9px; border: 1px solid rgba(26,32,35,0.12); border-radius: 4px; background: #fff; padding: 20px;">
-            <span style="font-family: 'Oswald', sans-serif; font-size: 15px; letter-spacing: 1.6px;">ANYTHING ELSE THEY SHOULD KNOW?</span>
-            <textarea rows="4" value="{{ f.notes }}" onInput="{{ setNotes }}" placeholder="e.g. keeping the existing kitchen cabinets, want the store room hacked, HDB permit not applied yet" style="padding: 12px 13px; border: 1px solid rgba(26,32,35,0.2); border-radius: 3px; resize: vertical; line-height: 1.55;"></textarea>
+          <label style="display: flex; flex-direction: column; gap: 9px; border: 1px solid rgba(20,25,27,0.12); border-radius: 20px; background: #fff; padding: 18px;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 14.5px; letter-spacing: 1.4px;">ANYTHING ELSE THEY SHOULD KNOW?</span>
+            <textarea rows="4" value="{{ f.notes }}" onInput="{{ setNotes }}" placeholder="e.g. keeping the existing kitchen cabinets, want the store room hacked, HDB permit not applied yet" style="padding: 14px; border: 1px solid rgba(20,25,27,0.16); border-radius: 12px; resize: vertical; line-height: 1.55;" style-focus="border-color: #5a7e8a; outline: none;"></textarea>
           </label>
         </div>
       </section>
     </sc-if>
 
     <sc-if value="{{ onStep5 }}" hint-placeholder-val="{{ false }}">
-      <section style="animation: hnmRise 0.5s ease both;">
-        <p style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 3.4px; color: #5a7e8a; margin: 0 0 14px;">STEP 05 — SEND IT</p>
-        <h1 style="font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 46px); line-height: 1.1; letter-spacing: 0.6px; margin: 0 0 14px;">CHECK IT, THEN SEND</h1>
-        <p style="font-size: 16px; line-height: 1.6; color: #4a5350; max-width: 640px; margin: 0 0 30px; text-wrap: pretty;">This is exactly what lands in our team's WhatsApp. Nothing else is attached, and no other company receives it.</p>
-        <div data-two="1" style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 22px; align-items: start;">
-          <div style="border: 1px solid rgba(26,32,35,0.12); border-radius: 4px; background: #fff; padding: 24px 24px 26px;">
-            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid rgba(26,32,35,0.1); margin-bottom: 4px;">
-              <span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.4px; color: #5a7e8a;">NEW ENQUIRY</span>
-              <span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.8px; color: #6d746f;">{{ ref }}</span>
+      <section style="animation: hnmIn 0.45s ease both;">
+        <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 7vw, 46px); line-height: 1.05; letter-spacing: -0.8px; margin: 0 0 12px;">Check it, then send</h1>
+        <p style="font-size: 15.5px; line-height: 1.6; color: #6d746f; margin: 0 0 26px; max-width: 46ch; text-wrap: pretty;">This is exactly what lands in our team's WhatsApp. Nothing else is attached, and no other company receives it.</p>
+        <div data-review="1" style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+          <div style="border: 1px solid rgba(20,25,27,0.12); border-radius: 20px; background: #fff; padding: 20px 20px 22px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(20,25,27,0.1);">
+              <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #5a7e8a;">NEW ENQUIRY</span>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; color: #8a908c;">{{ ref }}</span>
             </div>
-            <sc-for list="{{ summary }}" as="row" hint-placeholder-count="7">
-              <div style="display: grid; grid-template-columns: 130px 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px solid rgba(26,32,35,0.07);">
-                <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; color: #8a908c; padding-top: 2px;">{{ row.k }}</span>
-                <span style="font-size: 14.5px; line-height: 1.55; color: #1a2023;">{{ row.v }}</span>
+            <sc-for list="{{ summary }}" as="row" hint-placeholder-count="8">
+              <div style="display: flex; flex-direction: column; gap: 4px; padding: 13px 0; border-bottom: 1px solid rgba(20,25,27,0.07);">
+                <span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.8px; color: #8a908c;">{{ row.k }}</span>
+                <span style="font-size: 14.5px; line-height: 1.55; color: #14191b;">{{ row.v }}</span>
               </div>
             </sc-for>
-            <button type="button" onClick="{{ goStep1 }}" style="margin-top: 18px; cursor: pointer; background: none; border: none; padding: 0; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #5a7e8a; border-bottom: 1px solid rgba(90,126,138,0.5);">EDIT FROM THE TOP</button>
+            <button type="button" onClick="{{ goStep1 }}" style="margin-top: 16px; cursor: pointer; background: none; border: none; padding: 0; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #5a7e8a; border-bottom: 1px solid rgba(90,126,138,0.5);">EDIT FROM THE TOP</button>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 16px;">
-            <div style="border: 1px solid {{ coordBorder }}; border-radius: 4px; background: {{ coordBg }}; padding: 20px;">
-              <label style="display: flex; gap: 13px; align-items: flex-start; cursor: pointer;">
-                <input type="checkbox" checked="{{ f.coordinator }}" onChange="{{ toggleCoordinator }}" style="width: 19px; height: 19px; margin: 2px 0 0; accent-color: #5a7e8a; flex: none;">
-                <span style="display: flex; flex-direction: column; gap: 7px;">
-                  <span style="font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: 1.4px;">ADD A PROJECT COORDINATOR</span>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="border: 1.5px solid {{ coordBorder }}; border-radius: 20px; background: {{ coordBg }}; padding: 18px;">
+              <label style="display: flex; gap: 14px; align-items: flex-start; cursor: pointer;">
+                <span style="flex: none; width: 52px; height: 30px; border-radius: 999px; background: {{ switchBg }}; position: relative; transition: background 0.25s ease; margin-top: 2px;">
+                  <input type="checkbox" checked="{{ f.coordinator }}" onChange="{{ toggleCoordinator }}" style="position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer;">
+                  <span style="position: absolute; top: 3px; left: {{ switchX }}; width: 24px; height: 24px; border-radius: 999px; background: #fff; transition: left 0.25s cubic-bezier(0.2,0.8,0.2,1); box-shadow: 0 2px 6px rgba(20,25,27,0.3);"></span>
+                </span>
+                <span style="display: flex; flex-direction: column; gap: 6px;">
+                  <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 1.4px;">ADD A PROJECT COORDINATOR</span>
                   <span style="font-size: 13.5px; line-height: 1.55; color: #4a5350;">Someone from our side runs the schedule, checks the work on site and holds the trades to the quote. Priced to the job — a single toilet and a full-house strip are not the same fee, so we quote it with everything else.</span>
                 </span>
               </label>
             </div>
-            <div style="border: 1px solid rgba(26,32,35,0.12); border-radius: 4px; background: #fff; padding: 20px;">
-              <label style="display: flex; gap: 13px; align-items: flex-start; cursor: pointer;">
-                <input type="checkbox" checked="{{ f.consent }}" onChange="{{ toggleConsent }}" style="width: 19px; height: 19px; margin: 2px 0 0; accent-color: #5a7e8a; flex: none;">
-                <span style="font-size: 13.5px; line-height: 1.55; color: #4a5350;">I agree Home &amp; Me may contact me on WhatsApp, phone or email about this enquiry. No marketing lists, no passing my details to other firms.</span>
-              </label>
-            </div>
-            <button type="button" onClick="{{ send }}" style="cursor: pointer; border: none; background: #1a2023; color: #f6f4ef; border-radius: 999px; padding: 19px 26px; font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 2.4px; opacity: {{ sendOpacity }};" style-hover="background: #5a7e8a; color: #fff;">{{ sendLabel }}</button>
-            <a sc-camel-href="{{ mailHref }}" style="text-align: center; border: 1px solid rgba(26,32,35,0.25); border-radius: 999px; padding: 15px 24px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: #1a2023;" style-hover="border-color: #5a7e8a; color: #5a7e8a;">EMAIL IT INSTEAD</a>
-              <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #6d746f;">{{ sendHint }}</p>
+            <label style="display: flex; gap: 13px; align-items: flex-start; cursor: pointer; border: 1px solid rgba(20,25,27,0.12); border-radius: 20px; background: #fff; padding: 18px;">
+              <input type="checkbox" checked="{{ f.consent }}" onChange="{{ toggleConsent }}" style="width: 22px; height: 22px; margin: 1px 0 0; accent-color: #5a7e8a; flex: none;">
+              <span style="font-size: 13.5px; line-height: 1.55; color: #4a5350;">I agree Home &amp; Me may contact me on WhatsApp, phone or email about this enquiry. No marketing lists, no passing my details to other firms.</span>
+            </label>
+            <a sc-camel-href="{{ mailHref }}" style="text-align: center; border: 1.5px solid rgba(20,25,27,0.2); border-radius: 999px; padding: 17px 22px; font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 2.2px; color: #14191b; background: #fff;" style-hover="border-color: #5a7e8a; color: #5a7e8a;">EMAIL IT INSTEAD</a>
             <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
-              <div style="border: 1px solid rgba(90,126,138,0.4); background: rgba(90,126,138,0.08); border-radius: 4px; padding: 18px;">
-                <p style="margin: 0 0 10px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; color: #5a7e8a;">LOGGED AS {{ ref }}</p>
+              <div style="border: 1.5px solid rgba(90,126,138,0.45); background: rgba(90,126,138,0.09); border-radius: 20px; padding: 18px;">
+                <p style="margin: 0 0 8px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; color: #5a7e8a;">LOGGED AS {{ ref }}</p>
                 <p style="margin: 0 0 14px; font-size: 13.5px; line-height: 1.6; color: #4a5350;">{{ sentNote }}</p>
-                <button type="button" onClick="{{ copyText }}" style="cursor: pointer; background: none; border: 1px solid rgba(26,32,35,0.25); border-radius: 999px; padding: 10px 18px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px;">{{ copyLabel }}</button>
+                <button type="button" onClick="{{ copyText }}" style="cursor: pointer; background: #fff; border: 1px solid rgba(20,25,27,0.2); border-radius: 999px; padding: 12px 18px; min-height: 44px; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2px;">{{ copyLabel }}</button>
               </div>
             </sc-if>
+            <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #8a908c;">{{ sendHint }}</p>
           </div>
         </div>
       </section>
     </sc-if>
 
-    <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 40px; padding-top: 26px; border-top: 1px solid rgba(26,32,35,0.12);">
-      <sc-if value="{{ canBack }}" hint-placeholder-val="{{ false }}">
-        <button type="button" onClick="{{ back }}" style="cursor: pointer; background: none; border: 1px solid rgba(26,32,35,0.25); border-radius: 999px; padding: 15px 26px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px;" style-hover="border-color: #1a2023;">← BACK</button>
-      </sc-if>
-      <sc-if value="{{ canNext }}" hint-placeholder-val="{{ true }}">
-        <button type="button" onClick="{{ next }}" style="cursor: pointer; border: none; background: #5a7e8a; color: #fff; border-radius: 999px; padding: 16px 30px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px;" style-hover="background: #1a2023;">{{ nextLabel }}</button>
-      </sc-if>
-      <span style="font-size: 13.5px; color: {{ errFg }};">{{ hint }}</span>
-    </div>
+    <div data-desk="1" style="display: none; margin: 44px 0 0; padding-top: 22px; border-top: 1px solid rgba(20,25,27,0.12); font-size: 13px; color: #8a908c;">Home &amp; Me · Singapore · direct-contractor renovation, no middleman markup. Questions before you send? <a sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener">WhatsApp {{ waPretty }}</a> · <a sc-camel-href="{{ mailTo }}">{{ email }}</a></div>
   </main>
 
-  <footer style="border-top: 1px solid rgba(26,32,35,0.1); background: #fff; padding: 26px clamp(16px, 4vw, 36px);">
-    <div style="max-width: 1180px; margin: 0 auto; display: flex; gap: 18px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
-      <span style="font-size: 13px; color: #6d746f;">Home &amp; Me · Singapore · direct-contractor renovation, no middleman markup.</span>
-      <span style="font-size: 13px; color: #6d746f;">Questions before you send? <a sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener">WhatsApp {{ waPretty }}</a> · <a sc-camel-href="{{ mailTo }}">{{ email }}</a></span>
+  <div data-actionbar="1" style="position: fixed; left: 0; right: 0; bottom: calc(69px + env(safe-area-inset-bottom, 0px)); z-index: 45; background: rgba(242,239,233,0.94); backdrop-filter: blur(16px); border-top: 1px solid rgba(20,25,27,0.1); padding: 14px clamp(14px, 4vw, 30px) 16px;">
+    <div data-barinner="1" style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
+      <button data-primary="1" type="button" onClick="{{ primary }}" style="width: 100%; cursor: pointer; border: none; border-radius: 999px; background: {{ primaryBg }}; color: {{ primaryFg }}; padding: 19px 26px; font-family: 'Oswald', sans-serif; font-size: 12.5px; letter-spacing: 2.4px; transition: background 0.25s ease;">{{ primaryLabel }}</button>
+      <span data-hint="1" style="font-size: 13px; line-height: 1.45; color: {{ hintFg }}; text-align: center;">{{ hint }}</span>
     </div>
-  </footer>
+  </div>
+
+  <nav data-tabbar="1" style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 46; background: rgba(255,255,255,0.96); backdrop-filter: blur(16px); border-top: 1px solid rgba(20,25,27,0.1); padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px)); display: grid; grid-template-columns: repeat(4, 1fr);">
+    <a href="Home%20Direct.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;">{{ iconHome }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">HOME</span></a>
+    <a href="Home%20Direct.dc.html#portfolio" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;">{{ iconWork }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">OUR WORK</span></a>
+    <span style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #5a7e8a;">{{ iconPlan }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">ENQUIRY</span></span>
+    <a sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;">{{ iconChat }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">CHAT</span></a>
+  </nav>
 </div>
 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+6594235227&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;homeandme2017@gmail.com&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;webhookUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;coordinatorDefaultOn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;},&quot;autoRead&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;}}">
 const FLAT_TYPES = ['HDB 2-room', 'HDB 3-room', 'HDB 4-room', 'HDB 5-room', 'HDB Executive / Maisonette', 'HDB Jumbo', 'Condo / Apartment', 'Landed', 'Not sure yet'];
 
-// Two visuals per style, and every file appears exactly once across all ten cards —
-// a repeated photo makes two styles look like the same offer.
+// The seven style families Home & Me has completed projects for. Every card shows a
+// real photo from one of those projects, used exactly once — a repeated photo makes
+// two styles read as the same offer. photo() falls back to a material-palette tile for
+// any style we have not photographed, so nothing borrows another style's room.
+const CATS = ['ALL', 'POPULAR', 'BOLD', 'CLASSIC', 'CALM'];
 const STYLES = [
-  { id: 'contemporary', name: 'CONTEMPORARY', note: 'Clean lines, warm neutrals, practical joinery throughout.', imgs: ['portfolio/contemporary-3-room-hdb-design-01-living-hall.jpg', 'portfolio/contemporary-3-room-hdb-design-01-master-bedroom.jpg'] },
-  { id: 'modern-classic', name: 'MODERN CLASSIC', note: 'Panelling, cornices, brass and marble accents.', imgs: ['portfolio/modern-classic-3-room-hdb-design-01-living-hall.jpg', 'portfolio/modern-classic-3-room-hdb-design-02-master-bedroom.jpg'] },
-  { id: 'muji', name: 'MUJI / WABI-SABI', note: 'Soft plaster, linen, pale timber, almost no hardware.', imgs: ['portfolio/muji-5-room-hdb-design-02-living-hall.jpg', 'portfolio/muji-5-room-hdb-design-01-master-bedroom.jpg'] },
-  { id: 'modern-oriental', name: 'MODERN ORIENTAL', note: 'Dark timber, lattice screens, restrained colour.', imgs: ['portfolio/modern-oriental-5-room-hdb-design-01-living-hall.jpg', 'portfolio/modern-oriental-3-room-hdb-design-01-master-bedroom.jpg'] },
-  { id: 'minimalist', name: 'MINIMALIST', note: 'Flat fronts, hidden handles, one material family.', imgs: ['portfolio/minimalist-5-room-hdb-design-01-living-hall.jpg', 'portfolio/minimalist-5-room-hdb-design-01-kitchen.jpg'] },
-  { id: 'industrial', name: 'INDUSTRIAL', note: 'Raw screed, black metal, exposed services.', imgs: ['portfolio/industrial-4-room-hdb-design-01-living-hall.jpg', 'portfolio/industrial-4-room-hdb-design-01-kitchen.jpg'] },
-  { id: 'scandinavian', name: 'SCANDINAVIAN', note: 'Pale oak, white walls, daylight kept open.', imgs: ['portfolio/scandinavian-4-room-hdb-design-01-living-hall.jpg', 'portfolio/scandinavian-4-room-hdb-design-01-master-bedroom.jpg'] },
+  { id: 'contemporary', name: 'CONTEMPORARY', note: 'Clean lines, warm neutrals, practical joinery throughout.', cat: 'POPULAR', img: 'portfolio/contemporary-3-room-hdb-design-01-living-hall.jpg' },
+  { id: 'minimalist', name: 'MINIMALIST', note: 'Flat fronts, hidden handles, one material family.', cat: 'POPULAR', img: 'portfolio/minimalist-5-room-hdb-design-01-living-hall.jpg' },
+  { id: 'scandinavian', name: 'SCANDINAVIAN', note: 'Pale oak, white walls, daylight kept open.', cat: 'POPULAR', img: 'portfolio/scandinavian-4-room-hdb-design-01-living-hall.jpg' },
+  { id: 'modern-classic', name: 'MODERN CLASSIC', note: 'Panelling, cornices, brass and marble accents.', cat: 'CLASSIC', img: 'portfolio/modern-classic-3-room-hdb-design-01-living-hall.jpg' },
+  { id: 'modern-oriental', name: 'MODERN ORIENTAL', note: 'Dark timber, lattice screens, restrained colour.', cat: 'CLASSIC', img: 'portfolio/modern-oriental-5-room-hdb-design-01-living-hall.jpg' },
+  { id: 'muji', name: 'MUJI / WABI-SABI', note: 'Soft plaster, linen, pale timber, almost no hardware.', cat: 'CALM', img: 'portfolio/muji-5-room-hdb-design-02-living-hall.jpg' },
+  { id: 'industrial', name: 'INDUSTRIAL', note: 'Raw screed, black metal, exposed services.', cat: 'BOLD', img: 'portfolio/industrial-4-room-hdb-design-01-living-hall.jpg' },
 ];
 
 const AREAS = [
-  { id: 'whole', name: 'WHOLE HOUSE', note: 'Everything below, quoted as one project.', wet: false },
-  { id: 'living', name: 'LIVING & DINING', note: 'Feature wall, flooring, ceiling, TV console.', wet: false },
-  { id: 'kitchen', name: 'KITCHEN', note: 'Cabinets, worktop, tiling, sink and points.', wet: true },
-  { id: 'master', name: 'MASTER BEDROOM', note: 'Wardrobe, bed feature, lighting, flooring.', wet: false },
-  { id: 'common', name: 'COMMON BEDROOM(S)', note: 'One or more rooms — say how many in step 4.', wet: false },
-  { id: 'mbath', name: 'MASTER BATHROOM', note: 'Full wet-work: tiles, waterproofing, sanitary.', wet: true },
-  { id: 'cbath', name: 'COMMON BATHROOM', note: 'Full wet-work: tiles, waterproofing, sanitary.', wet: true },
-  { id: 'yard', name: 'SERVICE YARD / UTILITY', note: 'Laundry, sink, storage, WC if present.', wet: true },
-  { id: 'balcony', name: 'BALCONY', note: 'Decking, screens, parapet finishing.', wet: true },
-  { id: 'study', name: 'STUDY / WFH CORNER', note: 'Desk carpentry, shelving, data and power.', wet: false },
+  { id: 'whole', name: 'WHOLE HOUSE', note: 'Everything below, one project.', wet: false, icon: 'home' },
+  { id: 'living', name: 'LIVING & DINING', note: 'Feature wall, flooring, ceiling.', wet: false, icon: 'sofa' },
+  { id: 'kitchen', name: 'KITCHEN', note: 'Cabinets, worktop, tiling, sink.', wet: true, icon: 'kitchen' },
+  { id: 'master', name: 'MASTER BEDROOM', note: 'Wardrobe, bed feature, lighting.', wet: false, icon: 'bed' },
+  { id: 'common', name: 'COMMON BEDROOM(S)', note: 'One or more rooms.', wet: false, icon: 'bed' },
+  { id: 'mbath', name: 'MASTER BATHROOM', note: 'Tiles, waterproofing, sanitary.', wet: true, icon: 'bath' },
+  { id: 'cbath', name: 'COMMON BATHROOM', note: 'Tiles, waterproofing, sanitary.', wet: true, icon: 'bath' },
+  { id: 'yard', name: 'SERVICE YARD / UTILITY', note: 'Laundry, sink, storage, WC.', wet: true, icon: 'yard' },
+  { id: 'balcony', name: 'BALCONY', note: 'Decking, screens, parapet.', wet: true, icon: 'balcony' },
+  { id: 'study', name: 'STUDY / WFH CORNER', note: 'Desk carpentry, shelving, power.', wet: false, icon: 'desk' },
 ];
 
 const TRADES = [
@@ -325,23 +340,51 @@ const TRADES = [
   { id: 'haul', label: 'HAULAGE & CLEANING', note: 'Debris disposal and post-reno clean.' },
 ];
 
+// Material textures for the styles we have not photographed — timber slats, linen weave,
+// fluting, panelling, terrazzo speckle — drawn in CSS so no project photo is ever repeated.
+const TEXTURES = {
+  grain: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.09) 0 10px, transparent 10px 28px)',
+  'mid-century': 'repeating-linear-gradient(90deg, rgba(255,255,255,0.14) 0 12px, rgba(0,0,0,0.05) 12px 15px, transparent 15px 38px)',
+  coastal: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.3) 0 2px, transparent 2px 13px), repeating-linear-gradient(90deg, rgba(255,255,255,0.18) 0 2px, transparent 2px 13px)',
+  tropical: 'radial-gradient(circle at 76% 20%, rgba(255,255,255,0.28) 0 12%, transparent 46%), repeating-linear-gradient(72deg, rgba(255,255,255,0.1) 0 6px, transparent 6px 22px)',
+  cottagecore: 'radial-gradient(circle at 28% 26%, rgba(255,255,255,0.4) 0 14%, transparent 44%), repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0 2px, transparent 2px 26px)',
+  biophilic: 'repeating-linear-gradient(118deg, rgba(255,255,255,0.13) 0 7px, transparent 7px 26px), radial-gradient(circle at 82% 78%, rgba(255,255,255,0.22), transparent 45%)',
+  mediterranean: 'radial-gradient(ellipse 70% 55% at 50% 108%, rgba(255,255,255,0.42), transparent 70%), repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0 3px, transparent 3px 24px)',
+  gothic: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.12) 0 3px, transparent 3px 26px), radial-gradient(ellipse 46% 60% at 50% 0%, rgba(255,255,255,0.16), transparent 72%)',
+  cyberpunk: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.16) 0 2px, transparent 2px 11px), radial-gradient(circle at 20% 82%, rgba(255,255,255,0.3), transparent 44%)',
+  gamer: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.12) 0 5px, transparent 5px 17px), radial-gradient(circle at 74% 30%, rgba(255,255,255,0.24), transparent 42%)',
+  'art-deco': 'repeating-linear-gradient(90deg, rgba(255,255,255,0.2) 0 3px, rgba(0,0,0,0.07) 3px 5px, transparent 5px 17px)',
+  victorian: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.14) 0 3px, transparent 3px 38px), repeating-linear-gradient(90deg, rgba(0,0,0,0.06) 0 3px, transparent 3px 62px)',
+  'retro-terrazzo': 'radial-gradient(circle at 18% 24%, rgba(20,25,27,0.3) 0 3px, transparent 4px), radial-gradient(circle at 62% 14%, rgba(255,255,255,0.6) 0 4px, transparent 5px), radial-gradient(circle at 84% 46%, rgba(20,25,27,0.24) 0 3px, transparent 4px), radial-gradient(circle at 34% 62%, rgba(255,255,255,0.55) 0 5px, transparent 6px), radial-gradient(circle at 70% 76%, rgba(20,25,27,0.2) 0 4px, transparent 5px), radial-gradient(circle at 12% 82%, rgba(255,255,255,0.5) 0 3px, transparent 4px)',
+  bohemian: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.16) 0 4px, transparent 4px 14px), repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0 4px, transparent 4px 14px)',
+};
+
 const TIMINGS = ['ASAP', 'IN 1–3 MONTHS', 'IN 3–6 MONTHS', 'JUST EXPLORING'];
-const STEP_LABELS = ['DETAILS', 'PLAN & STYLE', 'AREAS', 'SCOPE', 'SEND'];
-const TEAL = '#5a7e8a', INK = '#1a2023';
+const STEP_NAMES = ['YOUR DETAILS', 'PLAN & STYLE', 'AREAS TO RENOVATE', 'SCOPE OF WORKS', 'REVIEW & SEND'];
+const TEAL = '#5a7e8a', INK = '#14191b';
+
+const ICONS = {
+  home: 'M3 10.5 12 4l9 6.5M5.5 9.5V20h13V9.5',
+  sofa: 'M4 11V8.5A1.5 1.5 0 0 1 5.5 7h13A1.5 1.5 0 0 1 20 8.5V11M3 11.5h18v5.5H3zM6 17v2M18 17v2',
+  kitchen: 'M4 4h16v16H4zM4 12h16M8 7.5h2M14 7.5h2M8 16h8',
+  bed: 'M3 18v-8M3 13h18v5M21 18v-5.5A2.5 2.5 0 0 0 18.5 10H10v3M6.5 8.5h.01',
+  bath: 'M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4zM7 12V6.5A1.5 1.5 0 0 1 8.5 5h1M6 19.5 5 21M18 19.5l1 1.5',
+  yard: 'M4 4h16v16H4zM12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM7.5 7h.01',
+  balcony: 'M4 9h16M4 9v11M20 9v11M9 9v11M15 9v11M4 20h16M12 3v6',
+  desk: 'M3 12h18M5 12v8M19 12v8M8 12V7h6v5M16 8h3',
+  chat: 'M21 11.5a8.4 8.4 0 0 1-9 8.5 9 9 0 0 1-3.9-.9L3 21l1.9-4.6A8.4 8.4 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5z',
+  work: 'M3 6.5h7v6H3zM14 6.5h7v11h-7zM3 15.5h7v2H3z',
+  plan: 'M4 4h16v16H4zM4 10h16M10 10v10M14 4v6',
+};
 
 class Component extends DCLogic {
   state = {
-    step: 1,
-    hint: '',
-    err: false,
-    sent: false,
-    copied: false,
-    sending: false,
+    step: 1, hint: '', err: false, sent: false, copied: false, sending: false, styleCat: 'ALL',
     read: { status: 'idle', note: 'Upload a plan and we will read the layout — or type the numbers yourself.' },
     plan: null,
     f: {
       street: '', unit: '', postal: '', flatType: 'HDB 4-room', name: '', phone: '', email: '',
-      detectedType: '', sqm: '', styles: [], areas: [], trades: {}, timing: '', notes: '',
+      detectedType: '', sqm: '', styles: [], customStyle: '', areas: [], trades: {}, timing: '', notes: '',
       coordinator: false, consent: false,
     },
   };
@@ -357,6 +400,50 @@ class Component extends DCLogic {
       const hit = STYLES.find((x) => x.id === m[1].toLowerCase());
       if (hit) this.setState((s) => ({ f: { ...s.f, styles: [hit.id] } }));
     }
+  }
+
+  // Icons and photos are built here, not in the template: an img src written as a hole is
+  // fetched verbatim by the browser's preload parser before the runtime can resolve it.
+  icon(name, size, stroke) {
+    return React.createElement('svg', {
+      width: size || 22, height: size || 22, viewBox: '0 0 24 24', fill: 'none', 'aria-hidden': 'true',
+      stroke: stroke || 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round',
+    }, React.createElement('path', { d: ICONS[name] || ICONS.home }));
+  }
+
+  photo(s) {
+    if (s.img) {
+      return React.createElement('img', {
+        src: 'assets/' + s.img, alt: s.name + ' project', loading: 'lazy',
+        style: { width: '100%', aspectRatio: '1 / 1', objectFit: 'cover', display: 'block', background: '#e7e2d8' },
+      });
+    }
+    // Not photographed yet. Drawn from the style's own palette and material texture — never a
+    // second copy of another style's room, which would read as the same offer twice.
+    const p = s.palette;
+    const light = this.luma(p[0]) > 0.62;
+    const ink = light ? 'rgba(20,25,27,0.26)' : 'rgba(255,255,255,0.3)';
+    return React.createElement('span', {
+      style: { position: 'relative', display: 'block', width: '100%', aspectRatio: '1 / 1', overflow: 'hidden', background: 'linear-gradient(152deg, ' + p[0] + ' 0%, ' + p[1] + ' 62%, ' + p[2] + ' 100%)' },
+    },
+      React.createElement('span', { key: 'tex', style: { position: 'absolute', inset: 0, backgroundImage: TEXTURES[s.id] || TEXTURES.grain } }),
+      React.createElement('span', {
+        key: 'mark',
+        style: { position: 'absolute', left: '14px', top: '6px', fontFamily: "'Instrument Serif', Georgia, serif", fontSize: '92px', lineHeight: 1, color: ink, letterSpacing: '-3px' },
+      }, s.name.charAt(0)),
+      React.createElement('span', {
+        key: 'strip', style: { position: 'absolute', left: 0, right: 0, bottom: 0, display: 'flex', height: '18px' },
+      }, p.map((c, i) => React.createElement('span', { key: c + i, style: { flex: 1, background: c } }))),
+      React.createElement('span', {
+        key: 'tag',
+        style: { position: 'absolute', left: '10px', bottom: '28px', fontFamily: "'Oswald', sans-serif", fontSize: '9px', letterSpacing: '1.6px', color: 'rgba(255,255,255,0.95)', background: 'rgba(20,25,27,0.55)', padding: '5px 9px', borderRadius: '999px' },
+      }, 'MOOD'));
+  }
+
+  luma(hex) {
+    const h = String(hex).replace('#', '');
+    const n = parseInt(h.length === 3 ? h.replace(/(.)/g, '$1$1') : h, 16);
+    return (0.2126 * ((n >> 16) & 255) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
   }
 
   set(k) { return (e) => { const v = e.target.value; this.setState((s) => ({ f: { ...s.f, [k]: v }, hint: '', err: false })); }; }
@@ -383,6 +470,7 @@ class Component extends DCLogic {
       if (!f.name.trim()) return 'Your name, so we know who we are speaking to.';
     }
     if (step === 2 && !f.styles.length) return 'Pick at least one look — it tells the contractor what finish level to price.';
+    if (step === 2 && f.styles.indexOf('custom') > -1 && !f.customStyle.trim()) return 'Describe the look you have in mind, or unpick Custom.';
     if (step === 3 && !f.areas.length) return 'Choose at least one area to renovate.';
     if (step === 4) {
       const any = Object.keys(f.trades).some((k) => (f.trades[k] || []).length);
@@ -398,7 +486,11 @@ class Component extends DCLogic {
     this.go(Math.min(5, this.state.step + 1));
   };
 
-  back = () => this.go(Math.max(1, this.state.step - 1));
+  // On step 1 there is no previous step, so back leaves the flow rather than dead-ending.
+  back = () => {
+    if (this.state.step > 1) { this.go(this.state.step - 1); return; }
+    window.location.href = 'Home Direct.dc.html';
+  };
 
   toggleIn(list, id) { return list.includes(id) ? list.filter((x) => x !== id) : list.concat([id]); }
 
@@ -408,6 +500,12 @@ class Component extends DCLogic {
       if (styles.length > 3) styles = styles.slice(styles.length - 3);
       return { f: { ...s.f, styles }, hint: '', err: false };
     });
+  }
+
+  styleName(id) {
+    if (id === 'custom') return 'CUSTOM' + (this.state.f.customStyle.trim() ? ' — ' + this.state.f.customStyle.trim() : '');
+    const x = STYLES.find((y) => y.id === id);
+    return x ? x.name : id;
   }
 
   pickArea(id) {
@@ -475,7 +573,7 @@ class Component extends DCLogic {
     L.push('*Address:* ' + [f.street, f.unit, f.postal].filter(Boolean).join(', '));
     L.push('*Property:* ' + f.flatType + (f.detectedType ? ' (plan read as ' + f.detectedType + ')' : '') + (f.sqm ? ' · ' + f.sqm + ' sqm' : ''));
     L.push('*Floor plan:* ' + (this.state.plan ? this.state.plan.name : 'not uploaded'));
-    L.push('*Style:* ' + (f.styles.map((s) => { const x = STYLES.find((y) => y.id === s); return x ? x.name : s; }).join(', ') || '—'));
+    L.push('*Style:* ' + (f.styles.map((s) => this.styleName(s)).join(', ') || '—'));
     L.push('');
     L.push('*SCOPE*');
     f.areas.forEach((a) => {
@@ -524,59 +622,72 @@ class Component extends DCLogic {
     const { step, f, read } = this.state;
     const wa = this.waTarget();
     const mail = this.props.email || 'homeandme2017@gmail.com';
-    const chip = (on) => ({ border: on ? TEAL : 'rgba(26,32,35,0.2)', bg: on ? TEAL : '#fff', fg: on ? '#fff' : INK });
-
+    const chip = (on) => ({ border: on ? TEAL : 'rgba(20,25,27,0.18)', bg: on ? TEAL : '#fff', fg: on ? '#fff' : INK });
     const areaList = f.areas.includes('whole') ? ['whole'] : f.areas;
-    const dot = { idle: '#c9c4b8', reading: '#e0a33c', read: '#7fb08a', manual: '#c98b5a' }[read.status] || '#c9c4b8';
-    const title = { idle: 'PLAN READING', reading: 'READING YOUR PLAN…', read: 'READ FROM YOUR PLAN', manual: 'TELL US INSTEAD' }[read.status] || 'PLAN READING';
 
     const summary = [
       { k: 'CLIENT', v: [f.name, f.phone, f.email].filter(Boolean).join(' · ') || '—' },
       { k: 'ADDRESS', v: [f.street, f.unit, f.postal].filter(Boolean).join(', ') || '—' },
       { k: 'PROPERTY', v: f.flatType + (f.detectedType ? ' · plan read as ' + f.detectedType : '') + (f.sqm ? ' · ' + f.sqm + ' sqm' : '') },
       { k: 'FLOOR PLAN', v: this.state.plan ? this.state.plan.name : 'not uploaded' },
-      { k: 'STYLE', v: f.styles.map((s) => { const x = STYLES.find((y) => y.id === s); return x ? x.name : s; }).join(', ') || '—' },
+      { k: 'STYLE', v: f.styles.map((s) => this.styleName(s)).join(', ') || '—' },
       { k: 'SCOPE', v: areaList.map((a) => this.areaName(a) + ' — ' + ((f.trades[a] || []).map((id) => { const t = TRADES.find((x) => x.id === id); return t ? t.label.toLowerCase() : id; }).join(', ') || 'to be advised')).join('  |  ') || '—' },
       { k: 'START', v: f.timing || 'not stated' },
       { k: 'COORDINATOR', v: f.coordinator ? 'Yes — quote it with the works' : 'Not for now' },
     ];
 
     return {
-      steps: STEP_LABELS.map((label, i) => {
-        const n = i + 1, done = n <= step;
-        return { no: '0' + n, label, bar: done ? TEAL : 'rgba(26,32,35,0.1)', fg: done ? INK : '#8a908c', num: done ? TEAL : '#b3b7b2' };
-      }),
+      stepOf: 'STEP 0' + step + ' OF 05',
+      stepName: STEP_NAMES[step - 1],
+      progress: Math.round((step / 5) * 100) + '%',
+      backOpacity: 1,
+      back: this.back,
       onStep1: step === 1, onStep2: step === 2, onStep3: step === 3, onStep4: step === 4, onStep5: step === 5,
       f, flatTypes: FLAT_TYPES,
       setStreet: this.set('street'), setUnit: this.set('unit'), setPostal: this.set('postal'),
       setFlatType: this.set('flatType'), setName: this.set('name'), setPhone: this.set('phone'),
       setEmail: this.set('email'), setDetectedType: this.set('detectedType'), setSqm: this.set('sqm'),
-      setNotes: this.set('notes'),
-      onFile: this.onFile,
+      setNotes: this.set('notes'), onFile: this.onFile,
       noPlan: !(this.state.plan && this.state.plan.src),
-      // The uploaded sheet is drawn directly rather than through a src hole: a hole in an
-      // img src resolves to its own literal text during the placeholder pass and fires a 404.
       planImg: this.state.plan && this.state.plan.src
-        ? React.createElement('img', { src: this.state.plan.src, alt: 'Your floor plan', style: { maxWidth: '100%', maxHeight: '300px', objectFit: 'contain' } })
+        ? React.createElement('img', { src: this.state.plan.src, alt: 'Your floor plan', style: { maxWidth: '100%', maxHeight: '260px', objectFit: 'contain', borderRadius: '10px' } })
         : null,
       planNote: this.state.plan ? this.state.plan.name : 'PDF, PNG or JPG · the HDB plan or your ID’s drawing',
-      readDot: dot, readTitle: title, readNote: read.note,
-      styleCards: STYLES.map((s) => {
-        const on = f.styles.includes(s.id);
-        return { name: s.name, note: s.note, pick: this.pickStyle(s.id), photos: this.photos(s),
-          border: on ? TEAL : 'rgba(26,32,35,0.12)', shadow: on ? '0 18px 34px -22px rgba(90,126,138,0.8)' : 'none',
-          tick: on ? 'SELECTED' : '', tickFg: TEAL };
+      readDot: { idle: '#c9c4b8', reading: '#e0a33c', read: '#7fb08a', manual: '#c98b5a' }[read.status] || '#c9c4b8',
+      readAnim: read.status === 'reading' ? 'hnmPulse 1.4s ease-in-out infinite' : 'none',
+      readTitle: { idle: 'PLAN READING', reading: 'READING YOUR PLAN…', read: 'READ FROM YOUR PLAN', manual: 'TELL US INSTEAD' }[read.status] || 'PLAN READING',
+      readNote: read.note,
+      styleChips: CATS.map((c) => {
+        const on = this.state.styleCat === c;
+        const n = c === 'ALL' ? STYLES.length : STYLES.filter((s) => s.cat === c).length;
+        return { label: c + ' ' + n, pick: () => this.setState({ styleCat: c }),
+          bg: on ? INK : '#fff', fg: on ? '#f6f4ef' : '#4a5350', border: on ? INK : 'rgba(20,25,27,0.16)' };
       }),
-      styleCount: f.styles.length ? f.styles.length + ' of 3 selected' : 'Choose up to 3',
+      styleCards: STYLES.filter((s) => this.state.styleCat === 'ALL' || s.cat === this.state.styleCat).map((s) => {
+        const on = f.styles.includes(s.id);
+        return { name: s.name, note: s.note, pick: this.pickStyle(s.id), photo: this.photo(s),
+          border: on ? TEAL : 'rgba(20,25,27,0.1)', shadow: on ? '0 14px 30px -18px rgba(90,126,138,0.9)' : 'none',
+          tick: on ? '✓' : '', tickBg: on ? TEAL : 'transparent' };
+      }),
+      styleCount: f.styles.length ? f.styles.length + ' OF 3 PICKED' : 'PICK UP TO 3',
+      pickCustom: this.pickStyle('custom'),
+      customOn: f.styles.indexOf('custom') > -1,
+      customBorder: f.styles.indexOf('custom') > -1 ? TEAL : 'rgba(20,25,27,0.16)',
+      customBg: f.styles.indexOf('custom') > -1 ? 'rgba(90,126,138,0.08)' : '#fff',
+      customTick: f.styles.indexOf('custom') > -1 ? '✓' : '＋',
+      setCustomStyle: this.set('customStyle'),
       areaCards: AREAS.map((a) => {
         const on = f.areas.includes(a.id);
         return { name: a.name, note: a.note, pick: this.pickArea(a.id), tick: on ? '✓' : '',
-          bg: on ? TEAL : '#fff', border: on ? TEAL : 'rgba(26,32,35,0.14)',
-          fg: on ? '#fff' : INK, sub: on ? 'rgba(255,255,255,0.78)' : '#6d746f' };
+          icon: this.icon(a.icon, 22, on ? TEAL : '#8a908c'),
+          bg: on ? 'rgba(90,126,138,0.1)' : '#fff', border: on ? TEAL : 'rgba(20,25,27,0.12)',
+          fg: on ? TEAL : INK, sub: on ? 'rgba(90,126,138,0.85)' : '#8a908c',
+          dotBorder: on ? TEAL : 'rgba(20,25,27,0.18)', dotBg: on ? TEAL : 'transparent' };
       }),
       scopeGroups: areaList.map((id) => {
         const picked = f.trades[id] || [];
         return { name: this.areaName(id), count: picked.length ? picked.length + ' SELECTED' : 'NOTHING TICKED YET',
+          countFg: picked.length ? TEAL : '#b3b7b2',
           trades: this.tradesFor(id).map((t) => ({ label: t.label, note: t.note, pick: this.pickTrade(id, t.id), ...chip(picked.includes(t.id)) })) };
       }),
       timings: TIMINGS.map((t) => ({ label: t, pick: this.pickTiming(t), ...chip(f.timing === t) })),
@@ -584,41 +695,32 @@ class Component extends DCLogic {
       goStep1: () => this.go(1),
       toggleCoordinator: () => this.setState((s) => ({ f: { ...s.f, coordinator: !s.f.coordinator } })),
       toggleConsent: () => this.setState((s) => ({ f: { ...s.f, consent: !s.f.consent }, hint: '', err: false })),
-      coordBorder: f.coordinator ? TEAL : 'rgba(26,32,35,0.12)',
+      coordBorder: f.coordinator ? TEAL : 'rgba(20,25,27,0.12)',
       coordBg: f.coordinator ? 'rgba(90,126,138,0.07)' : '#fff',
-      send: this.send, copyText: this.copyText,
-      copyLabel: this.state.copied ? 'COPIED' : 'COPY THE TEXT',
-      sendLabel: this.state.sent ? 'SEND AGAIN ON WHATSAPP' : 'SEND AS NEW ENQUIRY',
-      sendOpacity: f.consent ? 1 : 0.55,
+      switchBg: f.coordinator ? TEAL : 'rgba(20,25,27,0.22)',
+      switchX: f.coordinator ? '25px' : '3px',
+      primary: step === 5 ? this.send : this.next,
+      primaryLabel: step === 5 ? (this.state.sent ? 'SEND AGAIN ON WHATSAPP' : 'SEND AS NEW ENQUIRY') : (step === 4 ? 'REVIEW ENQUIRY →' : 'CONTINUE →'),
+      primaryBg: step === 5 ? (f.consent ? INK : 'rgba(20,25,27,0.4)') : TEAL,
+      primaryFg: '#f6f4ef',
+      hint: this.state.hint || (step === 5 ? (f.consent ? 'Opens WhatsApp with the enquiry written out.' : 'Tick the contact permission to send.') : ''),
+      hintFg: this.state.err ? '#a8563c' : '#8a908c',
+      copyText: this.copyText, copyLabel: this.state.copied ? 'COPIED' : 'COPY THE TEXT',
+      sent: this.state.sent,
+      sentNote: (this.props.webhookUrl ? 'Posted to the team channel and opened in WhatsApp. ' : 'Opened in WhatsApp for you to hit send. ') + 'Quote the reference if you follow up.',
       sendHint: this.state.sent
-        ? 'If WhatsApp did not open, copy the text below and send it to ' + this.pretty(wa) + ' or email ' + mail + '.'
-        : 'Opens WhatsApp with this enquiry written out — our team picks it up in the group and replies from the same number. No WhatsApp? Email it to ' + mail + ' instead.',
+        ? 'If WhatsApp did not open, copy the text above and send it to ' + this.pretty(wa) + ' or email ' + mail + '.'
+        : 'Our team picks it up in the group and replies from the same number. No WhatsApp? Email it instead.',
       email: mail,
       mailTo: 'mailto:' + mail + '?subject=' + encodeURIComponent('Renovation enquiry — Home & Me'),
       mailHref: 'mailto:' + mail + '?subject=' + encodeURIComponent('New enquiry ' + this.ref() + ' — Home & Me') + '&body=' + encodeURIComponent(this.message().replace(/\*/g, '')),
-      sent: this.state.sent,
-      sentNote: (this.props.webhookUrl ? 'Posted to the team channel and opened in WhatsApp. ' : 'Opened in WhatsApp for you to hit send. ') + 'Quote the reference if you follow up.',
-      next: this.next, back: this.back,
-      canBack: step > 1, canNext: step < 5,
-      nextLabel: step === 4 ? 'REVIEW ENQUIRY →' : 'CONTINUE →',
-      hint: this.state.hint, errFg: this.state.err ? '#a8563c' : '#6d746f',
       waPlain: 'https://wa.me/' + wa, waPretty: this.pretty(wa),
+      iconHome: this.icon('home', 21), iconWork: this.icon('work', 21),
+      iconPlan: this.icon('plan', 21), iconChat: this.icon('chat', 21),
     };
   }
 
   pretty(d) { return d && d.length > 8 ? '+' + d.slice(0, 2) + ' ' + d.slice(2, 6) + ' ' + d.slice(6) : '+' + d; }
-
-  // Built here, not in the template: an img src written as a hole is fetched verbatim by the
-  // browser's preload parser at parse time, long before the runtime resolves it.
-  photos(s) {
-    const cell = (file) => React.createElement('img', {
-      key: file, src: 'assets/' + file, alt: s.name + ' project',
-      style: { width: '100%', height: '100%', objectFit: 'cover' },
-    });
-    return React.createElement('span', {
-      style: { display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: '2px', aspectRatio: '16 / 10', background: '#e7e2d8' },
-    }, cell(s.imgs[0]), cell(s.imgs[1]));
-  }
 }
 
 </script>

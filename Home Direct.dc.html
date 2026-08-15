@@ -32,6 +32,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
 @media (max-width: 700px) {
   [data-herofoot] { grid-template-columns: 1fr !important; }
   [data-mobilecta] { display: flex !important; }
+  [data-tabbar] { display: grid !important; }
   [data-masonry] { column-count: 1 !important; }
 }
 </style>
@@ -348,16 +349,29 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
     </div>
   </sc-if>
 
-  <div data-mobilecta="1" style="display: none; position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 65; gap: 10px;">
-    <a href="Renovation%20Enquiry.dc.html" style="flex: 1; text-align: center; background: #14191b; color: #f6f4ef; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; padding: 17px 18px; border-radius: 999px; box-shadow: 0 14px 30px -16px rgba(20,25,27,0.8);">UPLOAD FLOOR PLAN</a>
-    <a sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener" style="flex: none; background: #5a7e8a; color: #fff; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2px; padding: 17px 20px; border-radius: 999px;">CHAT</a>
+  <div data-mobilecta="1" style="display: none; position: fixed; left: 12px; right: 12px; bottom: calc(81px + env(safe-area-inset-bottom, 0px)); z-index: 65; gap: 10px;">
+    <a href="Renovation%20Enquiry.dc.html" style="flex: 1; text-align: center; background: #14191b; color: #f6f4ef; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; padding: 18px; border-radius: 999px; box-shadow: 0 16px 34px -16px rgba(20,25,27,0.85);">UPLOAD FLOOR PLAN</a>
   </div>
+
+  <nav data-tabbar="1" style="display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 66; background: rgba(255,255,255,0.96); backdrop-filter: blur(16px); border-top: 1px solid rgba(20,25,27,0.1); padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px)); grid-template-columns: repeat(4, 1fr);">
+    <span style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #5a7e8a;">{{ iconHome }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">HOME</span></span>
+    <a href="#portfolio" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;">{{ iconWork }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">OUR WORK</span></a>
+    <a href="Renovation%20Enquiry.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;">{{ iconPlan }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">ENQUIRY</span></a>
+    <a sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;">{{ iconChat }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">CHAT</span></a>
+  </nav>
 </div>
 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+6594235227&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;homeandme2017@gmail.com&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;showThreeDNote&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;}}">
 const TICKER = ['HACKING', 'MASONRY & TILING', 'PAINTING', 'CARPENTRY', 'PLUMBING', 'ELECTRICAL', 'FALSE CEILING', 'GLASS & ALUMINIUM', 'WATERPROOFING', 'FLOORING', 'AIRCON', 'HAULAGE'];
 const CLAY = '#a8563c';
+
+const ICONS = {
+  home: 'M3 10.5 12 4l9 6.5M5.5 9.5V20h13V9.5',
+  work: 'M3 6.5h7v6H3zM14 6.5h7v11h-7zM3 15.5h7v2H3z',
+  plan: 'M4 4h16v16H4zM4 10h16M10 10v10M14 4v6',
+  chat: 'M21 11.5a8.4 8.4 0 0 1-9 8.5 9 9 0 0 1-3.9-.9L3 21l1.9-4.6A8.4 8.4 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5z',
+};
 
 // Completed-work gallery. Every file on this page appears exactly once: the hero holds
 // living-classic-bright, the coordinator section holds family-lounge, and these 18 are the
@@ -463,6 +477,13 @@ class Component extends DCLogic {
   // Built here, not in the template: an img src written as a hole is fetched verbatim by the
   // browser's preload parser at parse time, before the runtime can resolve it. Hover zoom rides
   // along as handlers since a parent-hover CSS rule is not available inline.
+  icon(name) {
+    return React.createElement('svg', {
+      width: 21, height: 21, viewBox: '0 0 24 24', fill: 'none', 'aria-hidden': 'true',
+      stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round',
+    }, React.createElement('path', { d: ICONS[name] }));
+  }
+
   photo(w, big) {
     return React.createElement('img', {
       src: 'assets/' + w.file, alt: w.style + ' ' + w.room.toLowerCase() + ' project',
@@ -501,6 +522,8 @@ class Component extends DCLogic {
       mailTo: 'mailto:' + email + '?subject=' + encodeURIComponent('Renovation enquiry — Home & Me'),
       showThreeD: this.props.showThreeDNote !== false,
       tickerRows: [{ items: TICKER }, { items: TICKER }],
+      iconHome: this.icon('home'), iconWork: this.icon('work'),
+      iconPlan: this.icon('plan'), iconChat: this.icon('chat'),
 
       proof: [
         { head: 'Itemised', body: 'The contractor’s own quote, line by line per trade — not a lump sum.' },
