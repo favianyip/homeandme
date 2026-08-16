@@ -296,20 +296,52 @@ select { appearance: none; -webkit-appearance: none; }
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+6594235227&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;homeandme2017@gmail.com&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;webhookUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;coordinatorDefaultOn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;},&quot;autoRead&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;}}">
 const FLAT_TYPES = ['HDB 2-room', 'HDB 3-room', 'HDB 4-room', 'HDB 5-room', 'HDB Executive / Maisonette', 'HDB Jumbo', 'Condo / Apartment', 'Landed', 'Not sure yet'];
+const STYLE_ALIASES = { 'modern-contemporary': 'contemporary', 'wabi-sabi': 'muji' };
 
-// The seven style families Home & Me has completed projects for. Every card shows a
-// real photo from one of those projects, used exactly once — a repeated photo makes
-// two styles read as the same offer. photo() falls back to a material-palette tile for
-// any style we have not photographed, so nothing borrows another style's room.
-const CATS = ['ALL', 'POPULAR', 'BOLD', 'CLASSIC', 'CALM'];
+// The design export adds thirty-three directions. Keep the existing, photographed
+// Modern Oriental option too, because live portfolio links already select it. Only
+// reviewed Home & Me portfolio photos are shown as projects; every unreviewed look is
+// an honest MOOD palette until its replacement render is selected and approved.
+const CATS = ['ALL', 'POPULAR', 'WARM', 'BOLD', 'CLASSIC', 'CALM'];
 const STYLES = [
-  { id: 'contemporary', name: 'CONTEMPORARY', note: 'Clean lines, warm neutrals, practical joinery throughout.', cat: 'POPULAR', img: 'portfolio/contemporary-3-room-hdb-design-01-living-hall.jpg' },
-  { id: 'minimalist', name: 'MINIMALIST', note: 'Flat fronts, hidden handles, one material family.', cat: 'POPULAR', img: 'portfolio/minimalist-5-room-hdb-design-01-living-hall.jpg' },
+  { id: 'minimalist', name: 'MINIMALIST', note: 'Flat fronts, hidden handles, one material.', cat: 'POPULAR', img: 'portfolio/minimalist-5-room-hdb-design-01-living-hall.jpg' },
   { id: 'scandinavian', name: 'SCANDINAVIAN', note: 'Pale oak, white walls, daylight kept open.', cat: 'POPULAR', img: 'portfolio/scandinavian-4-room-hdb-design-01-living-hall.jpg' },
-  { id: 'modern-classic', name: 'MODERN CLASSIC', note: 'Panelling, cornices, brass and marble accents.', cat: 'CLASSIC', img: 'portfolio/modern-classic-3-room-hdb-design-01-living-hall.jpg' },
-  { id: 'modern-oriental', name: 'MODERN ORIENTAL', note: 'Dark timber, lattice screens, restrained colour.', cat: 'CLASSIC', img: 'portfolio/modern-oriental-5-room-hdb-design-01-living-hall.jpg' },
-  { id: 'muji', name: 'MUJI / WABI-SABI', note: 'Soft plaster, linen, pale timber, almost no hardware.', cat: 'CALM', img: 'portfolio/muji-5-room-hdb-design-02-living-hall.jpg' },
+  { id: 'japandi', name: 'JAPANDI', note: 'Japanese calm meets Scandi warmth — low timber, muted tone.', cat: 'POPULAR', palette: ['#d8cdb8', '#a68e72', '#f3efe6'] },
+  { id: 'contemporary', name: 'MODERN CONTEMPORARY', note: 'Clean lines, neutral tones, bright and open.', cat: 'POPULAR', img: 'portfolio/contemporary-3-room-hdb-design-01-living-hall.jpg' },
+  { id: 'muji', name: 'WABI-SABI / MUJI', note: 'Weathered timber, clay and plaster, imperfect by design.', cat: 'POPULAR', img: 'portfolio/muji-5-room-hdb-design-02-living-hall.jpg' },
+  { id: 'contemporary-luxe', name: 'CONTEMPORARY LUXE', note: 'Full-height stone, dark joinery, layered light.', cat: 'POPULAR', palette: ['#2d3033', '#b9a26a', '#e5e0d7'] },
+  { id: 'mid-century', name: 'MID-CENTURY MODERN', note: 'Walnut, tapered legs, organic shapes, retro colour.', cat: 'POPULAR', palette: ['#7a4b2a', '#d99a2b', '#ece4d4'] },
+
+  { id: 'rustic-wood', name: 'RUSTIC WOOD', note: 'Solid timber, visible grain, earthy tones.', cat: 'WARM', palette: ['#7b5136', '#b48a5a', '#e6d8c3'] },
+  { id: 'warm-concrete', name: 'WARM CONCRETE', note: 'Greige plaster, concrete-look stone, oak table.', cat: 'WARM', palette: ['#a79f93', '#d8d2c8', '#9a7a58'] },
+  { id: 'coastal', name: 'COASTAL', note: 'Chalk white, lightened wood, linen and rope.', cat: 'WARM', palette: ['#e8ded0', '#cfd9d6', '#8aa6a8'] },
+  { id: 'tropical', name: 'TROPICAL RESORT', note: 'Rattan and teak, deep green, planting indoors.', cat: 'WARM', palette: ['#3f5340', '#c2a878', '#e6dcc8'] },
+  { id: 'cottagecore', name: 'COTTAGECORE', note: 'Cream cabinets, soft florals, vintage brass.', cat: 'WARM', palette: ['#f2e9dc', '#c9d3bd', '#b98d7a'] },
+  { id: 'biophilic', name: 'BIOPHILIC GREEN', note: 'Planting, daylight, raw stone and wood.', cat: 'WARM', palette: ['#5a6f4e', '#dfe3d5', '#8f7a5e'] },
+  { id: 'mediterranean', name: 'MEDITERRANEAN', note: 'Lime plaster, arches, hand-painted tile, wrought iron.', cat: 'WARM', palette: ['#efe3d3', '#c97f52', '#6f8ba0'] },
+
   { id: 'industrial', name: 'INDUSTRIAL', note: 'Raw screed, black metal, exposed services.', cat: 'BOLD', img: 'portfolio/industrial-4-room-hdb-design-01-living-hall.jpg' },
+  { id: 'dark-moody', name: 'DARK MOODY', note: 'Deep walls, matte black, pooled lighting.', cat: 'BOLD', palette: ['#24272b', '#4a3f3b', '#b28e68'] },
+  { id: 'monochrome', name: 'MONOCHROME GREY', note: 'Graphic tile, grey on grey, no colour.', cat: 'BOLD', palette: ['#2c2f33', '#8b8f93', '#e2e2df'] },
+  { id: 'gothic', name: 'GOTHIC REVIVAL', note: 'Ink walls, arches, carved dark timber.', cat: 'BOLD', palette: ['#1d1a22', '#4a3b52', '#a98b4f'] },
+  { id: 'cyberpunk', name: 'CYBERPUNK NEON', note: 'RGB coves, black lacquer, neon accents.', cat: 'BOLD', palette: ['#12101c', '#7b2ff7', '#00d2ff'] },
+  { id: 'gamer', name: 'GAMER SETUP', note: 'Strip lighting, acoustic panels, dark desk wall.', cat: 'BOLD', palette: ['#15161c', '#2b3350', '#b02cf0'] },
+
+  { id: 'modern-classic', name: 'MODERN CLASSIC', note: 'Panelling, cornice, brass and marble accents.', cat: 'CLASSIC', img: 'portfolio/modern-classic-3-room-hdb-design-01-living-hall.jpg' },
+  { id: 'modern-oriental', name: 'MODERN ORIENTAL', note: 'Dark timber, lattice screens, restrained colour.', cat: 'CLASSIC', img: 'portfolio/modern-oriental-5-room-hdb-design-01-living-hall.jpg' },
+  { id: 'marble-luxe', name: 'MARBLE LUXE', note: 'Book-matched slabs, gold trim, polished finish.', cat: 'CLASSIC', palette: ['#e8e1d8', '#c3aa77', '#4b443f'] },
+  { id: 'peranakan', name: 'PERANAKAN / STRAITS', note: 'Encaustic patterned tile, turquoise and crimson, carved teak.', cat: 'CLASSIC', palette: ['#1f8a8a', '#b51f3f', '#d8a23a'] },
+  { id: 'heritage-blue', name: 'HERITAGE BLUE', note: 'Deep blue fronts, brass pulls, speckled stone tile.', cat: 'CLASSIC', palette: ['#244a64', '#d9c7a1', '#f1ece2'] },
+  { id: 'art-deco', name: 'ART DECO', note: 'Geometry and symmetry, lacquer, brass, velvet.', cat: 'CLASSIC', palette: ['#14161a', '#b08d3f', '#1f4d3f'] },
+  { id: 'victorian', name: 'VICTORIAN HERITAGE', note: 'Wainscot panelling, deep green, ornate cornice.', cat: 'CLASSIC', palette: ['#2f4034', '#d8cbb4', '#7a4b3a'] },
+  { id: 'retro-terrazzo', name: 'RETRO TERRAZZO', note: 'Speckled stone, mint and clay, resale charm kept.', cat: 'CLASSIC', palette: ['#e9e4d8', '#7f9a91', '#c0705a'] },
+
+  { id: 'study-wfh', name: 'STUDY / WFH', note: 'Built-in desk and shelving, calm and quiet.', cat: 'CALM', palette: ['#9b8d7e', '#d8d0c3', '#56615d'] },
+  { id: 'family-warm', name: 'FAMILY WARM', note: 'Soft seating, durable finishes, warm light.', cat: 'CALM', palette: ['#b98161', '#e5d4bf', '#6f7a68'] },
+  { id: 'hotel-suite', name: 'HOTEL SUITE', note: 'Marble, vanity lighting, strict symmetry.', cat: 'CALM', palette: ['#d9d0c5', '#8d735c', '#f4f0e9'] },
+  { id: 'spa-stone', name: 'SPA STONE', note: 'Matte stone, timber, warm indirect light.', cat: 'CALM', palette: ['#7b8179', '#b8a98e', '#dfd8cb'] },
+  { id: 'soft-neutral', name: 'SOFT NEUTRAL', note: 'Beige joinery, sliding doors, small-room calm.', cat: 'CALM', palette: ['#cfc1ad', '#e8e1d7', '#8a8278'] },
+  { id: 'bohemian', name: 'BOHEMIAN', note: 'Layered textiles, rattan and jute, terracotta base.', cat: 'CALM', palette: ['#b5714f', '#e3d5c0', '#6b7f76'] },
 ];
 
 const AREAS = [
@@ -397,7 +429,9 @@ class Component extends DCLogic {
     } catch (e) { /* first visit */ }
     const m = /[#?&](?:style|s)=([\w-]+)/.exec(location.href);
     if (m) {
-      const hit = STYLES.find((x) => x.id === m[1].toLowerCase());
+      const requested = m[1].toLowerCase();
+      const styleId = STYLE_ALIASES[requested] || requested;
+      const hit = STYLES.find((x) => x.id === styleId);
       if (hit) this.setState((s) => ({ f: { ...s.f, styles: [hit.id] } }));
     }
   }
