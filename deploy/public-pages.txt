@@ -11,6 +11,10 @@ ContactUs.dc.html
 FaqAndHelp.dc.html
 Legal.dc.html
 
+# Search discovery
+robots.txt
+sitemap.xml
+
 # Public runtime
 support.js
 

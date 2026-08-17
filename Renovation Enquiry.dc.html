@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <link rel="icon" href="favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Renovation Enquiry — Home &amp; Me</title>
+<meta name="description" content="Build a renovation scope from your floor plan, preferred styles, rooms and trades, then review it before sending it to Home &amp; Me Singapore.">
+<link rel="canonical" href="https://homeandme.sg/Renovation%20Enquiry.dc.html">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -294,7 +297,7 @@ select { appearance: none; -webkit-appearance: none; }
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+6594235227&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;homeandme2017@gmail.com&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;webhookUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;coordinatorDefaultOn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;},&quot;autoRead&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+6594235227&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;homeandme2017@gmail.com&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;coordinatorDefaultOn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;},&quot;autoRead&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;}}">
 const FLAT_TYPES = ['HDB 2-room', 'HDB 3-room', 'HDB 4-room', 'HDB 5-room', 'HDB Executive / Maisonette', 'HDB Jumbo', 'Condo / Apartment', 'Landed', 'Not sure yet'];
 const STYLE_ALIASES = { 'modern-contemporary': 'contemporary', 'wabi-sabi': 'muji' };
 
@@ -634,13 +637,6 @@ class Component extends DCLogic {
     if (!f.consent) { this.setState({ hint: 'Tick the contact permission and we will send it.', err: true }); return; }
     this.setState({ sending: true });
     const text = this.message();
-    const hook = this.props.webhookUrl;
-    if (hook) {
-      try {
-        fetch(hook, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ event: 'new_enquiry', ref: this.ref(), text, form: f, plan: this.state.plan ? this.state.plan.name : null, at: new Date().toISOString() }) }).catch(() => {});
-      } catch (e) { /* delivery is best-effort; the WhatsApp hand-off is the guarantee */ }
-    }
     this.persist();
     try { window.open('https://wa.me/' + this.waTarget() + '?text=' + encodeURIComponent(text), '_blank', 'noopener'); } catch (e) { /* popup blocked */ }
     this.setState({ sent: true, sending: false, hint: '', err: false });
@@ -737,14 +733,14 @@ class Component extends DCLogic {
       primaryLabel: step === 5 ? (this.state.sent ? 'SEND AGAIN ON WHATSAPP' : 'SEND AS NEW ENQUIRY') : (step === 4 ? 'REVIEW ENQUIRY →' : 'CONTINUE →'),
       primaryBg: step === 5 ? (f.consent ? INK : 'rgba(20,25,27,0.4)') : TEAL,
       primaryFg: '#f6f4ef',
-      hint: this.state.hint || (step === 5 ? (f.consent ? 'Opens WhatsApp with the enquiry written out.' : 'Tick the contact permission to send.') : ''),
+      hint: this.state.hint || (step === 5 ? (f.consent ? 'Opens WhatsApp with the enquiry written out; you review it and press send.' : 'Tick the contact permission to continue to WhatsApp.') : ''),
       hintFg: this.state.err ? '#a8563c' : '#8a908c',
       copyText: this.copyText, copyLabel: this.state.copied ? 'COPIED' : 'COPY THE TEXT',
       sent: this.state.sent,
-      sentNote: (this.props.webhookUrl ? 'Posted to the team channel and opened in WhatsApp. ' : 'Opened in WhatsApp for you to hit send. ') + 'Quote the reference if you follow up.',
+      sentNote: 'Opened in WhatsApp for you to review and press send. Quote the reference if you follow up.',
       sendHint: this.state.sent
         ? 'If WhatsApp did not open, copy the text above and send it to ' + this.pretty(wa) + ' or email ' + mail + '.'
-        : 'Our team picks it up in the group and replies from the same number. No WhatsApp? Email it instead.',
+        : 'Review the enquiry, open WhatsApp, then press send to our team. No WhatsApp? Email it instead.',
       email: mail,
       mailTo: 'mailto:' + mail + '?subject=' + encodeURIComponent('Renovation enquiry — Home & Me'),
       mailHref: 'mailto:' + mail + '?subject=' + encodeURIComponent('New enquiry ' + this.ref() + ' — Home & Me') + '&body=' + encodeURIComponent(this.message().replace(/\*/g, '')),
