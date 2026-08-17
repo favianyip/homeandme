@@ -54,12 +54,25 @@ test('public enquiry exposes the ZIP style directions without weakening publicat
       const bytes = readFileSync(new URL(publicPath, root));
       const digest = createHash('sha256').update(bytes).digest('hex');
       assert.ok(!deniedMedia.has(digest), `${publicPath} must not match quarantined media`);
+    } else if (style.conceptImg) {
+      assert.match(style.conceptImg, /^concepts\//, `${style.id} concept must stay in the disclosed concepts namespace`);
+      assert.equal(style.conceptDisclosure, 'AI CONCEPT · NOT A COMPLETED PROJECT');
+      const publicPath = `assets/${style.conceptImg}`;
+      assert.ok(manifest.has(publicPath), `${publicPath} must be in the exact Pages manifest`);
+      const bytes = readFileSync(new URL(publicPath, root));
+      const digest = createHash('sha256').update(bytes).digest('hex');
+      assert.ok(!deniedMedia.has(digest), `${publicPath} must not match quarantined media`);
     } else {
       assert.equal(Array.isArray(style.palette), true, `${style.id} needs an honest MOOD palette`);
       assert.equal(style.palette.length, 3, `${style.id} palette must have three colours`);
       for (const colour of style.palette) assert.match(colour, /^#[0-9a-f]{6}$/i);
     }
   }
+
+  const monochrome = styles.find((style) => style.id === 'monochrome');
+  assert.equal(monochrome.conceptImg, 'concepts/monochrome-hdb-living.webp');
+  assert.match(page, /alt: s\.name \+ ' AI design concept'/);
+  assert.match(page, /s\.conceptDisclosure/);
 
   assert.doesNotMatch(page, /import\s*\(\s*['"]\.\/journey-(?:vision|archetype)\.js['"]\s*\)/);
   assert.match(page, /Automatic plan reading is off on the public site/);

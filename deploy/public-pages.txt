@@ -22,6 +22,11 @@ support.js
 assets/images/hnm-logo.png
 assets/images/fb-icon-teal.svg
 assets/images/ig-logo-teal.svg
+
+# Owner-approved AI design concepts. These remain visibly disclosed as concepts,
+# never completed-project photography.
+assets/concepts/monochrome-hdb-living.webp
+
 # Owner-approved project photography (rights-cleared: absent from the
 # quarantined-media denylist; the build re-checks every hash on each run).
 assets/portfolio/contemporary-3-room-hdb-design-01-kitchen.jpg
