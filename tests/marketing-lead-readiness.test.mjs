@@ -36,6 +36,8 @@ test('content pages expose page-specific search metadata', () => {
   assert.match(enquiry, /<title>Renovation Enquiry — Home &amp; Me<\/title>/);
   assert.match(enquiry, /<meta name="description" content="[^"]+">/);
   assert.match(enquiry, /<link rel="canonical" href="https:\/\/homeandme\.sg\/Renovation%20Enquiry\.dc\.html">/);
+  assert.match(enquiry, /@media \(max-width: 560px\)[\s\S]*\[data-plan-fields\][\s\S]*grid-template-columns: 1fr !important/,
+    'narrow screens must stack plan-reading fields instead of widening the viewport');
 });
 
 test('legal copy matches the enquiry-only service and current cookie behavior', () => {

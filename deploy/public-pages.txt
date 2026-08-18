@@ -25,7 +25,32 @@ assets/images/ig-logo-teal.svg
 
 # Owner-approved AI design concepts. These remain visibly disclosed as concepts,
 # never completed-project photography.
-assets/concepts/monochrome-hdb-living.webp
+assets/concepts/japandi-hdb-design.webp
+assets/concepts/contemporary-luxe-hdb-design.webp
+assets/concepts/mid-century-hdb-design.webp
+assets/concepts/rustic-wood-hdb-design.webp
+assets/concepts/warm-concrete-hdb-design.webp
+assets/concepts/coastal-hdb-design.webp
+assets/concepts/tropical-hdb-design.webp
+assets/concepts/cottagecore-hdb-design.webp
+assets/concepts/biophilic-hdb-design.webp
+assets/concepts/mediterranean-hdb-design.webp
+assets/concepts/dark-moody-hdb-design.webp
+assets/concepts/gothic-hdb-design.webp
+assets/concepts/cyberpunk-hdb-design.webp
+assets/concepts/gamer-hdb-design.webp
+assets/concepts/marble-luxe-hdb-design.webp
+assets/concepts/peranakan-hdb-design.webp
+assets/concepts/heritage-blue-hdb-design.webp
+assets/concepts/art-deco-hdb-design.webp
+assets/concepts/victorian-hdb-design.webp
+assets/concepts/retro-terrazzo-hdb-design.webp
+assets/concepts/study-wfh-hdb-design.webp
+assets/concepts/family-warm-hdb-design.webp
+assets/concepts/hotel-suite-hdb-design.webp
+assets/concepts/spa-stone-hdb-design.webp
+assets/concepts/soft-neutral-hdb-design.webp
+assets/concepts/bohemian-hdb-design.webp
 
 # Owner-approved project photography (rights-cleared: absent from the
 # quarantined-media denylist; the build re-checks every hash on each run).

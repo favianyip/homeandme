@@ -31,7 +31,7 @@ test('public enquiry exposes the ZIP style directions without weakening publicat
   const styles = Array.from(constantValue('STYLES', 'AREAS'));
 
   assert.deepEqual(categories, ['ALL', 'POPULAR', 'WARM', 'BOLD', 'CLASSIC', 'CALM']);
-  assert.equal(styles.length, 34, '33 exported directions plus the existing Modern Oriental option');
+  assert.equal(styles.length, 33, 'seven photographed styles plus twenty-six owner-approved concepts');
 
   const ids = styles.map((style) => style.id);
   assert.equal(new Set(ids).size, styles.length, 'style IDs must be unique');
@@ -39,7 +39,7 @@ test('public enquiry exposes the ZIP style directions without weakening publicat
     'minimalist', 'scandinavian', 'japandi', 'contemporary', 'muji',
     'contemporary-luxe', 'mid-century', 'rustic-wood', 'warm-concrete',
     'coastal', 'tropical', 'cottagecore', 'biophilic', 'mediterranean',
-    'industrial', 'dark-moody', 'monochrome', 'gothic', 'cyberpunk', 'gamer',
+    'industrial', 'dark-moody', 'gothic', 'cyberpunk', 'gamer',
     'modern-classic', 'modern-oriental', 'marble-luxe', 'peranakan',
     'heritage-blue', 'art-deco', 'victorian', 'retro-terrazzo', 'study-wfh',
     'family-warm', 'hotel-suite', 'spa-stone', 'soft-neutral', 'bohemian',
@@ -69,8 +69,22 @@ test('public enquiry exposes the ZIP style directions without weakening publicat
     }
   }
 
-  const monochrome = styles.find((style) => style.id === 'monochrome');
-  assert.equal(monochrome.conceptImg, 'concepts/monochrome-hdb-living.webp');
+  assert.ok(!ids.includes('monochrome'), 'owner-rejected Monochrome must be removed');
+  assert.doesNotMatch(page, /monochrome-hdb-living/i);
+  assert.ok(!manifest.has('assets/concepts/monochrome-hdb-living.webp'));
+
+  const conceptIds = [
+    'japandi', 'contemporary-luxe', 'mid-century', 'rustic-wood', 'warm-concrete',
+    'coastal', 'tropical', 'cottagecore', 'biophilic', 'mediterranean', 'dark-moody',
+    'gothic', 'cyberpunk', 'gamer', 'marble-luxe', 'peranakan', 'heritage-blue',
+    'art-deco', 'victorian', 'retro-terrazzo', 'study-wfh', 'family-warm',
+    'hotel-suite', 'spa-stone', 'soft-neutral', 'bohemian',
+  ];
+  for (const id of conceptIds) {
+    const style = styles.find((entry) => entry.id === id);
+    assert.equal(style.conceptImg, `concepts/${id}-hdb-design.webp`, `${id} needs its reviewed concept`);
+    assert.equal(style.conceptDisclosure, 'AI CONCEPT · NOT A COMPLETED PROJECT');
+  }
   assert.match(page, /alt: s\.name \+ ' AI design concept'/);
   assert.match(page, /s\.conceptDisclosure/);
 
