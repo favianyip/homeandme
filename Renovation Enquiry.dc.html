@@ -68,6 +68,9 @@ select { appearance: none; -webkit-appearance: none; }
       <section style="animation: hnmIn 0.45s ease both;">
         <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 7vw, 46px); line-height: 1.05; letter-spacing: -0.8px; margin: 0 0 12px;">Your unit and your contact</h1>
         <p style="font-size: 15.5px; line-height: 1.6; color: #6d746f; margin: 0 0 28px; max-width: 46ch; text-wrap: pretty;">Access, floor level and town all change the price — so the contractor needs the address before quoting. Your details reach our team only.</p>
+        <sc-if value="{{ restored }}" hint-placeholder-val="{{ false }}">
+          <p style="margin: -16px 0 24px; font-size: 13px; color: #8a908c;">Filled in from your last visit on this device. <button type="button" onClick="{{ clearDraft }}" style="cursor: pointer; background: none; border: none; padding: 0; font: inherit; color: #5a7e8a; border-bottom: 1px solid rgba(90,126,138,0.5);">Not you? Clear these details</button></p>
+        </sc-if>
         <div data-fields="1" style="display: grid; grid-template-columns: 1fr; gap: 16px;">
           <label data-wide="1" style="display: flex; flex-direction: column; gap: 8px;">
             <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #6d746f;">BLOCK &amp; STREET</span>
@@ -419,7 +422,7 @@ const ICONS = {
 
 class Component extends DCLogic {
   state = {
-    step: 1, hint: '', err: false, sent: false, delivered: false, copied: false, sending: false, styleCat: 'ALL',
+    step: 1, hint: '', err: false, sent: false, delivered: false, copied: false, sending: false, restored: false, styleCat: 'ALL',
     read: { status: 'idle', note: 'Upload a plan and we will read the layout — or type the numbers yourself.' },
     plan: null,
     f: {
@@ -432,8 +435,13 @@ class Component extends DCLogic {
   componentDidMount() {
     this.setState((s) => ({ f: { ...s.f, coordinator: !!this.props.coordinatorDefaultOn } }));
     try {
-      const saved = JSON.parse(localStorage.getItem('hnm.enquiry.v1') || 'null');
-      if (saved && saved.f) this.setState((s) => ({ f: { ...s.f, ...saved.f, consent: false } }));
+      // v2: drafts expire after 24 hours so personal details never linger on
+      // a device; v1 drafts are deliberately orphaned and cleaned up.
+      localStorage.removeItem('hnm.enquiry.v1');
+      const saved = JSON.parse(localStorage.getItem('hnm.enquiry.v2') || 'null');
+      const fresh = saved && saved.at && (Date.now() - saved.at) < 24 * 60 * 60 * 1000;
+      if (fresh && saved.f) this.setState((s) => ({ f: { ...s.f, ...saved.f, consent: false }, restored: true }));
+      else if (saved) localStorage.removeItem('hnm.enquiry.v2');
     } catch (e) { /* first visit */ }
     const m = /[#?&](?:style|s)=([\w-]+)/.exec(location.href);
     if (m) {
@@ -498,10 +506,18 @@ class Component extends DCLogic {
 
   set(k) { return (e) => { const v = e.target.value; this.setState((s) => ({ f: { ...s.f, [k]: v }, hint: '', err: false })); }; }
 
+  clearDraft = () => {
+    try { localStorage.removeItem('hnm.enquiry.v2'); } catch (e) { /* private mode */ }
+    this.setState((s) => ({
+      restored: false,
+      f: { ...s.f, street: '', unit: '', postal: '', name: '', phone: '', email: '', consent: false },
+    }));
+  };
+
   persist() {
     try {
       const { f } = this.state;
-      localStorage.setItem('hnm.enquiry.v1', JSON.stringify({ f: { ...f, consent: false }, at: Date.now() }));
+      localStorage.setItem('hnm.enquiry.v2', JSON.stringify({ f: { ...f, consent: false }, at: Date.now() }));
     } catch (e) { /* private mode */ }
   }
 
@@ -676,6 +692,10 @@ class Component extends DCLogic {
     if (!delivered) {
       try { window.open('https://wa.me/' + this.waTarget() + '?text=' + encodeURIComponent(text), '_blank', 'noopener'); } catch (e) { /* popup blocked */ }
     }
+    if (delivered) {
+      // Delivered server-side: the on-device draft has done its job.
+      try { localStorage.removeItem('hnm.enquiry.v2'); } catch (e) { /* private mode */ }
+    }
     this.setState({ sent: true, delivered, sending: false, hint: '', err: false });
   };
 
@@ -773,6 +793,7 @@ class Component extends DCLogic {
       hint: this.state.hint || (step === 5 ? (f.consent ? 'Sends your enquiry straight to the Home & Me team — we reply on WhatsApp or email.' : 'Tick the contact permission to send.') : ''),
       hintFg: this.state.err ? '#a8563c' : '#8a908c',
       copyText: this.copyText, copyLabel: this.state.copied ? 'COPIED' : 'COPY THE TEXT',
+      restored: this.state.restored, clearDraft: this.clearDraft,
       sent: this.state.sent,
       sentNote: this.state.delivered
         ? 'Sent to our team — we usually reply the same day. Quote the reference if you follow up.'
