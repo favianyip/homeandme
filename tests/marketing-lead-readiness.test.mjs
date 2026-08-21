@@ -50,17 +50,32 @@ test('legal copy matches the enquiry-only service and current cookie behavior', 
   assert.match(legal, /data protection contact/i);
 });
 
-test('public copy describes the real WhatsApp handoff without claiming a group delivery', () => {
-  const home = read('Home%20Direct.dc.html');
+test('public copy matches the server-delivered enquiry with WhatsApp fallback', () => {
   const enquiry = read('Renovation%20Enquiry.dc.html');
-  for (const page of [home, enquiry]) {
-    assert.doesNotMatch(page, /lands in our team WhatsApp|picks it up in the group|posted to the team channel/i);
-  }
-  assert.match(enquiry, /opens WhatsApp with the enquiry written out/i);
-  assert.match(enquiry, /you (?:review it and )?press send/i);
+  // Delivery claims must stay true: server send + email copy, same-day reply tone.
+  assert.match(enquiry, /Sends your enquiry straight to the Home & Me team/);
+  assert.match(enquiry, /WhatsApp alert plus an email copy/);
+  // The fallback path (endpoint down -> customer presses send in WhatsApp) keeps its honest copy.
+  assert.match(enquiry, /did not respond, so this opened in WhatsApp for you to review and press send/);
+  // Consent covers storage, not just contact.
+  assert.match(enquiry, /I agree Home &amp; Me may store this enquiry and contact me/);
+  const legal = read('Legal.dc.html');
+  assert.match(legal, /delivered to Home &amp; Me’s own lead system, which stores it securely and alerts our team by WhatsApp and email/);
+  assert.doesNotMatch(legal, /visible for you to review before you press send/i);
 });
 
-test('static enquiry never exposes or calls a private lead webhook from the browser', () => {
+test('enquiry calls exactly the sanctioned lead endpoint and nothing else', () => {
   const enquiry = read('Renovation%20Enquiry.dc.html');
-  assert.doesNotMatch(enquiry, /webhookUrl|webhook-url|fetch\s*\(/);
+  // One endpoint constant, declared once, and the only fetch on the page.
+  const endpoints = enquiry.match(/const LEAD_ENDPOINT = '([^']+)'/g) || [];
+  assert.equal(endpoints.length, 1, 'LEAD_ENDPOINT must be declared exactly once');
+  assert.match(enquiry, /const LEAD_ENDPOINT = 'https:\/\/spark-792d\.tail223b04\.ts\.net\/hnm\/v1\/leads'/);
+  const fetches = enquiry.match(/fetch\s*\(/g) || [];
+  assert.equal(fetches.length, 1, 'exactly one fetch call (the lead POST)');
+  assert.match(enquiry, /fetch\(LEAD_ENDPOINT/);
+  assert.doesNotMatch(enquiry, /webhookUrl|webhook-url/);
+  // Consent gate still guards the send, and the honeypot field is sent empty.
+  assert.match(enquiry, /if \(!f\.consent\)/);
+  assert.match(enquiry, /hp: ''/);
+  assert.match(enquiry, /consentVersion: CONSENT_VERSION/);
 });
