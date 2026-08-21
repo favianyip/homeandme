@@ -56,7 +56,6 @@ test('public enquiry exposes the ZIP style directions without weakening publicat
       assert.ok(!deniedMedia.has(digest), `${publicPath} must not match quarantined media`);
     } else if (style.conceptImg) {
       assert.match(style.conceptImg, /^concepts\//, `${style.id} concept must stay in the disclosed concepts namespace`);
-      assert.equal(style.conceptDisclosure, 'AI CONCEPT · NOT A COMPLETED PROJECT');
       const publicPath = `assets/${style.conceptImg}`;
       assert.ok(manifest.has(publicPath), `${publicPath} must be in the exact Pages manifest`);
       const bytes = readFileSync(new URL(publicPath, root));
@@ -83,10 +82,12 @@ test('public enquiry exposes the ZIP style directions without weakening publicat
   for (const id of conceptIds) {
     const style = styles.find((entry) => entry.id === id);
     assert.equal(style.conceptImg, `concepts/${id}-hdb-design.webp`, `${id} needs its reviewed concept`);
-    assert.equal(style.conceptDisclosure, 'AI CONCEPT · NOT A COMPLETED PROJECT');
   }
+  // Owner call 2026-08-21: no on-image AI badge. Honest disclosure must instead
+  // survive in the section note and the concept alt text — keep both pinned.
   assert.match(page, /alt: s\.name \+ ' AI design concept'/);
-  assert.match(page, /s\.conceptDisclosure/);
+  assert.doesNotMatch(page, /conceptDisclosure/, 'the on-image concept badge stays removed');
+  assert.match(page, /the remaining styles are AI-visualised design directions, not completed projects or renders of your unit/);
 
   assert.doesNotMatch(page, /import\s*\(\s*['"]\.\/journey-(?:vision|archetype)\.js['"]\s*\)/);
   assert.match(page, /Automatic plan reading is off on the public site/);

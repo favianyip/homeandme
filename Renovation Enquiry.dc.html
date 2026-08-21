@@ -178,7 +178,7 @@ select { appearance: none; -webkit-appearance: none; }
         <sc-if value="{{ customOn }}" hint-placeholder-val="{{ false }}">
           <textarea rows="3" value="{{ f.customStyle }}" onInput="{{ setCustomStyle }}" placeholder="e.g. dark green kitchen with fluted oak, like the café at Duxton" style="margin-top: 11px; width: 100%; box-sizing: border-box; padding: 15px; border: 1px solid rgba(20,25,27,0.16); border-radius: 14px; resize: vertical; line-height: 1.55;" style-focus="border-color: #5a7e8a; outline: none;"></textarea>
         </sc-if>
-        <p style="margin: 16px 0 0; font-size: 12.5px; line-height: 1.55; color: #8a908c;">Project photos show completed Home &amp; Me work. Cards tagged AI CONCEPT are design directions, not completed projects or renders of your unit.</p>
+        <p style="margin: 16px 0 0; font-size: 12.5px; line-height: 1.55; color: #8a908c;">Project photos show completed Home &amp; Me work; the remaining styles are AI-visualised design directions, not completed projects or renders of your unit.</p>
       </section>
     </sc-if>
 
@@ -313,41 +313,41 @@ const CATS = ['ALL', 'POPULAR', 'WARM', 'BOLD', 'CLASSIC', 'CALM'];
 const STYLES = [
   { id: 'minimalist', name: 'MINIMALIST', note: 'Flat fronts, hidden handles, one material.', cat: 'POPULAR', img: 'portfolio/cards/minimalist-5-room-hdb-design-01-living-hall.jpg' },
   { id: 'scandinavian', name: 'SCANDINAVIAN', note: 'Pale oak, white walls, daylight kept open.', cat: 'POPULAR', img: 'portfolio/cards/scandinavian-4-room-hdb-design-01-living-hall.jpg' },
-  { id: 'japandi', name: 'JAPANDI', note: 'Japanese calm meets Scandi warmth — low timber, muted tone.', cat: 'POPULAR', conceptImg: 'concepts/japandi-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
+  { id: 'japandi', name: 'JAPANDI', note: 'Japanese calm meets Scandi warmth — low timber, muted tone.', cat: 'POPULAR', conceptImg: 'concepts/japandi-hdb-design.webp' },
   { id: 'contemporary', name: 'MODERN CONTEMPORARY', note: 'Clean lines, neutral tones, bright and open.', cat: 'POPULAR', img: 'portfolio/cards/contemporary-3-room-hdb-design-01-living-hall.jpg' },
   { id: 'muji', name: 'WABI-SABI / MUJI', note: 'Weathered timber, clay and plaster, imperfect by design.', cat: 'POPULAR', img: 'portfolio/cards/muji-5-room-hdb-design-02-living-hall.jpg' },
-  { id: 'contemporary-luxe', name: 'CONTEMPORARY LUXE', note: 'Full-height stone, dark joinery, layered light.', cat: 'POPULAR', conceptImg: 'concepts/contemporary-luxe-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'mid-century', name: 'MID-CENTURY MODERN', note: 'Walnut, tapered legs, organic shapes, retro colour.', cat: 'POPULAR', conceptImg: 'concepts/mid-century-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
+  { id: 'contemporary-luxe', name: 'CONTEMPORARY LUXE', note: 'Full-height stone, dark joinery, layered light.', cat: 'POPULAR', conceptImg: 'concepts/contemporary-luxe-hdb-design.webp' },
+  { id: 'mid-century', name: 'MID-CENTURY MODERN', note: 'Walnut, tapered legs, organic shapes, retro colour.', cat: 'POPULAR', conceptImg: 'concepts/mid-century-hdb-design.webp' },
 
-  { id: 'rustic-wood', name: 'RUSTIC WOOD', note: 'Solid timber, visible grain, earthy tones.', cat: 'WARM', conceptImg: 'concepts/rustic-wood-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'warm-concrete', name: 'WARM CONCRETE', note: 'Greige plaster, concrete-look stone, oak table.', cat: 'WARM', conceptImg: 'concepts/warm-concrete-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'coastal', name: 'COASTAL', note: 'Chalk white, lightened wood, linen and rope.', cat: 'WARM', conceptImg: 'concepts/coastal-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'tropical', name: 'TROPICAL RESORT', note: 'Rattan and teak, deep green, planting indoors.', cat: 'WARM', conceptImg: 'concepts/tropical-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'cottagecore', name: 'COTTAGECORE', note: 'Cream cabinets, soft florals, vintage brass.', cat: 'WARM', conceptImg: 'concepts/cottagecore-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'biophilic', name: 'BIOPHILIC GREEN', note: 'Planting, daylight, raw stone and wood.', cat: 'WARM', conceptImg: 'concepts/biophilic-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'mediterranean', name: 'MEDITERRANEAN', note: 'Lime plaster, arches, hand-painted tile, wrought iron.', cat: 'WARM', conceptImg: 'concepts/mediterranean-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
+  { id: 'rustic-wood', name: 'RUSTIC WOOD', note: 'Solid timber, visible grain, earthy tones.', cat: 'WARM', conceptImg: 'concepts/rustic-wood-hdb-design.webp' },
+  { id: 'warm-concrete', name: 'WARM CONCRETE', note: 'Greige plaster, concrete-look stone, oak table.', cat: 'WARM', conceptImg: 'concepts/warm-concrete-hdb-design.webp' },
+  { id: 'coastal', name: 'COASTAL', note: 'Chalk white, lightened wood, linen and rope.', cat: 'WARM', conceptImg: 'concepts/coastal-hdb-design.webp' },
+  { id: 'tropical', name: 'TROPICAL RESORT', note: 'Rattan and teak, deep green, planting indoors.', cat: 'WARM', conceptImg: 'concepts/tropical-hdb-design.webp' },
+  { id: 'cottagecore', name: 'COTTAGECORE', note: 'Cream cabinets, soft florals, vintage brass.', cat: 'WARM', conceptImg: 'concepts/cottagecore-hdb-design.webp' },
+  { id: 'biophilic', name: 'BIOPHILIC GREEN', note: 'Planting, daylight, raw stone and wood.', cat: 'WARM', conceptImg: 'concepts/biophilic-hdb-design.webp' },
+  { id: 'mediterranean', name: 'MEDITERRANEAN', note: 'Lime plaster, arches, hand-painted tile, wrought iron.', cat: 'WARM', conceptImg: 'concepts/mediterranean-hdb-design.webp' },
 
   { id: 'industrial', name: 'INDUSTRIAL', note: 'Raw screed, black metal, exposed services.', cat: 'BOLD', img: 'portfolio/cards/industrial-4-room-hdb-design-01-living-hall.jpg' },
-  { id: 'dark-moody', name: 'DARK MOODY', note: 'Deep walls, matte black, pooled lighting.', cat: 'BOLD', conceptImg: 'concepts/dark-moody-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'gothic', name: 'GOTHIC REVIVAL', note: 'Ink walls, arches, carved dark timber.', cat: 'BOLD', conceptImg: 'concepts/gothic-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'cyberpunk', name: 'CYBERPUNK NEON', note: 'RGB coves, black lacquer, neon accents.', cat: 'BOLD', conceptImg: 'concepts/cyberpunk-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'gamer', name: 'GAMER SETUP', note: 'Strip lighting, acoustic panels, dark desk wall.', cat: 'BOLD', conceptImg: 'concepts/gamer-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
+  { id: 'dark-moody', name: 'DARK MOODY', note: 'Deep walls, matte black, pooled lighting.', cat: 'BOLD', conceptImg: 'concepts/dark-moody-hdb-design.webp' },
+  { id: 'gothic', name: 'GOTHIC REVIVAL', note: 'Ink walls, arches, carved dark timber.', cat: 'BOLD', conceptImg: 'concepts/gothic-hdb-design.webp' },
+  { id: 'cyberpunk', name: 'CYBERPUNK NEON', note: 'RGB coves, black lacquer, neon accents.', cat: 'BOLD', conceptImg: 'concepts/cyberpunk-hdb-design.webp' },
+  { id: 'gamer', name: 'GAMER SETUP', note: 'Strip lighting, acoustic panels, dark desk wall.', cat: 'BOLD', conceptImg: 'concepts/gamer-hdb-design.webp' },
 
   { id: 'modern-classic', name: 'MODERN CLASSIC', note: 'Panelling, cornice, brass and marble accents.', cat: 'CLASSIC', img: 'portfolio/cards/modern-classic-3-room-hdb-design-01-living-hall.jpg' },
   { id: 'modern-oriental', name: 'MODERN ORIENTAL', note: 'Dark timber, lattice screens, restrained colour.', cat: 'CLASSIC', img: 'portfolio/cards/modern-oriental-5-room-hdb-design-01-living-hall.jpg' },
-  { id: 'marble-luxe', name: 'MARBLE LUXE', note: 'Book-matched slabs, gold trim, polished finish.', cat: 'CLASSIC', conceptImg: 'concepts/marble-luxe-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'peranakan', name: 'PERANAKAN / STRAITS', note: 'Encaustic patterned tile, turquoise and crimson, carved teak.', cat: 'CLASSIC', conceptImg: 'concepts/peranakan-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'heritage-blue', name: 'HERITAGE BLUE', note: 'Deep blue fronts, brass pulls, speckled stone tile.', cat: 'CLASSIC', conceptImg: 'concepts/heritage-blue-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'art-deco', name: 'ART DECO', note: 'Geometry and symmetry, lacquer, brass, velvet.', cat: 'CLASSIC', conceptImg: 'concepts/art-deco-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'victorian', name: 'VICTORIAN HERITAGE', note: 'Wainscot panelling, deep green, ornate cornice.', cat: 'CLASSIC', conceptImg: 'concepts/victorian-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'retro-terrazzo', name: 'RETRO TERRAZZO', note: 'Speckled stone, mint and clay, resale charm kept.', cat: 'CLASSIC', conceptImg: 'concepts/retro-terrazzo-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
+  { id: 'marble-luxe', name: 'MARBLE LUXE', note: 'Book-matched slabs, gold trim, polished finish.', cat: 'CLASSIC', conceptImg: 'concepts/marble-luxe-hdb-design.webp' },
+  { id: 'peranakan', name: 'PERANAKAN / STRAITS', note: 'Encaustic patterned tile, turquoise and crimson, carved teak.', cat: 'CLASSIC', conceptImg: 'concepts/peranakan-hdb-design.webp' },
+  { id: 'heritage-blue', name: 'HERITAGE BLUE', note: 'Deep blue fronts, brass pulls, speckled stone tile.', cat: 'CLASSIC', conceptImg: 'concepts/heritage-blue-hdb-design.webp' },
+  { id: 'art-deco', name: 'ART DECO', note: 'Geometry and symmetry, lacquer, brass, velvet.', cat: 'CLASSIC', conceptImg: 'concepts/art-deco-hdb-design.webp' },
+  { id: 'victorian', name: 'VICTORIAN HERITAGE', note: 'Wainscot panelling, deep green, ornate cornice.', cat: 'CLASSIC', conceptImg: 'concepts/victorian-hdb-design.webp' },
+  { id: 'retro-terrazzo', name: 'RETRO TERRAZZO', note: 'Speckled stone, mint and clay, resale charm kept.', cat: 'CLASSIC', conceptImg: 'concepts/retro-terrazzo-hdb-design.webp' },
 
-  { id: 'study-wfh', name: 'STUDY / WFH', note: 'Built-in desk and shelving, calm and quiet.', cat: 'CALM', conceptImg: 'concepts/study-wfh-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'family-warm', name: 'FAMILY WARM', note: 'Soft seating, durable finishes, warm light.', cat: 'CALM', conceptImg: 'concepts/family-warm-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'hotel-suite', name: 'HOTEL SUITE', note: 'Marble, vanity lighting, strict symmetry.', cat: 'CALM', conceptImg: 'concepts/hotel-suite-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'spa-stone', name: 'SPA STONE', note: 'Matte stone, timber, warm indirect light.', cat: 'CALM', conceptImg: 'concepts/spa-stone-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'soft-neutral', name: 'SOFT NEUTRAL', note: 'Beige joinery, sliding doors, small-room calm.', cat: 'CALM', conceptImg: 'concepts/soft-neutral-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'bohemian', name: 'BOHEMIAN', note: 'Layered textiles, rattan and jute, terracotta base.', cat: 'CALM', conceptImg: 'concepts/bohemian-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
+  { id: 'study-wfh', name: 'STUDY / WFH', note: 'Built-in desk and shelving, calm and quiet.', cat: 'CALM', conceptImg: 'concepts/study-wfh-hdb-design.webp' },
+  { id: 'family-warm', name: 'FAMILY WARM', note: 'Soft seating, durable finishes, warm light.', cat: 'CALM', conceptImg: 'concepts/family-warm-hdb-design.webp' },
+  { id: 'hotel-suite', name: 'HOTEL SUITE', note: 'Marble, vanity lighting, strict symmetry.', cat: 'CALM', conceptImg: 'concepts/hotel-suite-hdb-design.webp' },
+  { id: 'spa-stone', name: 'SPA STONE', note: 'Matte stone, timber, warm indirect light.', cat: 'CALM', conceptImg: 'concepts/spa-stone-hdb-design.webp' },
+  { id: 'soft-neutral', name: 'SOFT NEUTRAL', note: 'Beige joinery, sliding doors, small-room calm.', cat: 'CALM', conceptImg: 'concepts/soft-neutral-hdb-design.webp' },
+  { id: 'bohemian', name: 'BOHEMIAN', note: 'Layered textiles, rattan and jute, terracotta base.', cat: 'CALM', conceptImg: 'concepts/bohemian-hdb-design.webp' },
 ];
 
 const AREAS = [
@@ -459,16 +459,12 @@ class Component extends DCLogic {
       });
     }
     if (s.conceptImg) {
-      return React.createElement('span', {
-        style: { position: 'relative', display: 'block', width: '100%', aspectRatio: '1 / 1', overflow: 'hidden', background: '#e7e2d8' },
-      },
-        React.createElement('img', {
-          src: 'assets/' + s.conceptImg, alt: s.name + ' AI design concept', loading: 'lazy',
-          style: { width: '100%', height: '100%', objectFit: 'cover', display: 'block' },
-        }),
-        React.createElement('span', {
-          style: { position: 'absolute', left: '8px', right: '8px', bottom: '8px', color: '#fff', background: 'rgba(20,25,27,0.78)', padding: '5px 7px', borderRadius: '4px', fontFamily: "'Oswald', sans-serif", fontSize: '8px', lineHeight: 1.25, letterSpacing: '0.8px', textAlign: 'center' },
-        }, s.conceptDisclosure));
+      // Owner call 2026-08-21: no on-image badge. The AI-visualisation disclosure
+      // lives in the section note below the grid and in the alt text instead.
+      return React.createElement('img', {
+        src: 'assets/' + s.conceptImg, alt: s.name + ' AI design concept', loading: 'lazy',
+        style: { width: '100%', aspectRatio: '1 / 1', objectFit: 'cover', display: 'block', background: '#e7e2d8' },
+      });
     }
     // Not photographed yet. Drawn from the style's own palette and material texture — never a
     // second copy of another style's room, which would read as the same offer twice.
