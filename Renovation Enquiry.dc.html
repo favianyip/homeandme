@@ -311,11 +311,11 @@ const STYLE_ALIASES = { 'modern-contemporary': 'contemporary', 'wabi-sabi': 'muj
 // photography, while the other twenty-six use visibly disclosed AI concepts.
 const CATS = ['ALL', 'POPULAR', 'WARM', 'BOLD', 'CLASSIC', 'CALM'];
 const STYLES = [
-  { id: 'minimalist', name: 'MINIMALIST', note: 'Flat fronts, hidden handles, one material.', cat: 'POPULAR', img: 'portfolio/minimalist-5-room-hdb-design-01-living-hall.jpg' },
-  { id: 'scandinavian', name: 'SCANDINAVIAN', note: 'Pale oak, white walls, daylight kept open.', cat: 'POPULAR', img: 'portfolio/scandinavian-4-room-hdb-design-01-living-hall.jpg' },
+  { id: 'minimalist', name: 'MINIMALIST', note: 'Flat fronts, hidden handles, one material.', cat: 'POPULAR', img: 'portfolio/cards/minimalist-5-room-hdb-design-01-living-hall.jpg' },
+  { id: 'scandinavian', name: 'SCANDINAVIAN', note: 'Pale oak, white walls, daylight kept open.', cat: 'POPULAR', img: 'portfolio/cards/scandinavian-4-room-hdb-design-01-living-hall.jpg' },
   { id: 'japandi', name: 'JAPANDI', note: 'Japanese calm meets Scandi warmth — low timber, muted tone.', cat: 'POPULAR', conceptImg: 'concepts/japandi-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
-  { id: 'contemporary', name: 'MODERN CONTEMPORARY', note: 'Clean lines, neutral tones, bright and open.', cat: 'POPULAR', img: 'portfolio/contemporary-3-room-hdb-design-01-living-hall.jpg' },
-  { id: 'muji', name: 'WABI-SABI / MUJI', note: 'Weathered timber, clay and plaster, imperfect by design.', cat: 'POPULAR', img: 'portfolio/muji-5-room-hdb-design-02-living-hall.jpg' },
+  { id: 'contemporary', name: 'MODERN CONTEMPORARY', note: 'Clean lines, neutral tones, bright and open.', cat: 'POPULAR', img: 'portfolio/cards/contemporary-3-room-hdb-design-01-living-hall.jpg' },
+  { id: 'muji', name: 'WABI-SABI / MUJI', note: 'Weathered timber, clay and plaster, imperfect by design.', cat: 'POPULAR', img: 'portfolio/cards/muji-5-room-hdb-design-02-living-hall.jpg' },
   { id: 'contemporary-luxe', name: 'CONTEMPORARY LUXE', note: 'Full-height stone, dark joinery, layered light.', cat: 'POPULAR', conceptImg: 'concepts/contemporary-luxe-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
   { id: 'mid-century', name: 'MID-CENTURY MODERN', note: 'Walnut, tapered legs, organic shapes, retro colour.', cat: 'POPULAR', conceptImg: 'concepts/mid-century-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
 
@@ -327,14 +327,14 @@ const STYLES = [
   { id: 'biophilic', name: 'BIOPHILIC GREEN', note: 'Planting, daylight, raw stone and wood.', cat: 'WARM', conceptImg: 'concepts/biophilic-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
   { id: 'mediterranean', name: 'MEDITERRANEAN', note: 'Lime plaster, arches, hand-painted tile, wrought iron.', cat: 'WARM', conceptImg: 'concepts/mediterranean-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
 
-  { id: 'industrial', name: 'INDUSTRIAL', note: 'Raw screed, black metal, exposed services.', cat: 'BOLD', img: 'portfolio/industrial-4-room-hdb-design-01-living-hall.jpg' },
+  { id: 'industrial', name: 'INDUSTRIAL', note: 'Raw screed, black metal, exposed services.', cat: 'BOLD', img: 'portfolio/cards/industrial-4-room-hdb-design-01-living-hall.jpg' },
   { id: 'dark-moody', name: 'DARK MOODY', note: 'Deep walls, matte black, pooled lighting.', cat: 'BOLD', conceptImg: 'concepts/dark-moody-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
   { id: 'gothic', name: 'GOTHIC REVIVAL', note: 'Ink walls, arches, carved dark timber.', cat: 'BOLD', conceptImg: 'concepts/gothic-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
   { id: 'cyberpunk', name: 'CYBERPUNK NEON', note: 'RGB coves, black lacquer, neon accents.', cat: 'BOLD', conceptImg: 'concepts/cyberpunk-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
   { id: 'gamer', name: 'GAMER SETUP', note: 'Strip lighting, acoustic panels, dark desk wall.', cat: 'BOLD', conceptImg: 'concepts/gamer-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
 
-  { id: 'modern-classic', name: 'MODERN CLASSIC', note: 'Panelling, cornice, brass and marble accents.', cat: 'CLASSIC', img: 'portfolio/modern-classic-3-room-hdb-design-01-living-hall.jpg' },
-  { id: 'modern-oriental', name: 'MODERN ORIENTAL', note: 'Dark timber, lattice screens, restrained colour.', cat: 'CLASSIC', img: 'portfolio/modern-oriental-5-room-hdb-design-01-living-hall.jpg' },
+  { id: 'modern-classic', name: 'MODERN CLASSIC', note: 'Panelling, cornice, brass and marble accents.', cat: 'CLASSIC', img: 'portfolio/cards/modern-classic-3-room-hdb-design-01-living-hall.jpg' },
+  { id: 'modern-oriental', name: 'MODERN ORIENTAL', note: 'Dark timber, lattice screens, restrained colour.', cat: 'CLASSIC', img: 'portfolio/cards/modern-oriental-5-room-hdb-design-01-living-hall.jpg' },
   { id: 'marble-luxe', name: 'MARBLE LUXE', note: 'Book-matched slabs, gold trim, polished finish.', cat: 'CLASSIC', conceptImg: 'concepts/marble-luxe-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
   { id: 'peranakan', name: 'PERANAKAN / STRAITS', note: 'Encaustic patterned tile, turquoise and crimson, carved teak.', cat: 'CLASSIC', conceptImg: 'concepts/peranakan-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },
   { id: 'heritage-blue', name: 'HERITAGE BLUE', note: 'Deep blue fronts, brass pulls, speckled stone tile.', cat: 'CLASSIC', conceptImg: 'concepts/heritage-blue-hdb-design.webp', conceptDisclosure: 'AI CONCEPT · NOT A COMPLETED PROJECT' },

@@ -52,6 +52,16 @@ assets/concepts/spa-stone-hdb-design.webp
 assets/concepts/soft-neutral-hdb-design.webp
 assets/concepts/bohemian-hdb-design.webp
 
+# Watermark-free card exports for the Step-2 style selector (same renders
+# as the gallery, before the Home&Me logo stamp).
+assets/portfolio/cards/minimalist-5-room-hdb-design-01-living-hall.jpg
+assets/portfolio/cards/scandinavian-4-room-hdb-design-01-living-hall.jpg
+assets/portfolio/cards/contemporary-3-room-hdb-design-01-living-hall.jpg
+assets/portfolio/cards/muji-5-room-hdb-design-02-living-hall.jpg
+assets/portfolio/cards/industrial-4-room-hdb-design-01-living-hall.jpg
+assets/portfolio/cards/modern-classic-3-room-hdb-design-01-living-hall.jpg
+assets/portfolio/cards/modern-oriental-5-room-hdb-design-01-living-hall.jpg
+
 # Owner-approved project photography (rights-cleared: absent from the
 # quarantined-media denylist; the build re-checks every hash on each run).
 assets/portfolio/contemporary-3-room-hdb-design-01-kitchen.jpg
