@@ -60,7 +60,7 @@ test('public copy matches the server-delivered enquiry with WhatsApp fallback', 
   // Consent covers storage, not just contact.
   assert.match(enquiry, /I agree Home &amp; Me may store this enquiry and contact me/);
   const legal = read('Legal.dc.html');
-  assert.match(legal, /delivered to Home &amp; Me’s own lead system, which stores it securely and alerts our team by WhatsApp and email/);
+  assert.match(legal, /delivered to Home &amp; Me’s own lead system, which stores it — including any floor plan you upload — securely and alerts our team by WhatsApp and email/);
   assert.doesNotMatch(legal, /visible for you to review before you press send/i);
 });
 
@@ -71,8 +71,10 @@ test('enquiry calls exactly the sanctioned lead endpoint and nothing else', () =
   assert.equal(endpoints.length, 1, 'LEAD_ENDPOINT must be declared exactly once');
   assert.match(enquiry, /const LEAD_ENDPOINT = 'https:\/\/spark-792d\.tail223b04\.ts\.net\/hnm\/v1\/leads'/);
   const fetches = enquiry.match(/fetch\s*\(/g) || [];
-  assert.equal(fetches.length, 1, 'exactly one fetch call (the lead POST)');
+  assert.equal(fetches.length, 2, 'exactly two fetch calls (plan upload + lead POST)');
   assert.match(enquiry, /fetch\(LEAD_ENDPOINT/);
+  assert.match(enquiry, /fetch\(PLAN_ENDPOINT/);
+  assert.match(enquiry, /const PLAN_ENDPOINT = 'https:\/\/spark-792d\.tail223b04\.ts\.net\/hnm\/v1\/plans'/);
   assert.doesNotMatch(enquiry, /webhookUrl|webhook-url/);
   // Consent gate still guards the send, and the honeypot field is sent empty.
   assert.match(enquiry, /if \(!f\.consent\)/);

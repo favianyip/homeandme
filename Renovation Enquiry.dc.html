@@ -306,8 +306,9 @@ select { appearance: none; -webkit-appearance: none; }
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+6594235227&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;homeandme2017@gmail.com&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;coordinatorDefaultOn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;},&quot;autoRead&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+6588376196&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;homeandme2017@gmail.com&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;coordinatorDefaultOn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;},&quot;autoRead&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;}}">
 const LEAD_ENDPOINT = 'https://spark-792d.tail223b04.ts.net/hnm/v1/leads';
+const PLAN_ENDPOINT = 'https://spark-792d.tail223b04.ts.net/hnm/v1/plans';
 const CONSENT_VERSION = '2026-08-22';
 const FLAT_TYPES = ['HDB 2-room', 'HDB 3-room', 'HDB 4-room', 'HDB 5-room', 'HDB Executive / Maisonette', 'HDB Jumbo', 'Condo / Apartment', 'Landed', 'Not sure yet'];
 const STYLE_ALIASES = { 'modern-contemporary': 'contemporary', 'wabi-sabi': 'muji' };
@@ -525,7 +526,7 @@ class Component extends DCLogic {
 
   digits(v) { return String(v || '').replace(/[^\d]/g, ''); }
 
-  waTarget() { return this.digits(this.props.waNumber || '+6594235227') || '6594235227'; }
+  waTarget() { return this.digits(this.props.waNumber || '+6588376196') || '6588376196'; }
 
   validate() {
     const { step, f } = this.state;
@@ -597,6 +598,8 @@ class Component extends DCLogic {
   onFile = (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
+    // Keep the original file so the enquiry can carry it to our team.
+    this.planFile = file;
     const isPdf = /pdf$/i.test(file.type) || /\.pdf$/i.test(file.name);
     const fr = new FileReader();
     fr.onload = () => {
@@ -670,6 +673,26 @@ class Component extends DCLogic {
     // Deliver to the Home & Me lead service; the WhatsApp prefill below runs
     // only as a fallback so the send button never dead-ends.
     let delivered = false;
+    // Upload the floor plan first (when there is one) so the enquiry email
+    // can carry it; a failed upload never blocks the enquiry itself.
+    let planId = '';
+    if (this.planFile) {
+      try {
+        const pc = new AbortController();
+        const pt = setTimeout(() => pc.abort(), 15000);
+        const pr = await fetch(PLAN_ENDPOINT, {
+          method: 'POST', mode: 'cors', signal: pc.signal,
+          headers: {
+            'Content-Type': this.planFile.type || 'application/pdf',
+            'X-Plan-Filename': encodeURIComponent(this.planFile.name).slice(0, 120),
+            'X-Lead-Ref': this.ref(),
+          },
+          body: this.planFile,
+        });
+        clearTimeout(pt);
+        if (pr.ok) { const pj = await pr.json(); planId = (pj && pj.planId) || ''; }
+      } catch (e) { planId = ''; }
+    }
     try {
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 6000);
@@ -682,7 +705,7 @@ class Component extends DCLogic {
           street: f.street, unit: f.unit, postal: f.postal, flatType: f.flatType,
           sqm: f.sqm, styles: f.styles, customStyle: f.customStyle, areas: f.areas,
           trades: f.trades, timing: f.timing, notes: f.notes, coordinator: !!f.coordinator,
-          consent: true, planFilename: this.state.plan ? this.state.plan.name : '',
+          consent: true, planFilename: this.state.plan ? this.state.plan.name : '', planId,
           hp: '', consentVersion: CONSENT_VERSION, page: 'renovation-enquiry',
         }),
       });
