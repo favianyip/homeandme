@@ -93,4 +93,3 @@ assets/portfolio/scandinavian-4-room-hdb-design-01-living-hall.jpg
 assets/portfolio/scandinavian-4-room-hdb-design-01-master-bedroom.jpg
 assets/renders/kitchen-mono.jpg
 assets/renders/living-luxe-dark.jpg
-google488ab609536c935c.html
