@@ -34,9 +34,23 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
 @media (max-width: 1100px) { [data-masonry] { column-count: 2 !important; } }
 @media (max-width: 700px) {
   [data-herofoot] { grid-template-columns: 1fr !important; }
-  [data-mobilecta] { display: flex !important; }
   [data-tabbar] { display: grid !important; }
-  [data-masonry] { column-count: 1 !important; }
+  footer { padding-bottom: 96px !important; }
+}
+[data-workgrid] { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; grid-auto-flow: dense; }
+[data-tile] { grid-column: span 2; }
+[data-tile][data-span="feat"] { grid-column: span 4; }
+@media (max-width: 1100px) {
+  [data-tile] { grid-column: span 3 !important; }
+  [data-tile][data-span="feat"] { grid-column: span 6 !important; }
+}
+@media (max-width: 700px) {
+  [data-tile] { grid-column: span 6 !important; }
+}
+@media (hover: hover) {
+  [data-cap] { opacity: 0; transform: translateY(6px); }
+  [data-tile]:hover [data-cap] { opacity: 1; transform: none; }
+  [data-tile]:focus-within [data-cap] { opacity: 1; transform: none; }
 }
 </style>
 </helmet>
@@ -74,8 +88,9 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
   </sc-if>
 
   <section id="top" style="position: relative; min-height: min(94vh, 940px); background: #14191b; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
-    <img src="assets/portfolio/contemporary-3-room-hdb-design-01-living-hall.jpg" alt="Home &amp; Me living and dining project" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.62;">
-    <div style="position: absolute; inset: 0; background: linear-gradient(102deg, rgba(20,25,27,0.95) 0%, rgba(20,25,27,0.78) 38%, rgba(20,25,27,0.22) 78%, rgba(20,25,27,0.35) 100%);"></div>
+    <img src="assets/portfolio/hero-minimalist-living.jpg" alt="Minimalist 5-room HDB living hall — a Home &amp; Me project" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.96;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(96deg, rgba(20,25,27,0.92) 0%, rgba(20,25,27,0.78) 34%, rgba(20,25,27,0.34) 62%, rgba(20,25,27,0.1) 100%);"></div>
+    <div style="position: absolute; inset: auto 0 0 0; height: 46%; background: linear-gradient(to top, rgba(20,25,27,0.82), rgba(20,25,27,0));"></div>
     <div style="position: relative; max-width: 1360px; width: 100%; margin: 0 auto; padding: 168px clamp(16px, 4vw, 44px) 0; box-sizing: border-box;">
       <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.8px; color: #a9c4cc; margin: 0 0 30px; display: flex; align-items: center; gap: 14px;"><span style="width: 44px; height: 1px; background: #a9c4cc;"></span>DIRECT CONTRACTOR RENOVATION · SINGAPORE</p>
       <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(44px, 8.2vw, 112px); line-height: 0.97; letter-spacing: -1.5px; margin: 0 0 28px; color: #f6f4ef; max-width: 15ch; animation: hnmRise 1s ease both;">Quoted by the people <em style="font-style: italic; color: #a9c4cc;">doing the work.</em></h1>
@@ -85,7 +100,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         <a href="#how" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; color: #f6f4ef; border: 1px solid rgba(246,244,239,0.38); padding: 19px 32px; border-radius: 999px;" style-hover="border-color: #f6f4ef; background: rgba(246,244,239,0.1);">HOW IT WORKS</a>
       </div>
     </div>
-    <div data-herofoot="1" style="position: relative; max-width: 1360px; width: 100%; margin: 0 auto; padding: 64px clamp(16px, 4vw, 44px) 40px; box-sizing: border-box; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(246,244,239,0.16);">
+    <div data-herofoot="1" style="position: relative; max-width: 1360px; width: 100%; margin: 0 auto; padding: 64px clamp(16px, 4vw, 44px) 40px; box-sizing: border-box; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;">
       <sc-for list="{{ proof }}" as="p" hint-placeholder-count="3">
         <div style="background: #14191b; padding: 26px 24px 4px; display: flex; flex-direction: column; gap: 9px;">
           <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 30px; line-height: 1; color: #f6f4ef;">{{ p.head }}</span>
@@ -96,7 +111,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
   </section>
 
   <div style="background: #5a7e8a; overflow: hidden; padding: 15px 0; border-bottom: 1px solid rgba(20,25,27,0.12);">
-    <div data-marquee="1" style="display: flex; width: max-content; animation: hnmMarquee 44s linear infinite;">
+    <div data-marquee="1" style="display: flex; width: max-content; animation: hnmMarquee 62s linear infinite;">
       <sc-for list="{{ tickerRows }}" as="row" hint-placeholder-count="2">
         <div style="display: flex; align-items: center; gap: 34px; padding-right: 34px;">
           <sc-for list="{{ row.items }}" as="t" hint-placeholder-count="12">
@@ -182,8 +197,8 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
       </div>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(232px, 1fr)); gap: 1px; background: rgba(20,25,27,0.13); border-top: 1px solid rgba(20,25,27,0.13);">
         <sc-for list="{{ how }}" as="s" hint-placeholder-count="5">
-          <div data-reveal="1" style="background: #fdfcfa; padding: 28px 22px 34px; display: flex; flex-direction: column; gap: 12px; border-bottom: 1px solid rgba(20,25,27,0.13);">
-            <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 42px; line-height: 1; color: #5a7e8a;">{{ s.no }}</span>
+          <div data-reveal="1" data-howcard="{{ s.i }}" style="background: #fdfcfa; padding: 28px 22px 34px; display: flex; flex-direction: column; gap: 12px; border-bottom: 2px solid {{ s.edge }}; transition: border-color 0.6s ease;">
+            <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 42px; line-height: 1; color: {{ s.numFg }}; transition: color 0.6s ease;">{{ s.no }}</span>
             <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 1.8px; color: #14191b;">{{ s.title }}</span>
             <span style="font-size: 14.5px; line-height: 1.62; color: #4a5350; text-wrap: pretty;">{{ s.body }}</span>
           </div>
@@ -196,13 +211,46 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
     </div>
   </section>
 
+  <section id="quote" style="background: #14191b; color: #f6f4ef; padding: clamp(60px, 9vw, 124px) clamp(16px, 4vw, 44px); scroll-margin-top: 78px;">
+    <div data-two="1" style="max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(30px, 5vw, 76px);">
+      <div data-sticky="1" style="position: sticky; top: 130px; align-self: start; min-width: 0;">
+        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(246,244,239,0.16); display: block; margin-bottom: 18px;">03</span>
+        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #a9c4cc; margin: 0 0 20px;">WHAT YOU'LL RECEIVE</p>
+        <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0 0 20px;">Watch your quote build itself.</h2>
+        <p style="font-size: 16.5px; line-height: 1.68; color: rgba(246,244,239,0.72); margin: 0; max-width: 44ch; text-wrap: pretty;">Keep scrolling — each line of an itemised quote arrives with the trade doing that work named against it. This is the format every Home &amp; Me quote takes.</p>
+        <div style="margin-top: 30px; max-width: 340px;">
+          <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #a9c4cc; margin: 0 0 12px;">{{ qCount }}</p>
+          <div style="height: 2px; background: rgba(246,244,239,0.16); border-radius: 2px; overflow: hidden;">
+            <div style="height: 100%; width: {{ qBar }}; background: #a9c4cc; transition: width 0.7s ease;"></div>
+          </div>
+        </div>
+      </div>
+      <div style="min-width: 0;">
+        <sc-for list="{{ qlines }}" as="l" hint-placeholder-count="5">
+          <div data-qline="{{ l.i }}" style="border-left: 2px solid {{ l.edge }}; opacity: {{ l.op }}; transform: {{ l.ty }}; transition: opacity 0.7s ease, transform 0.7s ease, border-color 0.7s ease; padding: 22px 0 22px 24px; border-bottom: 1px solid rgba(246,244,239,0.12); display: grid; gap: 7px;">
+            <div style="display: flex; justify-content: space-between; gap: 14px; align-items: baseline; flex-wrap: wrap;">
+              <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 2px; color: #f6f4ef;">{{ l.trade }}</span>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 2px; color: #a9c4cc; border: 1px solid rgba(169,196,204,0.4); border-radius: 999px; padding: 5px 11px; white-space: nowrap;">{{ l.who }}</span>
+            </div>
+            <span style="font-size: 14.5px; line-height: 1.6; color: rgba(246,244,239,0.66);">{{ l.scope }}</span>
+          </div>
+        </sc-for>
+        <div style="margin-top: 26px; border: 1px solid rgba(169,196,204,0.35); border-radius: 5px; padding: 26px 26px 30px; background: linear-gradient(150deg, rgba(90,126,138,0.16), rgba(90,126,138,0.04)); opacity: {{ qDoneOp }}; transition: opacity 0.8s ease;">
+          <p style="font-size: 16.5px; line-height: 1.6; color: #f6f4ef; margin: 0 0 10px;">Every line arrives priced — in your quote, not on this page.</p>
+          <p style="font-size: 14.5px; line-height: 1.66; color: rgba(246,244,239,0.66); margin: 0 0 22px; text-wrap: pretty;">An honest number depends on your unit, its condition and your materials, so we don't publish rates that would be wrong for you. Upload your floor plan and the contractor prices these exact lines for your flat — free, and itemised.</p>
+          <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 12.5px; background: #f6f4ef; color: #14191b; padding: 16px 30px; border-radius: 999px; display: inline-block;" style-hover="background: #5a7e8a; color: #fff;">GET MY ITEMISED QUOTE</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="portfolio" style="padding: clamp(60px, 9vw, 120px) 0 clamp(56px, 8vw, 104px); scroll-margin-top: 78px;">
     <div data-reveal="1" style="max-width: 1360px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 44px) clamp(30px, 4vw, 46px); display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; flex-wrap: wrap;">
       <div style="max-width: 640px;">
-        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(20,25,27,0.14); display: block; margin-bottom: 18px;">03</span>
+        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(20,25,27,0.14); display: block; margin-bottom: 18px;">04</span>
         <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 20px;">OUR WORK</p>
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0 0 16px;">The work we have done.</h2>
-        <p style="font-size: 16px; line-height: 1.66; color: #4a5350; margin: 0; max-width: 48ch; text-wrap: pretty;">Home &amp; Me projects, by room. Click any one to see it full size — or start your enquiry in that style straight from the caption.</p>
+        <p style="font-size: 16px; line-height: 1.66; color: #4a5350; margin: 0; max-width: 48ch; text-wrap: pretty;">Home &amp; Me projects, by room. Click any one to see it full size and start your enquiry in that exact style.</p>
       </div>
       <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; border: 1px solid rgba(20,25,27,0.2); border-radius: 999px; padding: 10px 18px;">{{ galleryCount }}</span>
     </div>
@@ -212,17 +260,16 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
           <button type="button" onClick="{{ c.pick }}" style="cursor: pointer; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.2px; padding: 11px 19px; border-radius: 999px; background: {{ c.bg }}; color: {{ c.fg }}; border: 1px solid {{ c.border }};">{{ c.label }}</button>
         </sc-for>
       </div>
-      <div data-masonry="1" style="column-count: 3; column-gap: 20px;">
+      <div data-workgrid="1">
         <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="6">
-          <div style="break-inside: avoid; margin: 0 0 20px; border: 1px solid rgba(20,25,27,0.13); border-radius: 5px; overflow: hidden; background: #fdfcfa;">
-            <button type="button" onClick="{{ g.open }}" title="View full size" style="display: block; width: 100%; padding: 0; border: none; background: #e7e2d8; cursor: zoom-in; overflow: hidden; line-height: 0;">{{ g.photo }}</button>
-            <div style="padding: 15px 17px 17px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-              <span style="display: flex; flex-direction: column; gap: 5px; min-width: 0;">
-                <span style="font-family: 'Oswald', sans-serif; font-size: 12.5px; letter-spacing: 1.8px; color: #14191b;">{{ g.room }}</span>
-                <span style="font-size: 13px; color: #8a908c;">{{ g.style }}</span>
+          <div data-tile="1" data-span="{{ g.span }}" style="border: 1px solid rgba(20,25,27,0.13); border-radius: 5px; overflow: hidden; background: #fdfcfa; min-width: 0;">
+            <button type="button" onClick="{{ g.open }}" title="View full size" style="display: block; position: relative; width: 100%; height: 100%; min-height: 100%; aspect-ratio: 2 / 1; padding: 0; border: none; background: #e7e2d8; cursor: zoom-in; overflow: hidden; line-height: 0;">
+              {{ g.photo }}
+              <span data-cap="1" style="position: absolute; inset: auto 0 0 0; padding: 44px 16px 13px; background: linear-gradient(to top, rgba(20,25,27,0.8), rgba(20,25,27,0)); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; line-height: 1.4; transition: opacity 0.45s ease, transform 0.45s ease; text-align: left;">
+                <span style="font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.8px; color: #f6f4ef;">{{ g.room }}</span>
+                <span style="font-size: 12.5px; color: rgba(246,244,239,0.78); white-space: nowrap;">{{ g.style }}</span>
               </span>
-              <a sc-camel-href="{{ g.href }}" style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 2px; color: #5a7e8a; white-space: nowrap;" style-hover="color: #14191b;">START THIS STYLE →</a>
-            </div>
+            </button>
           </div>
         </sc-for>
       </div>
@@ -232,7 +279,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
   <section id="coordinator" style="background: #14191b; color: #f6f4ef; padding: clamp(60px, 9vw, 124px) clamp(16px, 4vw, 44px); scroll-margin-top: 78px;">
     <div data-two="1" style="max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 1.08fr 0.92fr; gap: clamp(32px, 5vw, 70px); align-items: center;">
       <div data-reveal="1" style="min-width: 0;">
-        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(246,244,239,0.16); display: block; margin-bottom: 18px;">04</span>
+        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(246,244,239,0.16); display: block; margin-bottom: 18px;">05</span>
         <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #a9c4cc; margin: 0 0 20px;">OPTIONAL ADD-ON</p>
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0 0 20px;">Hire a project coordinator.</h2>
         <p style="font-size: 16.5px; line-height: 1.68; color: rgba(246,244,239,0.72); margin: 0 0 30px; max-width: 46ch; text-wrap: pretty;">Going direct means you hold the schedule. If you would rather not, one of ours holds it — and you still see the contractor's own quote.</p>
@@ -269,7 +316,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
   <section id="faq" style="padding: clamp(60px, 9vw, 120px) clamp(16px, 4vw, 44px); scroll-margin-top: 78px;">
     <div style="max-width: 1360px; margin: 0 auto;">
       <div data-reveal="1" style="margin-bottom: clamp(32px, 4vw, 52px);">
-        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(20,25,27,0.14); display: block; margin-bottom: 18px;">05</span>
+        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(20,25,27,0.14); display: block; margin-bottom: 18px;">06</span>
         <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 20px;">STRAIGHT ANSWERS</p>
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0;">The questions everyone asks.</h2>
       </div>
@@ -352,10 +399,6 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
     </div>
   </sc-if>
 
-  <div data-mobilecta="1" style="display: none; position: fixed; left: 12px; right: 12px; bottom: calc(81px + env(safe-area-inset-bottom, 0px)); z-index: 65; gap: 10px;">
-    <a href="Renovation%20Enquiry.dc.html" style="flex: 1; text-align: center; background: #14191b; color: #f6f4ef; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; padding: 18px; border-radius: 999px; box-shadow: 0 16px 34px -16px rgba(20,25,27,0.85);">UPLOAD FLOOR PLAN</a>
-  </div>
-
   <nav data-tabbar="1" style="display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 66; background: rgba(255,255,255,0.96); backdrop-filter: blur(16px); border-top: 1px solid rgba(20,25,27,0.1); padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px)); grid-template-columns: repeat(4, 1fr);">
     <span style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #5a7e8a;">{{ iconHome }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">HOME</span></span>
     <a href="#portfolio" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;">{{ iconWork }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">OUR WORK</span></a>
@@ -376,18 +419,19 @@ const ICONS = {
   chat: 'M21 11.5a8.4 8.4 0 0 1-9 8.5 9 9 0 0 1-3.9-.9L3 21l1.9-4.6A8.4 8.4 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5z',
 };
 
-// Completed-work gallery. Every file on this page appears exactly once: the hero holds
-// living-classic-bright, the coordinator section holds family-lounge, and these 18 are the
-// gallery. No image is shown twice anywhere on the page.
+// Completed-work gallery. The hero holds its own clean export (hero-minimalist-living,
+// the one image on the page without the corner mark); the coordinator section holds
+// contemporary-4-room design-02; these 25 are the gallery. Three carry featured: true
+// and render at a larger tile so the grid reads as an edited portfolio, not a catalogue.
 const ROOMS = ['ALL', 'LIVING & DINING', 'KITCHEN', 'BEDROOM', 'BATHROOM'];
 const WORK = [
   { file: 'portfolio/contemporary-3-room-hdb-design-01-living-hall.jpg', room: 'LIVING & DINING', style: 'CONTEMPORARY', styleId: 'contemporary' },
   { file: 'portfolio/contemporary-3-room-hdb-design-01-kitchen.jpg', room: 'KITCHEN', style: 'CONTEMPORARY', styleId: 'contemporary' },
   { file: 'portfolio/contemporary-3-room-hdb-design-01-master-bedroom.jpg', room: 'BEDROOM', style: 'CONTEMPORARY', styleId: 'contemporary' },
-  { file: 'portfolio/modern-classic-3-room-hdb-design-01-living-hall.jpg', room: 'LIVING & DINING', style: 'MODERN CLASSIC', styleId: 'modern-classic' },
+  { file: 'portfolio/modern-classic-3-room-hdb-design-01-living-hall.jpg', room: 'LIVING & DINING', style: 'MODERN CLASSIC', styleId: 'modern-classic', featured: true },
   { file: 'portfolio/modern-classic-3-room-hdb-design-01-kitchen.jpg', room: 'KITCHEN', style: 'MODERN CLASSIC', styleId: 'modern-classic' },
   { file: 'portfolio/modern-classic-3-room-hdb-design-02-master-bedroom.jpg', room: 'BEDROOM', style: 'MODERN CLASSIC', styleId: 'modern-classic' },
-  { file: 'portfolio/muji-5-room-hdb-design-02-living-hall.jpg', room: 'LIVING & DINING', style: 'MUJI / WABI-SABI', styleId: 'muji' },
+  { file: 'portfolio/muji-5-room-hdb-design-02-living-hall.jpg', room: 'LIVING & DINING', style: 'MUJI / WABI-SABI', styleId: 'muji', featured: true },
   { file: 'portfolio/muji-3-room-hdb-design-01-kitchen.jpg', room: 'KITCHEN', style: 'MUJI / WABI-SABI', styleId: 'muji' },
   { file: 'portfolio/muji-5-room-hdb-design-01-master-bedroom.jpg', room: 'BEDROOM', style: 'MUJI / WABI-SABI', styleId: 'muji' },
   { file: 'portfolio/modern-oriental-5-room-hdb-design-01-living-hall.jpg', room: 'LIVING & DINING', style: 'MODERN ORIENTAL', styleId: 'modern-oriental' },
@@ -396,7 +440,7 @@ const WORK = [
   { file: 'portfolio/minimalist-5-room-hdb-design-01-living-hall.jpg', room: 'LIVING & DINING', style: 'MINIMALIST', styleId: 'minimalist' },
   { file: 'portfolio/minimalist-5-room-hdb-design-01-kitchen.jpg', room: 'KITCHEN', style: 'MINIMALIST', styleId: 'minimalist' },
   { file: 'portfolio/minimalist-5-room-hdb-design-01-dining.jpg', room: 'LIVING & DINING', style: 'MINIMALIST', styleId: 'minimalist' },
-  { file: 'portfolio/industrial-4-room-hdb-design-01-living-hall.jpg', room: 'LIVING & DINING', style: 'INDUSTRIAL', styleId: 'industrial' },
+  { file: 'portfolio/industrial-4-room-hdb-design-01-living-hall.jpg', room: 'LIVING & DINING', style: 'INDUSTRIAL', styleId: 'industrial', featured: true },
   { file: 'portfolio/industrial-4-room-hdb-design-01-kitchen.jpg', room: 'KITCHEN', style: 'INDUSTRIAL', styleId: 'industrial' },
   { file: 'portfolio/industrial-4-room-hdb-design-01-master-bathroom.jpg', room: 'BATHROOM', style: 'INDUSTRIAL', styleId: 'industrial' },
   { file: 'portfolio/scandinavian-4-room-hdb-design-01-living-hall.jpg', room: 'LIVING & DINING', style: 'SCANDINAVIAN', styleId: 'scandinavian' },
@@ -409,7 +453,7 @@ const WORK = [
 ];
 
 class Component extends DCLogic {
-  state = { menuOpen: false, scrolled: false, progress: '0%', room: 'ALL', lb: null };
+  state = { menuOpen: false, scrolled: false, progress: '0%', room: 'ALL', lb: null, qSeen: 0, howOn: 0 };
 
   filtered() { return this.state.room === 'ALL' ? WORK : WORK.filter((w) => w.room === this.state.room); }
 
@@ -445,12 +489,47 @@ class Component extends DCLogic {
     };
     window.addEventListener('keydown', this._onKey);
     this.reveal();
+    this.watchSteps();
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this._onScroll);
     window.removeEventListener('keydown', this._onKey);
     if (this._io) this._io.disconnect();
+    if (this._qio) this._qio.disconnect();
+    if (this._hio) this._hio.disconnect();
+  }
+
+  // Quote lines and how-it-works steps activate as they enter the viewport. Monotonic:
+  // a step never de-activates, so fast scrolling and re-renders cannot make it flicker.
+  watchSteps() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || !('IntersectionObserver' in window)) {
+      this.setState({ qSeen: 5, howOn: 5 });
+      return;
+    }
+    const qlines = Array.prototype.slice.call(document.querySelectorAll('[data-qline]'));
+    if (qlines.length) {
+      this._qio = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const n = parseInt(e.target.getAttribute('data-qline'), 10) + 1;
+          if (n > this.state.qSeen) this.setState({ qSeen: n });
+        });
+      }, { rootMargin: '0px 0px -16% 0px', threshold: 0.45 });
+      qlines.forEach((el) => this._qio.observe(el));
+    }
+    const cards = Array.prototype.slice.call(document.querySelectorAll('[data-howcard]'));
+    if (cards.length) {
+      this._hio = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const n = parseInt(e.target.getAttribute('data-howcard'), 10) + 1;
+          if (n > this.state.howOn) this.setState({ howOn: n });
+        });
+      }, { rootMargin: '0px 0px -22% 0px', threshold: 0.5 });
+      cards.forEach((el) => this._hio.observe(el));
+    }
   }
 
   // Progressive enhancement: the markup ships visible, then JS hides and reveals on entry —
@@ -492,7 +571,7 @@ class Component extends DCLogic {
       src: 'assets/' + w.file, alt: w.style + ' ' + w.room.toLowerCase() + ' project',
       style: big
         ? { maxWidth: '100%', maxHeight: '78vh', objectFit: 'contain', display: 'block', borderRadius: '4px' }
-        : { width: '100%', height: 'auto', display: 'block', transition: 'transform 0.9s cubic-bezier(0.2,0.8,0.2,1)' },
+        : { width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.9s cubic-bezier(0.2,0.8,0.2,1)' },
       onMouseEnter: big ? null : (e) => { e.currentTarget.style.transform = 'scale(1.05)'; },
       onMouseLeave: big ? null : (e) => { e.currentTarget.style.transform = 'none'; },
     });
@@ -563,7 +642,22 @@ class Component extends DCLogic {
         { no: '03', title: 'AREAS', body: 'Whole house, or just the master bath. Only what you pick gets quoted.' },
         { no: '04', title: 'SCOPE OF WORKS', body: 'Tick the trades per room — hacking, tiling, painting, carpentry, plumbing and the rest. Unsure? Leave it for the walkthrough.' },
         { no: '05', title: 'REVIEW & SEND', body: 'Review the enquiry and press send — it lands with our team instantly, with an email copy, and we reply on WhatsApp the same day.' },
-      ],
+      ].map((s, i) => ({ ...s, i: String(i),
+        numFg: i < this.state.howOn ? '#5a7e8a' : 'rgba(90,126,138,0.32)',
+        edge: i < this.state.howOn ? '#5a7e8a' : 'rgba(20,25,27,0.13)' })),
+      qlines: [
+        { trade: 'HACKING & REMOVAL', who: 'DEMOLITION TEAM', scope: 'Old tiles, built-ins and the existing kitchen come out — cleared and hauled away.' },
+        { trade: 'MASONRY & TILING', who: 'TILER', scope: 'Screed and waterproofing first, then your chosen tiles — laid, levelled and grouted.' },
+        { trade: 'ELECTRICAL & PLUMBING', who: 'ELECTRICIAN · PLUMBER', scope: 'New points and lighting circuits; basin, WC and heater set to your layout.' },
+        { trade: 'CARPENTRY', who: 'CARPENTER', scope: 'Wardrobes, kitchen cabinets and the TV console, measured to your walls.' },
+        { trade: 'PAINTING & FINISHING', who: 'PAINTER', scope: 'Sealing, two coats through the whole unit, and the final touch-up walk-through.' },
+      ].map((l, i) => ({ ...l, i: String(i),
+        op: i < this.state.qSeen ? '1' : '0.28',
+        ty: i < this.state.qSeen ? 'none' : 'translateY(14px)',
+        edge: i < this.state.qSeen ? '#a9c4cc' : 'rgba(246,244,239,0.18)' })),
+      qCount: this.state.qSeen + ' OF 5 TRADES ON YOUR QUOTE',
+      qBar: (this.state.qSeen / 5 * 100) + '%',
+      qDoneOp: this.state.qSeen >= 5 ? '1' : '0.35',
       chips: ROOMS.map((r) => {
         const on = this.state.room === r;
         const count = r === 'ALL' ? WORK.length : WORK.filter((w) => w.room === r).length;
@@ -571,7 +665,7 @@ class Component extends DCLogic {
           bg: on ? '#14191b' : 'transparent', fg: on ? '#f6f4ef' : '#4a5350', border: on ? '#14191b' : 'rgba(20,25,27,0.22)' };
       }),
       gallery: list.map((w, i) => ({
-        room: w.room, style: w.style,
+        room: w.room, style: w.style, span: w.featured ? 'feat' : 'std',
         href: 'Renovation%20Enquiry.dc.html#style=' + w.styleId,
         photo: this.photo(w, false), open: this.openLb(i),
       })),
