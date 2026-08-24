@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="../favicon.svg">
+<title>HDB Resale Layout Planning | Plan vs Existing Condition</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Plan a resale HDB layout by separating source-plan evidence from existing conditions, recording uncertainties and deferring site-dependent decisions.">
+<link rel="canonical" href="https://homeandme.sg/guides/hdb-resale-layout-planning.html">
+<script src="../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+@keyframes hnmRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 1160px) {
+  #navLinks { display: none !important; }
+  #navBurger { display: flex !important; }
+}
+article.guide { max-width: 800px; margin: 0 auto; padding: 130px clamp(20px,4vw,40px) 60px; }
+.guide-meta { color: #5a7e8a; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 14px; }
+h1.g { font: 400 clamp(2rem,6vw,3.4rem)/1.08 Georgia, serif; letter-spacing: -.03em; margin: 0 0 26px; }
+h2 { font-family: Oswald, sans-serif; font-weight: 500; font-size: 1.35rem; letter-spacing: .01em; margin: 38px 0 12px; }
+h3 { font-family: Oswald, sans-serif; font-weight: 400; font-size: 1.05rem; margin: 26px 0 8px; }
+p, li { line-height: 1.75; font-size: 1.02rem; margin: 0 0 14px; }
+ul, ol { padding-left: 22px; margin: 0 0 14px; }
+li { margin-bottom: 7px; }
+ul.checklist { list-style: none; padding-left: 4px; }
+ul.checklist li::before { content: "☐ "; color: #5a7e8a; }
+strong { color: #14191b; }
+.cta { display:block; margin: 44px 0 10px; padding: 16px 26px; background:#1a2023; color:#f6f4ef; border-radius:999px; text-align:center; font-family:Oswald,sans-serif; letter-spacing:.14em; font-size:.8rem; }
+.cta:hover { background:#5a7e8a; color:#fff; }
+footer.gf { border-top: 1px solid rgba(26,32,35,.12); max-width: 800px; margin: 30px auto 0; padding: 26px clamp(20px,4vw,40px) 46px; display:flex; gap:20px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+footer.gf img { height:34px; width:auto; }
+footer.gf nav { display:flex; gap:18px; font-size:11px; letter-spacing:2px; font-family:Oswald,sans-serif; flex-wrap:wrap; }
+</style>
+</helmet>
+
+<header style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: rgba(246,244,239,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1);">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); height: 76px; display: flex; align-items: center;">
+      <a href="../Home%20Direct.dc.html" style="display: flex; align-items: center;"><img src="../assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 44px; width: auto;"></a>
+      <nav id="navLinks" style="display: flex; gap: 28px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; font-weight: 400;">
+        <a href="../Home%20Direct.dc.html">HOME</a>
+        <a href="../AboutUs.dc.html">ABOUT US</a>
+        <a href="../Home%20Direct.dc.html#portfolio">SHOWROOM</a>
+        <a href="../Renovation%20Enquiry.dc.html">3D JOURNEY</a>
+        <a href="../FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+        <a href="../ContactUs.dc.html">CONTACT US</a>
+        <a href="../Renovation%20Enquiry.dc.html" style="background: #1a2023; color: #f6f4ef; padding: 12px 26px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START YOUR RENOVATION</a>
+      </nav>
+      <button id="navBurger" type="button" onClick="{{ toggleMenu }}" style="display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid rgba(26,32,35,0.25); border-radius: 999px; background: none; cursor: pointer; font-size: 17px; color: #1a2023;">{{ menuIcon }}</button>
+    </div>
+  </header>
+
+  <article class="guide">
+    <p class="guide-meta">Home &amp; Me · Renovation Guides</p>
+    <h1 class="g">HDB resale layout planning: plan versus existing condition</h1>
+      <p><strong>Service status:</strong> Home &amp; Me’s floor-plan enquiry journey is live at homeandme.sg — upload your floor plan, choose your rooms and trades, and request an itemised contractor quote. This guide remains educational: reading it does not by itself start any job.</p>
+      <p>A resale flat has at least two evidence layers to manage: the source plan you can identify and the physical condition that can be lawfully observed and later measured. They may not answer the same questions. A drawing does not prove what is present now, while a quick viewing does not replace records, measurement, inspection or qualified assessment.</p>
+      <p>The useful goal is therefore not to make the plan and the flat “agree” by assumption. It is to preserve both records, note discrepancies and defer each conclusion until the right evidence is available.</p>
+      <h2>Before a viewing or lawful access: identify the source, not a typical layout</h2>
+      <p>Record the exact file or sheet you have: its source, flat or unit identity, issue date or revision if shown, page count, legibility and whether its symbols or notes are complete enough for the question being asked. Keep the original unchanged. Do not substitute a listing image, remembered neighbour’s layout or a plan for another unit.</p>
+      <p>Start an uncertainty register:</p>
+      <ul>
+        <li>Which dimensions, walls, openings, fixtures and notes are explicitly shown?</li>
+        <li>Which marks are unclear, cropped, missing or unsupported by a plan-specific legend?</li>
+        <li>Is the revision or completeness unknown?</li>
+        <li>Which questions concern later alterations, finishes, services, concealed conditions or defects that the source plan cannot establish?</li>
+        <li>What must be observed, measured, checked against records or assessed by a qualified person?</li>
+      </ul>
+      <p>Treat every unsupported detail as a question, not a blank to fill. This is especially important for an old HDB flat layout: age or flat type alone does not prove the present arrangement, condition, alteration history or feasibility of a proposed change.</p>
+      <h2>Write the household brief without pretending fit is known</h2>
+      <p>List the household’s activities, privacy and mobility needs, work or study patterns, storage categories, furniture worth retaining and likely changes. Rank each need as essential, preferred or deferrable.</p>
+      <p>Then compare zones rather than committing to fitted dimensions:</p>
+      <ul>
+        <li><strong>Circulation:</strong> Which everyday routes should stay direct and unobstructed?</li>
+        <li><strong>Storage:</strong> What needs frequent access, and near which activity?</li>
+        <li><strong>Adjacency:</strong> Which activities benefit from proximity or separation?</li>
+        <li><strong>Furniture zones:</strong> What approximate footprint and use space should be tested later?</li>
+        <li><strong>Simultaneous use:</strong> Where could doors, chairs, drawers or people compete for space?</li>
+      </ul>
+      <p>These are planning prompts, not fit confirmation. Keep alternatives open where dimensions, openings, finishes or obstructions remain unverified.</p>
+      <h2>During a viewing or other lawful observation</h2>
+      <p>Observe only where and when you are lawfully permitted. Do not assume a right to measure, inspect, open, operate or disturb anything. Keep observations separate from conclusions and from transaction advice.</p>
+      <p>For each relevant area, note visible differences or unresolved questions:</p>
+      <ul>
+        <li>Does an opening appear where the source shows one, and does its apparent position or operation need later measurement?</li>
+        <li>Are visible walls, partitions, fixtures or built-ins consistent with the drawing, or simply not established by it?</li>
+        <li>Are there visible service points or obstructions that need records and qualified checks?</li>
+        <li>Are there signs that prompt a condition or defect question for an appropriate inspection, without diagnosing the cause?</li>
+        <li>Could finishes or fitted items conceal boundaries, services or dimensions?</li>
+      </ul>
+      <p>Use neutral language: “not shown”, “not observed”, “appears different” and “to verify”. A photograph or viewing note may document what was visible at that moment; it does not establish concealed condition, compliance, alteration history or construction feasibility.</p>
+      <h2>Build a plan-versus-condition record</h2>
+      <p>A simple table keeps the evidence honest:</p>
+      <p>| Item | Source plan says/shows | Lawfully observed | Status | Next evidence |</p>
+      <p>|---|---|---|---|---|</p>
+      <p>| Opening | Record the exact symbol or note | Record only what was visible | match / possible discrepancy / unresolved | site measurement, records or qualified check |</p>
+      <p>| Wall or partition | Record the drawn boundary | Do not infer structure from appearance | unresolved unless supported | current official and qualified checks |</p>
+      <p>| Fixture or service | Record only explicit marks | Note visible presence or obstruction | unresolved | records, measurement and relevant specialist |</p>
+      <p>| Furniture or storage zone | Plan-derived proposal only | Note apparent constraints | fit unproven | measured condition, product data and installation access |</p>
+      <p>| Condition or defect question | Usually outside plan scope | Describe visible evidence without diagnosis | unresolved | appropriate inspection or qualified assessment |</p>
+      <p>Do not convert “not shown” into “does not exist”, or an apparent discrepancy into proof of an alteration. Preserve the source, observation date and who recorded it.</p>
+      <h2>After possession or other lawful access: measure, check and revise</h2>
+      <p>When you have lawful access and permission for the relevant activity, measure the conditions that control a decision using appropriate methods. Compare openings, boundaries, fixtures, obstructions and finished dimensions with the source and record discrepancies. Seek current official information and qualified assessment for structure, mechanical/electrical/plumbing systems, safety, accessibility, regulatory matters, defects and construction feasibility.</p>
+      <p>Revisit circulation, storage, adjacency and furniture zones using the measured evidence. Include product dimensions, tolerances and installation access where fit matters. If evidence conflicts with the proposal, correct the geometry proposal and reassess every dependent layout or image. Do not protect an attractive option from inconvenient site evidence.</p>
+      <h2>Keep six layers distinct</h2>
+      <ol>
+        <li><strong>Source plan:</strong> the exact identified drawing and its explicit content. It does not automatically describe the current physical flat.</li>
+        <li><strong>Observed existing condition:</strong> dated, limited observations made during lawful access. Observation is not a survey, inspection or concealed-condition finding.</li>
+        <li><strong>Plan-derived proposal:</strong> an interpretation with recorded uncertainty. It is non-authoritative geometry.</li>
+        <li><strong>Human-reviewed canonical geometry:</strong> versioned, correctable proposed geometry reviewed by a person before it controls later 3D or layout work. Review improves traceability; it does not make the proposal as-built truth.</li>
+        <li><strong>Concept imagery:</strong> a visual aid for discussing a direction. It cannot write or override canonical geometry and is not dimensional evidence.</li>
+        <li><strong>Site, as-built and construction truth:</strong> appropriate measurements, records, specifications, current official requirements and qualified assessments for the decision.</li>
+      </ol>
+      <p>The first five do not guarantee the sixth. This guide and any plan-derived work remain <strong>non-as-built, non-survey, non-inspection, non-construction and non-regulatory</strong>. They provide no structural, mechanical, electrical or plumbing advice and no guarantee of condition, dimensional accuracy, accessibility, compliance, fit, feasibility, price, timeline or outcome.</p>
+      <h2>The intended five-station decision order</h2>
+      <p>Home &amp; Me’s intended order is <strong>address context → source floor plan → human-reviewed geometry before 3D → design choice → separately reviewed formal quote</strong>.</p>
+      <p>This is an intended decision sequence, not a live public workflow. Address context does not prove a layout or existing condition. The source plan needs identity and uncertainty checks. Human review must precede any dependent 3D, but does not create site truth. Design remains a choice. Any future formal quote would require separate human review of scope and evidence.</p>
+      <p>The enquiry journey on our homepage follows the same discipline — upload, review together, then an itemised quote built on checked evidence.</p>
+      <h2>What to defer</h2>
+      <p>Defer wall-removal conclusions, changes to openings or services, concealed-condition or defect conclusions, final fitted dimensions, furniture or appliance fit, structural/MEP decisions, regulatory conclusions, construction methods, procurement quantities, prices, timelines and commitments until the necessary measurements, records, current official information and qualified checks exist.</p>
+      <p>Deferral is useful: it identifies exactly what evidence must arrive before a decision becomes responsible.</p>
+      <h2>Frequently asked questions</h2>
+      <h3>Is an HDB resale floor plan an as-built record?</h3>
+      <p>Do not treat it as one. Identify what the exact source explicitly shows, then compare it with lawfully observed and measured conditions. Site-, condition- and construction-dependent matters need appropriate evidence and checks.</p>
+      <h3>Can I tell whether a wall can be removed from the plan or a viewing?</h3>
+      <p>No conclusion should be made from this guide, a plan or appearance alone. Record the question and seek current official information and qualified assessment appropriate to the proposed work.</p>
+      <h3>What if an opening appears different from the source plan?</h3>
+      <p>Record the apparent discrepancy without diagnosing why it exists. Verify identity and revision, measure when lawfully permitted, check relevant records and obtain qualified advice where needed.</p>
+      <h3>Should I diagnose defects during a viewing?</h3>
+      <p>No. Record visible evidence neutrally and arrange an appropriate inspection or qualified assessment when authorised. Do not infer concealed condition or cause.</p>
+      <h3>Can concept imagery confirm my furniture will fit?</h3>
+      <p>No. A concept is not dimensional proof. Fit may depend on measured conditions, product specifications, tolerances, operation and installation access.</p>
+      <h3>How is resale planning different from BTO planning?</h3>
+      <p>This guide centres on comparing a source plan with an existing physical condition. A separate BTO guide owns the before-access planning lane. Neither lane turns a drawing or concept into site truth.</p>
+      <h3>Can Home &amp; Me review my resale plan now?</h3>
+      <p>You can start right now through the enquiry journey on the [Home &amp; Me homepage](../Home%20Direct.dc.html): upload your plan, pick rooms and trades, request an itemised quote.</p>
+      <h2>Your next useful step while the service is unavailable</h2>
+      <p>Prepare a one-page resale question checklist: exact source and revision, missing or unclear evidence, household essentials, circulation and storage priorities, adjacency and furniture zones, observed discrepancies, and the measurement, record, official or qualified check needed for each unresolved item.</p>
+      <p>When the separately approved floor-plan guide, resale renovation checklist, concept explanation, limitations/privacy page or BTO comparison becomes available at a verified destination, continue there. Until then, keep those topics in your checklist rather than following an unavailable route. Do not contact Home &amp; Me to start the disabled service.</p>
+    <a class="cta" href="../Renovation%20Enquiry.dc.html">START YOUR RENOVATION →</a>
+  </article>
+
+  <footer class="gf">
+      <img src="../assets/images/hnm-logo.png" alt="Home &amp; Me">
+      <nav>
+        <a href="../Home%20Direct.dc.html">HOME</a>
+        <a href="../AboutUs.dc.html">ABOUT US</a>
+        <a href="../ContactUs.dc.html">CONTACT US</a>
+      </nav>
+      <span style="font-size: 13px; color: #8a908c;">© HOME&amp;ME · Educational guide, not professional advice.</span>
+  </footer>
+</x-dc>
+</body>
+</html>

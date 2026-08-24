@@ -7,4 +7,9 @@
   <url><loc>https://homeandme.sg/ContactUs.dc.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://homeandme.sg/FaqAndHelp.dc.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://homeandme.sg/Legal.dc.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://homeandme.sg/guides/how-to-read-hdb-floor-plan.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://homeandme.sg/guides/floor-plan-concept-visualisation.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://homeandme.sg/guides/hdb-bto-layout-planning.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://homeandme.sg/guides/hdb-resale-layout-planning.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://homeandme.sg/guides/concept-visualisation-limitations.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

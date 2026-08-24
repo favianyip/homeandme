@@ -11,6 +11,14 @@ ContactUs.dc.html
 FaqAndHelp.dc.html
 Legal.dc.html
 
+
+# Renovation guides (owner-approved 2026-08-24)
+guides/how-to-read-hdb-floor-plan.html
+guides/floor-plan-concept-visualisation.html
+guides/hdb-bto-layout-planning.html
+guides/hdb-resale-layout-planning.html
+guides/concept-visualisation-limitations.html
+
 # Search discovery
 robots.txt
 sitemap.xml
