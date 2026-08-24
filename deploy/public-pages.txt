@@ -1,6 +1,6 @@
 # Exact GitHub Pages artifact. Source files not listed here are not public.
-# Direct-contractor relaunch: the six-page site. Everything from the previous
-# 3D-journey site stays in the repo but is no longer published.
+# Direct-contractor public site. Everything not explicitly listed here stays in
+# the repository and is not published.
 CNAME
 favicon.svg
 index.html
@@ -10,6 +10,14 @@ AboutUs.dc.html
 ContactUs.dc.html
 FaqAndHelp.dc.html
 Legal.dc.html
+
+# Renovation guide hub and five owner-reviewed guides
+Renovation Guides.dc.html
+guides/how-to-read-hdb-floor-plan.html
+guides/floor-plan-concept-visualisation.html
+guides/hdb-bto-layout-planning.html
+guides/hdb-resale-layout-planning.html
+guides/concept-visualisation-limitations.html
 
 # Search discovery
 robots.txt
