@@ -5,9 +5,11 @@
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <title>Concept Visualisation: What It Can and Cannot Tell You</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Learn what a floor-plan concept can help you discuss—and why dimensions, site conditions, fit, construction and HDB requirements still need verification.">
+<meta name="theme-color" content="#f6f4ef">
+<meta name="description" content="Learn what a floor-plan concept can help you discuss, and why dimensions, site conditions, fit, construction and HDB requirements still need verification.">
 <link rel="canonical" href="https://homeandme.sg/guides/concept-visualisation-limitations.html">
 <script src="../support.js"></script>
+<script src="../guide-navigation.js" defer></script>
 </head>
 <body>
 <x-dc>
@@ -20,17 +22,61 @@
 html { scroll-behavior: smooth; }
 body { margin: 0; background: #f6f4ef; color: #14191b; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 body::after { content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: 0.05; background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNDAnIGhlaWdodD0nMTQwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44NScgbnVtT2N0YXZlcz0nMycvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPScxNDAnIGhlaWdodD0nMTQwJyBmaWx0ZXI9J3VybCgjbiknLz48L3N2Zz4="); }
-a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
+a { color: #14191b; text-decoration: none; touch-action: manipulation; } a:hover { color: #5a7e8a; }
+h1, h2, h3 { text-wrap: balance; }
+.skip-link { position: fixed; top: 10px; left: 16px; z-index: 80; transform: translateY(-150%); border-radius: 5px; background: #14191b; color: #f6f4ef; padding: 12px 16px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; }
+.skip-link:focus { transform: translateY(0); color: #f6f4ef; }
+[data-menu-toggle] { display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid rgba(20,25,27,0.25); border-radius: 999px; background: transparent; color: #14191b; font-size: 18px; line-height: 1; cursor: pointer; touch-action: manipulation; }
+[data-mobile-menu][data-menu-state="closed"] { display: none; }
+[data-mobile-menu] { position: fixed; inset: 0; z-index: 75; overflow-y: auto; overscroll-behavior: contain; background: #14191b; padding: 94px clamp(24px, 6vw, 48px) calc(38px + env(safe-area-inset-bottom, 0px)); }
+.mobile-menu-close { position: absolute; top: 16px; right: clamp(16px, 4vw, 44px); display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid rgba(246,244,239,0.38); border-radius: 999px; background: transparent; color: #f6f4ef; font-size: 23px; line-height: 1; cursor: pointer; touch-action: manipulation; }
+.mobile-menu-nav { display: grid; max-width: 720px; margin: 0 auto; font-family: 'Oswald', sans-serif; font-size: clamp(22px, 6vw, 26px); letter-spacing: 2.4px; }
+.mobile-menu-nav a { color: #f6f4ef; padding: 14px 0; border-bottom: 1px solid rgba(246,244,239,0.14); }
+.mobile-menu-nav a[data-contact] { color: #a9c4cc; }
+.mobile-menu-nav a[data-menu-cta] { justify-self: start; margin-top: 22px; border: 0; border-radius: 999px; background: #f6f4ef; color: #14191b; padding: 16px 28px; font-size: 14px; }
+[data-menu-toggle]:focus-visible, [data-tabbar] a:focus-visible { outline: 3px solid #5a7e8a; outline-offset: 3px; }
+.mobile-menu-close:focus-visible, .mobile-menu-nav a:focus-visible { outline: 3px solid #a9c4cc; outline-offset: 3px; }
+[data-tabbar] svg { display: block; width: 21px; height: 21px; }
 @keyframes hnmRise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
-@media (max-width: 1120px) { [data-navlinks] > a:not([data-cta]) { display: none !important; } }
-@media (max-width: 980px) { [data-two] { grid-template-columns: 1fr !important; } [data-sticky] { position: static !important; } [data-toc] { display: none !important; } }
+[data-guidehero] { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(430px, 1.1fr); gap: clamp(30px, 5vw, 72px); align-items: end; }
+.guide-hero-visual { margin: 0; min-width: 0; animation: hnmRise 0.9s ease 0.14s both; }
+.guide-hero-visual img, .guide-visual-story img { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; border: 1px solid rgba(20,25,27,0.14); border-radius: 5px; }
+.guide-hero-visual figcaption { margin: 11px 0 0; color: #4a5350; font-size: 13px; line-height: 1.55; text-wrap: pretty; }
+.guide-visual-story { display: block; margin: 54px 0; max-width: 960px; overflow: hidden; border: 1px solid rgba(20,25,27,0.14); border-radius: 5px; background: #fdfcfa; }
+.guide-visual-story figure { margin: 0; min-width: 0; }
+.guide-visual-story img { height: auto; min-height: 0; border: 0; border-bottom: 1px solid rgba(20,25,27,0.12); border-radius: 0; }
+.guide-visual-notes { display: flex; flex-direction: column; justify-content: center; gap: 18px; padding: clamp(24px, 3.2vw, 38px); }
+.guide-visual-notes h3 { margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(26px, 3vw, 36px); font-weight: 400; line-height: 1.08; letter-spacing: -0.4px; }
+.guide-visual-notes dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 3vw, 28px); margin: 0; }
+.guide-visual-notes dt { margin: 0 0 3px; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2px; color: #5a7e8a; }
+.guide-visual-notes dd { margin: 0; color: #4a5350; font-size: 14.5px; line-height: 1.56; text-wrap: pretty; }
+.guide-visual-note { margin: 0; padding-top: 14px; border-top: 1px solid rgba(20,25,27,0.12); color: #4a5350; font-size: 12.5px; line-height: 1.55; text-wrap: pretty; }
+@media (max-width: 1120px) { [data-navlinks] { display: none !important; } [data-menu-toggle] { display: flex !important; } }
+@media (max-width: 700px) { [data-tabbar] { display: grid !important; } footer { padding-bottom: 96px !important; } }
+@media (max-width: 980px) {
+  [data-two] { grid-template-columns: 1fr !important; }
+  [data-sticky] { position: static !important; }
+  [data-toc] { display: block !important; min-width: 0; overflow-x: auto; padding-bottom: 10px; scroll-snap-type: x proximity; scrollbar-color: #5a7e8a transparent; }
+  [data-toc] nav { display: flex !important; gap: 10px; width: max-content; }
+  [data-toc] nav a { flex: 0 0 min(76vw, 290px); box-sizing: border-box; padding: 14px !important; border: 1px solid rgba(20,25,27,0.14) !important; border-radius: 5px; background: #fdfcfa; scroll-snap-align: start; }
+}
+@media (max-width: 980px) {
+  [data-guidehero] { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 720px) { .guide-visual-notes dl { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .guide-visual-notes { padding: 23px 21px 25px; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
+}
 </style>
 </helmet>
 <div>
+  <a class="skip-link" href="#main-content">SKIP TO CONTENT</a>
   <header style="position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.92); border-bottom: 1px solid rgba(20,25,27,0.12); backdrop-filter: blur(18px);">
     <div style="max-width: 1360px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 44px); height: 78px; display: flex; align-items: center; gap: 30px;">
-      <a href="../Home%20Direct.dc.html" style="display: flex; align-items: center;"><img src="../assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 42px; width: auto;"></a>
-      <nav data-navlinks="1" style="display: flex; gap: 30px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 2.4px;">
+      <a href="../Home%20Direct.dc.html" style="display: flex; align-items: center;"><img src="../assets/images/hnm-logo.png" alt="Home &amp; Me" width="168" height="168" style="height: 42px; width: auto;"></a>
+      <nav aria-label="Primary" data-navlinks="1" style="display: flex; gap: 30px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 2.4px;">
         <a href="../Home%20Direct.dc.html#direct" style="padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">WHY DIRECT</a>
         <a href="../Home%20Direct.dc.html#how" style="padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">HOW IT WORKS</a>
         <a href="../Home%20Direct.dc.html#portfolio" style="padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">OUR WORK</a>
@@ -38,22 +84,45 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         <a href="../Home%20Direct.dc.html#faq" style="padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">FAQ</a>
               <a data-cta="1" href="../Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 2.2px; background: #5a7e8a; color: #fff; padding: 13px 26px; border-radius: 999px; white-space: nowrap;" style-hover="background: #14191b; color: #fff;">UPLOAD FLOOR PLAN</a>
       </nav>
+      <button data-menu-toggle type="button" aria-expanded="false" aria-controls="guide-mobile-menu" aria-label="Open navigation">☰</button>
     </div>
   </header>
 
-  <div style="padding: 22px clamp(16px, 4vw, 44px) 0;">
-    <div style="max-width: 1360px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #a9b0ad;">
-      <a href="../Home%20Direct.dc.html" style="color: #8a908c;">HOME</a><span>/</span>
-      <a href="../Renovation%20Guides.dc.html" style="color: #8a908c;">RENOVATION GUIDES</a><span>/</span>
-      <span style="color: #5a7e8a;">WHAT CONCEPTS CAN & CANNOT TELL YOU</span>
-    </div>
+  <div id="guide-mobile-menu" data-mobile-menu data-menu-state="closed" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site navigation">
+    <button class="mobile-menu-close" data-menu-close type="button" aria-label="Close navigation">×</button>
+    <nav class="mobile-menu-nav" aria-label="Mobile">
+      <a href="../Home%20Direct.dc.html#direct">WHY DIRECT</a>
+      <a href="../Home%20Direct.dc.html#how">HOW IT WORKS</a>
+      <a href="../Home%20Direct.dc.html#portfolio">OUR WORK</a>
+      <a href="../Renovation%20Guides.dc.html" aria-current="page" style="color: #a9c4cc;">RENOVATION GUIDES</a>
+      <a href="../Home%20Direct.dc.html#faq">FAQ</a>
+      <a data-contact href="../ContactUs.dc.html">CONTACT US</a>
+      <a data-contact href="https://wa.me/6588376196" target="_blank" rel="noopener">WHATSAPP US</a>
+      <a data-menu-cta href="../Renovation%20Enquiry.dc.html">UPLOAD FLOOR PLAN</a>
+    </nav>
   </div>
 
-  <section style="padding: clamp(34px, 5vw, 62px) clamp(16px, 4vw, 44px) clamp(24px, 3vw, 40px);">
-    <div style="max-width: 1360px; margin: 0 auto;">
-      <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 24px; display: flex; align-items: center; gap: 14px;"><span style="width: 40px; height: 1px; background: #5a7e8a;"></span>GUIDE 05 · LIMITS</p>
-      <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(36px, 6vw, 78px); line-height: 1.0; letter-spacing: -1.2px; margin: 0 0 26px; max-width: 22ch; animation: hnmRise 0.9s ease both;">Concept visualisation: what it can and cannot tell you</h1>
-      <p style="font-size: clamp(16px, 1.8vw, 19px); line-height: 1.68; color: #4a5350; margin: 0; max-width: 62ch; text-wrap: pretty; animation: hnmRise 0.9s ease 0.1s both;">A convincing image makes a renovation idea easier to discuss. It can show a design direction, bring spatial relationships into view and expose questions a written brief hides. It cannot turn uncertain source material into measured fact.</p>
+  <main id="main-content">
+
+  <div style="padding: 22px clamp(16px, 4vw, 44px) 0;">
+    <nav aria-label="Breadcrumb" style="max-width: 1360px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #a9b0ad;">
+      <a href="../Home%20Direct.dc.html" style="color: #8a908c;">HOME</a><span aria-hidden="true">/</span>
+      <a href="../Renovation%20Guides.dc.html" style="color: #8a908c;">RENOVATION GUIDES</a><span aria-hidden="true">/</span>
+      <span aria-current="page" style="color: #5a7e8a;">WHAT CONCEPTS CAN &amp; CANNOT TELL YOU</span>
+    </nav>
+  </div>
+
+  <section style="padding: clamp(34px, 5vw, 62px) clamp(16px, 4vw, 44px) clamp(38px, 5vw, 64px);">
+    <div data-guidehero="1" style="max-width: 1360px; margin: 0 auto;">
+      <div style="min-width: 0;">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 22px; display: flex; align-items: center; gap: 14px;"><span style="width: 40px; height: 1px; background: #5a7e8a;"></span>VISUALISATION LIMITS</p>
+        <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(38px, 4.4vw, 56px); line-height: 1.0; letter-spacing: -0.9px; margin: 0 0 22px; max-width: 15ch; animation: hnmRise 0.9s ease both;">What a concept can clarify, not prove</h1>
+        <p style="font-size: clamp(16px, 1.7vw, 18.5px); line-height: 1.66; color: #4a5350; margin: 0; max-width: 48ch; text-wrap: pretty; animation: hnmRise 0.9s ease 0.1s both;">Use images to compare design direction and room relationships. They do not prove dimensions, existing conditions, fit or renovation feasibility.</p>
+      </div>
+      <figure class="guide-hero-visual">
+        <img src="../assets/portfolio/modern-classic-3-room-hdb-design-01-kitchen.jpg" alt="Modern Classic 3-room HDB kitchen with blue cabinetry, worktops and appliances, shown as a Home &amp; Me project visual" width="1600" height="800" loading="eager" fetchpriority="high">
+        <figcaption>Home &amp; Me project visual. It can communicate colour and cabinetry direction, but cannot confirm product fit, service locations or construction readiness.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -61,27 +130,27 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
     <div data-two="1" style="max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 260px 1fr; gap: clamp(30px, 5vw, 76px);">
       <aside data-toc="1" data-sticky="1" style="position: sticky; top: 108px; align-self: start; min-width: 0;">
         <p style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 8px;">ON THIS PAGE</p>
-        <nav style="display: grid;">
+        <nav aria-label="On this page" style="display: grid;">
           <a href="#the-six-evidence-layers-behind-a-responsible-concept" style="display: flex; gap: 12px; font-size: 13.5px; line-height: 1.5; color: #4a5350; padding: 9px 0; border-bottom: 1px solid rgba(20,25,27,0.09);" style-hover="color: #5a7e8a;"><span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #a9b0ad; padding-top: 2px;">01</span>The six evidence layers behind a responsible concept</a>
           <a href="#what-concept-visualisation-can-help-you-do" style="display: flex; gap: 12px; font-size: 13.5px; line-height: 1.5; color: #4a5350; padding: 9px 0; border-bottom: 1px solid rgba(20,25,27,0.09);" style-hover="color: #5a7e8a;"><span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #a9b0ad; padding-top: 2px;">02</span>What concept visualisation can help you do</a>
           <a href="#what-it-cannot-establish" style="display: flex; gap: 12px; font-size: 13.5px; line-height: 1.5; color: #4a5350; padding: 9px 0; border-bottom: 1px solid rgba(20,25,27,0.09);" style-hover="color: #5a7e8a;"><span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #a9b0ad; padding-top: 2px;">03</span>What it cannot establish</a>
           <a href="#a-practical-verification-checklist" style="display: flex; gap: 12px; font-size: 13.5px; line-height: 1.5; color: #4a5350; padding: 9px 0; border-bottom: 1px solid rgba(20,25,27,0.09);" style-hover="color: #5a7e8a;"><span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #a9b0ad; padding-top: 2px;">04</span>A practical verification checklist</a>
-          <a href="#a-five-station-order-for-any-future-3d-workflow" style="display: flex; gap: 12px; font-size: 13.5px; line-height: 1.5; color: #4a5350; padding: 9px 0; border-bottom: 1px solid rgba(20,25,27,0.09);" style-hover="color: #5a7e8a;"><span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #a9b0ad; padding-top: 2px;">05</span>A five-station order for any future 3D workflow</a>
+          <a href="#a-five-station-order-for-any-future-3d-workflow" style="display: flex; gap: 12px; font-size: 13.5px; line-height: 1.5; color: #4a5350; padding: 9px 0; border-bottom: 1px solid rgba(20,25,27,0.09);" style-hover="color: #5a7e8a;"><span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #a9b0ad; padding-top: 2px;">05</span>A five-step order for any future 3D workflow</a>
         </nav>
       </aside>
       <div style="min-width: 0;">
         <div style="border: 1px solid rgba(90,126,138,0.34); background: rgba(90,126,138,0.07); border-radius: 5px; padding: 24px 26px; max-width: 68ch;">
           <p style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.6px; color: #5a7e8a; margin: 0 0 10px;">ENQUIRY STATUS · LIVE</p>
-          <p style="font-size: 16px; line-height: 1.7; color: #2f3739; margin: 0; text-wrap: pretty;">Our floor-plan enquiry journey is live — upload your plan, choose rooms and trades, and request an itemised quote. Floor-plan-to-3D is still in development; concept imagery remains an educational discussion aid, not a construction document.</p>
+          <p style="font-size: 16px; line-height: 1.7; color: #2f3739; margin: 0; text-wrap: pretty;">Our floor-plan enquiry journey is live. Upload your plan, choose rooms and trades, and request an itemised quote. Floor-plan-to-3D is still in development; concept imagery remains an educational discussion aid, not a construction document.</p>
         </div>
       <section id="the-six-evidence-layers-behind-a-responsible-concept" style="scroll-margin-top: 100px;">
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.08; letter-spacing: -0.5px; margin: 54px 0 20px;">The six evidence layers behind a responsible concept</h2>
         <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">These layers answer different questions. Moving to a more polished layer does not repair missing evidence in an earlier one.</p>
         <ol style="display: grid; gap: 11px; margin: 0 0 24px; padding: 0 0 0 22px; max-width: 68ch;">
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Identified source plan.</strong> The exact drawing being used, with its source, flat identity, date or revision if shown, page completeness and readable content recorded. Evidence of what that document shows — not automatic proof of the flat’s present condition.</li>
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Plan-derived proposal.</strong> Lines, openings, rooms or scale interpreted from the source, with ambiguity recorded. Non-authoritative geometry; it must not fill gaps merely because a feature seems typical.</li>
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Human-reviewed, correctable canonical geometry.</strong> A person checks and corrects the versioned geometry proposal before it controls dependent 3D, layout or render outputs. It remains a correctable proposal — not surveyed, as-built or construction truth.</li>
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Concept imagery.</strong> Colours, materials, furniture and viewpoints communicate a possible direction. An image cannot create, change or prove authoritative geometry.</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Identified source plan.</strong> The exact drawing being used, with its source, flat identity, date or revision if shown, page completeness and readable content recorded. This is evidence of what that document shows, not automatic proof of the flat’s present condition.</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Plan-derived proposal.</strong> An early layout proposal based on lines, openings, rooms or scale interpreted from the source, with ambiguity recorded. It is not a measured record and must not fill gaps because a feature seems typical.</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Human-reviewed layout proposal.</strong> A person checks and corrects the versioned proposal before it guides later 3D views, layouts, images or fit checks. It remains a correctable proposal, not surveyed, as-built or construction truth.</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Concept imagery.</strong> Colours, materials, furniture and viewpoints communicate a possible direction. An image cannot create, change or prove the reviewed layout proposal.</li>
           <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Measured or observed site evidence.</strong> Lawfully obtained measurements, dated observations and appropriate inspections describe particular accessible conditions within their scope.</li>
           <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Site, as-built, construction and regulatory truth.</strong> Verified measurements, records, specifications, current official requirements, approvals and qualified assessments. What is required depends on the proposed work.</li>
         </ol>
@@ -97,7 +166,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
           <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">decide which choices can remain conceptual and which need later verification;</li>
           <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">revise a brief when household needs or evidence change.</li>
         </ul>
-        <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">The concept is useful when it makes uncertainty easier to manage — not when it hides uncertainty behind realism.</p>
+        <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">The concept is useful when it makes uncertainty easier to manage, not when it hides uncertainty behind realism.</p>
       </section>
       <section id="what-it-cannot-establish" style="scroll-margin-top: 100px;">
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.08; letter-spacing: -0.5px; margin: 54px 0 20px;">What it cannot establish</h2>
@@ -117,9 +186,23 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
           <p style="font-size: 16px; line-height: 1.7; color: #2f3739; margin: 0; text-wrap: pretty;">Visual realism is not evidence of any item on that list. The image cannot prove what is hidden, what has changed on site, what an authority will accept, or what a qualified person must assess.</p>
         </div>
       </section>
+      <aside class="guide-visual-story" aria-label="Project visual showing details that an image cannot verify">
+        <figure>
+          <img src="../assets/portfolio/modern-classic-3-room-hdb-design-01-master-bathroom.jpg" alt="Home &amp; Me modern classic bathroom project visual with a vanity, toilet, shower screen and dark wall finishes" width="1600" height="800" loading="lazy">
+        </figure>
+        <div class="guide-visual-notes">
+          <h3>Visual clarity is not site evidence</h3>
+          <dl>
+            <div><dt>THE IMAGE CAN SHOW</dt><dd>Colour direction, fixture relationships and the intended feel of the room.</dd></div>
+            <div><dt>THE IMAGE CANNOT SHOW</dt><dd>Concealed services, waterproofing condition, exact fit or construction feasibility.</dd></div>
+            <div><dt>THE NEXT STEP</dt><dd>Check approvals against current official sources, use site measurements for dimensions, and ask the appropriate qualified person about technical questions.</dd></div>
+          </dl>
+          <p class="guide-visual-note">Home &amp; Me project visual. Its polish does not turn uncertain inputs into verified facts.</p>
+        </div>
+      </aside>
       <section id="a-practical-verification-checklist" style="scroll-margin-top: 100px;">
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.08; letter-spacing: -0.5px; margin: 54px 0 20px;">A practical verification checklist</h2>
-        <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">Before relying on any floor-plan concept, write down the answers — or mark them unresolved.</p>
+        <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">Before relying on any floor-plan concept, write down the answers, or mark them unresolved.</p>
         <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(23px, 2.6vw, 30px); line-height: 1.16; letter-spacing: -0.3px; margin: 36px 0 14px;">Source and revision</h3>
         <ul style="display: grid; gap: 11px; margin: 0 0 24px; padding: 0 0 0 22px; max-width: 68ch;">
           <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">What exact plan or sheet is being used, where did it come from, and is it the correct flat and revision?</li>
@@ -128,9 +211,9 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         </ul>
         <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(23px, 2.6vw, 30px); line-height: 1.16; letter-spacing: -0.3px; margin: 36px 0 14px;">Proposal and uncertainty</h3>
         <ul style="display: grid; gap: 11px; margin: 0 0 24px; padding: 0 0 0 22px; max-width: 68ch;">
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">Which geometry is explicitly supported by the source, and which parts are interpretations?</li>
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">Who reviewed the canonical geometry, which revision controls dependent outputs, and what remains uncertain?</li>
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">Is concept imagery clearly subordinate to that revision rather than treated as geometry evidence?</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">Which parts of the layout are explicitly supported by the source, and which parts are interpretations?</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">Who reviewed the layout proposal, which revision guides later layouts, images and fit checks, and what remains uncertain?</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">Is concept imagery clearly subordinate to that revision rather than treated as layout evidence?</li>
         </ul>
         <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(23px, 2.6vw, 30px); line-height: 1.16; letter-spacing: -0.3px; margin: 36px 0 14px;">Dimensions and site checks</h3>
         <ul style="display: grid; gap: 11px; margin: 0 0 24px; padding: 0 0 0 22px; max-width: 68ch;">
@@ -141,7 +224,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(23px, 2.6vw, 30px); line-height: 1.16; letter-spacing: -0.3px; margin: 36px 0 14px;">Official and qualified checks</h3>
         <ul style="display: grid; gap: 11px; margin: 0 0 24px; padding: 0 0 0 22px; max-width: 68ch;">
           <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">Which current official requirements or approvals apply to the proposed work?</li>
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">Which structural, MEP, safety, accessibility, defect or construction questions need the appropriately qualified person?</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">Which structural, mechanical, electrical, plumbing, safety, accessibility, defect or construction questions need the appropriate qualified person?</li>
           <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">Has current information been checked for this exact decision rather than assumed from an old summary?</li>
         </ul>
         <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(23px, 2.6vw, 30px); line-height: 1.16; letter-spacing: -0.3px; margin: 36px 0 14px;">Products, tolerances and access</h3>
@@ -158,14 +241,14 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         </ul>
         <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(23px, 2.6vw, 30px); line-height: 1.16; letter-spacing: -0.3px; margin: 36px 0 14px;">Revision when evidence changes</h3>
         <ul style="display: grid; gap: 11px; margin: 0 0 24px; padding: 0 0 0 22px; max-width: 68ch;">
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">If site evidence conflicts with the proposal, will canonical geometry be corrected rather than the evidence ignored?</li>
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">Will every dependent layout, 3D view, render and fit check be invalidated and reviewed against the new revision?</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">If site evidence conflicts with the proposal, will the reviewed layout proposal be corrected rather than the evidence ignored?</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;">Will every later layout, 3D view, render and fit check be reviewed against the new revision?</li>
         </ul>
       </section>
       <section id="a-five-station-order-for-any-future-3d-workflow" style="scroll-margin-top: 100px;">
-        <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.08; letter-spacing: -0.5px; margin: 54px 0 20px;">A five-station order for any future 3D workflow</h2>
-        <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">Address context, then source floor plan, then human-reviewed geometry before any 3D, then design choice, then a separately reviewed itemised quote.</p>
-        <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">This is the evidence order a future 3D workflow must follow, not a claim that 3D is live today. Address context organises a case but does not prove layout or condition. The exact source plan comes next. Human review and correction must happen before any 3D depends on the geometry. Design remains a choice layered over that geometry. The quote is separately reviewed against scope and evidence — it is never generated or authorised by an image.</p>
+        <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.08; letter-spacing: -0.5px; margin: 54px 0 20px;">A five-step order for any future 3D workflow</h2>
+        <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">Address context, then source floor plan, then a human-reviewed layout proposal before any 3D, then design choice, then a separately reviewed itemised quote.</p>
+        <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">This is the evidence order a future 3D workflow must follow, not a claim that 3D is live today. Address context organises a case but does not prove layout or condition. The exact source plan comes next. Human review and correction must happen before any 3D depends on the layout proposal. Design remains a choice layered over that proposal. The quote is separately reviewed against scope and evidence. It is never generated or authorised by an image.</p>
       </section>
 
         <section id="faq" style="scroll-margin-top: 100px; margin-top: 64px;">
@@ -188,12 +271,12 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
           <p style="font-size: 16.5px; line-height: 1.7; color: #4a5350; margin: 0; max-width: 66ch; text-wrap: pretty;">No. Concept visualisation is not a regulatory assessment or approval. Requirements and the evidence needed for a particular proposal must be checked through current official sources and qualified channels.</p>
         </div>
         <div style="border-top: 1px solid rgba(20,25,27,0.14); padding: 26px 0;">
-          <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(20px, 2.2vw, 25px); line-height: 1.2; margin: 0 0 12px;">If the image and canonical geometry disagree, which one controls?</h3>
-          <p style="font-size: 16.5px; line-height: 1.7; color: #4a5350; margin: 0; max-width: 66ch; text-wrap: pretty;">Canonical geometry controls dependent 3D, layouts and renders. The image must be corrected or invalidated; it cannot overwrite the geometry. Reviewed geometry is still a correctable proposal until the applicable site and approval evidence exists.</p>
+          <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(20px, 2.2vw, 25px); line-height: 1.2; margin: 0 0 12px;">If the image and reviewed layout proposal disagree, which one controls?</h3>
+          <p style="font-size: 16.5px; line-height: 1.7; color: #4a5350; margin: 0; max-width: 66ch; text-wrap: pretty;">The reviewed layout proposal guides later 3D views, layouts and renders. The image must be corrected or withdrawn; it cannot overwrite the proposal. That proposal still needs the applicable site and approval evidence.</p>
         </div>
         <div style="border-top: 1px solid rgba(20,25,27,0.14); padding: 26px 0;">
           <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(20px, 2.2vw, 25px); line-height: 1.2; margin: 0 0 12px;">What should happen when site evidence conflicts with the proposal?</h3>
-          <p style="font-size: 16.5px; line-height: 1.7; color: #4a5350; margin: 0; max-width: 66ch; text-wrap: pretty;">Preserve the conflict, verify that the evidence applies to the correct place and decision, and correct the canonical geometry where warranted. Then invalidate and review every dependent output. Do not adjust or ignore site evidence to protect an attractive concept.</p>
+          <p style="font-size: 16.5px; line-height: 1.7; color: #4a5350; margin: 0; max-width: 66ch; text-wrap: pretty;">Preserve the conflict, verify that the evidence applies to the correct place and decision, and correct the reviewed layout proposal where warranted. Then revisit every later layout, image and fit check. Do not adjust or ignore site evidence to protect an attractive concept.</p>
         </div>
         <div style="border-top: 1px solid rgba(20,25,27,0.14); padding: 26px 0;">
           <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(20px, 2.2vw, 25px); line-height: 1.2; margin: 0 0 12px;">Is human review the same as an as-built survey?</h3>
@@ -207,7 +290,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         <a href="floor-plan-concept-visualisation.html" style="display: flex; flex-direction: column; gap: 10px; border: 1px solid rgba(20,25,27,0.14); border-radius: 5px; padding: 26px 26px 22px; background: #fdfcfa; transition: border-color 0.3s ease, transform 0.3s ease;" style-hover="border-color: #5a7e8a; transform: translateY(-3px);">
           <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.4px; color: #5a7e8a;">GUIDE 02</span>
           <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 25px; line-height: 1.16;">Concept visualisation</span>
-          <span style="font-size: 15px; line-height: 1.6; color: #4a5350;">How a human-reviewed concept is built, station by station.</span>
+          <span style="font-size: 15px; line-height: 1.6; color: #4a5350;">How a human-reviewed concept is built, step by step.</span>
         </a>
         <a href="how-to-read-hdb-floor-plan.html" style="display: flex; flex-direction: column; gap: 10px; border: 1px solid rgba(20,25,27,0.14); border-radius: 5px; padding: 26px 26px 22px; background: #fdfcfa; transition: border-color 0.3s ease, transform 0.3s ease;" style-hover="border-color: #5a7e8a; transform: translateY(-3px);">
           <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.4px; color: #5a7e8a;">GUIDE 01</span>
@@ -227,6 +310,8 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
     </div>
   </section>
 
+  </main>
+
   <section style="padding: clamp(56px, 8vw, 110px) clamp(16px, 4vw, 44px); background: #14191b;">
     <div style="max-width: 1360px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 34px;">
       <div>
@@ -239,7 +324,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
 
   <footer style="padding: 44px clamp(16px, 4vw, 44px); border-top: 1px solid rgba(20,25,27,0.12);">
     <div style="max-width: 1360px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 24px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #8a908c;">
-      <a href="../Home%20Direct.dc.html"><img src="../assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 30px; width: auto;"></a>
+      <a href="../Home%20Direct.dc.html"><img src="../assets/images/hnm-logo.png" alt="Home &amp; Me" width="168" height="168" loading="lazy" style="height: 30px; width: auto;"></a>
       <a href="../Home%20Direct.dc.html" style="color: #4a5350;">HOME</a>
       <a href="../AboutUs.dc.html" style="color: #4a5350;">ABOUT US</a>
       <a href="../Renovation%20Guides.dc.html" style="color: #4a5350;">RENOVATION GUIDES</a>
@@ -247,6 +332,13 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
       <span style="margin-left: auto;">© HOME&amp;ME · EDUCATIONAL GUIDE, NOT PROFESSIONAL ADVICE.</span>
     </div>
   </footer>
+
+  <nav aria-label="Mobile shortcuts" data-tabbar="1" style="display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 66; background: rgba(255,255,255,0.96); backdrop-filter: blur(16px); border-top: 1px solid rgba(20,25,27,0.1); padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px)); grid-template-columns: repeat(4, 1fr);">
+    <a href="../Home%20Direct.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 4l9 6.5M5.5 9.5V20h13V9.5"></path></svg><span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">HOME</span></a>
+    <a href="../Renovation%20Guides.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #5a7e8a;"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5h7v6H3zM14 6.5h7v11h-7zM3 15.5h7v2H3z"></path></svg><span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">GUIDES</span></a>
+    <a href="../Renovation%20Enquiry.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4zM4 10h16M10 10v10M14 4v6"></path></svg><span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">ENQUIRY</span></a>
+    <a href="https://wa.me/6588376196" target="_blank" rel="noopener" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 9 9 0 0 1-3.9-.9L3 21l1.9-4.6A8.4 8.4 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5z"></path></svg><span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">CHAT</span></a>
+  </nav>
 </div>
 </x-dc>
 </body>

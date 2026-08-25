@@ -5,9 +5,11 @@
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <title>HDB Resale Layout Planning | Plan vs Existing Condition</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f4ef">
 <meta name="description" content="Plan a resale HDB layout by separating source-plan evidence from existing conditions, recording uncertainties and deferring site-dependent decisions.">
 <link rel="canonical" href="https://homeandme.sg/guides/hdb-resale-layout-planning.html">
 <script src="../support.js"></script>
+<script src="../guide-navigation.js" defer></script>
 </head>
 <body>
 <x-dc>
@@ -20,17 +22,61 @@
 html { scroll-behavior: smooth; }
 body { margin: 0; background: #f6f4ef; color: #14191b; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 body::after { content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: 0.05; background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNDAnIGhlaWdodD0nMTQwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44NScgbnVtT2N0YXZlcz0nMycvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPScxNDAnIGhlaWdodD0nMTQwJyBmaWx0ZXI9J3VybCgjbiknLz48L3N2Zz4="); }
-a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
+a { color: #14191b; text-decoration: none; touch-action: manipulation; } a:hover { color: #5a7e8a; }
+h1, h2, h3 { text-wrap: balance; }
+.skip-link { position: fixed; top: 10px; left: 16px; z-index: 80; transform: translateY(-150%); border-radius: 5px; background: #14191b; color: #f6f4ef; padding: 12px 16px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; }
+.skip-link:focus { transform: translateY(0); color: #f6f4ef; }
+[data-menu-toggle] { display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid rgba(20,25,27,0.25); border-radius: 999px; background: transparent; color: #14191b; font-size: 18px; line-height: 1; cursor: pointer; touch-action: manipulation; }
+[data-mobile-menu][data-menu-state="closed"] { display: none; }
+[data-mobile-menu] { position: fixed; inset: 0; z-index: 75; overflow-y: auto; overscroll-behavior: contain; background: #14191b; padding: 94px clamp(24px, 6vw, 48px) calc(38px + env(safe-area-inset-bottom, 0px)); }
+.mobile-menu-close { position: absolute; top: 16px; right: clamp(16px, 4vw, 44px); display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid rgba(246,244,239,0.38); border-radius: 999px; background: transparent; color: #f6f4ef; font-size: 23px; line-height: 1; cursor: pointer; touch-action: manipulation; }
+.mobile-menu-nav { display: grid; max-width: 720px; margin: 0 auto; font-family: 'Oswald', sans-serif; font-size: clamp(22px, 6vw, 26px); letter-spacing: 2.4px; }
+.mobile-menu-nav a { color: #f6f4ef; padding: 14px 0; border-bottom: 1px solid rgba(246,244,239,0.14); }
+.mobile-menu-nav a[data-contact] { color: #a9c4cc; }
+.mobile-menu-nav a[data-menu-cta] { justify-self: start; margin-top: 22px; border: 0; border-radius: 999px; background: #f6f4ef; color: #14191b; padding: 16px 28px; font-size: 14px; }
+[data-menu-toggle]:focus-visible, [data-tabbar] a:focus-visible { outline: 3px solid #5a7e8a; outline-offset: 3px; }
+.mobile-menu-close:focus-visible, .mobile-menu-nav a:focus-visible { outline: 3px solid #a9c4cc; outline-offset: 3px; }
+[data-tabbar] svg { display: block; width: 21px; height: 21px; }
 @keyframes hnmRise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
-@media (max-width: 1120px) { [data-navlinks] > a:not([data-cta]) { display: none !important; } }
-@media (max-width: 980px) { [data-two] { grid-template-columns: 1fr !important; } [data-sticky] { position: static !important; } [data-toc] { display: none !important; } }
+[data-guidehero] { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(430px, 1.1fr); gap: clamp(30px, 5vw, 72px); align-items: end; }
+.guide-hero-visual { margin: 0; min-width: 0; animation: hnmRise 0.9s ease 0.14s both; }
+.guide-hero-visual img, .guide-visual-story img { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; border: 1px solid rgba(20,25,27,0.14); border-radius: 5px; }
+.guide-hero-visual figcaption { margin: 11px 0 0; color: #4a5350; font-size: 13px; line-height: 1.55; text-wrap: pretty; }
+.guide-visual-story { display: block; margin: 54px 0; max-width: 960px; overflow: hidden; border: 1px solid rgba(20,25,27,0.14); border-radius: 5px; background: #fdfcfa; }
+.guide-visual-story figure { margin: 0; min-width: 0; }
+.guide-visual-story img { height: auto; min-height: 0; border: 0; border-bottom: 1px solid rgba(20,25,27,0.12); border-radius: 0; }
+.guide-visual-notes { display: flex; flex-direction: column; justify-content: center; gap: 18px; padding: clamp(24px, 3.2vw, 38px); }
+.guide-visual-notes h3 { margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(26px, 3vw, 36px); font-weight: 400; line-height: 1.08; letter-spacing: -0.4px; }
+.guide-visual-notes dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 3vw, 28px); margin: 0; }
+.guide-visual-notes dt { margin: 0 0 3px; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2px; color: #5a7e8a; }
+.guide-visual-notes dd { margin: 0; color: #4a5350; font-size: 14.5px; line-height: 1.56; text-wrap: pretty; }
+.guide-visual-note { margin: 0; padding-top: 14px; border-top: 1px solid rgba(20,25,27,0.12); color: #4a5350; font-size: 12.5px; line-height: 1.55; text-wrap: pretty; }
+@media (max-width: 1120px) { [data-navlinks] { display: none !important; } [data-menu-toggle] { display: flex !important; } }
+@media (max-width: 700px) { [data-tabbar] { display: grid !important; } footer { padding-bottom: 96px !important; } }
+@media (max-width: 980px) {
+  [data-two] { grid-template-columns: 1fr !important; }
+  [data-sticky] { position: static !important; }
+  [data-toc] { display: block !important; min-width: 0; overflow-x: auto; padding-bottom: 10px; scroll-snap-type: x proximity; scrollbar-color: #5a7e8a transparent; }
+  [data-toc] nav { display: flex !important; gap: 10px; width: max-content; }
+  [data-toc] nav a { flex: 0 0 min(76vw, 290px); box-sizing: border-box; padding: 14px !important; border: 1px solid rgba(20,25,27,0.14) !important; border-radius: 5px; background: #fdfcfa; scroll-snap-align: start; }
+}
+@media (max-width: 980px) {
+  [data-guidehero] { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 720px) { .guide-visual-notes dl { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .guide-visual-notes { padding: 23px 21px 25px; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
+}
 </style>
 </helmet>
 <div>
+  <a class="skip-link" href="#main-content">SKIP TO CONTENT</a>
   <header style="position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.92); border-bottom: 1px solid rgba(20,25,27,0.12); backdrop-filter: blur(18px);">
     <div style="max-width: 1360px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 44px); height: 78px; display: flex; align-items: center; gap: 30px;">
-      <a href="../Home%20Direct.dc.html" style="display: flex; align-items: center;"><img src="../assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 42px; width: auto;"></a>
-      <nav data-navlinks="1" style="display: flex; gap: 30px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 2.4px;">
+      <a href="../Home%20Direct.dc.html" style="display: flex; align-items: center;"><img src="../assets/images/hnm-logo.png" alt="Home &amp; Me" width="168" height="168" style="height: 42px; width: auto;"></a>
+      <nav aria-label="Primary" data-navlinks="1" style="display: flex; gap: 30px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 2.4px;">
         <a href="../Home%20Direct.dc.html#direct" style="padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">WHY DIRECT</a>
         <a href="../Home%20Direct.dc.html#how" style="padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">HOW IT WORKS</a>
         <a href="../Home%20Direct.dc.html#portfolio" style="padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">OUR WORK</a>
@@ -38,22 +84,45 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         <a href="../Home%20Direct.dc.html#faq" style="padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">FAQ</a>
               <a data-cta="1" href="../Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 2.2px; background: #5a7e8a; color: #fff; padding: 13px 26px; border-radius: 999px; white-space: nowrap;" style-hover="background: #14191b; color: #fff;">UPLOAD FLOOR PLAN</a>
       </nav>
+      <button data-menu-toggle type="button" aria-expanded="false" aria-controls="guide-mobile-menu" aria-label="Open navigation">☰</button>
     </div>
   </header>
 
-  <div style="padding: 22px clamp(16px, 4vw, 44px) 0;">
-    <div style="max-width: 1360px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #a9b0ad;">
-      <a href="../Home%20Direct.dc.html" style="color: #8a908c;">HOME</a><span>/</span>
-      <a href="../Renovation%20Guides.dc.html" style="color: #8a908c;">RENOVATION GUIDES</a><span>/</span>
-      <span style="color: #5a7e8a;">HDB RESALE LAYOUT PLANNING</span>
-    </div>
+  <div id="guide-mobile-menu" data-mobile-menu data-menu-state="closed" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site navigation">
+    <button class="mobile-menu-close" data-menu-close type="button" aria-label="Close navigation">×</button>
+    <nav class="mobile-menu-nav" aria-label="Mobile">
+      <a href="../Home%20Direct.dc.html#direct">WHY DIRECT</a>
+      <a href="../Home%20Direct.dc.html#how">HOW IT WORKS</a>
+      <a href="../Home%20Direct.dc.html#portfolio">OUR WORK</a>
+      <a href="../Renovation%20Guides.dc.html" aria-current="page" style="color: #a9c4cc;">RENOVATION GUIDES</a>
+      <a href="../Home%20Direct.dc.html#faq">FAQ</a>
+      <a data-contact href="../ContactUs.dc.html">CONTACT US</a>
+      <a data-contact href="https://wa.me/6588376196" target="_blank" rel="noopener">WHATSAPP US</a>
+      <a data-menu-cta href="../Renovation%20Enquiry.dc.html">UPLOAD FLOOR PLAN</a>
+    </nav>
   </div>
 
-  <section style="padding: clamp(34px, 5vw, 62px) clamp(16px, 4vw, 44px) clamp(24px, 3vw, 40px);">
-    <div style="max-width: 1360px; margin: 0 auto;">
-      <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 24px; display: flex; align-items: center; gap: 14px;"><span style="width: 40px; height: 1px; background: #5a7e8a;"></span>GUIDE 04 · RESALE</p>
-      <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(36px, 6vw, 78px); line-height: 1.0; letter-spacing: -1.2px; margin: 0 0 26px; max-width: 22ch; animation: hnmRise 0.9s ease both;">HDB resale layout planning: plan versus existing condition</h1>
-      <p style="font-size: clamp(16px, 1.8vw, 19px); line-height: 1.68; color: #4a5350; margin: 0; max-width: 62ch; text-wrap: pretty; animation: hnmRise 0.9s ease 0.1s both;">A resale flat has at least two evidence layers: the source plan you can identify, and the physical condition that can be lawfully observed and later measured. They may not answer the same questions. The goal is not to make them agree by assumption.</p>
+  <main id="main-content">
+
+  <div style="padding: 22px clamp(16px, 4vw, 44px) 0;">
+    <nav aria-label="Breadcrumb" style="max-width: 1360px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #a9b0ad;">
+      <a href="../Home%20Direct.dc.html" style="color: #8a908c;">HOME</a><span aria-hidden="true">/</span>
+      <a href="../Renovation%20Guides.dc.html" style="color: #8a908c;">RENOVATION GUIDES</a><span aria-hidden="true">/</span>
+      <span aria-current="page" style="color: #5a7e8a;">HDB RESALE LAYOUT PLANNING</span>
+    </nav>
+  </div>
+
+  <section style="padding: clamp(34px, 5vw, 62px) clamp(16px, 4vw, 44px) clamp(38px, 5vw, 64px);">
+    <div data-guidehero="1" style="max-width: 1360px; margin: 0 auto;">
+      <div style="min-width: 0;">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 22px; display: flex; align-items: center; gap: 14px;"><span style="width: 40px; height: 1px; background: #5a7e8a;"></span>RESALE LAYOUT PLANNING</p>
+        <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(38px, 4.4vw, 56px); line-height: 1.0; letter-spacing: -0.9px; margin: 0 0 22px; max-width: 15ch; animation: hnmRise 0.9s ease both;">Plan a resale layout with evidence</h1>
+        <p style="font-size: clamp(16px, 1.7vw, 18.5px); line-height: 1.66; color: #4a5350; margin: 0; max-width: 48ch; text-wrap: pretty; animation: hnmRise 0.9s ease 0.1s both;">Treat the source plan and the flat's lawfully observed condition as separate evidence. Record differences rather than forcing them to agree, then verify critical dimensions after possession.</p>
+      </div>
+      <figure class="guide-hero-visual">
+        <img src="../assets/portfolio/industrial-4-room-hdb-design-01-master-bathroom.jpg" alt="Industrial 4-room HDB master bathroom with a shower enclosure, vanity and toilet, shown as a Home &amp; Me project visual" width="1600" height="800" loading="eager" fetchpriority="high">
+        <figcaption>Home &amp; Me project visual. Visible finishes cannot establish hidden services, waterproofing condition or actual dimensions; use site measurements and the appropriate qualified checks.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -61,7 +130,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
     <div data-two="1" style="max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 260px 1fr; gap: clamp(30px, 5vw, 76px);">
       <aside data-toc="1" data-sticky="1" style="position: sticky; top: 108px; align-self: start; min-width: 0;">
         <p style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.6px; color: #8a908c; margin: 0 0 8px;">ON THIS PAGE</p>
-        <nav style="display: grid;">
+        <nav aria-label="On this page" style="display: grid;">
           <a href="#before-a-viewing-identify-the-source-not-a-typical-layout" style="display: flex; gap: 12px; font-size: 13.5px; line-height: 1.5; color: #4a5350; padding: 9px 0; border-bottom: 1px solid rgba(20,25,27,0.09);" style-hover="color: #5a7e8a;"><span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #a9b0ad; padding-top: 2px;">01</span>Before a viewing: identify the source, not a typical layout</a>
           <a href="#write-the-household-brief-without-pretending-fit-is-known" style="display: flex; gap: 12px; font-size: 13.5px; line-height: 1.5; color: #4a5350; padding: 9px 0; border-bottom: 1px solid rgba(20,25,27,0.09);" style-hover="color: #5a7e8a;"><span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #a9b0ad; padding-top: 2px;">02</span>Write the household brief without pretending fit is known</a>
           <a href="#during-a-viewing-or-other-lawful-observation" style="display: flex; gap: 12px; font-size: 13.5px; line-height: 1.5; color: #4a5350; padding: 9px 0; border-bottom: 1px solid rgba(20,25,27,0.09);" style-hover="color: #5a7e8a;"><span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #a9b0ad; padding-top: 2px;">03</span>During a viewing or other lawful observation</a>
@@ -74,7 +143,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
       <div style="min-width: 0;">
         <div style="border: 1px solid rgba(90,126,138,0.34); background: rgba(90,126,138,0.07); border-radius: 5px; padding: 24px 26px; max-width: 68ch;">
           <p style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.6px; color: #5a7e8a; margin: 0 0 10px;">ENQUIRY STATUS · LIVE</p>
-          <p style="font-size: 16px; line-height: 1.7; color: #2f3739; margin: 0; text-wrap: pretty;">Our floor-plan enquiry journey is live — upload your floor plan, choose your rooms and trades, and request an itemised contractor quote. This guide is educational: reading it does not start a job.</p>
+          <p style="font-size: 16px; line-height: 1.7; color: #2f3739; margin: 0; text-wrap: pretty;">Our floor-plan enquiry journey is live. Upload your floor plan, choose your rooms and trades, and request an itemised contractor quote. This guide is educational: reading it does not start a job.</p>
         </div>
       <section id="before-a-viewing-identify-the-source-not-a-typical-layout" style="scroll-margin-top: 100px;">
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.08; letter-spacing: -0.5px; margin: 54px 0 20px;">Before a viewing: identify the source, not a typical layout</h2>
@@ -116,6 +185,20 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         </ul>
         <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">Use neutral language: “not shown”, “not observed”, “appears different”, “to verify”. A photograph or viewing note documents what was visible at that moment; it does not establish concealed condition, compliance, alteration history or construction feasibility.</p>
       </section>
+      <aside class="guide-visual-story" aria-label="Home and Me project visual with reminders about resale conditions that need separate verification">
+        <figure>
+          <img src="../assets/portfolio/industrial-4-room-hdb-design-01-kitchen.jpg" alt="Home &amp; Me industrial kitchen project visual with worktops, appliances, a window and a narrow passage" width="1600" height="800" loading="lazy">
+        </figure>
+        <div class="guide-visual-notes">
+          <h3>Keep what you see separate from what you know</h3>
+          <dl>
+            <div><dt>VISIBLE</dt><dd>Record openings, fixtures, finishes and the clear paths you can lawfully observe.</dd></div>
+            <div><dt>STILL UNKNOWN</dt><dd>Do not infer concealed services, waterproofing or condition from appearance.</dd></div>
+            <div><dt>NEXT EVIDENCE</dt><dd>After possession, measure critical fit and have the appropriate qualified person check technical questions.</dd></div>
+          </dl>
+          <p class="guide-visual-note">Home &amp; Me project visual. It is a planning reference, not evidence of the existing condition in your flat.</p>
+        </div>
+      </aside>
       <section id="build-a-plan-versus-condition-record" style="scroll-margin-top: 100px;">
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.08; letter-spacing: -0.5px; margin: 54px 0 20px;">Build a plan-versus-condition record</h2>
         <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">A simple record keeps the evidence honest. For each item, note what the source shows, what was lawfully observed, and what evidence comes next.</p>
@@ -130,11 +213,11 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
           </div>
           <div style="background: #fdfcfa; padding: 22px 24px; display: grid; gap: 9px;">
             <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #14191b; margin: 0;">FIXTURE OR SERVICE</p>
-            <p style="font-size: 15.5px; line-height: 1.62; color: #4a5350; margin: 0;"><strong style="color: #14191b; font-weight: 500;">Plan says:</strong> record only explicit marks<br><strong style="color: #14191b; font-weight: 500;">Observed:</strong> note visible presence or obstruction<br><strong style="color: #14191b; font-weight: 500;">Next evidence:</strong> records, measurement and the relevant specialist</p>
+            <p style="font-size: 15.5px; line-height: 1.62; color: #4a5350; margin: 0;"><strong style="color: #14191b; font-weight: 500;">Plan says:</strong> record only explicit marks<br><strong style="color: #14191b; font-weight: 500;">Observed:</strong> note visible presence or obstruction<br><strong style="color: #14191b; font-weight: 500;">Next evidence:</strong> records, measurement and the appropriate qualified person</p>
           </div>
           <div style="background: #fdfcfa; padding: 22px 24px; display: grid; gap: 9px;">
             <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #14191b; margin: 0;">FURNITURE OR STORAGE ZONE</p>
-            <p style="font-size: 15.5px; line-height: 1.62; color: #4a5350; margin: 0;"><strong style="color: #14191b; font-weight: 500;">Plan says:</strong> plan-derived proposal only<br><strong style="color: #14191b; font-weight: 500;">Observed:</strong> note apparent constraints — fit unproven<br><strong style="color: #14191b; font-weight: 500;">Next evidence:</strong> measured condition, product data, installation access</p>
+            <p style="font-size: 15.5px; line-height: 1.62; color: #4a5350; margin: 0;"><strong style="color: #14191b; font-weight: 500;">Plan says:</strong> plan-derived proposal only<br><strong style="color: #14191b; font-weight: 500;">Observed:</strong> note apparent constraints; fit unproven<br><strong style="color: #14191b; font-weight: 500;">Next evidence:</strong> measured condition, product data, installation access</p>
           </div>
           <div style="background: #fdfcfa; padding: 22px 24px; display: grid; gap: 9px;">
             <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #14191b; margin: 0;">CONDITION OR DEFECT QUESTION</p>
@@ -146,23 +229,23 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
       <section id="after-possession-measure-check-and-revise" style="scroll-margin-top: 100px;">
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.08; letter-spacing: -0.5px; margin: 54px 0 20px;">After possession: measure, check and revise</h2>
         <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">When you have lawful access and permission for the relevant activity, measure the conditions that control a decision using appropriate methods. Compare openings, boundaries, fixtures, obstructions and finished dimensions with the source and record discrepancies. Seek current official information and qualified assessment for structure, mechanical, electrical and plumbing systems, safety, accessibility, regulatory matters, defects and construction feasibility.</p>
-        <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">Revisit circulation, storage, adjacency and furniture zones using the measured evidence. Include product dimensions, tolerances and installation access where fit matters. If evidence conflicts with the proposal, correct the geometry proposal and reassess every dependent layout or image. Do not protect an attractive option from inconvenient site evidence.</p>
+        <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">Revisit circulation, storage, adjacency and furniture zones using the measured evidence. Include product dimensions, tolerances and installation access where fit matters. If evidence conflicts with the proposal, correct the layout proposal and reassess every later layout or image. Do not protect an attractive option from inconvenient site evidence.</p>
       </section>
       <section id="keep-six-layers-distinct" style="scroll-margin-top: 100px;">
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.08; letter-spacing: -0.5px; margin: 54px 0 20px;">Keep six layers distinct</h2>
         <ol style="display: grid; gap: 11px; margin: 0 0 24px; padding: 0 0 0 22px; max-width: 68ch;">
           <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Source plan.</strong> The exact identified drawing and its explicit content. It does not automatically describe the current physical flat.</li>
           <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Observed existing condition.</strong> Dated, limited observations made during lawful access. Not a survey, inspection or concealed-condition finding.</li>
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Plan-derived proposal.</strong> An interpretation with recorded uncertainty. Non-authoritative geometry.</li>
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Human-reviewed canonical geometry.</strong> Versioned, correctable proposed geometry reviewed by a person before it controls later 3D or layout work.</li>
-          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Concept imagery.</strong> A visual aid for discussing a direction. It cannot override canonical geometry and is not dimensional evidence.</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Plan-derived proposal.</strong> An early layout proposal with recorded uncertainty. It is not a measured record.</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Human-reviewed layout proposal.</strong> A versioned, correctable proposal reviewed by a person before it guides later 3D or layout work.</li>
+          <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Concept imagery.</strong> A visual aid for discussing a direction. It cannot override the reviewed layout proposal and is not dimensional evidence.</li>
           <li style="font-size: 16.5px; line-height: 1.7; color: #2f3739; text-wrap: pretty;"><strong style="font-weight: 500;">Site, as-built and construction truth.</strong> Appropriate measurements, records, specifications, current official requirements and qualified assessments.</li>
         </ol>
         <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">The first five do not guarantee the sixth. Everything plan-derived remains non-as-built, non-survey, non-inspection, non-construction and non-regulatory.</p>
       </section>
       <section id="what-to-defer" style="scroll-margin-top: 100px;">
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.08; letter-spacing: -0.5px; margin: 54px 0 20px;">What to defer</h2>
-        <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">Defer wall-removal conclusions, changes to openings or services, concealed-condition or defect conclusions, final fitted dimensions, furniture or appliance fit, structural and MEP decisions, regulatory conclusions, construction methods, procurement quantities, prices, timelines and commitments until the necessary measurements, records, current official information and qualified checks exist.</p>
+        <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">Defer wall-removal conclusions, changes to openings or services, concealed-condition or defect conclusions, final fitted dimensions, furniture or appliance fit, structural, mechanical, electrical and plumbing decisions, regulatory conclusions, construction methods, procurement quantities, prices, timelines and commitments until the necessary measurements, records, current official information and qualified checks exist.</p>
         <p style="font-size: 17px; line-height: 1.76; color: #2f3739; margin: 0 0 20px; max-width: 68ch; text-wrap: pretty;">Deferral is useful: it identifies exactly what evidence must arrive before a decision becomes responsible.</p>
       </section>
 
@@ -225,6 +308,8 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
     </div>
   </section>
 
+  </main>
+
   <section style="padding: clamp(56px, 8vw, 110px) clamp(16px, 4vw, 44px); background: #14191b;">
     <div style="max-width: 1360px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 34px;">
       <div>
@@ -237,7 +322,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
 
   <footer style="padding: 44px clamp(16px, 4vw, 44px); border-top: 1px solid rgba(20,25,27,0.12);">
     <div style="max-width: 1360px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 24px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #8a908c;">
-      <a href="../Home%20Direct.dc.html"><img src="../assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 30px; width: auto;"></a>
+      <a href="../Home%20Direct.dc.html"><img src="../assets/images/hnm-logo.png" alt="Home &amp; Me" width="168" height="168" loading="lazy" style="height: 30px; width: auto;"></a>
       <a href="../Home%20Direct.dc.html" style="color: #4a5350;">HOME</a>
       <a href="../AboutUs.dc.html" style="color: #4a5350;">ABOUT US</a>
       <a href="../Renovation%20Guides.dc.html" style="color: #4a5350;">RENOVATION GUIDES</a>
@@ -245,6 +330,13 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
       <span style="margin-left: auto;">© HOME&amp;ME · EDUCATIONAL GUIDE, NOT PROFESSIONAL ADVICE.</span>
     </div>
   </footer>
+
+  <nav aria-label="Mobile shortcuts" data-tabbar="1" style="display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 66; background: rgba(255,255,255,0.96); backdrop-filter: blur(16px); border-top: 1px solid rgba(20,25,27,0.1); padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px)); grid-template-columns: repeat(4, 1fr);">
+    <a href="../Home%20Direct.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 4l9 6.5M5.5 9.5V20h13V9.5"></path></svg><span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">HOME</span></a>
+    <a href="../Renovation%20Guides.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #5a7e8a;"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5h7v6H3zM14 6.5h7v11h-7zM3 15.5h7v2H3z"></path></svg><span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">GUIDES</span></a>
+    <a href="../Renovation%20Enquiry.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4zM4 10h16M10 10v10M14 4v6"></path></svg><span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">ENQUIRY</span></a>
+    <a href="https://wa.me/6588376196" target="_blank" rel="noopener" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 9 9 0 0 1-3.9-.9L3 21l1.9-4.6A8.4 8.4 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5z"></path></svg><span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">CHAT</span></a>
+  </nav>
 </div>
 </x-dc>
 </body>
