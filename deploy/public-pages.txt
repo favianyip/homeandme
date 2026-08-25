@@ -25,6 +25,7 @@ sitemap.xml
 
 # Public runtime
 support.js
+guide-navigation.js
 
 # Brand marks
 assets/images/hnm-logo.png
