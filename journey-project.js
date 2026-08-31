@@ -79,11 +79,12 @@ export function contractToProject(contract, options = {}) {
         id: o.id,
         storeyId,
         wallId: o.wall,
-        kind: o.kind || 'opening',
+        kind: o.kind ?? 'opening',
         span: { startRatio: o.t0, endRatio: o.t1, width: o.width },
-        height: o.height || (o.kind === 'window' ? 1200 : 2100),
+        height: o.height ?? (o.kind === 'window' ? 1200 : 2100),
         sill: o.sill == null ? (o.kind === 'window' ? 900 : 0) : o.sill,
-        handing: o.handing || 'unknown',
+        handing: o.handing ?? 'unknown',
+        reviewedUsage: o.reviewedUsage ?? 'unspecified',
         between: o.between || [],
         confidence: o.confidence,
       })),
@@ -96,6 +97,8 @@ export function contractToProject(contract, options = {}) {
         boundary: r.poly || [],
         anchor: centroid(r.poly),
         areaM2: r.areaM2,
+        minDim: r.minDim,
+        labelSuspect: r.labelSuspect,
         confidence: r.confidence,
       })),
       // Reserved first-class geometry for the correction editor and future detectors.
@@ -120,7 +123,7 @@ export function validateProject(project) {
   const ids = new Set();
   for (const group of ['walls', 'openings', 'spaces', 'columns', 'shafts', 'beams']) {
     for (const item of (project && project.geometry && project.geometry[group]) || []) {
-      if (!item.id) errors.push(`${group} item has no id`);
+      if (typeof item.id !== 'string' || !item.id.trim()) errors.push(`${group} item has invalid id`);
       else if (ids.has(item.id)) errors.push(`duplicate geometry id: ${item.id}`);
       ids.add(item.id);
     }

@@ -26,6 +26,8 @@ jobs:
           node --check journey-geometry-ops.js
           node --check journey-service-workflow.js
           node --check journey-model-artifacts.js
+          node --check journey-release-dossier.js
+          node --check private-design-selection-workflow.js
           node --check journey-topology-gate.js
           node --check project-journey-model.js
           node --check project-journey.js
@@ -71,10 +73,17 @@ jobs:
             sleep 0.1
           done
           test "$server_ready" = true
-          for fixture in project-journey-lifecycle.browser.html project-journey-model-reference.browser.html; do
+          for fixture in project-journey-lifecycle.browser.html project-journey-model-reference.browser.html project-journey-release-dossier.browser.html; do
             result="/tmp/hnm-browser-${fixture//[^A-Za-z0-9]/-}.html"
             "$browser_bin" --headless --no-sandbox --disable-gpu --virtual-time-budget=8000 --dump-dom \
               "http://127.0.0.1:4173/tests/$fixture" >"$result"
+            grep -q 'data-result="pass"' "$result"
+          done
+          for viewport in 1440,1000 500,844; do
+            result="/tmp/hnm-private-design-selection-${viewport//,/-}.html"
+            "$browser_bin" --headless --no-sandbox --disable-gpu --window-size="$viewport" \
+              --virtual-time-budget=8000 --dump-dom \
+              "http://127.0.0.1:4173/tests/private-design-selection-workflow.browser.html" >"$result"
             grep -q 'data-result="pass"' "$result"
           done
       - name: Reject backend files from public Pages source

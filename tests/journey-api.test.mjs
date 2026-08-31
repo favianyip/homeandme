@@ -1,7 +1,16 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { HomeAndMeProjectApi, journeyConfig, pollJob } from '../journey-api.js';
+import {
+  applyServiceCapabilities,
+  HomeAndMeProjectApi,
+  journeyConfig,
+  pollJob,
+  SERVICE_CAPABILITY_ORDER,
+  SERVICE_CAPABILITY_SCHEMA,
+  SERVICE_CONTRACTS,
+  validateServiceCapabilities,
+} from '../journey-api.js';
 import { createRenderRequest } from '../journey-render-contract.js';
 
 function response(status, payload) {
@@ -19,6 +28,24 @@ function memoryStorage(initial = {}) {
   return {
     getItem: (key) => data.get(key) || null,
     setItem: (key, value) => data.set(key, value),
+  };
+}
+
+function capabilityManifest({
+  releaseId = 'a'.repeat(40),
+  runtimeEnvironment = 'production',
+  serviceReady = true,
+  capabilities = Object.fromEntries(SERVICE_CAPABILITY_ORDER.map((name) => [name, true])),
+  contracts = SERVICE_CONTRACTS,
+} = {}) {
+  return {
+    schema: SERVICE_CAPABILITY_SCHEMA,
+    releaseId,
+    runtimeEnvironment,
+    serviceReady,
+    contracts: { ...contracts },
+    capabilities: { ...capabilities },
+    dependencyOrder: [...SERVICE_CAPABILITY_ORDER],
   };
 }
 
@@ -63,6 +90,79 @@ test('a configured non-local project API must use HTTPS even before rollout', ()
     () => journeyConfig(undefined, { apiBaseUrl: 'http://api.example', flags: {} }),
     /must use HTTPS/,
   );
+});
+
+test('public capabilities require an exact production release pin and contract set', () => {
+  const config = journeyConfig(undefined, {
+    apiBaseUrl: 'https://api.homeandme.sg',
+    expectedServiceReleaseId: 'a'.repeat(40),
+    flags: Object.fromEntries(SERVICE_CAPABILITY_ORDER.map((name) => [name, true])),
+  });
+  const manifest = capabilityManifest({
+    capabilities: {
+      AI_ANALYSIS_ENABLED: true,
+      GEOMETRY_REVIEW_ENABLED: true,
+      LIVE_3D_ENABLED: true,
+      AI_RENDERING_ENABLED: true,
+      QUOTATION_ENABLED: true,
+      PAYMENTS_ENABLED: false,
+    },
+  });
+
+  const effective = applyServiceCapabilities(config, manifest);
+
+  assert.equal(effective.flags.QUOTATION_ENABLED, true);
+  assert.equal(effective.flags.PAYMENTS_ENABLED, false);
+  assert.deepEqual(effective.serviceVerification, {
+    schema: SERVICE_CAPABILITY_SCHEMA,
+    releaseId: 'a'.repeat(40),
+    runtimeEnvironment: 'production',
+    serviceReady: true,
+  });
+  assert.throws(
+    () => applyServiceCapabilities({ ...config, expectedServiceReleaseId: 'b'.repeat(40) }, manifest),
+    /release pin/,
+  );
+  assert.throws(
+    () => applyServiceCapabilities({ ...config, expectedServiceReleaseId: '' }, manifest),
+    /release pin/,
+  );
+});
+
+test('capability manifest rejects schema drift, broken dependencies and public staging', () => {
+  const options = { baseUrl: 'https://api.homeandme.sg', expectedReleaseId: 'a'.repeat(40) };
+  const extra = { ...capabilityManifest(), unexpected: true };
+  assert.throws(() => validateServiceCapabilities(extra, options), /incompatible/);
+
+  const broken = capabilityManifest({ capabilities: {
+    AI_ANALYSIS_ENABLED: false,
+    GEOMETRY_REVIEW_ENABLED: true,
+    LIVE_3D_ENABLED: false,
+    AI_RENDERING_ENABLED: false,
+    QUOTATION_ENABLED: false,
+    PAYMENTS_ENABLED: false,
+  } });
+  assert.throws(() => validateServiceCapabilities(broken, options), /without its dependency/);
+
+  const staging = capabilityManifest({ runtimeEnvironment: 'staging' });
+  assert.throws(() => validateServiceCapabilities(staging, options), /non-production/);
+
+  const drifted = capabilityManifest({ contracts: { ...SERVICE_CONTRACTS, geometry: 'new-unreviewed/2' } });
+  assert.throws(() => validateServiceCapabilities(drifted, options), /contracts/);
+});
+
+test('capability lookup is public, session-free and credentialed only by HttpOnly cookie', async () => {
+  const requests = [];
+  const manifest = capabilityManifest();
+  const api = new HomeAndMeProjectApi({
+    baseUrl: 'https://api.homeandme.sg', storage: memoryStorage(),
+    fetchImpl: async (url, init) => { requests.push({ url, init }); return response(200, manifest); },
+  });
+
+  assert.deepEqual(await api.capabilities(), manifest);
+  assert.equal(requests[0].url, 'https://api.homeandme.sg/api/v1/capabilities');
+  assert.equal(requests[0].init.credentials, 'include');
+  assert.equal(requests[0].init.headers.Authorization, undefined);
 });
 
 test('client persists only the project ID and relies on an HttpOnly cookie', async () => {

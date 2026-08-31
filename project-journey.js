@@ -1,4 +1,8 @@
-import { journeyConfig } from './journey-api.js';
+import {
+  applyServiceCapabilities,
+  journeyConfig,
+  SERVICE_CAPABILITY_ORDER,
+} from './journey-api.js';
 import {
   createJourneyServiceWorkflow,
   WorkflowGuardError,
@@ -19,6 +23,13 @@ import {
   modelArtifactContract,
   modelReviewApprovalState,
 } from './journey-model-artifacts.js';
+import { buildLayoutReviewPreview } from './journey-layout-review.js';
+import {
+  designReferenceSelection,
+  validateDesignReferenceCatalog,
+} from './journey-design-references.js';
+import { verifyPixelMetricRegistrationIntegrity } from './journey-source-registration.js';
+import { journeyReleaseDossier } from './journey-release-dossier.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -140,6 +151,7 @@ export class ProjectJourneyApp {
     this.editorContext = null;
     this.editorReady = false;
     this.pendingCorrection = null;
+    this.editingVerticalProposal = false;
     this.previewEpoch = 0;
     this.previewReceipts = { model: null, render: null };
     this.workbench = $('#workbench');
@@ -151,6 +163,7 @@ export class ProjectJourneyApp {
     addEventListener('pagehide', this.onPageHide, { once: true });
     $('#editorClose').addEventListener('click', () => this.editorDialog.close());
     this.editorDialog.addEventListener('close', () => {
+      if (this.editorContext?.source?.imageUrl) URL.revokeObjectURL(this.editorContext.source.imageUrl);
       this.editorReady = false;
       this.editorContext = null;
       this.editorFrame.removeAttribute('src');
@@ -163,6 +176,31 @@ export class ProjectJourneyApp {
       return;
     }
     this.workflow = createJourneyServiceWorkflow({ baseUrl: this.config.apiBaseUrl });
+    try {
+      this.config = applyServiceCapabilities(
+        this.config,
+        await this.workflow.api.capabilities(),
+      );
+      this.availability = serviceAvailability(this.config);
+    } catch (error) {
+      const disabledFlags = { ...this.config.flags };
+      for (const capability of SERVICE_CAPABILITY_ORDER) disabledFlags[capability] = false;
+      this.config = journeyConfig(undefined, {
+        apiBaseUrl: this.config.apiBaseUrl,
+        expectedServiceReleaseId: this.config.expectedServiceReleaseId,
+        flags: disabledFlags,
+      });
+      this.availability = serviceAvailability(this.config);
+      this.workflow = null;
+      this.error = new Error(`Live service verification failed: ${error.message}`);
+      this.render();
+      return;
+    }
+    if (!this.availability.live) {
+      this.workflow = null;
+      this.render();
+      return;
+    }
     if (this.workflow.api.session?.projectId) {
       await this.execute(async () => this.setState(await this.workflow.resume()), { initial: true });
     } else {
@@ -213,8 +251,21 @@ export class ProjectJourneyApp {
         this.phaseData.geometryAuditError = error.message;
       }
     }
+    if (phase === WorkflowPhase.GEOMETRY_APPROVED) {
+      this.phaseData.designReferenceCatalog = validateDesignReferenceCatalog(
+        await this.workflow.api.designReferences(),
+      );
+    }
+    if (phase === WorkflowPhase.LAYOUT_PREPARATION) {
+      this.phaseData.designBrief = await this.workflow.reviewDesignBrief();
+    }
     if (phase === WorkflowPhase.LAYOUT_REVIEW) {
-      this.phaseData.layouts = await this.workflow.reviewLayouts();
+      const [layouts, geometry] = await Promise.all([
+        this.workflow.reviewLayouts(),
+        this.workflow.api.geometry(),
+      ]);
+      this.phaseData.layouts = layouts;
+      this.phaseData.geometry = geometry;
     }
     if ([WorkflowPhase.MODEL_REVIEW, WorkflowPhase.MODEL_APPROVED].includes(phase)) {
       this.phaseData.model = phase === WorkflowPhase.MODEL_REVIEW
@@ -286,6 +337,7 @@ export class ProjectJourneyApp {
     const geometry = this.phaseData.geometry;
     const items = [
       this.evidenceItem('Runtime', view.availability.live ? 'Authenticated project service' : 'Static concept only', view.availability.live ? 'good' : 'block'),
+      this.evidenceItem('Service release', this.config.serviceVerification?.releaseId ? shortHash(this.config.serviceVerification.releaseId) : 'Not verified', this.config.serviceVerification?.releaseId ? 'good' : 'block'),
       this.evidenceItem('Server state', view.serverState || 'No live project', view.serverState ? 'good' : 'warn'),
       this.evidenceItem('Geometry revision', project.geometryVersion ? `v${project.geometryVersion} · ${shortHash(geometry?.geometrySha256)}` : 'Not created', project.geometryVersion ? 'good' : 'warn'),
       this.evidenceItem('Approved geometry', project.approvedGeometryVersion ? `v${project.approvedGeometryVersion}` : 'Not approved', project.approvedGeometryVersion ? 'good' : 'warn'),
@@ -316,6 +368,7 @@ export class ProjectJourneyApp {
     this.workbench.dataset.busy = String(this.busy);
     if (!view.availability.live) {
       this.renderOffline(view);
+      this.renderError();
       return;
     }
     if (!this.capabilityEnabled()) {
@@ -341,13 +394,49 @@ export class ProjectJourneyApp {
   }
 
   renderOffline(view) {
-    const panel = element('div', { className: 'offline-panel' }, [
+    const dossier = journeyReleaseDossier(this.config);
+    const proof = element('section', {
+      className: 'release-dossier',
+      attrs: { 'aria-labelledby': 'releaseDossierTitle' },
+    }, [
+      element('header', { className: 'release-dossier-head' }, [
+        element('div', {}, [
+          element('span', { className: 'micro-label', text: 'Build / evidence / release' }),
+          element('h4', { id: 'releaseDossierTitle', text: dossier.title }),
+        ]),
+        element('span', { className: 'release-dossier-count', text: '06 receipt gates' }),
+      ]),
+      element('p', { className: 'release-dossier-summary', text: dossier.summary }),
+      element('ol', { className: 'release-dossier-list' }, dossier.stages.map((stage) => element('li', {
+        className: 'release-dossier-step',
+        dataset: { proof: stage.proofState, release: stage.publicState },
+      }, [
+        element('span', { className: 'release-step-number', text: stage.number }),
+        element('div', { className: 'release-step-body' }, [
+          element('div', { className: 'release-step-stamps' }, [
+            element('span', { className: 'release-proof-status', text: stage.proofLabel }),
+            element('span', { className: 'release-public-status', text: stage.publicLabel }),
+          ]),
+          element('h5', { text: stage.label }),
+          element('p', { text: stage.summary }),
+          element('div', { className: 'release-receipt' }, [
+            element('span', { text: 'Receipt chain' }),
+            element('code', { text: stage.receipt }),
+          ]),
+          element('p', { className: 'release-step-boundary', text: stage.boundary }),
+        ]),
+      ]))),
+      element('p', { className: 'release-dossier-boundary', text: dossier.boundary, attrs: { role: 'note' } }),
+      element('div', { className: 'release-dossier-actions' }, [
+        element('a', { className: 'button', text: 'Inspect the verified synthetic reference', href: 'ReviewedReferences.html' }),
+        element('a', { className: 'button secondary', text: 'Talk to a human designer', href: 'ContactUs.dc.html' }),
+      ]),
+    ]);
+    const panel = element('div', { className: 'offline-panel release-status-panel' }, [
       element('div', { className: 'status-knot' }, element('span', { text: '!' })),
       element('h3', { className: 'panel-title', text: view.availability.title }),
       element('p', { className: 'panel-copy', text: view.availability.message }),
-      element('div', { className: 'actions' }, [
-        element('a', { className: 'button secondary', text: 'Talk to a human designer', href: 'ContactUs.dc.html' }),
-      ]),
+      proof,
     ]);
     this.workbench.replaceChildren(panel);
   }
@@ -527,11 +616,22 @@ export class ProjectJourneyApp {
     const geometry = review.geometry;
     const validation = review.validation || {};
     const issues = Array.isArray(validation.issues) ? validation.issues : [];
-    const serverReady = validation.valid === true && issues.length === 0 && geometry.scale_status === 'customer_confirmed';
+    let sourceRegistrationError = null;
+    try {
+      geometryCorrectionSourceBinding(review);
+    } catch (error) {
+      sourceRegistrationError = error.message;
+    }
+    const sourceRegistered = sourceRegistrationError === null;
+    const serverReady = validation.valid === true && issues.length === 0
+      && geometry.scale_status === 'customer_confirmed' && sourceRegistered;
     const confirmation = element('input', { type: 'checkbox', id: 'confirmGeometry' });
     const approve = button('Approve exact 2D revision', 'approve-geometry', { disabled: !serverReady || this.busy });
     approve.addEventListener('click', () => this.approveGeometry(confirmation));
-    const correct = button('Open correction desk', 'open-editor', { secondary: true, disabled: this.busy });
+    const correct = button('Open source-aligned correction desk', 'open-editor', {
+      secondary: true,
+      disabled: this.busy || !sourceRegistered,
+    });
     correct.addEventListener('click', () => this.openEditor());
     const panel = element('div', { className: 'section-panel' }, [
       element('h3', { className: 'panel-title', text: 'Read the proposal like a survey drawing' }),
@@ -543,11 +643,20 @@ export class ProjectJourneyApp {
         this.metric((geometry.rooms || []).length, 'closed rooms'),
       ]),
       this.createPlanSheet(geometry),
-      element('ul', { className: 'issue-list' }, issues.length
-        ? issues.slice(0, 20).map((issue) => element('li', { className: 'issue-item', dataset: { kind: 'block' } }, [
+      element('ul', { className: 'issue-list' }, (issues.length || sourceRegistrationError)
+        ? [
+          ...issues.slice(0, 20).map((issue) => element('li', { className: 'issue-item', dataset: { kind: 'block' } }, [
           element('span', { text: '×' }),
           element('span', {}, [element('b', { text: issue.code || 'Geometry blocker' }), element('span', { text: issue.message || issue.note || 'Review required.' })]),
-        ]))
+          ])),
+          sourceRegistrationError ? element('li', { className: 'issue-item', dataset: { kind: 'block' } }, [
+            element('span', { text: '×' }),
+            element('span', {}, [
+              element('b', { text: 'Source registration unavailable' }),
+              element('span', { text: `${sourceRegistrationError} 2D approval and correction stay locked.` }),
+            ]),
+          ]) : null,
+        ]
         : element('li', { className: 'issue-item', dataset: { kind: serverReady ? 'pass' : 'block' } }, [
           element('span', { text: serverReady ? '✓' : '!' }),
           element('span', {}, [
@@ -623,6 +732,16 @@ export class ProjectJourneyApp {
   async approveGeometry(checkbox) {
     if (!checkbox.checked) { this.error = new Error('Explicitly confirm the exact 2D revision first.'); this.render(); return; }
     const review = this.phaseData.geometry;
+    try {
+      const source = geometryCorrectionSourceBinding(review);
+      // Web Crypto is intentionally awaited at the approval boundary; a well-shaped
+      // but stale affine payload must never reach the mutating service call.
+      await verifyPixelMetricRegistrationIntegrity(source.pixelMetricRegistration);
+    } catch (error) {
+      this.error = new Error(`2D approval remains locked: ${error.message}`);
+      this.render();
+      return;
+    }
     await this.execute(async () => this.setState(await this.workflow.approveGeometry2d({
       geometryVersion: review.geometryVersion,
       geometrySha256: review.geometrySha256,
@@ -632,13 +751,52 @@ export class ProjectJourneyApp {
     })));
   }
 
-  openEditor() {
+  async verifiedCorrectionSource(review) {
+    const source = geometryCorrectionSourceBinding(review);
+    // Keep hashing asynchronous and explicit before any private image URL enters the editor.
+    await verifyPixelMetricRegistrationIntegrity(source.pixelMetricRegistration);
+    const browserEvidenceLimit = 25 * 1024 * 1024;
+    if (source.byteSize > browserEvidenceLimit) {
+      throw new Error('The original upload exceeds the browser correction-evidence limit. Correction stays locked.');
+    }
+    const artifact = await this.workflow.api.artifactPayload(
+      source.sourceArtifactRole,
+      [source.mediaType],
+      browserEvidenceLimit,
+    );
+    if (artifact.bytes.byteLength !== source.byteSize) {
+      throw new Error('The downloaded original upload does not match the server-bound byte size. Correction stays locked.');
+    }
+    const downloadedSha256 = await sha256Bytes(artifact.bytes);
+    if (downloadedSha256 !== source.sourceArtifactSha256) {
+      throw new Error('The downloaded original upload does not match the server-bound SHA-256. Correction stays locked.');
+    }
+    const decoded = await decodePrivateImage(artifact.bytes, artifact.contentType);
+    if (decoded.width !== source.intrinsicPixels.width
+      || decoded.height !== source.intrinsicPixels.height) {
+      URL.revokeObjectURL(decoded.url);
+      throw new Error('The decoded original upload dimensions do not match the server binding. Correction stays locked.');
+    }
+    return {
+      binding: source,
+      bytes: artifact.bytes,
+      contentType: artifact.contentType,
+      imageUrl: decoded.url,
+      imageWidth: decoded.width,
+      imageHeight: decoded.height,
+    };
+  }
+
+  async openEditor() {
     const audit = this.phaseData.geometryAudit;
     if (!audit?.project) { this.error = new Error(this.phaseData.geometryAuditError || 'The current revision could not be opened safely.'); this.render(); return; }
-    this.editorContext = { review: this.phaseData.geometry, project: audit.project };
-    this.editorReady = false;
-    this.editorFrame.src = 'editor.html?mode=service';
-    this.editorDialog.showModal();
+    await this.execute(async () => {
+      const source = await this.verifiedCorrectionSource(this.phaseData.geometry);
+      this.editorContext = { review: this.phaseData.geometry, project: audit.project, source };
+      this.editorReady = false;
+      this.editorFrame.src = 'editor.html?mode=service';
+      this.editorDialog.showModal();
+    });
   }
 
   onEditorMessage(event) {
@@ -646,8 +804,21 @@ export class ProjectJourneyApp {
     if (event.data?.type === 'hnm:editor-ready' && this.editorContext) {
       this.editorReady = true;
       this.editorFrame.contentWindow.postMessage({
-        type: 'hnm:editor-load-project', project: this.editorContext.project,
+        type: 'hnm:editor-load-project',
+        project: this.editorContext.project,
+        sourceUnderlay: {
+          imageUrl: this.editorContext.source.imageUrl,
+          sourceArtifactSha256: this.editorContext.source.binding.sourceArtifactSha256,
+          intrinsicPixels: this.editorContext.source.binding.intrinsicPixels,
+          geometrySha256: this.editorContext.review.geometrySha256,
+          registration: this.editorContext.source.binding.pixelMetricRegistration,
+        },
       }, location.origin);
+    }
+    if (event.data?.type === 'hnm:editor-load-error' && this.editorContext) {
+      this.error = new Error(`The correction editor stayed locked: ${event.data.message || 'source registration could not be loaded.'}`);
+      this.editorDialog.close();
+      this.render();
     }
     if (event.data?.type === 'hnm:editor-submit-project' && this.editorContext) {
       this.submitEditorProject(event.data.project);
@@ -662,28 +833,15 @@ export class ProjectJourneyApp {
       const changes = canonicalGeometryChanges(context.review.geometry, corrected);
       if (!changes.length) throw new Error('The correction desk submitted no canonical wall, opening or room change.');
       const source = geometryCorrectionSourceBinding(context.review);
-      const browserEvidenceLimit = 25 * 1024 * 1024;
-      if (source.byteSize && source.byteSize > browserEvidenceLimit) {
-        throw new Error('The original upload exceeds the browser correction-evidence limit. Correction stays locked.');
-      }
-      const artifact = await this.workflow.api.artifactPayload(
-        source.sourceArtifactRole,
-        source.mediaType ? [source.mediaType] : ['image/png', 'image/jpeg', 'image/webp', 'image/tiff'],
-        browserEvidenceLimit,
-      );
-      if (source.byteSize && artifact.bytes.byteLength !== source.byteSize) {
-        throw new Error('The downloaded original upload does not match the server-bound byte size. Correction stays locked.');
-      }
-      const downloadedSha256 = await sha256Bytes(artifact.bytes);
+      await verifyPixelMetricRegistrationIntegrity(source.pixelMetricRegistration);
+      const downloadedSha256 = await sha256Bytes(context.source.bytes);
       if (downloadedSha256 !== source.sourceArtifactSha256) {
-        throw new Error('The downloaded original upload does not match the server-bound SHA-256. Correction stays locked.');
+        throw new Error('The in-memory original upload no longer matches its immutable SHA-256. Correction stays locked.');
       }
-      const decoded = await decodePrivateImage(artifact.bytes, artifact.contentType);
-      if (source.intrinsicPixels
-        && (decoded.width !== source.intrinsicPixels.width || decoded.height !== source.intrinsicPixels.height)) {
-        URL.revokeObjectURL(decoded.url);
-        throw new Error('The decoded original upload dimensions do not match the server binding. Correction stays locked.');
-      }
+      const evidenceImageUrl = URL.createObjectURL(new Blob(
+        [context.source.bytes],
+        { type: context.source.contentType },
+      ));
       this.clearPendingCorrection();
       this.pendingCorrection = {
         sourceGeometryVersion: context.review.geometryVersion,
@@ -691,9 +849,9 @@ export class ProjectJourneyApp {
         source,
         corrected,
         changes,
-        imageUrl: decoded.url,
-        imageWidth: decoded.width,
-        imageHeight: decoded.height,
+        imageUrl: evidenceImageUrl,
+        imageWidth: context.source.imageWidth,
+        imageHeight: context.source.imageHeight,
         boxes: new Map(),
         notes: new Map(changes.map((change) => [correctionChangeKey(change), ''])),
         mode: 'bounded_edit',
@@ -955,10 +1113,13 @@ export class ProjectJourneyApp {
     const review = this.phaseData.geometry;
     const saved = this.workflow.saved.verticalProposal;
     if (!review?.geometry) { this.renderStopped({ blockedReason: 'Current geometry is unavailable.' }); return; }
-    if (saved) {
+    if (saved && !this.editingVerticalProposal) {
       if (this.state?.blocked) { this.renderStopped({ blockedReason: this.state.blockedReason }); return; }
       if (!saved.review) { this.renderStopped({ blockedReason: 'The exact measured proposal fields are unavailable, so approval remains locked.' }); return; }
       const proposal = saved.review;
+      const topology = saved.validation?.whole_unit_topology;
+      const topologyReady = topology?.ready_for_whole_unit_3d === true;
+      const topologyIssues = Array.isArray(topology?.issues) ? topology.issues : [];
       const sameIds = (left, right) => {
         if (left.length !== right.length) return false;
         const expected = [...left].sort(); const actual = [...right].sort();
@@ -983,14 +1144,18 @@ export class ProjectJourneyApp {
         const opening = openingById.get(item.openingId);
         return element('div', { className: 'review-row' }, [
           element('strong', { text: `${opening?.kind || 'opening'} · ${item.openingId}` }),
-          element('span', { text: `${item.heightMm} mm high · ${item.sillMm} mm sill · ${item.sillMm + item.heightMm} mm head · ${item.swing} swing` }),
+          element('span', { text: `${item.heightMm} mm high · ${item.sillMm} mm sill · ${item.sillMm + item.heightMm} mm head · ${item.swing} swing · ${item.reviewedUsage.replaceAll('_', ' ')}` }),
         ]);
       });
       const confirm = element('input', { type: 'checkbox' });
       const approve = button('Approve measured verticals', 'approve-dimensions', { disabled: true });
-      const sync = () => { approve.disabled = this.busy || !confirm.checked; };
+      const revise = button('Revise measurements or portal roles', 'revise-dimensions', { secondary: true });
+      const correctGeometry = button('Correct walls, rooms or opening positions', 'correct-from-dimensions', { secondary: true });
+      const sync = () => { approve.disabled = this.busy || !confirm.checked || !topologyReady; };
       confirm.addEventListener('change', sync);
       approve.addEventListener('click', () => this.approveDimensions(confirm));
+      revise.addEventListener('click', () => { this.editingVerticalProposal = true; this.render(); });
+      correctGeometry.addEventListener('click', () => this.openEditor());
       this.workbench.replaceChildren(element('div', { className: 'section-panel' }, [
         element('h3', { className: 'panel-title', text: 'The measured vertical proposal is ready' }),
         element('p', { className: 'panel-copy', text: `Proposal v${saved.version} is bound to geometry v${proposal.sourceGeometryVersion}. Review every recorded value below before approval.` }),
@@ -1000,6 +1165,8 @@ export class ProjectJourneyApp {
             this.evidenceItem('Source geometry SHA-256', proposal.sourceGeometrySha256, 'good'),
             this.evidenceItem('2D approval SHA-256', proposal.geometry2dApprovalSha256, 'good'),
             this.evidenceItem('Ceiling', `${proposal.ceilingHeightMm} mm`, 'good'),
+            this.evidenceItem('Primary entrance', topology?.primary_entrance_id || 'Missing or not unique', topology?.primary_entrance_id ? 'good' : 'block'),
+            this.evidenceItem('Rooms reachable', topology ? `${(topology.reachable_room_ids || []).length}/${(topology.required_room_ids || []).length}` : 'No topology evidence', topologyReady ? 'good' : 'block'),
           ]),
           element('section', { className: 'review-group' }, [
             element('h4', { text: `Walls · ${wallRows.length}` }),
@@ -1014,43 +1181,117 @@ export class ProjectJourneyApp {
             element('p', { text: proposal.evidenceNote }),
             element('small', { text: proposal.requiresSiteVerification ? 'Professional site verification remains required.' : 'Site-verification flag missing.' }),
           ]),
+          element('section', { className: 'review-group evidence-note' }, [
+            element('h4', { text: topologyReady ? 'Whole-unit portal graph passed' : 'Whole-unit portal graph is blocked' }),
+            element('p', { text: topologyReady
+              ? 'Exactly one reviewed primary entrance reaches every canonical room through interior doors or passages.'
+              : 'Approval stays locked. Revise each door/window role or return to geometry correction; secondary exterior doors cannot join disconnected room islands through outside.' }),
+            ...(topologyIssues.length
+              ? topologyIssues.map((issue) => element('div', { className: 'review-row' }, [
+                element('strong', { text: issue.code || 'PORTAL_TOPOLOGY_BLOCKER' }),
+                element('span', { text: issue.message || 'Portal review required.' }),
+              ]))
+              : []),
+          ]),
         ]),
-        element('label', { className: 'consent' }, [confirm, element('span', { text: 'I reviewed every wall, door and window height, sill and swing in this proposal and confirm the recorded site-verification evidence.' })]),
-        element('div', { className: 'actions' }, approve),
+        element('label', { className: 'consent' }, [confirm, element('span', { text: 'I reviewed every wall, door and window height, sill, swing and portal role, including the unique entrance and complete room reachability.' })]),
+        element('div', { className: 'actions' }, [revise, correctGeometry, approve]),
       ]));
       return;
     }
     const geometry = review.geometry;
+    const savedReview = this.editingVerticalProposal ? saved?.review : null;
+    const savedOpenings = new Map(
+      (savedReview?.openingDimensions || []).map((item) => [item.openingId, item]),
+    );
+    const topologyBindings = new Map(
+      (review.validation?.whole_unit_topology?.opening_side_bindings || [])
+        .map((item) => [item.opening_id, item]),
+    );
     const form = element('form', { className: 'section-panel' });
-    const ceiling = element('input', { name: 'ceilingHeight', attrs: { type: 'number', min: '2000', max: '6000', step: '1', placeholder: 'Measured mm', required: '' } });
-    const evidence = element('textarea', { name: 'evidence', attrs: { minlength: '10', maxlength: '2000', placeholder: 'How and where were these dimensions measured?', required: '' } });
+    const ceiling = element('input', {
+      name: 'ceilingHeight', value: savedReview?.ceilingHeightMm || '',
+      attrs: { type: 'number', min: '2000', max: '6000', step: '1', placeholder: 'Measured mm', required: '' },
+    });
+    const evidence = element('textarea', {
+      name: 'evidence', value: savedReview?.evidenceNote || '',
+      attrs: { minlength: '10', maxlength: '2000', placeholder: 'How and where were these dimensions measured?', required: '' },
+    });
     const dimensionList = element('div', { className: 'dimension-list' });
     for (const opening of geometry.openings || []) {
-      const height = element('input', { name: `height:${opening.id}`, value: opening.height || '', attrs: { type: 'number', min: '100', max: '6000', step: '1', required: '' } });
-      const sill = element('input', { name: `sill:${opening.id}`, value: opening.sill ?? '', attrs: { type: 'number', min: '0', max: '5000', step: '1', required: '' } });
-      const swingValues = ['left', 'right', 'double', 'sliding', 'none'];
-      const knownSwing = swingValues.includes(opening.swing) ? opening.swing : '';
+      const savedOpening = savedOpenings.get(opening.id);
+      const binding = topologyBindings.get(opening.id);
+      const height = element('input', { name: `height:${opening.id}`, value: savedOpening?.heightMm ?? opening.height ?? '', attrs: { type: 'number', min: '100', max: '6000', step: '1', required: '' } });
+      const sill = element('input', { name: `sill:${opening.id}`, value: savedOpening?.sillMm ?? opening.sill ?? '', attrs: { type: 'number', min: '0', max: '5000', step: '1', required: '' } });
+      const swingValues = opening.kind === 'door'
+        ? ['left', 'right', 'double', 'sliding']
+        : ['none'];
+      const proposedSwing = savedOpening?.swing || opening.swing;
+      const knownSwing = swingValues.includes(proposedSwing) ? proposedSwing : '';
       const swing = element('select', { name: `swing:${opening.id}`, attrs: { required: '' } }, [
         element('option', { value: '', text: 'Choose measured swing', attrs: { disabled: '', ...(knownSwing ? {} : { selected: '' }) } }),
         ...swingValues.map((value) => element('option', { value, text: value, attrs: knownSwing === value ? { selected: '' } : {} })),
       ]);
+      const usageOptions = opening.kind === 'door'
+        ? (binding?.boundary_classification === 'exterior'
+          ? [
+            ['primary_entrance', 'Primary home entrance'],
+            ['secondary_exterior_door', 'Secondary exterior door'],
+          ]
+          : binding?.boundary_classification === 'interior'
+            ? [['interior_door', 'Interior door']]
+            : [
+              ['primary_entrance', 'Primary home entrance'],
+              ['secondary_exterior_door', 'Secondary exterior door'],
+              ['interior_door', 'Interior door'],
+            ])
+        : opening.kind === 'window'
+          ? (binding?.boundary_classification === 'interior'
+            ? [['interior_borrowed_light', 'Interior borrowed-light window']]
+            : binding?.boundary_classification === 'exterior'
+              ? [['exterior_window', 'Exterior window']]
+              : [
+                ['exterior_window', 'Exterior window'],
+                ['interior_borrowed_light', 'Interior borrowed-light window'],
+              ])
+          : [['interior_passage', 'Interior clear passage']];
+      const proposedUsage = savedOpening?.reviewedUsage
+        || opening.reviewed_usage || opening.reviewedUsage || '';
+      const knownUsage = usageOptions.some(([value]) => value === proposedUsage)
+        ? proposedUsage : '';
+      const usage = element('select', { name: `usage:${opening.id}`, attrs: { required: '' } }, [
+        element('option', { value: '', text: 'Choose observed portal role', attrs: { disabled: '', ...(knownUsage ? {} : { selected: '' }) } }),
+        ...usageOptions.map(([value, label]) => element('option', {
+          value, text: label, attrs: knownUsage === value ? { selected: '' } : {},
+        })),
+      ]);
+      const classification = binding?.boundary_classification || 'unresolved';
       dimensionList.append(element('div', { className: 'dimension-card' }, [
         element('strong', { text: `${opening.kind || 'opening'} · ${opening.id}` }),
+        element('small', { text: `Derived wall-side evidence: ${classification.replaceAll('_', ' ')}` }),
         field('Height mm', height), field('Sill mm', sill), field('Swing', swing),
+        field('Observed portal role', usage, { help: 'This is a reviewed fact. The service independently recomputes the two regions on either side of the hosted opening.' }),
       ]));
     }
     const confirmation = element('input', { type: 'checkbox', name: 'confirm', attrs: { required: '' } });
     form.append(
-      element('h3', { className: 'panel-title', text: 'Record the missing third dimension' }),
-      element('p', { className: 'panel-copy', text: 'Plan drawings do not prove ceiling, sill or head heights. Enter observed integer millimetres; every current wall and opening must be covered.' }),
+      element('h3', { className: 'panel-title', text: savedReview ? 'Revise measured verticals and portal roles' : 'Record the missing third dimension' }),
+      element('p', { className: 'panel-copy', text: 'Plan drawings do not prove ceiling, sill, head height or entrance semantics. Enter observed integer millimetres and explicitly review every door, window and clear passage. The service derives connectivity from the geometry; it does not trust the selected label alone.' }),
       element('div', { className: 'form-grid' }, [
         field('Confirmed ceiling height', ceiling, { className: 'full' }),
         field('Measurement evidence', evidence, { className: 'full' }),
       ]),
       dimensionList,
-      element('label', { className: 'consent' }, [confirmation, element('span', { text: 'These values were checked against site evidence. I confirm metric scale and vertical dimensions and accept that professional site verification remains required.' })]),
-      element('div', { className: 'actions' }, button('Create measured proposal', 'propose-dimensions', { type: 'submit', disabled: this.busy })),
+      element('label', { className: 'consent' }, [confirmation, element('span', { text: 'These values and portal roles were checked against drawing/site evidence. I confirm metric scale and vertical dimensions and accept that professional site verification remains required.' })]),
+      element('div', { className: 'actions' }, [
+        ...(savedReview ? [button('Keep current proposal', 'cancel-revise-dimensions', { secondary: true })] : []),
+        button(savedReview ? 'Replace measured proposal' : 'Create measured proposal', 'propose-dimensions', { type: 'submit', disabled: this.busy }),
+      ]),
     );
+    form.querySelector('[data-action="cancel-revise-dimensions"]')?.addEventListener('click', () => {
+      this.editingVerticalProposal = false;
+      this.render();
+    });
     form.addEventListener('submit', (event) => this.proposeDimensions(event, form));
     this.workbench.replaceChildren(form);
   }
@@ -1066,6 +1307,7 @@ export class ProjectJourneyApp {
       heightMm: Number(data.get(`height:${opening.id}`)),
       sillMm: Number(data.get(`sill:${opening.id}`)),
       swing: String(data.get(`swing:${opening.id}`)),
+      reviewedUsage: String(data.get(`usage:${opening.id}`)),
     }));
     await this.execute(async () => {
       await this.workflow.proposeVerticalDimensions({
@@ -1078,6 +1320,7 @@ export class ProjectJourneyApp {
         confirmVerticalDimensions: true,
         requiresSiteVerification: true,
       });
+      this.editingVerticalProposal = false;
       await this.setState(await this.workflow.resume());
     });
   }
@@ -1095,17 +1338,19 @@ export class ProjectJourneyApp {
 
   renderDesignBrief() {
     const rooms = this.phaseData.geometry?.geometry?.rooms || [];
+    const catalog = this.phaseData.designReferenceCatalog;
+    if (!catalog?.references?.length) {
+      this.renderStopped({ blockedReason: 'The rights-cleared design-reference catalog is unavailable. No static style fallback is allowed.' });
+      return;
+    }
     const form = element('form', { className: 'section-panel' });
     const members = element('input', { name: 'members', value: '2', attrs: { type: 'number', min: '1', max: '30', required: '' } });
     const budget = element('input', { name: 'budget', attrs: { type: 'number', min: '0', step: '1000', placeholder: 'Optional SGD' } });
-    const style = element('select', { name: 'style' }, [
-      element('option', { value: 'scandinavian', text: 'Scandinavian' }),
-      element('option', { value: 'japandi', text: 'Japandi' }),
-      element('option', { value: 'minimalist', text: 'Minimalist' }),
-      element('option', { value: 'modern-luxury', text: 'Modern luxury' }),
-      element('option', { value: 'contemporary', text: 'Contemporary' }),
-      element('option', { value: 'custom', text: 'Custom / designer review' }),
-    ]);
+    const reference = element('select', { name: 'designReference', attrs: { required: '' } },
+      catalog.references.map((item) => element('option', {
+        value: item.referenceId,
+        text: `${item.label} · ${shortHash(item.referenceSha256)}`,
+      })));
     const instructions = element('textarea', { name: 'instructions', attrs: { maxlength: '5000', placeholder: 'Storage, accessibility, existing furniture and daily routines.' } });
     const roomOptions = rooms.map((room) => {
       const input = element('input', { type: 'checkbox', name: 'room', value: room.id, checked: true });
@@ -1113,10 +1358,10 @@ export class ProjectJourneyApp {
     });
     form.append(
       element('h3', { className: 'panel-title', text: 'Design for the household, not a stock image' }),
-      element('p', { className: 'panel-copy', text: 'The brief is versioned before furniture is proposed. Pick verified rooms and a direction; the layout engine still enforces physical constraints.' }),
+      element('p', { className: 'panel-copy', text: 'Choose a service-owned procedural material reference. Every palette has commercial/render rights evidence, millimetre-scale pattern dimensions and an immutable hash; external stock imagery is not used.' }),
       element('div', { className: 'form-grid' }, [
         field('Household members', members, { className: 'third' }),
-        field('Design direction', style, { className: 'third' }),
+        field('Rights-cleared design reference', reference, { className: 'third' }),
         field('Budget guide', budget, { className: 'third' }),
         field('Lifestyle and priorities', instructions, { className: 'full' }),
       ]),
@@ -1132,22 +1377,31 @@ export class ProjectJourneyApp {
     const data = new FormData(form);
     const roomIds = data.getAll('room').map(String);
     if (!roomIds.length) { this.error = new Error('Select at least one verified room.'); this.render(); return; }
+    const selection = designReferenceSelection(
+      this.phaseData.designReferenceCatalog,
+      String(data.get('designReference')),
+    );
     const budget = Number(data.get('budget'));
     await this.execute(async () => this.setState(await this.workflow.submitDesignBrief({
       householdMembers: Number(data.get('members')),
       roomsToRenovate: roomIds,
-      preferredStyles: [String(data.get('style'))],
+      ...selection,
       budgetSgd: Number.isFinite(budget) && budget > 0 ? budget : null,
       specialInstructions: String(data.get('instructions') || ''),
     })));
   }
 
   renderLayoutPreparation() {
+    const designReference = this.phaseData.designBrief?.reference;
+    if (!designReference) {
+      this.renderStopped({ blockedReason: 'The selected design reference could not be recovered from the authenticated service.' });
+      return;
+    }
     const generate = button('Generate constraint-checked layouts', 'generate-layouts', { disabled: this.busy });
     generate.addEventListener('click', () => this.generateLayouts());
     this.workbench.replaceChildren(element('div', { className: 'section-panel' }, [
       element('h3', { className: 'panel-title', text: 'Furniture is a spatial test before it is a style choice' }),
-      element('p', { className: 'panel-copy', text: 'The service tests placements against room boundaries, wall thickness, door swings and circulation. Unsafe options cannot be approved.' }),
+      element('p', { className: 'panel-copy', text: `Recovered ${designReference.label} · ${shortHash(designReference.referenceSha256)}. The service tests placements against room boundaries, wall thickness, door swings and circulation. Unsafe options cannot be approved.` }),
       element('div', { className: 'actions' }, generate),
     ]));
   }
@@ -1159,6 +1413,152 @@ export class ProjectJourneyApp {
     });
   }
 
+  createLayoutDiagram(preview) {
+    const { bounds } = preview;
+    const pad = Math.max(400, Math.max(bounds.width, bounds.depth) * 0.055);
+    const mapY = (value) => bounds.minY + bounds.maxY - value;
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('viewBox', `${bounds.minX - pad} ${bounds.minY - pad} ${bounds.width + pad * 2} ${bounds.depth + pad * 2}`);
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', `Exact measured floor-plan projection of ${preview.placements.length} furniture placements for layout ${preview.layoutId}`);
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    const svgElement = (tag, attributes = {}, text = null) => {
+      const node = document.createElementNS(SVG_NS, tag);
+      for (const [name, value] of Object.entries(attributes)) node.setAttribute(name, String(value));
+      if (text !== null) node.textContent = text;
+      return node;
+    };
+
+    const roomLayer = svgElement('g', { class: 'layout-room-layer' });
+    const span = Math.max(bounds.width, bounds.depth);
+    const roomFontSize = Math.max(180, Math.min(320, span / 38));
+    for (const room of preview.rooms) {
+      const points = room.boundary.map((point) => `${point.x},${mapY(point.y)}`).join(' ');
+      const polygon = svgElement('polygon', {
+        points,
+        class: 'layout-room-footprint',
+        'data-room-function': room.function,
+      });
+      polygon.append(svgElement('title', {}, `${room.name} · ${room.function}`));
+      roomLayer.append(polygon);
+      const centreX = room.boundary.reduce((sum, point) => sum + point.x, 0) / room.boundary.length;
+      const centreY = room.boundary.reduce((sum, point) => sum + point.y, 0) / room.boundary.length;
+      roomLayer.append(svgElement('text', {
+        x: centreX,
+        y: mapY(centreY),
+        class: 'layout-room-label',
+        'font-size': roomFontSize,
+        'text-anchor': 'middle',
+      }, room.name));
+    }
+    svg.append(roomLayer);
+
+    const wallLayer = svgElement('g', { class: 'layout-wall-layer' });
+    for (const wall of preview.walls) {
+      const line = svgElement('line', {
+        x1: wall.start.x,
+        y1: mapY(wall.start.y),
+        x2: wall.end.x,
+        y2: mapY(wall.end.y),
+        class: 'layout-wall-line',
+        'stroke-width': wall.thickness,
+      });
+      line.append(svgElement('title', {}, `${wall.id} · ${wall.kind} · ${wall.thickness} mm`));
+      wallLayer.append(line);
+    }
+    svg.append(wallLayer);
+
+    const openingLayer = svgElement('g', { class: 'layout-opening-layer' });
+    for (const opening of preview.openings) {
+      openingLayer.append(svgElement('line', {
+        x1: opening.start.x,
+        y1: mapY(opening.start.y),
+        x2: opening.end.x,
+        y2: mapY(opening.end.y),
+        class: 'layout-opening-cut',
+        'stroke-width': opening.thickness + 80,
+      }));
+      const marker = svgElement('line', {
+        x1: opening.start.x,
+        y1: mapY(opening.start.y),
+        x2: opening.end.x,
+        y2: mapY(opening.end.y),
+        class: `layout-opening-marker ${opening.kind}`,
+        'stroke-width': Math.min(120, Math.max(70, opening.thickness * 0.55)),
+      });
+      marker.append(svgElement('title', {}, `${opening.kind} ${opening.id} · operation ${opening.swing} · role ${opening.reviewedUsage} · hosted by ${opening.wallId}`));
+      openingLayer.append(marker);
+    }
+    svg.append(openingLayer);
+
+    const furnitureLayer = svgElement('g', { class: 'layout-furniture-layer' });
+    for (const placement of preview.placements) {
+      const assetLabel = placement.assetId.split('-')
+        .filter((part) => part && !/^\d+$/.test(part))
+        .slice(0, 3)
+        .join(' ');
+      const assetFontSize = Math.max(72, Math.min(
+        span / 58,
+        placement.depth * 0.26,
+        placement.width / Math.max(3.5, assetLabel.length * 0.56),
+      ));
+      const group = svgElement('g', {
+        class: 'layout-furniture-item',
+        'data-room-id': placement.roomId,
+      });
+      const rect = svgElement('rect', {
+        x: placement.x,
+        y: mapY(placement.y + placement.depth),
+        width: placement.width,
+        height: placement.depth,
+        rx: Math.min(90, placement.width * 0.05, placement.depth * 0.08),
+      });
+      rect.append(svgElement('title', {}, `${placement.assetId} · ${placement.width} × ${placement.depth} × ${placement.height} mm · ${placement.roomId}`));
+      group.append(rect, svgElement('text', {
+        x: placement.x + placement.width / 2,
+        y: mapY(placement.y + placement.depth / 2),
+        class: 'layout-furniture-label',
+        'font-size': assetFontSize,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'middle',
+      }, assetLabel));
+      furnitureLayer.append(group);
+    }
+    svg.append(furnitureLayer);
+
+    const legend = element('div', { className: 'layout-preview-legend' }, [
+      element('span', { className: 'legend-key furniture', text: 'Measured furniture footprint' }),
+      element('span', { className: 'legend-key door', text: 'Door / passage' }),
+      element('span', { className: 'legend-key window', text: 'Window' }),
+    ]);
+    const readableOpeningValue = (value) => String(value).replaceAll('_', ' ');
+    const openingReview = element('div', { className: 'layout-opening-review' }, [
+      element('strong', { text: `Reviewed openings (${preview.openings.length})` }),
+      element('div', { className: 'layout-opening-review-list' }, preview.openings.map((opening) => (
+        element('span', { className: `layout-opening-review-row ${opening.kind}` }, [
+          element('b', { text: `${opening.kind} ${opening.id}` }),
+          element('small', {
+            text: `Operation ${readableOpeningValue(opening.swing)} · role ${readableOpeningValue(opening.reviewedUsage)} · host ${opening.wallId}`,
+          }),
+        ])
+      ))),
+      element('small', {
+        className: 'layout-opening-review-note',
+        text: 'Operation labels are shown exactly. Hinge jamb and opens-into direction are not source-resolved, so this review does not invent swing arcs.',
+      }),
+    ]);
+    return element('figure', { className: 'layout-review-preview' }, [
+      element('div', { className: 'layout-preview-canvas' }, svg),
+      element('figcaption', {}, [
+        element('strong', { text: `Exact option ${preview.layoutId}` }),
+        element('span', { text: `${preview.placements.length} measured footprints · geometry v${preview.source.geometryVersion} · ${shortHash(preview.source.geometrySha256)} · layout ${shortHash(preview.layoutSha256)}` }),
+        element('small', { text: 'Review projection generated in this browser from service-returned millimetres. No customer image or external furniture media is loaded.' }),
+      ]),
+      legend,
+      openingReview,
+    ]);
+  }
+
   renderLayoutReview() {
     const layouts = this.phaseData.layouts;
     if (!layouts) { this.renderStopped({ blockedReason: 'The exact layout option set is unavailable.' }); return; }
@@ -1166,44 +1566,65 @@ export class ProjectJourneyApp {
     const options = layouts.options || [];
     const list = element('div', { className: 'option-list' });
     const detailsById = new Map();
+    const previewById = new Map();
+    const previewErrors = new Map();
     for (const option of options) {
-      const safe = layouts.safeLayoutIds.includes(option.layoutId);
-      const input = element('input', { type: 'radio', name: 'layout', value: option.layoutId, disabled: !safe, checked: safe && !list.querySelector('input:checked') });
+      if (!layouts.safeLayoutIds.includes(option.layoutId)) continue;
+      try {
+        previewById.set(option.layoutId, buildLayoutReviewPreview({
+          projectId: this.state.projectId,
+          geometryReview: this.phaseData.geometry,
+          layoutSet: layouts,
+          layoutId: option.layoutId,
+        }));
+      } catch (error) {
+        previewErrors.set(option.layoutId, error.message);
+      }
+    }
+    for (const option of options) {
+      const serviceSafe = layouts.safeLayoutIds.includes(option.layoutId);
+      const preview = previewById.get(option.layoutId);
+      const reviewable = serviceSafe && Boolean(preview);
+      const input = element('input', { type: 'radio', name: 'layout', value: option.layoutId, disabled: !reviewable, checked: reviewable && !list.querySelector('input:checked') });
       const placements = Array.isArray(option.placements) ? option.placements : [];
       const detail = element('div', { className: 'option-evidence', dataset: { visible: input.checked } }, [
         element('div', { className: 'hash-strip' }, [
           element('span', { text: 'Layout SHA-256' }),
           element('code', { text: option.layoutSha256 || 'Missing — option cannot be approved' }),
         ]),
+        preview ? this.createLayoutDiagram(preview) : element('div', { className: 'layout-preview-blocked', attrs: { role: 'status' } }, [
+          element('strong', { text: 'Measured furnishing view locked' }),
+          element('span', { text: previewErrors.get(option.layoutId) || 'This option did not pass the service layout gates.' }),
+        ]),
         element('div', { className: 'placement-list' }, placements.map((placement) => element('article', { className: 'placement-row' }, [
           element('strong', { text: `${placement.assetId || 'unknown asset'} · ${placement.placementId || 'missing placement ID'}` }),
           element('span', { text: `Room ${placement.roomId || '—'} · position ${placement.x ?? '—'}, ${placement.y ?? '—'}, ${placement.z ?? '—'} mm · rotation ${placement.rotationDegrees ?? '—'}°` }),
           element('span', { text: `Measured W×D×H ${placement.width ?? '—'} × ${placement.depth ?? '—'} × ${placement.height ?? '—'} mm · clearance ${placement.clearance ?? '—'} mm` }),
         ]))),
-        element('p', { className: 'validation-line', text: safe
-          ? 'Feasible · door-swing passed · circulation passed · no hard violations'
-          : `Locked · ${(option.validation?.hardConstraintViolations || []).map((item) => item.message || item.code || item).join('; ') || 'review evidence incomplete'}` }),
+        element('p', { className: 'validation-line', text: reviewable
+          ? 'Reviewable · exact geometry binding · measured footprints · door-swing passed · circulation passed · no hard violations'
+          : `Locked · ${previewErrors.get(option.layoutId) || (option.validation?.hardConstraintViolations || []).map((item) => item.message || item.code || item).join('; ') || 'review evidence incomplete'}` }),
       ]);
       detailsById.set(option.layoutId, detail);
-      const card = element('div', { className: 'option-card', dataset: { safe } }, [
+      const card = element('div', { className: 'option-card', dataset: { safe: reviewable } }, [
         element('label', { className: 'option-choice' }, [
           input,
           element('span', {}, [
             element('strong', { text: option.type ? `${option.type.replaceAll('_', ' ')} furnishing` : option.layoutId }),
-            element('small', { text: `${placements.length} measured placements · ${safe ? 'all review gates passed' : 'blocked by service validation'}` }),
+            element('small', { text: `${placements.length} measured placements · ${reviewable ? 'geometry-bound visual ready' : 'review visual unavailable'}` }),
           ]),
-          element('span', { className: 'micro-label', text: safe ? 'Feasible' : 'Locked' }),
+          element('span', { className: 'micro-label', text: reviewable ? 'Reviewable' : 'Locked' }),
         ]),
         detail,
       ]);
       list.append(card);
     }
-    const confirm = element('input', { type: 'checkbox' });
+    const confirm = element('input', { type: 'checkbox', disabled: previewById.size === 0 });
     const approve = button('Approve selected furnishing example', 'approve-layout', { disabled: true });
     const sync = () => {
       const selected = $('input[name="layout"]:checked', list);
       for (const [layoutId, detail] of detailsById) detail.dataset.visible = String(layoutId === selected?.value);
-      approve.disabled = this.busy || !confirm.checked || !selected || !layouts.safeLayoutIds.includes(selected.value);
+      approve.disabled = this.busy || !confirm.checked || !selected || !previewById.has(selected.value);
     };
     confirm.addEventListener('change', sync);
     list.addEventListener('change', sync);
@@ -1216,7 +1637,7 @@ export class ProjectJourneyApp {
         element('code', { text: layouts.optionSetSha256 || 'Missing option-set SHA-256' }),
       ]),
       list,
-      element('label', { className: 'consent' }, [confirm, element('span', { text: 'I reviewed circulation, door swings, room use and furniture extents for the selected option.' })]),
+      element('label', { className: 'consent' }, [confirm, element('span', { text: 'I inspected the exact geometry-bound furnishing diagram, measured item extents, room use, door swings and circulation evidence for the selected option.' })]),
       element('div', { className: 'actions' }, approve),
     ]));
   }
@@ -1224,6 +1645,18 @@ export class ProjectJourneyApp {
   async approveLayout(list, confirmation) {
     const selected = $('input[name="layout"]:checked', list);
     if (!selected || !confirmation.checked) { this.error = new Error('Select a feasible option and explicitly confirm its layout review.'); this.render(); return; }
+    try {
+      buildLayoutReviewPreview({
+        projectId: this.state.projectId,
+        geometryReview: this.phaseData.geometry,
+        layoutSet: this.phaseData.layouts,
+        layoutId: selected.value,
+      });
+    } catch (error) {
+      this.error = new Error(`The furnishing evidence changed or is incomplete. Approval remains locked. ${error.message}`);
+      this.render();
+      return;
+    }
     await this.execute(async () => this.setState(await this.workflow.approveLayout({
       layoutId: selected.value,
       reviewerActorId: `customer:${this.state.projectId}`,

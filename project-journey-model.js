@@ -3,6 +3,7 @@ import { projectToSolidContract } from './journey-solid.js';
 import { validateProject3dReadiness } from './journey-topology-gate.js';
 import { createRenderRequest, validateRenderRequest } from './journey-render-contract.js';
 import { WorkflowPhase } from './journey-service-workflow.js';
+import { normalizePixelMetricRegistration } from './journey-source-registration.js';
 
 export const PROJECT_JOURNEY_ACTS = Object.freeze([
   Object.freeze({
@@ -282,6 +283,7 @@ export function canonicalGeometryToPlanContract(geometry) {
       height: Number(opening.height),
       sill: Number(opening.sill),
       handing: opening.swing || opening.handing || 'unknown',
+      reviewedUsage: opening.reviewed_usage || opening.reviewedUsage || 'unspecified',
       confidence: opening.confidence,
     };
   });
@@ -361,6 +363,9 @@ export function projectToCanonicalGeometry(project, sourceGeometry) {
       ? wall.structuralClass : 'unknown',
   }));
   const wallById = new Map(walls.map((wall) => [wall.id, wall]));
+  const sourceOpeningById = new Map(
+    (sourceGeometry.openings || []).map((opening) => [opening.id, opening]),
+  );
   const supportedSwing = new Set(['left', 'right', 'double', 'sliding', 'none', 'unknown']);
   const openings = (project.geometry?.openings || []).map((opening) => {
     const wall = wallById.get(opening.wallId);
@@ -368,16 +373,29 @@ export function projectToCanonicalGeometry(project, sourceGeometry) {
     const length = Math.hypot(wall.end.x - wall.start.x, wall.end.y - wall.start.y);
     const startRatio = Number(opening.span?.startRatio);
     const endRatio = Number(opening.span?.endRatio);
-    return {
+    const canonical = {
       id: opening.id,
       wall_id: opening.wallId,
-      kind: ['door', 'window', 'opening'].includes(opening.kind) ? opening.kind : 'opening',
+      kind: (() => {
+        if (!['door', 'window', 'opening'].includes(opening.kind)) {
+          throw new TypeError(`Opening ${opening.id} has an unsupported canonical kind.`);
+        }
+        return opening.kind;
+      })(),
       offset: Math.round(length * startRatio),
       width: Math.round(length * (endRatio - startRatio)),
       height: Math.round(Number(opening.height)),
       sill: Math.round(Number(opening.sill)),
       swing: supportedSwing.has(opening.handing) ? opening.handing : 'unknown',
     };
+    const reviewedUsage = opening.reviewedUsage || 'unspecified';
+    const sourceOpening = sourceOpeningById.get(opening.id);
+    if (reviewedUsage !== 'unspecified'
+      || Object.hasOwn(sourceOpening || {}, 'reviewed_usage')
+      || Object.hasOwn(sourceOpening || {}, 'reviewedUsage')) {
+      canonical.reviewed_usage = reviewedUsage;
+    }
+    return canonical;
   });
   const rooms = (project.geometry?.spaces || []).map((space) => ({
     id: space.id,
@@ -463,6 +481,15 @@ export function geometryCorrectionSourceBinding(geometryReview) {
   if (legacyCandidates.some((digest) => digest !== authoritative.sha256)) {
     throw new TypeError('Geometry metadata contains conflicting original-upload SHA-256 bindings.');
   }
+  const pixelMetricRegistration = normalizePixelMetricRegistration(
+    authoritative.pixelMetricRegistration,
+    {
+      sourceArtifactSha256: authoritative.sha256,
+      imageWidth: authoritative.intrinsicPixels.width,
+      imageHeight: authoritative.intrinsicPixels.height,
+      geometrySha256: geometryReview.geometrySha256,
+    },
+  );
   return Object.freeze({
     sourceArtifactRole: authoritative.role,
     sourceArtifactSha256: authoritative.sha256,
@@ -470,6 +497,7 @@ export function geometryCorrectionSourceBinding(geometryReview) {
     byteSize: authoritative.byteSize,
     intrinsicPixels: Object.freeze({ ...authoritative.intrinsicPixels }),
     sourceGeometryAncestryVersions: Object.freeze([...authoritative.sourceGeometryAncestryVersions]),
+    pixelMetricRegistration,
   });
 }
 

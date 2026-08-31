@@ -17,8 +17,12 @@ support.js
 three-d-stage.js
 project-journey.js
 project-journey-model.js
+journey-source-registration.js
 journey-model-artifacts.js
+journey-layout-review.js
 journey-api.js
+journey-design-references.js
+journey-release-dossier.js
 journey-service-workflow.js
 journey-render-contract.js
 journey-project.js

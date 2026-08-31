@@ -31,6 +31,7 @@ jobs:
           node --check journey-geometry-ops.js
           node --check journey-service-workflow.js
           node --check journey-model-artifacts.js
+          node --check journey-release-dossier.js
           node --check journey-topology-gate.js
           node --check project-journey-model.js
           node --check project-journey.js
@@ -75,7 +76,7 @@ jobs:
             sleep 0.1
           done
           test "$server_ready" = true
-          for fixture in project-journey-lifecycle.browser.html project-journey-model-reference.browser.html; do
+          for fixture in project-journey-lifecycle.browser.html project-journey-model-reference.browser.html project-journey-release-dossier.browser.html; do
             result="/tmp/hnm-pages-browser-${fixture//[^A-Za-z0-9]/-}.html"
             "$browser_bin" --headless --no-sandbox --disable-gpu --virtual-time-budget=8000 --dump-dom \
               "http://127.0.0.1:4173/tests/$fixture" >"$result"

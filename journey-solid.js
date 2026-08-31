@@ -1,5 +1,7 @@
-import { junctionTrim } from './geometry-clipper.js';
+import { compileWallOpeningSegments, isParapetHostWall, polygonArea } from './geometry-clipper.js';
 import { validateProject3dReadiness } from './journey-topology-gate.js';
+
+export { compileWallOpeningSegments } from './geometry-clipper.js';
 
 // The contract extruder — Stage 3.
 //
@@ -12,144 +14,7 @@ import { validateProject3dReadiness } from './journey-topology-gate.js';
 
 const WET = /BATH|WC|TOILET|SHOWER/i;
 const TILE = /KITCHEN|YARD|UTILITY|SERVICE|STORE|SHELTER/i;
-const RATIO_EPS = 1e-9;
-
-const pointAtRatio = (wall, ratio) => [
-  wall.a[0] + (wall.b[0] - wall.a[0]) * ratio,
-  wall.a[1] + (wall.b[1] - wall.a[1]) * ratio,
-];
-
-function ratioAtPoint(wall, point) {
-  const dx = wall.b[0] - wall.a[0];
-  const dy = wall.b[1] - wall.a[1];
-  const lengthSquared = dx * dx + dy * dy;
-  return lengthSquared
-    ? ((point[0] - wall.a[0]) * dx + (point[1] - wall.a[1]) * dy) / lengthSquared
-    : 0;
-}
-
-/**
- * Compile continuous host walls into deterministic solid and typed-opening intervals.
- *
- * Authoritative hnm-project openings reference a non-void host wall by ratio. Legacy experimental
- * contracts may instead provide an already-split `void: true` wall with one opening keyed by the
- * same ID; that representation remains supported, but ambiguous multi-opening legacy voids fail.
- */
-export function compileWallOpeningSegments(walls = [], openings = []) {
-  const wallIds = new Set();
-  for (const wall of walls) {
-    if (!wall?.id || wallIds.has(wall.id)) throw new Error(`Wall IDs must be present and unique: ${wall?.id || 'missing'}.`);
-    wallIds.add(wall.id);
-  }
-  const openingIds = new Set();
-  const openingsByWall = new Map();
-  for (const opening of openings) {
-    if (!opening?.id || openingIds.has(opening.id)) {
-      throw new Error(`Opening IDs must be present and unique: ${opening?.id || 'missing'}.`);
-    }
-    openingIds.add(opening.id);
-    if (!wallIds.has(opening.wall)) throw new Error(`Opening ${opening.id} references missing wall ${opening.wall}.`);
-    const hosted = openingsByWall.get(opening.wall) || [];
-    hosted.push(opening);
-    openingsByWall.set(opening.wall, hosted);
-  }
-
-  const trimmed = junctionTrim(walls.filter((wall) => !wall.void));
-  const segments = [];
-  for (const wall of walls) {
-    const hosted = [...(openingsByWall.get(wall.id) || [])]
-      .sort((left, right) => (left.t0 - right.t0) || (left.t1 - right.t1)
-        || String(left.id).localeCompare(String(right.id)));
-    const adjusted = trimmed.get(wall.id) || { a: wall.a, b: wall.b };
-
-    if (wall.void) {
-      if (hosted.length > 1) {
-        throw new Error(`Experimental void wall ${wall.id} cannot represent multiple openings.`);
-      }
-      const opening = hosted[0] || null;
-      segments.push({
-        ...wall,
-        id: `${wall.id}::legacy-opening:0:${opening?.id || 'untyped'}`,
-        a: [...wall.a], b: [...wall.b],
-        hostWallId: wall.id,
-        segmentKind: 'opening',
-        opening,
-        t0: 0, t1: 1,
-        legacyExperimental: true,
-        hostA: [...wall.a], hostB: [...wall.b],
-      });
-      continue;
-    }
-
-    if (!hosted.length) {
-      const startRatio = ratioAtPoint(wall, adjusted.a);
-      const endRatio = ratioAtPoint(wall, adjusted.b);
-      segments.push({
-        ...wall,
-        a: [...adjusted.a], b: [...adjusted.b],
-        hostWallId: wall.id,
-        segmentKind: 'solid',
-        t0: startRatio, t1: endRatio,
-        hostA: [...adjusted.a], hostB: [...adjusted.b],
-      });
-      continue;
-    }
-
-    const trimStart = ratioAtPoint(wall, adjusted.a);
-    const trimEnd = ratioAtPoint(wall, adjusted.b);
-    if (trimStart < -RATIO_EPS || trimEnd > 1 + RATIO_EPS || trimStart >= trimEnd - RATIO_EPS) {
-      throw new Error(`Trimmed host wall ${wall.id} has an invalid usable interval.`);
-    }
-    let cursor = Math.max(0, trimStart);
-    let solidIndex = 0;
-    for (let openingIndex = 0; openingIndex < hosted.length; openingIndex += 1) {
-      const opening = hosted[openingIndex];
-      const start = opening.t0; const end = opening.t1;
-      if (!Number.isFinite(start) || !Number.isFinite(end)
-        || start < cursor - RATIO_EPS || start < trimStart - RATIO_EPS
-        || end > trimEnd + RATIO_EPS || start >= end - RATIO_EPS) {
-        throw new Error(`Opening ${opening.id} has an invalid or overlapping host interval.`);
-      }
-      if (start > cursor + RATIO_EPS) {
-        segments.push({
-          ...wall,
-          id: `${wall.id}::solid:${solidIndex}`,
-          a: pointAtRatio(wall, cursor), b: pointAtRatio(wall, start),
-          hostWallId: wall.id,
-          segmentKind: 'solid',
-          t0: cursor, t1: start,
-          hostA: [...adjusted.a], hostB: [...adjusted.b],
-        });
-        solidIndex += 1;
-      }
-      segments.push({
-        ...wall,
-        id: `${wall.id}::opening:${openingIndex}:${opening.id}`,
-        a: pointAtRatio(wall, start), b: pointAtRatio(wall, end),
-        void: true,
-        hostWallId: wall.id,
-        openingId: opening.id,
-        segmentKind: 'opening',
-        opening,
-        t0: start, t1: end,
-        hostA: [...adjusted.a], hostB: [...adjusted.b],
-      });
-      cursor = end;
-    }
-    if (cursor < trimEnd - RATIO_EPS) {
-      segments.push({
-        ...wall,
-        id: `${wall.id}::solid:${solidIndex}`,
-        a: pointAtRatio(wall, cursor), b: [...adjusted.b],
-        hostWallId: wall.id,
-        segmentKind: 'solid',
-        t0: cursor, t1: trimEnd,
-        hostA: [...adjusted.a], hostB: [...adjusted.b],
-      });
-    }
-  }
-  return segments;
-}
+const pointDistance = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
 
 /** Convert one hnm-project storey to the proven contract-shaped input used by buildSolid.
  *  Curved paths fail visibly until the production curve mesher lands; silently chord-cutting them
@@ -183,15 +48,25 @@ export function projectToSolidContract(project, storeyId) {
     void: !!wall.isVoid,
     confidence: wall.confidence,
   }));
+  const solidWallById = new Map(walls.map((wall) => [wall.id, wall]));
   const openings = (project.geometry?.openings || []).filter(belongs).map((opening) => ({
     id: opening.id,
     wall: opening.wallId,
     t0: opening.span?.startRatio,
     t1: opening.span?.endRatio,
-    width: opening.span?.width,
+    width: (() => {
+      const wall = solidWallById.get(opening.wallId);
+      const start = opening.span?.startRatio;
+      const end = opening.span?.endRatio;
+      return wall && Number.isFinite(start) && Number.isFinite(end)
+        ? pointDistance(wall.a, wall.b) * (end - start)
+        : undefined;
+    })(),
     kind: opening.kind,
     height: opening.height,
     sill: opening.sill,
+    handing: opening.handing,
+    reviewedUsage: opening.reviewedUsage,
     between: opening.between || [],
     confidence: opening.confidence,
   }));
@@ -199,16 +74,23 @@ export function projectToSolidContract(project, storeyId) {
     id: space.id,
     cycle: space.wallIds || [],
     poly: space.boundary || [],
-    areaM2: space.areaM2,
+    areaM2: Math.abs(polygonArea(space.boundary || [])) / 1_000_000,
+    minDim: space.minDim,
     cls: space.type,
     label: space.name,
+    labelSuspect: space.labelSuspect === true,
     confidence: space.confidence,
   }));
+  const solidPoints = walls.flatMap((wall) => [wall.a, wall.b]);
+  const envelope = [
+    Math.max(...solidPoints.map((point) => point[0])) - Math.min(...solidPoints.map((point) => point[0])),
+    Math.max(...solidPoints.map((point) => point[1])) - Math.min(...solidPoints.map((point) => point[1])),
+  ];
 
   return {
     schema: 'hnm-plan-contract/1', ok: true, units: 'mm',
     source: project.provenance?.source || null,
-    envelope: storey.envelope,
+    envelope,
     walls, openings, rooms,
     adjacency: project.relationships?.adjacency || [],
     issues: project.issues || [],
@@ -234,8 +116,17 @@ export function buildSolid(c, THREE, opts) {
   if (!c || !c.ok || !c.walls.length) return { group: g, stats };
 
   const M = (mm) => mm / 1000;
-  const [EW, ED] = (c.envelope || [0, 0]).map(M);
-  const ox = -EW / 2, oz = -ED / 2;
+  const contractPoints = (c.walls || []).flatMap((wall) => [wall.a, wall.b])
+    .filter((point) => Array.isArray(point) && point.length === 2
+      && point.every((coordinate) => typeof coordinate === 'number' && Number.isFinite(coordinate)));
+  const ox = contractPoints.length
+    ? -M((Math.min(...contractPoints.map((point) => point[0]))
+      + Math.max(...contractPoints.map((point) => point[0]))) / 2)
+    : 0;
+  const oz = contractPoints.length
+    ? -M((Math.min(...contractPoints.map((point) => point[1]))
+      + Math.max(...contractPoints.map((point) => point[1]))) / 2)
+    : 0;
 
   const mat = (hex, extra) => new THREE.MeshStandardMaterial(Object.assign({
     color: new THREE.Color(hex), roughness: 0.82, metalness: 0,
@@ -272,21 +163,10 @@ export function buildSolid(c, THREE, opts) {
   // Guarded deliberately: opening a wall on a guess puts a hole in a walkthrough, so a wall only
   // becomes a parapet when it bounds exactly ONE room, that room is named as a balcony, and the
   // room is big enough to stand on. Anything short of that stays full height.
-  const owners = new Map();
-  for (const r of (c.rooms || [])) {
-    for (const id of (r.cycle || [])) {
-      if (!owners.has(id)) owners.set(id, []);
-      owners.get(id).push(r);
-    }
-  }
   const wallHeight = (wall) => Number.isFinite(O.wallH)
     ? O.wallH : (Number.isFinite(wall?.height) ? M(wall.height) : 2.6);
   const parapetOf = (hostWall) => {
-    const own = owners.get(hostWall.id) || [];
-    if (own.length !== 1) return 0;
-    const r = own[0];
-    if (!/BALCON|TERRACE|PATIO/i.test(r.label || '')) return 0;
-    if (!(r.areaM2 >= 1.5) || (r.minDim && r.minDim < 800)) return 0;
+    if (!isParapetHostWall(hostWall, c.rooms || [])) return 0;
     return Math.min(O.parapetH, wallHeight(hostWall));
   };
 
@@ -355,6 +235,8 @@ export function buildSolid(c, THREE, opts) {
       segmentId: segment.id,
       openingId: opening.id || null,
       openingKind: kind,
+      openingHanding: opening.handing ?? null,
+      reviewedUsage: opening.reviewedUsage ?? null,
       legacyExperimental: segment.legacyExperimental === true,
       t0: segment.t0,
       t1: segment.t1,
@@ -400,39 +282,52 @@ export function buildSolid(c, THREE, opts) {
       cx, O.slab / 2, cz, MATS.threshold, 'Threshold_' + segment.id,
       { ...openingMeta, component: 'opening-threshold' });
     stats.thresholds++;
-    if (kind === 'door') {
-      stats.doors++;
-      // a leaf on every interior door too — a bare gap reads as a missing wall, not a doorway.
-      // Height clamps to the wall exactly as the glazing and the entrance leaf do, or the leaf
-      // hangs above the walls in the dollhouse cut.
+    if (kind === 'door' || kind === 'entrance') {
+      const operation = opening.handing;
+      const primaryEntrance = opening.reviewedUsage === 'primary_entrance';
       const leafHeight = Math.max(0.05, head - sill - O.slab);
-      const lf = new THREE.Mesh(new THREE.BoxGeometry(len * 0.93, leafHeight, 0.042), MATS.leaf);
-      lf.geometry.translate(len * 0.465, 0, 0);
-      lf.position.set(cx - (horiz ? len / 2 : 0), sill + O.slab + leafHeight / 2,
-        cz - (horiz ? 0 : len / 2));
-      // the hinge sits at the opening's low end and the leaf runs toward +X or +Z from there:
-      // rotation.y maps local +X to (cos θ, 0, −sin θ), so a vertical wall needs −π/2, not +π/2
-      lf.rotation.y = horiz ? -0.6 : -Math.PI / 2 + 0.6;
-      lf.castShadow = true;
-      lf.name = 'DoorLeaf_' + segment.id;
-      lf.userData = { ...(lf.userData || {}), ...openingMeta, component: 'door-leaf' };
-      g.add(lf);
-      stats.doorLeaves++;
-    }
-    if (kind === 'entrance') {
-      // a real leaf, ajar, so the front door is unmistakable in the model
-      const leafHeight = head - sill;
-      const leaf = new THREE.Mesh(new THREE.BoxGeometry(len * 0.94, leafHeight, 0.045), MATS.entrance);
-      leaf.position.set(cx, sill + leafHeight / 2, cz);
-      leaf.rotation.y = (horiz ? 0 : Math.PI / 2) - (horiz ? 0.55 : -0.55);
-      leaf.geometry.translate(len * 0.47, 0, 0);
-      leaf.castShadow = true;
-      leaf.name = 'EntranceLeaf_' + segment.id;
-      leaf.userData = { ...(leaf.userData || {}), ...openingMeta, component: 'entrance-leaf' };
-      g.add(leaf);
+      const material = primaryEntrance ? MATS.entrance : MATS.leaf;
+      const addClosedPanel = ({
+        width, along = 0, across = 0, thickness = 0.042,
+        suffix, component, representation,
+      }) => {
+        const panel = box(
+          ...(horiz ? [width, leafHeight, thickness] : [thickness, leafHeight, width]),
+          cx + (horiz ? along : across), sill + O.slab + leafHeight / 2,
+          cz + (horiz ? across : along), material,
+          `${primaryEntrance ? 'Entrance' : 'Door'}_${suffix}_${segment.id}`,
+          { ...openingMeta, component, representation },
+        );
+        if (panel) stats.doorLeaves++;
+      };
+      if (operation === 'left' || operation === 'right') {
+        addClosedPanel({
+          width: len * 0.93,
+          suffix: operation,
+          component: primaryEntrance ? 'entrance-leaf' : 'door-leaf',
+          representation: 'single-closed-leaf',
+        });
+      } else if (operation === 'double') {
+        for (const [suffix, along] of [['a', -len * 0.25], ['b', len * 0.25]]) {
+          addClosedPanel({
+            width: len * 0.465, along, suffix: `double-${suffix}`,
+            component: primaryEntrance ? 'entrance-leaf' : 'door-leaf',
+            representation: 'double-closed-leaf',
+          });
+        }
+      } else if (operation === 'sliding') {
+        for (const [suffix, along, across] of [
+          ['a', -len * 0.24, -0.012], ['b', len * 0.24, 0.012],
+        ]) {
+          addClosedPanel({
+            width: len * 0.52, along, across, thickness: 0.018,
+            suffix: `sliding-${suffix}`,
+            component: 'sliding-panel', representation: 'double-sliding-panel',
+          });
+        }
+      }
       stats.doors++;
-      stats.entrance++;
-      stats.doorLeaves++;
+      if (primaryEntrance) stats.entrance++;
     }
   }
 
@@ -448,11 +343,12 @@ export function buildSolid(c, THREE, opts) {
     const geo = new THREE.ShapeGeometry(shape);
     geo.rotateX(Math.PI / 2);
     geo.translate(0, 0.006, 0);
-    const label = r.label || '';
+    const label = typeof r.label === 'string' ? r.label : '';
+    const roomId = typeof r.id === 'string' ? r.id : 'unnamed-room';
     // a suspect label must not drag a wet-room finish across an 11 m² face
     const key = WET.test(label) && !r.labelSuspect ? 'wet' : TILE.test(label) ? 'tile' : 'timber';
     const m = new THREE.Mesh(geo, MATS[key]);
-    m.name = 'Floor_' + (label || r.id).replace(/[^A-Za-z0-9]+/g, '_') + '_' + r.id;
+    m.name = 'Floor_' + (label || roomId).replace(/[^A-Za-z0-9]+/g, '_') + '_' + roomId;
     m.receiveShadow = true;
     g.add(m);
     stats.floors++;
@@ -465,7 +361,9 @@ export function buildSolid(c, THREE, opts) {
     const cx = (Math.min(...xs) + Math.max(...xs)) / 2 + ox;
     const cz = (Math.min(...zs) + Math.max(...zs)) / 2 + oz;
     const name = label || 'UNNAMED';
-    const sub = (r.areaM2 ? r.areaM2.toFixed(1) + ' m²' : '') + (r.labelSuspect ? '  · SUGGESTED' : '');
+    const derivedAreaM2 = Math.abs(polygonArea(poly)) / 1_000_000;
+    const sub = (derivedAreaM2 ? derivedAreaM2.toFixed(1) + ' m²' : '')
+      + (r.labelSuspect ? '  · SUGGESTED' : '');
     const cv = document.createElement('canvas');
     cv.width = 512; cv.height = 160;
     const cx2 = cv.getContext('2d');
@@ -486,7 +384,7 @@ export function buildSolid(c, THREE, opts) {
     // long rooms read better with the text running along the room's own axis
     if (d > w * 1.35) lp.rotation.z = Math.PI / 2;
     lp.position.set(cx, 0.012, cz);
-    lp.name = 'Label_' + name.replace(/[^A-Za-z0-9]+/g, '_') + '_' + r.id;
+    lp.name = 'Label_' + name.replace(/[^A-Za-z0-9]+/g, '_') + '_' + roomId;
     lp.userData.omitFromExport = true;
     g.add(lp);
     // Floating tag: the floor lettering is edge-on at the default 19° camera. A billboard fixes
@@ -502,7 +400,7 @@ export function buildSolid(c, THREE, opts) {
     const top = (stats.topH || 2.6) - 0.18;
     sp.position.set(cx, Math.min(1.35 + (stats.labels % 3) * 0.52, Math.max(0.3, top)), cz);
     sp.renderOrder = 10;
-    sp.name = 'Tag_' + name.replace(/[^A-Za-z0-9]+/g, '_') + '_' + r.id;
+    sp.name = 'Tag_' + name.replace(/[^A-Za-z0-9]+/g, '_') + '_' + roomId;
     sp.userData.omitFromExport = true;
     g.add(sp);
     stats.labels++;

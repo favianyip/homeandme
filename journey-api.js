@@ -1,9 +1,126 @@
 import { validateRenderRequest } from './journey-render-contract.js';
 
 const STORAGE_KEY = 'hnm_secure_guest_project_v1';
+const RELEASE_ID = /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/;
+
+export const SERVICE_CAPABILITY_SCHEMA = 'homeandme-service-capabilities/1';
+export const SERVICE_CAPABILITY_ORDER = Object.freeze([
+  'AI_ANALYSIS_ENABLED',
+  'GEOMETRY_REVIEW_ENABLED',
+  'LIVE_3D_ENABLED',
+  'AI_RENDERING_ENABLED',
+  'QUOTATION_ENABLED',
+  'PAYMENTS_ENABLED',
+]);
+export const SERVICE_CONTRACTS = Object.freeze({
+  projectApi: 'homeandme-project-api/2',
+  geometry: 'spatialforge-canonical-geometry/1.0',
+  referenceViews: 'canonical-room-complete-reference-coverage/1',
+  renderRequest: 'hnm-render-request/1',
+});
+
+const exactKeys = (value, expected) => value !== null
+  && typeof value === 'object'
+  && !Array.isArray(value)
+  && Object.keys(value).sort().join('\u0000') === [...expected].sort().join('\u0000');
+
+/** Validate the complete release handshake before its booleans may influence the UI. */
+export function validateServiceCapabilities(manifest, {
+  baseUrl,
+  expectedReleaseId = '',
+} = {}) {
+  const topLevelKeys = [
+    'schema', 'releaseId', 'runtimeEnvironment', 'serviceReady',
+    'contracts', 'capabilities', 'dependencyOrder',
+  ];
+  if (!exactKeys(manifest, topLevelKeys) || manifest.schema !== SERVICE_CAPABILITY_SCHEMA) {
+    throw new TypeError('The project service returned an incompatible capability manifest.');
+  }
+  if (!['production', 'staging', 'development', 'test'].includes(manifest.runtimeEnvironment)
+    || typeof manifest.serviceReady !== 'boolean') {
+    throw new TypeError('The project service capability environment is invalid.');
+  }
+  if (manifest.releaseId !== null && !RELEASE_ID.test(manifest.releaseId)) {
+    throw new TypeError('The project service release identity is invalid.');
+  }
+  if (!exactKeys(manifest.contracts, Object.keys(SERVICE_CONTRACTS))
+    || Object.entries(SERVICE_CONTRACTS).some(([name, contract]) => manifest.contracts[name] !== contract)) {
+    throw new TypeError('The project service contracts do not match this browser release.');
+  }
+  if (!exactKeys(manifest.capabilities, SERVICE_CAPABILITY_ORDER)
+    || SERVICE_CAPABILITY_ORDER.some((name) => typeof manifest.capabilities[name] !== 'boolean')
+    || !Array.isArray(manifest.dependencyOrder)
+    || manifest.dependencyOrder.length !== SERVICE_CAPABILITY_ORDER.length
+    || manifest.dependencyOrder.some((name, index) => name !== SERVICE_CAPABILITY_ORDER[index])) {
+    throw new TypeError('The project service capability order is invalid.');
+  }
+  let upstreamEnabled = true;
+  for (const name of SERVICE_CAPABILITY_ORDER) {
+    if (manifest.capabilities[name] && !upstreamEnabled) {
+      throw new TypeError('The project service advertised a capability without its dependency.');
+    }
+    upstreamEnabled = upstreamEnabled && manifest.capabilities[name];
+  }
+  const anyEnabled = SERVICE_CAPABILITY_ORDER.some((name) => manifest.capabilities[name]);
+  if ((!manifest.serviceReady && anyEnabled)
+    || (manifest.serviceReady && !RELEASE_ID.test(manifest.releaseId || ''))) {
+    throw new TypeError('The project service capabilities are not bound to a ready release.');
+  }
+
+  const apiUrl = new URL(baseUrl);
+  const local = ['127.0.0.1', 'localhost'].includes(apiUrl.hostname);
+  if (manifest.serviceReady && !local && manifest.runtimeEnvironment !== 'production') {
+    throw new TypeError('A public site cannot use a non-production project service release.');
+  }
+  if (manifest.serviceReady && !local) {
+    if (!RELEASE_ID.test(expectedReleaseId)
+      || manifest.releaseId !== expectedReleaseId) {
+      throw new TypeError('The project service release does not match the public-site release pin.');
+    }
+  } else if (expectedReleaseId && manifest.releaseId !== expectedReleaseId) {
+    throw new TypeError('The project service release does not match the configured release pin.');
+  }
+  return Object.freeze({
+    ...manifest,
+    contracts: Object.freeze({ ...manifest.contracts }),
+    capabilities: Object.freeze({ ...manifest.capabilities }),
+    dependencyOrder: Object.freeze([...manifest.dependencyOrder]),
+  });
+}
+
+/** Intersect the public rollout request with the verified release; neither side can self-enable. */
+export function applyServiceCapabilities(config, manifest) {
+  const verified = validateServiceCapabilities(manifest, {
+    baseUrl: config?.apiBaseUrl,
+    expectedReleaseId: config?.expectedServiceReleaseId,
+  });
+  const requested = config?.flags || {};
+  const flags = { ...requested };
+  for (const name of SERVICE_CAPABILITY_ORDER) {
+    flags[name] = requested[name] === true && verified.capabilities[name] === true;
+  }
+  const effective = journeyConfig(undefined, {
+    apiBaseUrl: config?.apiBaseUrl,
+    expectedServiceReleaseId: config?.expectedServiceReleaseId,
+    flags,
+  });
+  return Object.freeze({
+    ...effective,
+    serviceVerification: Object.freeze({
+      schema: verified.schema,
+      releaseId: verified.releaseId,
+      runtimeEnvironment: verified.runtimeEnvironment,
+      serviceReady: verified.serviceReady,
+    }),
+  });
+}
 
 export function journeyConfig(_locationObject = globalThis.location, configured = globalThis.HNM_CONFIG) {
   const apiBaseUrl = (configured?.apiBaseUrl || '').replace(/\/$/, '');
+  const expectedServiceReleaseId = configured?.expectedServiceReleaseId || '';
+  if (expectedServiceReleaseId && !RELEASE_ID.test(expectedServiceReleaseId)) {
+    throw new Error('The configured project service release ID is invalid.');
+  }
   const serviceConfigured = Boolean(apiBaseUrl);
   if (serviceConfigured) {
     const url = new URL(apiBaseUrl);
@@ -21,6 +138,7 @@ export function journeyConfig(_locationObject = globalThis.location, configured 
   const payments = quotation && requested.PAYMENTS_ENABLED === true;
   return {
     apiBaseUrl,
+    expectedServiceReleaseId,
     flags: {
       ...requested,
       AI_ANALYSIS_ENABLED: analysis,
@@ -86,6 +204,8 @@ export class HomeAndMeProjectApi {
     return payload;
   }
 
+  capabilities() { return this._request('/api/v1/capabilities'); }
+
   requireSession() {
     if (!this.session?.projectId) throw new Error('No saved project session.');
     return this.session;
@@ -98,6 +218,7 @@ export class HomeAndMeProjectApi {
     });
   }
   events() { return this._request(`/api/v1/projects/${this.requireSession().projectId}/events`); }
+  designReferences() { return this._request('/api/v1/design-references'); }
 
   async uploadFloorPlan(file) {
     const form = new FormData(); form.append('file', file, file.name);
@@ -166,6 +287,9 @@ export class HomeAndMeProjectApi {
   }
   putDesignBrief(brief) {
     return this._request(`/api/v1/projects/${this.requireSession().projectId}/design-brief`, { method: 'PUT', body: brief });
+  }
+  designBrief() {
+    return this._request(`/api/v1/projects/${this.requireSession().projectId}/design-brief`);
   }
   generateLayouts() {
     return this._request(`/api/v1/projects/${this.requireSession().projectId}/layouts/generate`, { method: 'POST' });

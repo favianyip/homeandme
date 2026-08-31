@@ -4,6 +4,7 @@ import {
   validateModelArtifactContract,
 } from './journey-model-artifacts.js';
 import { validateRenderRequest } from './journey-render-contract.js';
+import { validateRecoveredDesignBrief } from './journey-design-references.js';
 
 export const SERVICE_WORKFLOW_SCHEMA = 'hnm-service-workflow/2';
 export const SERVICE_WORKFLOW_STORAGE_KEY = 'hnm_service_workflow_v2';
@@ -75,6 +76,14 @@ const ACTOR = /^[A-Za-z0-9][A-Za-z0-9._:-]*$/;
 const RECOVERY_ID = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
 const PERSISTED_JOB_KINDS = new Set(Object.values(ACTIVE_JOB_KIND));
 const SWINGS = new Set(['left', 'right', 'double', 'sliding', 'none']);
+const REVIEWED_OPENING_USAGES = new Set([
+  'primary_entrance',
+  'secondary_exterior_door',
+  'interior_door',
+  'exterior_window',
+  'interior_borrowed_light',
+  'interior_passage',
+]);
 
 export class WorkflowGuardError extends Error {
   constructor(code, message, details = undefined) {
@@ -232,8 +241,9 @@ function verticalProposalReceipt(response, currentProject) {
     && item.heightMm >= 100 && item.heightMm <= 6000
     && Number.isInteger(item.sillMm) && item.sillMm >= 0 && item.sillMm <= 5000
     && item.sillMm + item.heightMm <= review.ceilingHeightMm
-    && SWINGS.has(item.swing)),
-  'INVALID_PROPOSAL', 'The reviewed opening heights, sills or swings are invalid.');
+    && SWINGS.has(item.swing)
+    && REVIEWED_OPENING_USAGES.has(item.reviewedUsage)),
+  'INVALID_PROPOSAL', 'The reviewed opening heights, sills, swings or portal usages are invalid.');
   guard(review.confirmMetricScale === true
     && review.confirmVerticalDimensions === true
     && review.requiresSiteVerification === true,
@@ -242,7 +252,10 @@ function verticalProposalReceipt(response, currentProject) {
     guard(record(response.validation)
       && response.validation.valid === true
       && Array.isArray(response.validation.issues)
-      && response.validation.issues.length === 0,
+      && response.validation.issues.length === 0
+      && record(response.validation.whole_unit_topology)
+      && typeof response.validation.whole_unit_topology.ready_for_whole_unit_3d === 'boolean'
+      && Array.isArray(response.validation.whole_unit_topology.issues),
     'INVALID_PROPOSAL', 'The proposed measured geometry does not pass service validation.');
   }
   if (response.sourceReferences !== undefined) {
@@ -657,7 +670,8 @@ export class JourneyServiceWorkflow {
       guard(sameSet(geometryOpeningIds, submittedOpeningIds), 'INCOMPLETE_DIMENSIONS', 'Opening dimensions must cover every current opening exactly once.');
       guard(openingDimensions.every((item) => Number.isInteger(item.heightMm) && item.heightMm >= 100 && item.heightMm <= 6000
         && Number.isInteger(item.sillMm) && item.sillMm >= 0 && item.sillMm <= 5000
-        && item.sillMm + item.heightMm <= ceilingHeightMm && SWINGS.has(item.swing)), 'INVALID_DIMENSIONS', 'Opening dimensions or swing values are invalid.');
+        && item.sillMm + item.heightMm <= ceilingHeightMm && SWINGS.has(item.swing)
+        && REVIEWED_OPENING_USAGES.has(item.reviewedUsage)), 'INVALID_DIMENSIONS', 'Opening dimensions, swing values or portal usages are invalid.');
       const proposed = await this._request('/dimensions/propose', {
         sourceGeometryVersion: review.geometryVersion,
         sourceGeometrySha256: review.geometrySha256,
@@ -686,6 +700,8 @@ export class JourneyServiceWorkflow {
       actorId(reviewerActorId);
       const saved = this.saved.verticalProposal;
       guard(saved?.review && saved.version === version(proposalVersion, 'proposalVersion') && saved.sha256 === digest(proposalSha256, 'proposalSha256'), 'STALE_PROPOSAL', 'Approval must target the exact proposal and review evidence shown to the customer.');
+      guard(saved.validation?.whole_unit_topology?.ready_for_whole_unit_3d === true,
+        'WHOLE_UNIT_TOPOLOGY_INCOMPLETE', 'Vertical approval requires one primary entrance and every room reachable through reviewed portals.');
       guard(typeof this.api.dimensionProposal === 'function', 'API_CONTRACT_MISSING', 'The service client cannot revalidate the measured proposal.');
       const recovered = verticalProposalReceipt(await this.api.dimensionProposal(), current.project);
       guard(recovered.version === saved.version && recovered.sha256 === saved.sha256
@@ -705,13 +721,32 @@ export class JourneyServiceWorkflow {
       const current = await this._refresh();
       guard(current.phase === WorkflowPhase.GEOMETRY_APPROVED, 'WRONG_PHASE', 'A design brief requires approved geometry.', current);
       guard(record(brief), 'INVALID_DESIGN_BRIEF', 'A customer design brief is required.');
+      guard(typeof brief.designReferenceId === 'string'
+        && HASH.test(brief.designReferenceSha256 || '')
+        && brief.confirmDesignReferenceRights === true
+        && Array.isArray(brief.referenceImages) && brief.referenceImages.length === 0,
+      'INVALID_DESIGN_REFERENCE', 'Select and confirm one exact rights-cleared service design reference.');
       const result = await this.api.putDesignBrief(brief);
-      guard(result?.state === 'DESIGN_BRIEF_COMPLETE' && result.designBriefVersion, 'INVALID_TRANSITION', 'The design brief was not versioned by the service.');
+      guard(result?.state === 'DESIGN_BRIEF_COMPLETE' && result.designBriefVersion
+        && result.designReferenceId === brief.designReferenceId
+        && result.designReferenceSha256 === brief.designReferenceSha256,
+      'INVALID_TRANSITION', 'The design brief or selected design reference was not versioned by the service.');
       delete this.saved.layouts;
       delete this.saved.approvedLayout;
       delete this.saved.renderCapture;
       this._persist();
       return this._refresh();
+    });
+  }
+
+  async reviewDesignBrief() {
+    return this._exclusive(async () => {
+      const current = await this._refresh();
+      guard(current.project?.designBriefVersion, 'MISSING_DESIGN_BRIEF',
+        'No current service design brief can be recovered.');
+      guard(typeof this.api.designBrief === 'function', 'API_CONTRACT_MISSING',
+        'The service client cannot recover the selected design reference.');
+      return validateRecoveredDesignBrief(await this.api.designBrief(), current.project);
     });
   }
 

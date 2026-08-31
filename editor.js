@@ -1,11 +1,16 @@
 // editor.js — Home & Me geometry correction editor.
 //
 // All mutations flow through journey-geometry-ops.js (applyGeometryOperation).
-// The SVG viewBox is in floor-plan millimetres; no pixel↔mm transform is needed
-// for drawing — just map event clientXY to SVG userspace via getBoundingClientRect.
+// The SVG viewBox is in floor-plan millimetres. The immutable uploaded raster is
+// transformed into that same userspace through an explicit hash-bound affine registration.
 
 import { applyGeometryOperation, createProjectHistory } from './journey-geometry-ops.js';
 import { validateProject3dReadiness, validateProjectTopology } from './journey-topology-gate.js';
+import {
+  normalizePixelMetricRegistration,
+  registrationSvgMatrix,
+  verifyPixelMetricRegistrationIntegrity,
+} from './journey-source-registration.js';
 
 // ─── safe string helpers ──────────────────────────────────────────────────────
 // Escape user-supplied text before injecting into SVG/HTML markup.
@@ -27,6 +32,9 @@ let drag    = null;     // active drag descriptor
 let snapRes = null;     // last resolved snap { point: [x,y], kind: string }
 let activeTool = null;  // 'wall.add' while drawing a human correction
 let addWallStart = null;
+let sourceUnderlay = null;
+let baseViewBox = null;
+let viewport = null;
 
 // ─── DOM refs (set in init) ───────────────────────────────────────────────────
 let svgEl, propPanel;
@@ -121,6 +129,41 @@ function computeViewBox(proj) {
   return { x: minX - pad, y: minY - pad, w: maxX - minX + pad * 2, h: maxY - minY + pad * 2 };
 }
 
+function copyViewBox(value) {
+  return { x: value.x, y: value.y, w: value.w, h: value.h };
+}
+
+function fitViewport() {
+  const proj = project();
+  if (!proj) return;
+  baseViewBox = computeViewBox(proj);
+  viewport = copyViewBox(baseViewBox);
+  render();
+}
+
+function zoomViewport(factor, clientX = null, clientY = null) {
+  if (!viewport || !baseViewBox || !svgEl || !Number.isFinite(factor) || factor <= 0) return;
+  const rect = svgEl.getBoundingClientRect();
+  if (rect.width <= 0 || rect.height <= 0) return;
+  const x = clientX == null ? rect.left + rect.width / 2 : clientX;
+  const y = clientY == null ? rect.top + rect.height / 2 : clientY;
+  const ratioX = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+  const ratioY = Math.max(0, Math.min(1, (y - rect.top) / rect.height));
+  const requestedWidth = viewport.w * factor;
+  const minimumWidth = baseViewBox.w * 0.12;
+  const maximumWidth = baseViewBox.w * 8;
+  const width = Math.max(minimumWidth, Math.min(maximumWidth, requestedWidth));
+  const applied = width / viewport.w;
+  const height = viewport.h * applied;
+  viewport = {
+    x: viewport.x + ratioX * (viewport.w - width),
+    y: viewport.y + ratioY * (viewport.h - height),
+    w: width,
+    h: height,
+  };
+  render();
+}
+
 function confidenceColor(conf) {
   if (conf === undefined || conf === null) return '#3a7f5c';
   if (conf >= 0.85) return '#3a7f5c';    // green — high confidence
@@ -132,7 +175,11 @@ function render() {
   const proj = project();
   if (!proj || !svgEl) return;
 
-  const vb = computeViewBox(proj);
+  if (!baseViewBox || !viewport) {
+    baseViewBox = computeViewBox(proj);
+    viewport = copyViewBox(baseViewBox);
+  }
+  const vb = viewport;
   svgEl.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
 
   const walls    = proj.geometry?.walls    ?? [];
@@ -147,6 +194,16 @@ function render() {
   }
 
   const parts = [];
+
+  // ── exact source drawing underlay ─────────────────────────────────────────
+  // It shares this SVG viewBox with every vector, so pan/zoom cannot drift the layers apart.
+  if (sourceUnderlay) {
+    parts.push(`<image class="source-underlay"
+      x="0" y="0" width="${sourceUnderlay.imageWidth}" height="${sourceUnderlay.imageHeight}"
+      transform="${registrationSvgMatrix(sourceUnderlay.registration)}"
+      opacity="${sourceUnderlay.opacity}" preserveAspectRatio="none"
+      pointer-events="none" aria-hidden="true"/>`);
+  }
 
   // ── grid dots (background reference) ──────────────────────────────────────
   const gStep = 1000;
@@ -255,6 +312,9 @@ function render() {
   }
 
   svgEl.innerHTML = parts.join('\n');
+  // Assign the already-verified private blob URL through the DOM so it is never parsed
+  // as markup and remains outside the public static dependency graph.
+  svgEl.querySelector('image.source-underlay')?.setAttribute('href', sourceUnderlay?.imageUrl || '');
 
   // Refresh toolbar state
   const topology = validateProjectTopology(proj);
@@ -276,13 +336,20 @@ function render() {
     badge.title = [...topology.blocking, ...reviewRequired].map((item) => item.message).join('\n');
     badge.className = 'badge ' + (topology.blocking.length || reviewRequired.length > 0 ? 'warn' : 'ok');
   }
-  if (btnApprove) btnApprove.disabled = reviewRequired.length > 0 || !topology.ok;
+  if (btnApprove) btnApprove.disabled = !sourceUnderlay || reviewRequired.length > 0 || !topology.ok;
   if (btnUndo) btnUndo.disabled = !history?.canUndo();
   if (btnRedo) btnRedo.disabled = !history?.canRedo();
   if (btnAddWall) btnAddWall.classList.toggle('active', activeTool === 'wall.add');
+  const btnPan = document.getElementById('btnPan');
+  if (btnPan) {
+    btnPan.classList.toggle('active', activeTool === 'pan');
+    btnPan.setAttribute('aria-pressed', String(activeTool === 'pan'));
+  }
   if (banner) banner.textContent = activeTool === 'wall.add'
     ? (addWallStart ? 'Click the second endpoint · Esc cancels' : 'Click the first endpoint · Esc cancels')
-    : 'Drag endpoint handles · Click openings or room labels to edit';
+    : activeTool === 'pan'
+      ? 'Drag the drawing · wheel or ＋ / − zooms · Esc returns to editing'
+      : 'Source-aligned vectors · drag endpoints · click openings or room labels';
   if (gateSummary) {
     gateSummary.textContent = readiness.ok
       ? 'Ready for a corrected 3D concept. This is not an as-built record.'
@@ -454,6 +521,13 @@ function commit(op) {
 
 // ─── pointer events ───────────────────────────────────────────────────────────
 function onDown(e) {
+  const wantsPan = e.button === 1 || (e.button === 0 && activeTool === 'pan');
+  if (wantsPan) {
+    e.preventDefault();
+    drag = { type: 'pan', clientX: e.clientX, clientY: e.clientY };
+    svgEl.setPointerCapture(e.pointerId);
+    return;
+  }
   if (e.button !== 0) return;
   e.preventDefault();
   const t = e.target;
@@ -528,6 +602,23 @@ function onDown(e) {
 }
 
 function onMove(e) {
+  if (drag?.type === 'pan') {
+    e.preventDefault();
+    const rect = svgEl.getBoundingClientRect();
+    if (viewport && rect.width > 0 && rect.height > 0) {
+      const dx = e.clientX - drag.clientX;
+      const dy = e.clientY - drag.clientY;
+      viewport = {
+        ...viewport,
+        x: viewport.x - dx * viewport.w / rect.width,
+        y: viewport.y - dy * viewport.h / rect.height,
+      };
+      drag.clientX = e.clientX;
+      drag.clientY = e.clientY;
+      render();
+    }
+    return;
+  }
   if (activeTool === 'wall.add') {
     const walls = project()?.geometry?.walls ?? [];
     snapRes = resolveSnap(eventToMm(e), walls, { from: addWallStart });
@@ -556,6 +647,11 @@ function onMove(e) {
 function onUp(e) {
   if (!drag) return;
   e.preventDefault();
+  if (drag.type === 'pan') {
+    drag = null;
+    if (svgEl.hasPointerCapture(e.pointerId)) svgEl.releasePointerCapture(e.pointerId);
+    return;
+  }
   const mm   = eventToMm(e);
   const proj = project();
   const walls = proj.geometry?.walls ?? [];
@@ -598,6 +694,12 @@ function toggleAddWall() {
   render(); renderPanel();
 }
 
+function togglePan() {
+  activeTool = activeTool === 'pan' ? null : 'pan';
+  addWallStart = null; snapRes = null; drag = null; selected = null;
+  render(); renderPanel();
+}
+
 function cancelActiveTool() {
   if (!activeTool) return;
   activeTool = null; addWallStart = null; snapRes = null;
@@ -626,19 +728,58 @@ function approveGeometry() {
 
 
 // ─── init ─────────────────────────────────────────────────────────────────────
-export function init(options = {}) {
+export async function init(options = {}) {
   svgEl     = document.getElementById('editorSvg');
   propPanel = document.getElementById('propPanel');
   if (!svgEl) { console.error('editor: #editorSvg not found'); return; }
 
   if (!options.project) throw new TypeError('The correction editor requires geometry supplied by its authenticated parent journey.');
   const proj = options.project;
+  const supplied = options.sourceUnderlay;
+  if (typeof supplied?.imageUrl !== 'string' || !supplied.imageUrl) {
+    throw new TypeError('The correction editor requires the verified original-upload image.');
+  }
+  const parsedImageUrl = new URL(supplied.imageUrl, location.href);
+  if (parsedImageUrl.protocol !== 'blob:' || parsedImageUrl.origin !== location.origin) {
+    throw new TypeError('The correction editor accepts only a same-origin private source-image URL.');
+  }
+  if (proj.revision?.geometrySha256 !== supplied.geometrySha256) {
+    throw new TypeError('The source registration is not bound to this editable geometry revision.');
+  }
+  const registration = normalizePixelMetricRegistration(supplied.registration, {
+    sourceArtifactSha256: supplied.sourceArtifactSha256,
+    imageWidth: supplied.intrinsicPixels?.width,
+    imageHeight: supplied.intrinsicPixels?.height,
+    geometrySha256: supplied.geometrySha256,
+  });
+  // The iframe repeats the asynchronous integrity check at its own trust boundary.
+  await verifyPixelMetricRegistrationIntegrity(registration);
+  sourceUnderlay = {
+    imageUrl: parsedImageUrl.href,
+    imageWidth: supplied.intrinsicPixels.width,
+    imageHeight: supplied.intrinsicPixels.height,
+    registration,
+    opacity: 0.55,
+  };
+  baseViewBox = null;
+  viewport = null;
   history    = createProjectHistory(proj, { limit: 100 });
 
   // Toolbar
   document.getElementById('btnUndo')?.addEventListener('click', undo);
   document.getElementById('btnRedo')?.addEventListener('click', redo);
   document.getElementById('btnAddWall')?.addEventListener('click', toggleAddWall);
+  document.getElementById('btnPan')?.addEventListener('click', togglePan);
+  document.getElementById('btnZoomOut')?.addEventListener('click', () => zoomViewport(1.25));
+  document.getElementById('btnZoomIn')?.addEventListener('click', () => zoomViewport(0.8));
+  document.getElementById('btnFit')?.addEventListener('click', fitViewport);
+  const opacity = document.getElementById('sourceOpacity');
+  opacity?.addEventListener('input', () => {
+    sourceUnderlay.opacity = Math.max(0, Math.min(1, Number(opacity.value) / 100));
+    render();
+  });
+  const sourceBadge = document.getElementById('sourceBadge');
+  if (sourceBadge) sourceBadge.textContent = `SHA ${registration.sourceArtifactSha256.slice(0, 8)} · ${registration.sourceImageSizePx.width}×${registration.sourceImageSizePx.height}`;
   document.getElementById('btnApprove')?.addEventListener('click', approveGeometry);
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') cancelActiveTool();
@@ -649,6 +790,10 @@ export function init(options = {}) {
   svgEl.addEventListener('pointermove',  onMove);
   svgEl.addEventListener('pointerup',    onUp);
   svgEl.addEventListener('pointercancel', () => { drag = null; snapRes = null; render(); });
+  svgEl.addEventListener('wheel', (event) => {
+    event.preventDefault();
+    zoomViewport(event.deltaY < 0 ? 0.86 : 1.16, event.clientX, event.clientY);
+  }, { passive: false });
 
   render();
   renderPanel();

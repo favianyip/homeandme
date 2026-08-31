@@ -67,6 +67,189 @@ export function openingCutout(wall, opening) {
   ];
 }
 
+// Keep host-opening interval semantics in this dependency-free geometry module so the
+// readiness gate and the Three.js solid builder execute the exact same dry-run.
+export const WALL_INTERVAL_RATIO_EPS = 1e-9;
+
+const pointAtRatio = (wall, ratio) => [
+  wall.a[0] + (wall.b[0] - wall.a[0]) * ratio,
+  wall.a[1] + (wall.b[1] - wall.a[1]) * ratio,
+];
+
+function ratioAtPoint(wall, point) {
+  const dx = wall.b[0] - wall.a[0];
+  const dy = wall.b[1] - wall.a[1];
+  const lengthSquared = dx * dx + dy * dy;
+  return lengthSquared
+    ? ((point[0] - wall.a[0]) * dx + (point[1] - wall.a[1]) * dy) / lengthSquared
+    : 0;
+}
+
+/**
+ * Compile continuous host walls into deterministic solid and typed-opening intervals.
+ * This is also the authoritative CPU-only interval dry-run used before 3D approval.
+ */
+export function compileWallOpeningSegments(walls = [], openings = []) {
+  const wallIds = new Set();
+  for (const wall of walls) {
+    if (!wall?.id || wallIds.has(wall.id)) throw new Error(`Wall IDs must be present and unique: ${wall?.id || 'missing'}.`);
+    wallIds.add(wall.id);
+  }
+  const openingIds = new Set();
+  const openingsByWall = new Map();
+  for (const opening of openings) {
+    if (!opening?.id || openingIds.has(opening.id)) {
+      throw new Error(`Opening IDs must be present and unique: ${opening?.id || 'missing'}.`);
+    }
+    openingIds.add(opening.id);
+    if (!wallIds.has(opening.wall)) throw new Error(`Opening ${opening.id} references missing wall ${opening.wall}.`);
+    const hosted = openingsByWall.get(opening.wall) || [];
+    hosted.push(opening);
+    openingsByWall.set(opening.wall, hosted);
+  }
+
+  const trimmed = junctionTrim(walls.filter((wall) => !wall.void));
+  const segments = [];
+  for (const wall of walls) {
+    const hosted = [...(openingsByWall.get(wall.id) || [])]
+      .sort((left, right) => (left.t0 - right.t0) || (left.t1 - right.t1)
+        || String(left.id).localeCompare(String(right.id)));
+    const adjusted = trimmed.get(wall.id) || { a: wall.a, b: wall.b };
+
+    if (wall.void) {
+      if (hosted.length > 1) {
+        throw new Error(`Experimental void wall ${wall.id} cannot represent multiple openings.`);
+      }
+      const opening = hosted[0] || null;
+      segments.push({
+        ...wall,
+        id: `${wall.id}::legacy-opening:0:${opening?.id || 'untyped'}`,
+        a: [...wall.a], b: [...wall.b],
+        hostWallId: wall.id,
+        segmentKind: 'opening',
+        opening,
+        t0: 0, t1: 1,
+        legacyExperimental: true,
+        hostA: [...wall.a], hostB: [...wall.b],
+      });
+      continue;
+    }
+
+    const trimStart = ratioAtPoint(wall, adjusted.a);
+    const trimEnd = ratioAtPoint(wall, adjusted.b);
+    if (trimStart < -WALL_INTERVAL_RATIO_EPS || trimEnd > 1 + WALL_INTERVAL_RATIO_EPS
+      || trimStart >= trimEnd - WALL_INTERVAL_RATIO_EPS) {
+      throw new Error(`Trimmed host wall ${wall.id} has an invalid usable interval.`);
+    }
+
+    if (!hosted.length) {
+      segments.push({
+        ...wall,
+        a: [...adjusted.a], b: [...adjusted.b],
+        hostWallId: wall.id,
+        segmentKind: 'solid',
+        t0: trimStart, t1: trimEnd,
+        hostA: [...adjusted.a], hostB: [...adjusted.b],
+      });
+      continue;
+    }
+    let cursor = Math.max(0, trimStart);
+    let solidIndex = 0;
+    for (let openingIndex = 0; openingIndex < hosted.length; openingIndex += 1) {
+      const opening = hosted[openingIndex];
+      const start = opening.t0; const end = opening.t1;
+      if (!Number.isFinite(start) || !Number.isFinite(end)
+        || start < cursor - WALL_INTERVAL_RATIO_EPS
+        || start < trimStart - WALL_INTERVAL_RATIO_EPS
+        || end > trimEnd + WALL_INTERVAL_RATIO_EPS
+        || start >= end - WALL_INTERVAL_RATIO_EPS) {
+        throw new Error(`Opening ${opening.id} has an invalid or overlapping host interval.`);
+      }
+      if (start > cursor + WALL_INTERVAL_RATIO_EPS) {
+        segments.push({
+          ...wall,
+          id: `${wall.id}::solid:${solidIndex}`,
+          a: pointAtRatio(wall, cursor), b: pointAtRatio(wall, start),
+          hostWallId: wall.id,
+          segmentKind: 'solid',
+          t0: cursor, t1: start,
+          hostA: [...adjusted.a], hostB: [...adjusted.b],
+        });
+        solidIndex += 1;
+      }
+      segments.push({
+        ...wall,
+        id: `${wall.id}::opening:${openingIndex}:${opening.id}`,
+        a: pointAtRatio(wall, start), b: pointAtRatio(wall, end),
+        void: true,
+        hostWallId: wall.id,
+        openingId: opening.id,
+        segmentKind: 'opening',
+        opening,
+        t0: start, t1: end,
+        hostA: [...adjusted.a], hostB: [...adjusted.b],
+      });
+      cursor = end;
+    }
+    if (cursor < trimEnd - WALL_INTERVAL_RATIO_EPS) {
+      segments.push({
+        ...wall,
+        id: `${wall.id}::solid:${solidIndex}`,
+        a: pointAtRatio(wall, cursor), b: [...adjusted.b],
+        hostWallId: wall.id,
+        segmentKind: 'solid',
+        t0: cursor, t1: trimEnd,
+        hostA: [...adjusted.a], hostB: [...adjusted.b],
+      });
+    }
+  }
+  return segments;
+}
+
+/** Return whether the current box builder will lower this uniquely owned balcony edge. */
+export function polygonMinimumAxisSpan(polygon) {
+  if (!Array.isArray(polygon) || polygon.length < 3
+    || !polygon.every((point) => Array.isArray(point) && point.length === 2
+      && point.every((coordinate) => typeof coordinate === 'number' && Number.isFinite(coordinate)))) {
+    return 0;
+  }
+  const gaps = [0, 1].flatMap((axis) => {
+    const coordinates = polygon.map((point) => point[axis]).sort((left, right) => left - right);
+    const unique = coordinates.filter((value, index) => (
+      index === 0 || value - coordinates[index - 1] > EPS
+    ));
+    return unique.slice(1).map((value, index) => value - unique[index]);
+  }).filter((value) => value > EPS);
+  return gaps.length ? Math.min(...gaps) : 0;
+}
+
+export function isParapetHostWall(wall, rooms = []) {
+  const owners = rooms.filter((room) => {
+    const wallIds = room.cycle || room.wallIds || [];
+    return wallIds.includes(wall.id);
+  });
+  if (owners.length !== 1) return false;
+  const room = owners[0];
+  const label = room.label ?? room.name ?? '';
+  const polygon = room.poly ?? room.boundary;
+  const derivedAreaM2 = Array.isArray(polygon) && polygon.length >= 3
+    && polygon.every((point) => Array.isArray(point) && point.length === 2
+      && point.every((coordinate) => typeof coordinate === 'number' && Number.isFinite(coordinate)))
+    ? Math.abs(polygonArea(polygon)) / 1_000_000
+    : 0;
+  if (room.minDim != null
+    && (typeof room.minDim !== 'number' || !Number.isFinite(room.minDim)
+      || room.minDim <= 0)) return false;
+  if (room.labelSuspect != null && typeof room.labelSuspect !== 'boolean') return false;
+  const derivedMinDim = polygonMinimumAxisSpan(polygon);
+  const effectiveMinDim = room.minDim == null
+    ? derivedMinDim : Math.min(room.minDim, derivedMinDim);
+  return /BALCON|TERRACE|PATIO/i.test(label)
+    && room.labelSuspect !== true
+    && derivedAreaM2 >= 1.5
+    && effectiveMinDim >= 800;
+}
+
 // ─── polygon math ────────────────────────────────────────────────────────────
 
 /**
