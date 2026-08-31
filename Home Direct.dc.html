@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-SG">
 <head>
 <meta charset="utf-8">
 <link rel="icon" href="favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Home &amp; Me — Direct Contractor Renovation, Singapore</title>
-<meta name="description" content="Upload your floor plan, choose rooms and trades, and request an itemised direct-contractor renovation quote from Home &amp; Me Singapore.">
+<meta name="description" content="Choose a whole-home renovation or selected rooms, build the scope, add a floor plan if you have one, and request an itemised contractor quote from Home &amp; Me Singapore.">
+<meta name="theme-color" content="#14191b">
 <link rel="canonical" href="https://homeandme.sg/Home%20Direct.dc.html">
 <script src="./support.js"></script>
 </head>
@@ -21,10 +22,18 @@ html { scroll-behavior: smooth; }
 body { margin: 0; background: #f6f4ef; color: #14191b; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 body::after { content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: 0.05; background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNDAnIGhlaWdodD0nMTQwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44NScgbnVtT2N0YXZlcz0nMycvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPScxNDAnIGhlaWdodD0nMTQwJyBmaWx0ZXI9J3VybCgjbiknLz48L3N2Zz4="); }
 a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
+button, a { touch-action: manipulation; -webkit-tap-highlight-color: rgba(90,126,138,0.12); }
+a:active, button:active { opacity: 0.82; }
+.skip-link { position: fixed; top: 8px; left: 8px; z-index: 100; min-height: 44px; padding: 11px 14px; box-sizing: border-box; display: flex; align-items: center; border-radius: 999px; background: #f6f4ef; color: #14191b; transform: translateY(-150%); transition: transform 0.18s ease; }
+.skip-link:focus { transform: translateY(0); }
+a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; outline-offset: 3px !important; }
 @keyframes hnmRise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes hnmMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@keyframes hnmBlink { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
-@media (prefers-reduced-motion: reduce) { [data-marquee] { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  [data-marquee] { animation: none !important; }
+}
 @media (max-width: 1120px) { #navLinks { display: none !important; } #navBurger { display: flex !important; } }
 @media (max-width: 980px) {
   [data-two] { grid-template-columns: 1fr !important; }
@@ -53,9 +62,9 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
   [data-dhwrap] { height: 760svh; position: relative; }
   [data-dsticky] { position: sticky; top: 0; height: 100svh; overflow: hidden; display: flex; align-items: stretch; }
   [data-dtrack] { display: flex !important; flex: 0 0 700%; width: 700%; height: 100%; will-change: transform; }
-  [data-dblock] { flex: 0 0 calc(100% / 7); width: calc(100% / 7); min-height: 0 !important; height: 100%; padding: 84px 8px 132px !important; justify-content: center; border-top: none !important; overflow: hidden; }
+  [data-dblock] { box-sizing: border-box; flex: 0 0 calc(100% / 7); width: calc(100% / 7); min-height: 0 !important; height: 100%; padding: 116px 8px 104px !important; justify-content: flex-start; border-top: none !important; overflow: hidden; }
   [data-dbimg] { display: block; margin-bottom: 16px; }
-  [data-dprog] { display: flex !important; }
+  [data-dprog] { display: flex !important; top: 94px; bottom: auto !important; height: 2px; pointer-events: none; }
 }
 /* Phone with reduced motion: plain stacked list, no pinning, no sliding. */
 @media (max-width: 980px) and (prefers-reduced-motion: reduce) {
@@ -70,11 +79,12 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
 </style>
 </helmet>
 <div>
+  <a class="skip-link" href="#top">Skip to content</a>
   <div style="position: fixed; top: 0; left: 0; height: 2px; z-index: 70; background: #5a7e8a; width: {{ progress }};"></div>
 
   <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: {{ navBg }}; border-bottom: 1px solid {{ navBorder }}; backdrop-filter: blur(18px); transition: background 0.4s ease, border-color 0.4s ease;">
     <div style="max-width: 1360px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 44px); height: 78px; display: flex; align-items: center;">
-      <a href="#top" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 42px; width: auto; filter: {{ logoFilter }}; transition: filter 0.4s ease;"></a>
+      <a href="#top" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" width="168" height="168" style="height: 42px; width: auto; filter: {{ logoFilter }}; transition: filter 0.4s ease;"></a>
       <nav id="navLinks" style="display: flex; gap: 30px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 2.4px;">
         <a href="#direct" style="color: {{ navFg }}; padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">WHY DIRECT</a>
         <a href="#how" style="color: {{ navFg }}; padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">HOW IT WORKS</a>
@@ -82,14 +92,14 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         <a href="#coordinator" style="color: {{ navFg }}; padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">COORDINATOR</a>
         <a href="Renovation%20Guides.dc.html" style="color: {{ navFg }}; padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">GUIDES</a>
         <a href="#faq" style="color: {{ navFg }}; padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">FAQ</a>
-        <a href="Renovation%20Enquiry.dc.html" style="background: #5a7e8a; color: #fff; padding: 13px 26px; border-radius: 999px; letter-spacing: 2.2px;" style-hover="background: #14191b; color: #fff;">UPLOAD FLOOR PLAN</a>
+        <a href="Renovation%20Enquiry.dc.html" style="background: #5a7e8a; color: #fff; padding: 13px 26px; border-radius: 999px; letter-spacing: 2.2px;" style-hover="background: #14191b; color: #fff;">START ENQUIRY</a>
       </nav>
-      <button id="navBurger" type="button" onClick="{{ toggleMenu }}" style="display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid {{ navBurgerBorder }}; border-radius: 999px; background: none; cursor: pointer; font-size: 17px; color: {{ navFg }};">{{ menuIcon }}</button>
+      <button id="navBurger" type="button" onClick="{{ toggleMenu }}" aria-label="{{ menuLabel }}" aria-expanded="{{ menuOpen }}" aria-controls="mobile-nav" style="display: none; margin-left: auto; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid {{ navBurgerBorder }}; border-radius: 999px; background: none; cursor: pointer; font-size: 17px; color: {{ navFg }};">{{ menuIcon }}</button>
     </div>
   </header>
 
   <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
-    <div style="position: fixed; inset: 0; z-index: 58; background: #14191b; padding: 112px clamp(24px, 6vw, 48px) 40px; overflow: auto;">
+    <div id="mobile-nav" style="position: fixed; inset: 0; z-index: 58; background: #14191b; padding: 112px clamp(24px, 6vw, 48px) 40px; overflow: auto;">
       <nav style="display: grid; gap: 4px; font-family: 'Oswald', sans-serif; font-size: 26px; letter-spacing: 2.4px;">
         <a href="#direct" onClick="{{ closeMenu }}" style="color: #f6f4ef; padding: 14px 0; border-bottom: 1px solid rgba(246,244,239,0.14);">WHY DIRECT</a>
         <a href="#how" onClick="{{ closeMenu }}" style="color: #f6f4ef; padding: 14px 0; border-bottom: 1px solid rgba(246,244,239,0.14);">HOW IT WORKS</a>
@@ -99,21 +109,21 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         <a href="#faq" onClick="{{ closeMenu }}" style="color: #f6f4ef; padding: 14px 0; border-bottom: 1px solid rgba(246,244,239,0.14);">FAQ</a>
         <a sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener" style="color: #a9c4cc; padding: 14px 0;">WHATSAPP US</a>
         <a sc-camel-href="{{ mailTo }}" style="color: #a9c4cc; padding: 0 0 14px;">EMAIL US</a>
-        <a href="Renovation%20Enquiry.dc.html" style="margin-top: 10px; justify-self: start; background: #f6f4ef; color: #14191b; padding: 17px 32px; border-radius: 999px; font-size: 14px;">UPLOAD FLOOR PLAN</a>
+        <a href="Renovation%20Enquiry.dc.html" style="margin-top: 10px; justify-self: start; background: #f6f4ef; color: #14191b; padding: 17px 32px; border-radius: 999px; font-size: 14px;">START ENQUIRY</a>
       </nav>
     </div>
   </sc-if>
 
-  <section id="top" style="position: relative; min-height: min(94vh, 940px); background: #14191b; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
-    <img src="assets/portfolio/hero-minimalist-living.jpg" alt="Minimalist 5-room HDB living hall — a Home &amp; Me project" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.96;">
+  <section id="top" tabindex="-1" style="position: relative; min-height: min(94vh, 940px); background: #14191b; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+    <img src="assets/portfolio/hero-minimalist-living.jpg" alt="Minimalist 5-room HDB living hall, a Home &amp; Me project" width="1900" height="950" fetchpriority="high" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.96;">
     <div style="position: absolute; inset: 0; background: linear-gradient(96deg, rgba(20,25,27,0.92) 0%, rgba(20,25,27,0.78) 34%, rgba(20,25,27,0.34) 62%, rgba(20,25,27,0.1) 100%);"></div>
     <div style="position: absolute; inset: auto 0 0 0; height: 46%; background: linear-gradient(to top, rgba(20,25,27,0.82), rgba(20,25,27,0));"></div>
     <div style="position: relative; max-width: 1360px; width: 100%; margin: 0 auto; padding: 168px clamp(16px, 4vw, 44px) 0; box-sizing: border-box;">
       <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.8px; color: #a9c4cc; margin: 0 0 30px; display: flex; align-items: center; gap: 14px;"><span style="width: 44px; height: 1px; background: #a9c4cc;"></span>DIRECT CONTRACTOR RENOVATION · SINGAPORE</p>
       <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(44px, 8.2vw, 112px); line-height: 0.97; letter-spacing: -1.5px; margin: 0 0 28px; color: #f6f4ef; max-width: 15ch; animation: hnmRise 1s ease both;">Quoted by the people <em style="font-style: italic; color: #a9c4cc;">doing the work.</em></h1>
-      <p style="font-size: clamp(16px, 1.9vw, 19.5px); line-height: 1.66; color: rgba(246,244,239,0.76); margin: 0 0 38px; max-width: 470px; text-wrap: pretty; animation: hnmRise 1s ease 0.12s both;">Upload your floor plan, choose the rooms and the trades. The contractor who will hold the drill sends you the itemised quote — nobody in between adds a margin to it.</p>
+      <p style="font-size: clamp(16px, 1.9vw, 19.5px); line-height: 1.66; color: rgba(246,244,239,0.76); margin: 0 0 38px; max-width: 470px; text-wrap: pretty; animation: hnmRise 1s ease 0.12s both;">Choose whole home or selected rooms, build the scope, and add a floor plan if you have one.</p>
       <div style="display: flex; align-items: center; gap: 22px; flex-wrap: wrap; animation: hnmRise 1s ease 0.24s both;">
-        <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #f6f4ef; color: #14191b; padding: 19px 36px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">UPLOAD FLOOR PLAN</a>
+        <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #f6f4ef; color: #14191b; padding: 19px 36px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START ENQUIRY</a>
         <a href="#how" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; color: #f6f4ef; border: 1px solid rgba(246,244,239,0.38); padding: 19px 32px; border-radius: 999px;" style-hover="border-color: #f6f4ef; background: rgba(246,244,239,0.1);">HOW IT WORKS</a>
       </div>
     </div>
@@ -210,7 +220,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
           <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 20px;">HOW IT WORKS</p>
           <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0;">Five screens, then a real person.</h2>
         </div>
-        <p style="font-size: 15.5px; line-height: 1.65; color: #6d746f; max-width: 300px; margin: 0;">About four minutes. Stop halfway and your answers are still here when you come back.</p>
+        <p style="font-size: 15.5px; line-height: 1.65; color: #6d746f; max-width: 300px; margin: 0;">About four minutes. Your non-contact project choices stay here for 24 hours, so you can finish later.</p>
       </div>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(232px, 1fr)); gap: 1px; background: rgba(20,25,27,0.13); border-top: 1px solid rgba(20,25,27,0.13);">
         <sc-for list="{{ how }}" as="s" hint-placeholder-count="5">
@@ -222,7 +232,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         </sc-for>
       </div>
       <div style="margin-top: 40px; display: flex; align-items: center; gap: 22px; flex-wrap: wrap;">
-        <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #14191b; color: #f6f4ef; padding: 19px 36px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START — UPLOAD FLOOR PLAN</a>
+        <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #14191b; color: #f6f4ef; padding: 19px 36px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START ENQUIRY</a>
         <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #8a908c;">FREE · NO OBLIGATION · NO SHOWROOM VISIT</span>
       </div>
     </div>
@@ -254,7 +264,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         </sc-for>
         <div style="margin-top: 26px; border: 1px solid rgba(169,196,204,0.35); border-radius: 5px; padding: 26px 26px 30px; background: linear-gradient(150deg, rgba(90,126,138,0.16), rgba(90,126,138,0.04)); opacity: {{ qDoneOp }}; transition: opacity 0.8s ease;">
           <p style="font-size: 16.5px; line-height: 1.6; color: #f6f4ef; margin: 0 0 10px;">Every line arrives priced — in your quote, not on this page.</p>
-          <p style="font-size: 14.5px; line-height: 1.66; color: rgba(246,244,239,0.66); margin: 0 0 22px; text-wrap: pretty;">An honest number depends on your unit, its condition and your materials, so we don't publish rates that would be wrong for you. Upload your floor plan and the contractor prices these exact lines for your flat — free, and itemised.</p>
+          <p style="font-size: 14.5px; line-height: 1.66; color: rgba(246,244,239,0.66); margin: 0 0 22px; text-wrap: pretty;">An honest number depends on your unit, its condition and your materials, so we don't publish rates that would be wrong for you. Start with the rooms and work you need. Add a floor plan if you have one.</p>
           <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 12.5px; background: #f6f4ef; color: #14191b; padding: 16px 30px; border-radius: 999px; display: inline-block;" style-hover="background: #5a7e8a; color: #fff;">GET MY ITEMISED QUOTE</a>
         </div>
       </div>
@@ -274,7 +284,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
     <div data-dbody="1" style="max-width: 1360px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 44px);">
       <nav data-drail="1" aria-label="Design index">
         <sc-for list="{{ dRail }}" as="r" hint-placeholder-count="7">
-          <button type="button" onClick="{{ r.go }}" style="cursor: pointer; background: none; border: none; border-left: 2px solid {{ r.edge }}; text-align: left; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1px; color: {{ r.fg }}; padding: 3px 0 3px 8px; transition: color 0.3s ease, border-color 0.3s ease;">{{ r.no }}</button>
+          <button type="button" onClick="{{ r.go }}" aria-label="{{ r.label }}" style="min-height: 32px; cursor: pointer; background: none; border: none; border-left: 2px solid {{ r.edge }}; text-align: left; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1px; color: {{ r.fg }}; padding: 7px 0 7px 8px; transition: color 0.3s ease, border-color 0.3s ease;">{{ r.no }}</button>
         </sc-for>
       </nav>
       <div data-dhwrap="1"><div data-dsticky="1">
@@ -287,7 +297,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
             <p style="font-size: 15.5px; line-height: 1.66; color: #4a5350; margin: 0 0 20px; max-width: 38ch; text-wrap: pretty;">{{ b.desc }}</p>
             <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;">
               <sc-for list="{{ b.chips }}" as="c" hint-placeholder-count="4">
-                <button type="button" onClick="{{ c.pick }}" style="cursor: pointer; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.8px; padding: 9px 15px; border-radius: 999px; background: {{ c.bg }}; color: {{ c.fg }}; border: 1px solid {{ c.border }}; transition: all 0.25s ease;">{{ c.label }}</button>
+                <button type="button" onClick="{{ c.pick }}" style="min-height: 44px; cursor: pointer; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.8px; padding: 9px 15px; border-radius: 999px; background: {{ c.bg }}; color: {{ c.fg }}; border: 1px solid {{ c.border }}; transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;">{{ c.label }}</button>
               </sc-for>
             </div>
             <a sc-camel-href="{{ b.href }}" style="display: inline-block; align-self: flex-start; font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 12px; background: #14191b; color: #f6f4ef; padding: 15px 28px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START THIS DESIGN →</a>
@@ -302,7 +312,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
       </div></div>
       <div data-dstagecol="1">
         <div data-dstage="1">
-          <button type="button" data-dstagemain="1" onClick="{{ dOpenLb }}" title="View full size" style="all: unset; cursor: zoom-in; position: relative; border-radius: 5px; overflow: hidden; border: 1px solid rgba(20,25,27,0.13); aspect-ratio: 2 / 1; background: #e7e2d8; display: block;">
+          <button type="button" data-dstagemain="1" onClick="{{ dOpenLb }}" aria-label="View current project full size" title="View full size" style="all: unset; cursor: zoom-in; position: relative; border-radius: 5px; overflow: hidden; border: 1px solid rgba(20,25,27,0.13); aspect-ratio: 2 / 1; background: #e7e2d8; display: block;">
             {{ dStage }}
             <span style="position: absolute; left: 14px; bottom: 12px; z-index: 2; background: rgba(20,25,27,0.82); color: #f6f4ef; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2px; padding: 8px 13px; border-radius: 3px;">{{ dRoom }}</span>
           </button>
@@ -335,23 +345,21 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
         <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #f6f4ef; color: #14191b; padding: 18px 34px; border-radius: 999px; display: inline-block;" style-hover="background: #5a7e8a; color: #fff;">ADD ONE TO MY ENQUIRY</a>
       </div>
       <div data-reveal="1" style="min-width: 0; position: relative;">
-        <img src="assets/portfolio/contemporary-4-room-hdb-design-02-living-hall.jpg" alt="Coordinated Home &amp; Me project" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 5px; display: block;">
+        <img src="assets/portfolio/contemporary-4-room-hdb-design-02-living-hall.jpg" alt="Coordinated Home &amp; Me project" width="1600" height="800" loading="lazy" style="width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 5px; display: block;">
         <span data-overlap="1" style="position: absolute; left: 0; bottom: 26px; margin-left: -28px; background: #5a7e8a; color: #fff; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; padding: 14px 20px; border-radius: 3px;">ONE POINT OF CONTACT</span>
       </div>
     </div>
   </section>
 
-  <sc-if value="{{ showThreeD }}" hint-placeholder-val="{{ true }}">
-    <section style="background: #0e1214; color: #f6f4ef; border-top: 1px solid rgba(246,244,239,0.12); padding: clamp(38px, 5vw, 58px) clamp(16px, 4vw, 44px);">
-      <div style="max-width: 1360px; margin: 0 auto; display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap;">
-        <span style="display: flex; align-items: center; gap: 10px; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.6px; color: #7fb08a; border: 1px solid rgba(127,176,138,0.45); border-radius: 999px; padding: 9px 16px; flex: none;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #7fb08a; animation: hnmBlink 2.4s ease-in-out infinite;"></span>IN DEVELOPMENT</span>
-        <div style="flex: 1; min-width: 260px;">
-          <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(21px, 2.6vw, 30px); letter-spacing: -0.2px; margin: 0 0 10px;">Floor plan to 3D — not ready yet.</h3>
-          <p style="font-size: 15.5px; line-height: 1.68; color: rgba(246,244,239,0.66); margin: 0; max-width: 74ch; text-wrap: pretty;">We are building a tool that turns your HDB plan into a walkable 3D of your own unit. It reads layouts reliably today, but not well enough to price a job against — so it is not part of your quote and we are not charging for it. When it works, you will see it here.</p>
-        </div>
+  <section style="background: #0e1214; color: #f6f4ef; border-top: 1px solid rgba(246,244,239,0.12); padding: clamp(38px, 5vw, 58px) clamp(16px, 4vw, 44px);">
+    <div style="max-width: 1360px; margin: 0 auto; display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap;">
+      <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.6px; color: #a9c4cc; border: 1px solid rgba(169,196,204,0.45); border-radius: 999px; padding: 9px 16px; flex: none;">HUMAN REVIEW</span>
+      <div style="flex: 1; min-width: 260px;">
+        <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(21px, 2.6vw, 30px); letter-spacing: -0.2px; margin: 0 0 10px;">A floor plan is helpful, not required.</h3>
+        <p style="font-size: 15.5px; line-height: 1.68; color: rgba(246,244,239,0.66); margin: 0; max-width: 74ch; text-wrap: pretty;">Upload the original if it helps explain the job. A Home &amp; Me coordinator reviews it with your choices. The site does not automatically read or price from the plan.</p>
       </div>
-    </section>
-  </sc-if>
+    </div>
+  </section>
 
   <section id="faq" style="padding: clamp(60px, 9vw, 120px) clamp(16px, 4vw, 44px); scroll-margin-top: 78px;">
     <div style="max-width: 1360px; margin: 0 auto;">
@@ -376,10 +384,10 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
 
   <section style="position: relative; overflow: hidden; background: #5a7e8a; color: #fff; padding: clamp(64px, 9vw, 120px) clamp(16px, 4vw, 44px); text-align: center;">
     <div style="position: relative; max-width: 900px; margin: 0 auto;">
-      <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(34px, 6vw, 74px); line-height: 1.02; letter-spacing: -1px; margin: 0 0 22px;">Send us your floor plan.</h2>
-      <p style="font-size: 17px; line-height: 1.66; color: rgba(255,255,255,0.88); margin: 0 0 34px;">Five steps, no obligation, and it goes straight to our team on WhatsApp.</p>
+      <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(34px, 6vw, 74px); line-height: 1.02; letter-spacing: -1px; margin: 0 0 22px;">Start with the job, not the document.</h2>
+      <p style="font-size: 17px; line-height: 1.66; color: rgba(255,255,255,0.88); margin: 0 0 34px;">Choose whole home or selected rooms. Add a floor plan if you have one. Five screens, then a human review.</p>
       <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-        <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #14191b; color: #f6f4ef; padding: 19px 36px; border-radius: 999px;" style-hover="background: #f6f4ef; color: #14191b;">UPLOAD FLOOR PLAN</a>
+        <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #14191b; color: #f6f4ef; padding: 19px 36px; border-radius: 999px;" style-hover="background: #f6f4ef; color: #14191b;">START ENQUIRY</a>
         <a sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; border: 1px solid rgba(255,255,255,0.55); color: #fff; padding: 19px 34px; border-radius: 999px;" style-hover="background: rgba(255,255,255,0.14);">WHATSAPP {{ waPretty }}</a>
       </div>
       <p style="font-size: 14.5px; color: rgba(255,255,255,0.82); margin: 26px 0 0;">Prefer email? <a sc-camel-href="{{ mailTo }}" style="color: #fff; border-bottom: 1px solid rgba(255,255,255,0.5);">{{ email }}</a></p>
@@ -389,13 +397,13 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
   <footer style="background: #14191b; color: rgba(246,244,239,0.72); padding: clamp(44px, 6vw, 68px) clamp(16px, 4vw, 44px) 34px;">
     <div style="max-width: 1360px; margin: 0 auto; display: flex; gap: 40px; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;">
       <div style="max-width: 400px;">
-        <img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height: 40px; width: auto; margin-bottom: 16px; filter: brightness(0) invert(1);">
+        <img src="assets/images/hnm-logo.png" alt="Home &amp; Me" width="168" height="168" loading="lazy" style="height: 40px; width: auto; margin-bottom: 16px; filter: brightness(0) invert(1);">
         <p style="font-size: 14.5px; line-height: 1.65; margin: 0;">Direct-contractor renovation in Singapore. We connect you to the trade doing the work and stay out of the markup.</p>
       </div>
       <div style="display: flex; gap: clamp(28px, 4vw, 56px); flex-wrap: wrap;">
         <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px;">
           <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.4px; color: #6d746f;">START</span>
-          <a href="Renovation%20Enquiry.dc.html" style="color: rgba(246,244,239,0.86);" style-hover="color: #a9c4cc;">Upload floor plan</a>
+          <a href="Renovation%20Enquiry.dc.html" style="color: rgba(246,244,239,0.86);" style-hover="color: #a9c4cc;">Start enquiry</a>
           <a href="#portfolio" style="color: rgba(246,244,239,0.86);" style-hover="color: #a9c4cc;">Portfolio</a>
           <a href="#coordinator" style="color: rgba(246,244,239,0.86);" style-hover="color: #a9c4cc;">Project coordinator</a>
         </div>
@@ -449,7 +457,7 @@ a { color: #14191b; text-decoration: none; } a:hover { color: #5a7e8a; }
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+6588376196&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;homeandme2017@gmail.com&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;showThreeDNote&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+6588376196&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;homeandme2017@gmail.com&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;}}">
 const TICKER = ['HACKING', 'MASONRY & TILING', 'PAINTING', 'CARPENTRY', 'PLUMBING', 'ELECTRICAL', 'FALSE CEILING', 'GLASS & ALUMINIUM', 'WATERPROOFING', 'FLOORING', 'AIRCON', 'HAULAGE'];
 const CLAY = '#a8563c';
 
@@ -662,6 +670,7 @@ class Component extends DCLogic {
   photo(w, big) {
     return React.createElement('img', {
       src: 'assets/' + w.file, alt: w.style + ' ' + w.room.toLowerCase() + ' project',
+      width: 1600, height: 900, loading: big ? 'eager' : 'lazy',
       style: big
         ? { maxWidth: '100%', maxHeight: '78vh', objectFit: 'contain', display: 'block', borderRadius: '4px' }
         : { width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.9s cubic-bezier(0.2,0.8,0.2,1)' },
@@ -684,6 +693,7 @@ class Component extends DCLogic {
       progress: this.state.progress,
       menuOpen: this.state.menuOpen,
       menuIcon: this.state.menuOpen ? '✕' : '☰',
+      menuLabel: this.state.menuOpen ? 'Close menu' : 'Open menu',
       toggleMenu: () => this.setState((s) => ({ menuOpen: !s.menuOpen })),
       closeMenu: () => this.setState({ menuOpen: false }),
       navBg: solid ? 'rgba(246,244,239,0.9)' : 'rgba(20,25,27,0.16)',
@@ -695,7 +705,6 @@ class Component extends DCLogic {
       waPretty: '+' + digits.slice(0, 2) + ' ' + digits.slice(2, 6) + ' ' + digits.slice(6),
       email,
       mailTo: 'mailto:' + email + '?subject=' + encodeURIComponent('Renovation enquiry — Home & Me'),
-      showThreeD: this.props.showThreeDNote !== false,
       tickerRows: [{ items: TICKER }, { items: TICKER }],
       iconHome: this.icon('home'), iconWork: this.icon('work'),
       iconPlan: this.icon('plan'), iconChat: this.icon('chat'),
@@ -706,14 +715,14 @@ class Component extends DCLogic {
         { head: 'Your scope', body: 'One toilet or the whole flat. Only what you tick gets priced.' },
       ],
       usual: [
-        plain('01', 'You', 'brief, floor plan, budget'),
+        plain('01', 'You', 'project brief, optional plan, priorities'),
         marked('02', 'Design firm sales consultant', 'commission on your contract value'),
         marked('03', 'Firm’s project manager', 'showroom, marketing, overhead'),
         marked('04', 'Main contractor', 'margin on the whole package'),
         plain('05', 'The tiler, carpenter, plumber', 'the only people who touch your flat'),
       ],
       direct: [
-        teal('01', 'You', 'plan, rooms, trades — filled in once'),
+        teal('01', 'You', 'project path, rooms, trades and references'),
         teal('02', 'Home & Me', 'we match and pass it on, unedited'),
         teal('03', 'The contractor doing the work', 'quotes you directly, itemised'),
       ],
@@ -730,11 +739,11 @@ class Component extends DCLogic {
         'Sell or share your details with other firms.',
       ],
       how: [
-        { no: '01', title: 'YOUR UNIT & CONTACT', body: 'Address, unit type, mobile and email. Access and floor level change the price, so the contractor needs them upfront.' },
-        { no: '02', title: 'PLAN & STYLE', body: 'Upload the floor plan — we read the layout and size, you confirm it. Then pick the look from real project visuals.' },
-        { no: '03', title: 'AREAS', body: 'Whole house, or just the master bath. Only what you pick gets quoted.' },
-        { no: '04', title: 'SCOPE OF WORKS', body: 'Tick the trades per room — hacking, tiling, painting, carpentry, plumbing and the rest. Unsure? Leave it for the walkthrough.' },
-        { no: '05', title: 'REVIEW & SEND', body: 'Review the enquiry and press send — it lands with our team instantly, with an email copy, and we reply on WhatsApp the same day.' },
+        { no: '01', title: 'PROJECT FIT', body: 'Choose whole home or selected rooms, then add the property details you know.' },
+        { no: '02', title: 'YOUR PRIORITIES', body: 'The questions adapt to your route. Add room scope first or start with optional plans and style.' },
+        { no: '03', title: 'COMPLETE THE BRIEF', body: 'Add the remaining room details, timing and references. Contractor to advise is a complete answer when you are unsure.' },
+        { no: '04', title: 'CONTACT DETAILS', body: 'Add your address and contact details after the project brief. They are not saved in browser storage.' },
+        { no: '05', title: 'REVIEW & SEND', body: 'Review the enquiry and press send. It is stored securely, then our team is alerted by WhatsApp and email.' },
       ].map((s, i) => ({ ...s, i: String(i),
         numFg: i < this.state.howOn ? '#5a7e8a' : 'rgba(90,126,138,0.32)',
         edge: i < this.state.howOn ? '#5a7e8a' : 'rgba(20,25,27,0.13)' })),
@@ -753,6 +762,7 @@ class Component extends DCLogic {
       qDoneOp: this.state.qSeen >= 5 ? '1' : '0.35',
       dRail: DESIGNS.map((d, i) => ({
         no: String(i + 1).padStart(2, '0'),
+        label: 'View ' + d.label + ' design',
         fg: i === this.state.dActive ? '#14191b' : '#b3b7b2',
         edge: i === this.state.dActive ? '#5a7e8a' : 'transparent',
         go: () => {
@@ -769,8 +779,9 @@ class Component extends DCLogic {
         slideImg: React.createElement('img', {
           src: 'assets/' + d.items[i === this.state.dActive ? this.state.dImg : 0].file,
           alt: d.label + ' project visual',
+          width: 1600, height: 900,
           loading: i < 2 ? 'eager' : 'lazy',
-          style: { width: '100%', aspectRatio: '16 / 10', objectFit: 'cover', borderRadius: '5px',
+          style: { width: '100%', height: 'auto', aspectRatio: '16 / 10', objectFit: 'cover', borderRadius: '5px',
             border: '1px solid rgba(20,25,27,0.13)', display: 'block' },
         }),
         chips: d.items.map((w, ii) => {
@@ -784,6 +795,7 @@ class Component extends DCLogic {
           key: d.id + '-' + ii,
           src: 'assets/' + w.file,
           alt: w.style + ' ' + w.room.toLowerCase() + ' project visual',
+          width: 1600, height: 900,
           loading: i === 0 ? 'eager' : 'lazy',
           style: { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
             opacity: i === this.state.dActive && ii === this.state.dImg ? 1 : 0,
@@ -792,7 +804,7 @@ class Component extends DCLogic {
       dThumbs: React.createElement('span', { style: { display: 'contents' } },
         DESIGNS[this.state.dActive].items.map((w, ii) => React.createElement('button', {
           key: 'th-' + this.state.dActive + '-' + ii,
-          type: 'button', title: w.room,
+          type: 'button', title: w.room, 'aria-label': 'Show ' + w.room.toLowerCase() + ' view',
           onClick: () => this.setState({ dImg: ii }),
           style: { all: 'unset', cursor: 'pointer', position: 'relative', borderRadius: '4px', overflow: 'hidden',
             border: '1px solid rgba(20,25,27,0.13)', aspectRatio: '2 / 1',
@@ -800,7 +812,7 @@ class Component extends DCLogic {
             boxShadow: ii === this.state.dImg ? '0 0 0 2px #5a7e8a' : 'none',
             transition: 'opacity 0.3s ease, box-shadow 0.3s ease' },
         }, React.createElement('img', {
-          src: 'assets/' + w.file, alt: '', loading: 'lazy',
+          src: 'assets/' + w.file, alt: '', width: 1600, height: 900, loading: 'lazy',
           style: { width: '100%', height: '100%', objectFit: 'cover', display: 'block' },
         })))),
       dRoom: DESIGNS[this.state.dActive].items[this.state.dImg].room,
@@ -832,7 +844,7 @@ class Component extends DCLogic {
         { no: '03', q: 'WHY IS THERE NO PRICE LIST ON THIS SITE?', a: 'Because an honest renovation price depends on your unit, its condition and your material choices. A published rate would be wrong for most people, and wrong numbers are not transparency.' },
         { no: '04', q: 'HOW MANY CONTRACTORS WILL CALL ME?', a: 'We match your job to the trade that fits it and tell you who that is. Your number does not get circulated to a pool of firms.' },
         { no: '05', q: 'CAN I RENOVATE JUST ONE ROOM?', a: 'Yes — a single toilet or one kitchen is a normal job here. Pick that area in step 3 and nothing else gets quoted.' },
-        { no: '06', q: 'DO YOU DO CONDOS AND LANDED?', a: 'Yes. The plan reading is tuned for HDB layouts today, so for other property types you may need to type the unit size yourself.' },
+        { no: '06', q: 'DO YOU DO CONDOS AND LANDED?', a: 'Yes. Choose the closest property type and enter the size you know. Add a floor plan if you have one; a person reviews it with your brief.' },
       ],
     };
   }

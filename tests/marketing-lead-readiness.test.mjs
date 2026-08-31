@@ -52,16 +52,32 @@ test('legal copy matches the enquiry-only service and current cookie behavior', 
 
 test('public copy matches the server-delivered enquiry with WhatsApp fallback', () => {
   const enquiry = read('Renovation%20Enquiry.dc.html');
-  // Delivery claims must stay true: server send + email copy, same-day reply tone.
-  assert.match(enquiry, /Sends your enquiry straight to the Home & Me team/);
-  assert.match(enquiry, /WhatsApp alert plus an email copy/);
-  // The fallback path (endpoint down -> customer presses send in WhatsApp) keeps its honest copy.
-  assert.match(enquiry, /did not respond, so this opened in WhatsApp for you to review and press send/);
+  // Delivery claims must stay true: the response confirms storage, while alerts happen afterward.
+  assert.match(enquiry, /Your enquiry was received and stored/);
+  assert.match(enquiry, /goes to our secure enquiry line/);
+  assert.doesNotMatch(enquiry, /lands with our team instantly|WhatsApp alert plus an email copy/);
+  // The fallback path must account for popup blocking.
+  assert.match(enquiry, /could not confirm it opened/);
+  assert.match(enquiry, /fallbackOpened = !!window\.open/);
   // Consent covers storage, not just contact.
   assert.match(enquiry, /I agree Home &amp; Me may store this enquiry and contact me/);
   const legal = read('Legal.dc.html');
   assert.match(legal, /delivered to Home &amp; Me’s own lead system, which stores it — including any floor plan you upload — securely and alerts our team by WhatsApp and email/);
   assert.doesNotMatch(legal, /visible for you to review before you press send/i);
+});
+
+test('homepage describes the adaptive journey and keeps floor plans optional', () => {
+  const home = read('Home%20Direct.dc.html');
+  const index = read('index.html');
+  assert.match(home, /Choose whole home or selected rooms, build the scope, and add a floor plan if you have one/);
+  assert.match(home, /A floor plan is helpful, not required/);
+  assert.match(home, /does not automatically read or price from the plan/);
+  assert.match(home, /stored securely, then our team is alerted by WhatsApp and email/);
+  assert.match(home, /class="skip-link" href="#top"/);
+  assert.match(home, /aria-label="\{\{ menuLabel \}\}" aria-expanded="\{\{ menuOpen \}\}"/);
+  assert.match(home, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.match(index, /add a floor plan if you have one/);
+  assert.doesNotMatch(home, /UPLOAD FLOOR PLAN|we read the layout and size|lands with our team instantly|Floor plan to 3D|plan reading is tuned/i);
 });
 
 test('enquiry calls exactly the sanctioned lead endpoint and nothing else', () => {
