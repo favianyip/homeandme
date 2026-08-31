@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <link rel="icon" href="../favicon.svg">
+  <link rel="stylesheet" href="../assets/css/project-journey.css">
+  <title>Project Journey release dossier contract</title>
+</head>
+<body data-result="running">
+  <main id="fixture"></main>
+  <script type="module">
+    try {
+      const { ProjectJourneyApp } = await import('../project-journey.js');
+      document.querySelector('#fixture').innerHTML = `
+        <span id="projectRef"></span>
+        <span id="runtimeBadge"></span>
+        <ol id="workflowRail"></ol>
+        <span id="railProgress"></span>
+        <section id="workHead"><p id="stageEyebrow"></p><h1 id="stageTitle"></h1><p id="stageCopy"></p></section>
+        <div id="blocker"><span id="blockerText"></span></div>
+        <div id="evidenceList"></div>
+        <div id="workbench"></div>
+        <dialog id="editorDialog"><button id="editorClose" type="button">Close</button><iframe id="editorFrame"></iframe></dialog>`;
+      const app = new ProjectJourneyApp();
+      app.render();
+
+      const dossier = document.querySelector('.release-dossier');
+      const steps = [...document.querySelectorAll('.release-dossier-step')];
+      if (!dossier || dossier.getAttribute('aria-labelledby') !== 'releaseDossierTitle') throw new Error('Accessible dossier region is missing.');
+      if (steps.length !== 6) throw new Error(`Expected six release steps, found ${steps.length}.`);
+      if (steps.some((step) => step.dataset.release !== 'not_released')) throw new Error('Flags-off page claimed a released service stage.');
+      if (steps.some((step) => !step.dataset.proof)) throw new Error('A release step omitted its controlled-proof classification.');
+      if (!dossier.querySelector('a[href="ReviewedReferences.html"]')) throw new Error('Reviewed synthetic evidence is not linked.');
+      if (dossier.querySelector('input, [data-action], form')) throw new Error('Static release dossier exposed a customer mutation control.');
+      if (getComputedStyle(dossier).display === 'none') throw new Error('Release dossier is not visible.');
+      app.destroy();
+      document.body.dataset.result = 'pass';
+    } catch (error) {
+      document.body.dataset.result = 'fail';
+      document.body.textContent = error.stack || error.message;
+    }
+  </script>
+</body>
+</html>

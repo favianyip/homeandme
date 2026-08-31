@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://homeandme.sg/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://homeandme.sg/Home%20Direct.dc.html</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://homeandme.sg/Renovation%20Enquiry.dc.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://homeandme.sg/AboutUs.dc.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://homeandme.sg/ContactUs.dc.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://homeandme.sg/FaqAndHelp.dc.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://homeandme.sg/Legal.dc.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://homeandme.sg/Renovation%20Guides.dc.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://homeandme.sg/guides/how-to-read-hdb-floor-plan.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://homeandme.sg/guides/floor-plan-concept-visualisation.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://homeandme.sg/guides/hdb-bto-layout-planning.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://homeandme.sg/guides/hdb-resale-layout-planning.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://homeandme.sg/guides/concept-visualisation-limitations.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+</urlset>

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Private bare-shell workflow surface fixture</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/css/private-shell-workflow.css">
+</head>
+<body data-result="running" data-test-fixture="private-shell-workflow">
+  <div id="surface"></div>
+  <script type="module">
+    import {
+      renderPrivateShellWorkflow,
+      updatePrivateShellOrbitPresentation,
+    } from '../private-shell-workflow-view.js';
+
+    const hash = (character) => character.repeat(64);
+    const view = (name, room, role, character) => ({
+      view: name,
+      roomId: room ? `room-${name}` : null,
+      roomName: room,
+      roomFunction: room ? name : null,
+      artifactRole: role,
+      artifactFilename: `${name}.png`,
+      artifactSha256: hash(character),
+      imageQuality: {
+        contract: 'spatialforge-neutral-shell-png-quality/1',
+        widthPixels: 1280,
+        heightPixels: 800,
+        meanLuma: 146.4,
+        stddevLuma: 38.2,
+        whitePixelFraction: .11,
+        blackPixelFraction: .02,
+        passed: true,
+        failureCodes: [],
+      },
+    });
+
+    const state = {
+      phase: 'shell_review',
+      projectId: 'HNM-2408-019',
+      release: { releaseId: hash('a') },
+      source: {
+        geometryVersion: 7,
+        geometrySha256: hash('1'),
+        verticalDimensionsApprovalVersion: 2,
+      },
+      shell: {
+        shellModelVersion: 3,
+        shellModelSha256: hash('5'),
+        artifactManifestSha256: hash('4'),
+        approvalStatus: 'ready',
+        verificationComplete: true,
+        artifactTransportContract: 'same-origin-private-no-store/1',
+        glbArtifact: {
+          role: 'shell_geometry_glb',
+          mediaType: 'model/gltf-binary',
+          byteSize: 274560,
+          sha256: hash('3'),
+        },
+        reviewViews: [
+          view('overview', null, 'shell_review_overview', '6'),
+          view('living', 'Living / dining', 'shell_review_living', '7'),
+          view('bedroom', 'Bedroom 01', 'shell_review_bedroom', '8'),
+          view('entry-window', 'Entrance opening coverage', 'shell_review_entry_window', '9'),
+        ],
+      },
+      evidence: {
+        counts: { walls: 17, doors: 7, windows: 11, rooms: 8, hostedOpenings: 18, reviewViews: 4 },
+      },
+      visualQuality: { status: 'passed' },
+      blockers: [],
+      actions: {
+        generateShell: false,
+        recoverShell: false,
+        inspectShell: true,
+        approveShell: false,
+        returnToCorrection: true,
+        functionalFurnitureBrief: false,
+      },
+      downstreamLocks: {
+        designSelection: true,
+        materials: true,
+        furnishedModel: true,
+        rendering: true,
+        quotation: true,
+        payment: true,
+      },
+    };
+
+    try {
+      renderPrivateShellWorkflow(document.querySelector('#surface'), state);
+      updatePrivateShellOrbitPresentation(document.querySelector('#surface'), {
+        status: 'disabled',
+      });
+      document.body.dataset.result = 'pass';
+    } catch (error) {
+      document.body.dataset.result = 'fail';
+      document.body.textContent = error.stack || error.message;
+    }
+  </script>
+</body>
+</html>

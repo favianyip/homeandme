@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Private complete customer journey fixture</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/css/private-complete-journey.css">
+</head>
+<body data-result="running" data-test-fixture="private-complete-journey">
+  <main id="surface"></main>
+  <script type="module">
+    import {
+      PRIVATE_COMPLETE_JOURNEY_EVIDENCE_SCHEMA,
+      PRIVATE_COMPLETE_JOURNEY_STAGE_ORDER,
+      renderPrivateCompleteJourney,
+    } from '../private-complete-journey-view.js';
+    import { DESIGN_REFERENCE_SCHEMA } from '../journey-design-references.js';
+    import { LAYOUT_REVIEW_PREVIEW_SCHEMA } from '../journey-layout-review.js';
+    import { DETERMINISTIC_RENDERER, RENDER_REQUEST_SCHEMA } from '../journey-render-contract.js';
+    import {
+      FUNCTIONAL_FURNITURE_BRIEF_SCHEMA,
+      PRIVATE_SHELL_CUSTOMER_WORKFLOW_SCHEMA,
+    } from '../journey-shell-customer-workflow.js';
+    import { PRIVATE_BARE_SHELL_REVIEW_SCHEMA } from '../journey-shell-review.js';
+    import { REGISTRATION_SCHEMA } from '../journey-source-registration.js';
+
+    const hash = (character) => character.repeat(64);
+    const evidence = {
+      schema: PRIVATE_COMPLETE_JOURNEY_EVIDENCE_SCHEMA,
+      workflowContract: 'bare_shell_first/1',
+      projectId: 'private-controlled-journey-01',
+      contracts: {
+        workflow: 'bare_shell_first/1',
+        sourceRegistration: REGISTRATION_SCHEMA,
+        privateShellWorkflow: PRIVATE_SHELL_CUSTOMER_WORKFLOW_SCHEMA,
+        shellReview: PRIVATE_BARE_SHELL_REVIEW_SCHEMA,
+        furnitureBrief: FUNCTIONAL_FURNITURE_BRIEF_SCHEMA,
+        layoutPreview: LAYOUT_REVIEW_PREVIEW_SCHEMA,
+        designSelection: 'spatialforge-design-selection/1',
+        designReference: DESIGN_REFERENCE_SCHEMA,
+        furnishedModel: 'spatialforge-furnished-model/2',
+        renderRequest: RENDER_REQUEST_SCHEMA,
+        renderer: DETERMINISTIC_RENDERER,
+        finalApproval: 'spatialforge-selection-design-approval/1',
+      },
+      provenance: {
+        sourceClass: 'owned_controlled_integration_fixture',
+        detectorOutput: false,
+        realHdbHoldoutPassed: false,
+        customerVisualAcceptanceRecorded: false,
+        asBuiltEvidence: false,
+        productionBackendConnected: false,
+        publicServiceReleased: false,
+        percentageAccuracyClaimed: false,
+      },
+      source: {
+        uploadArtifactRole: 'original_upload', uploadSha256: hash('a'), uploadByteSize: 4831,
+        imageWidthPx: 900, imageHeightPx: 600, registrationSchema: REGISTRATION_SCHEMA,
+        registrationSha256: hash('b'), registrationGeometrySha256: hash('c'),
+      },
+      geometry: {
+        approvalStatus: 'approved', geometryVersion: 3, geometrySha256: hash('c'),
+        geometry2dApprovalVersion: 2, geometry2dApprovalSha256: hash('d'),
+        verticalDimensionsApprovalVersion: 1, verticalDimensionsApprovalSha256: hash('e'),
+        wholeUnitTopologySha256: hash('f'), wallCount: 6, doorCount: 3, windowCount: 3,
+        roomCount: 3, topologyIssueCount: 0,
+      },
+      shell: {
+        approvalStatus: 'approved', shellModelVersion: 1, shellModelSha256: hash('1'),
+        artifactManifestSha256: hash('2'), shellApprovalVersion: 1,
+        shellApprovalSha256: hash('3'), geometrySha256: hash('c'),
+        artifactVerificationComplete: true, roomCoverageComplete: true,
+        reviewViewCount: 4, placementCount: 0,
+      },
+      functional: {
+        briefVersion: 1, briefSha256: hash('4'), shellModelSha256: hash('1'),
+        optionSetSha256: hash('5'), layoutVersion: 1, layoutSha256: hash('6'),
+        selectedOptionSha256: hash('7'), layoutId: 'layout-storage-01',
+        layoutType: 'storage_optimised', placementCount: 5, roomCount: 3,
+        roomsCovered: 3, hardViolationCount: 0, feasible: true, approved: true,
+      },
+      design: {
+        selectionStatus: 'complete', designSelectionVersion: 1,
+        designSelectionSha256: hash('8'), layoutSha256: hash('6'),
+        designReferenceId: 'hnm-scandinavian-calm-v1', designReferenceSha256: hash('9'),
+        rightsReceiptSha256: hash('0'), externalReferenceImageCount: 0,
+      },
+      render: {
+        modelVersion: 1, modelSha256: hash('a'), modelAuthoritySha256: hash('b'),
+        modelApprovalVersion: 1, modelApprovalSha256: hash('c'),
+        designSelectionSha256: hash('8'), renderVersion: 1, renderSetSha256: hash('d'),
+        renderRequestSha256: hash('e'), renderer: DETERMINISTIC_RENDERER,
+        requestedOutputSha256: hash('f'), finalApprovalVersion: 1,
+        finalApprovalSha256: hash('1'), externalConditioningCount: 0, deterministic: true,
+      },
+    };
+
+    try {
+      const probe = document.createElement('div');
+      let defaultOff = false;
+      try { renderPrivateCompleteJourney(probe, evidence); } catch (error) {
+        defaultOff = /disabled/i.test(error.message);
+      }
+      if (!defaultOff || probe.childElementCount !== 0) throw new Error('Surface did not fail closed by default.');
+
+      const root = document.querySelector('#surface');
+      const view = renderPrivateCompleteJourney(root, evidence, { enabled: true });
+      const stages = [...root.querySelectorAll('.pcj-stage')];
+      if (stages.map((item) => item.dataset.stage).join('|') !== PRIVATE_COMPLETE_JOURNEY_STAGE_ORDER.join('|')) {
+        throw new Error('Rendered journey stage order is incorrect.');
+      }
+      if (stages.some((item) => item.dataset.status !== 'controlled_pass')) throw new Error('A controlled receipt did not pass.');
+      if (view.customerReleaseEligible !== false
+        || root.querySelector('.private-complete-journey').dataset.customerReleaseEligible !== 'false') {
+        throw new Error('Private evidence claimed customer release.');
+      }
+      if (root.querySelectorAll('.pcj-blocker').length !== 6) throw new Error('Release blocker ledger is incomplete.');
+      if (!/raw detection is not 3D-ready/i.test(root.textContent)
+        || !/corrected geometry and a site survey are required/i.test(root.textContent)
+        || !/all public flags off/i.test(root.textContent)) {
+        throw new Error('Detector, correction/site-survey or public-flag boundary is not visible.');
+      }
+      if (root.querySelector('img, picture, video, canvas, model-viewer, iframe, form, input, button, a')) {
+        throw new Error('Metadata-only surface exposed media, navigation or mutation controls.');
+      }
+      const source = root.innerHTML;
+      if (/https?:\/\/|blob:|data:image|95\s*[–-]\s*99|accuracy achieved|as-built accuracy/i.test(source)) {
+        throw new Error('Private media or a percentage accuracy claim appeared in the DOM.');
+      }
+      document.body.dataset.result = 'pass';
+    } catch (error) {
+      document.body.dataset.result = 'fail';
+      document.body.textContent = error.stack || error.message;
+    }
+  </script>
+</body>
+</html>

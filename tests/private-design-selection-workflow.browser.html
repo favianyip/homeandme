@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Private design-selection continuation fixture</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f4f1e9; color: #183d3a; }
+    main { width: min(100% - 2rem, 48rem); margin: 2rem auto; padding: 1.5rem; background: #fff; }
+    ol { display: grid; gap: .75rem; padding: 0; list-style: none; }
+    li { display: flex; justify-content: space-between; gap: 1rem; padding: .75rem; border: 1px solid #d6d2c7; }
+    [data-status="locked"] { color: #656565; }
+    @media (max-width: 32rem) { main { width: 100%; margin: 0; padding: 1rem; } li { align-items: start; } }
+    @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body data-result="running" data-test-fixture="private-design-selection-continuation">
+  <main id="surface"></main>
+  <script type="module">
+    import {
+      PRIVATE_DESIGN_SELECTION_WORKFLOW_ENABLED,
+      PrivateDesignSelectionWorkflow,
+      validatePrivateDesignSelectionRelease,
+    } from '../private-design-selection-workflow.js';
+
+    const release = 'd'.repeat(40);
+    const manifest = {
+      schema: 'homeandme-private-design-selection-capabilities/1',
+      releaseId: release,
+      runtimeEnvironment: 'test',
+      serviceReady: true,
+      scope: 'private-service-only',
+      contracts: {
+        projectApi: 'homeandme-project-api/2',
+        workflow: 'bare_shell_first/1',
+        approvedLayoutRecovery: 'spatialforge-current-approved-functional-layout/1',
+        functionalLayoutEvidence: 'functional-layout-source-evidence/1',
+        designReferenceCatalog: 'spatialforge-design-reference-catalog/1',
+        designReference: 'spatialforge-design-reference/1',
+        designSelection: 'spatialforge-design-selection/1',
+        designSelectionSources: 'bare-shell-design-selection-sources/1',
+        privacy: 'same-origin-private-no-store/1',
+      },
+      capabilities: {
+        APPROVED_FUNCTIONAL_LAYOUT_RECOVERY: true,
+        DESIGN_SELECTION: true,
+        FURNISHED_MODEL: false,
+        AI_RENDERING: false,
+        QUOTATION: false,
+        PAYMENTS: false,
+      },
+      dependencyOrder: [
+        'APPROVED_FUNCTIONAL_LAYOUT_RECOVERY', 'DESIGN_SELECTION', 'FURNISHED_MODEL',
+        'AI_RENDERING', 'QUOTATION', 'PAYMENTS',
+      ],
+      safeguards: {
+        demoFallbackEnabled: false,
+        publicJourneyWiringEnabled: false,
+        furnishedModelEnabled: false,
+        renderingEnabled: false,
+        commerceEnabled: false,
+      },
+    };
+
+    try {
+      const validated = validatePrivateDesignSelectionRelease(manifest, {
+        expectedReleaseId: release,
+        baseUrl: `${location.origin}/`,
+      });
+      if (validated.capabilities.DESIGN_SELECTION !== true
+        || validated.capabilities.FURNISHED_MODEL !== false
+        || validated.capabilities.AI_RENDERING !== false) {
+        throw new Error('Browser accepted an unsafe capability boundary.');
+      }
+      let requests = 0;
+      const disabled = new PrivateDesignSelectionWorkflow({
+        baseUrl: location.origin,
+        projectId: 'private-design-browser-01',
+        expectedReleaseId: release,
+        layoutSnapshot: null,
+        fetchImpl: async () => { requests += 1; },
+      });
+      let defaultOff = false;
+      try { await disabled.connect(); } catch (error) { defaultOff = /disabled/i.test(error.message); }
+      if (PRIVATE_DESIGN_SELECTION_WORKFLOW_ENABLED !== false || !defaultOff || requests !== 0) {
+        throw new Error('Private controller did not remain zero-network and default-off.');
+      }
+
+      const surface = document.querySelector('#surface');
+      const heading = document.createElement('h1');
+      heading.textContent = 'Private continuation boundary';
+      const note = document.createElement('p');
+      note.textContent = 'Approved layout recovery and one rights-cleared design choice only.';
+      const stages = document.createElement('ol');
+      for (const [label, status] of [
+        ['Approved functional layout', 'verified'],
+        ['Design reference selection', 'available'],
+        ['Furnished model', 'locked'],
+        ['Deterministic render', 'locked'],
+        ['Quotation and payment', 'locked'],
+      ]) {
+        const item = document.createElement('li');
+        item.dataset.status = status;
+        const name = document.createElement('span');
+        name.textContent = label;
+        const state = document.createElement('strong');
+        state.textContent = status;
+        item.append(name, state);
+        stages.append(item);
+      }
+      surface.append(heading, note, stages);
+      if (surface.querySelector('img, picture, video, canvas, iframe, a, form, input')) {
+        throw new Error('Metadata-only fixture exposed media or an interactive public action.');
+      }
+      if (/https?:\/\/|blob:|data:image|source pixels|artifact bytes/i.test(surface.innerHTML)) {
+        throw new Error('Private media or byte locators appeared in the DOM.');
+      }
+      void surface.offsetWidth;
+      if (document.documentElement.scrollWidth > document.documentElement.clientWidth + 1) {
+        throw new Error('Private continuation overflowed the browser viewport.');
+      }
+      document.body.dataset.result = 'pass';
+      document.body.dataset.viewport = `${innerWidth}x${innerHeight}`;
+    } catch (error) {
+      document.body.dataset.result = 'fail';
+      document.body.textContent = error.stack || error.message;
+    }
+  </script>
+</body>
+</html>

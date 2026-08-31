@@ -1,0 +1,19 @@
+{
+  "userAgent": "HomeAndMe-CompliantImporter/1.0 (+compliance@homeandme.sg)",
+  "timeoutMs": 20000,
+  "maxBytes": 50000000,
+  "minIntervalMs": 1000,
+  "hosts": {
+    "developer.api.autodesk.com": {
+      "pathPrefixes": ["/"],
+      "authEnv": "APS_ACCESS_TOKEN",
+      "authScheme": "Bearer",
+      "minIntervalMs": 1000
+    },
+    "api.example-owned-staging.sg": {
+      "pathPrefixes": ["/synthetic-projects/"],
+      "authEnv": "HNM_STAGING_TOKEN",
+      "minIntervalMs": 500
+    }
+  }
+}

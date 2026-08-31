@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home &amp; Me — Design Portfolio</title>
+<meta name="description" content="Home & Me render portfolio — Contemporary, Modern Classic, Muji, Scandinavian, Industrial, Minimalist, Modern Oriental and more, across 2 to 5-room HDB layouts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f6f4ef; color: #1a2023; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #1a2023; text-decoration: none; } a:hover { color: #5a7e8a; }
+  .osw { font-family: 'Oswald', sans-serif; }
+  .wrap { max-width: 1360px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
+  header { position: sticky; top: 0; z-index: 60; background: rgba(246,244,239,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(26,32,35,0.1); }
+  .navrow { height: 76px; display: flex; align-items: center; gap: 22px; }
+  .navrow nav { display: flex; gap: 26px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; }
+  .navrow nav a { white-space: nowrap; }
+  .lbl { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; }
+  .tabs { display: flex; gap: 10px; flex-wrap: wrap; margin: 26px 0 8px; }
+  .tab { font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2px; padding: 11px 20px; border-radius: 999px; border: 1px solid rgba(26,32,35,0.22); cursor: pointer; background: none; color: #1a2023; }
+  .tab:hover { border-color: #5a7e8a; color: #5a7e8a; }
+  .tab.on { background: #1a2023; color: #f6f4ef; border-color: #1a2023; }
+  .styleblock { padding: clamp(30px, 4vw, 44px) 0 6px; scroll-margin-top: 90px; }
+  .stylehead { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; border-bottom: 1px solid rgba(26,32,35,0.12); padding-bottom: 12px; }
+  .stylehead h2 { font-family: 'Oswald', sans-serif; font-weight: 400; font-size: clamp(26px, 3.4vw, 38px); margin: 0; }
+  .designgrp { margin-top: 26px; }
+  .designgrp h3 { font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 15px; letter-spacing: 2.4px; color: #5a7e8a; margin: 0 0 14px; text-transform: uppercase; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+  figure { margin: 0; background: #fff; border: 1px solid rgba(26,32,35,0.1); border-radius: 6px; overflow: hidden; cursor: zoom-in; }
+  figure img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; display: block; transition: transform 0.6s ease; }
+  figure:hover img { transform: scale(1.04); }
+  figcaption { padding: 11px 14px 13px; font-size: 13px; color: #4a5350; display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  figcaption b { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 12.5px; letter-spacing: 1.4px; color: #1a2023; text-transform: uppercase; }
+  figcaption span { font-size: 11.5px; color: #8a908c; white-space: nowrap; }
+  #lightbox { position: fixed; inset: 0; z-index: 100; background: rgba(13,17,18,0.94); display: none; flex-direction: column; align-items: center; justify-content: center; padding: 3vh 3vw; }
+  #lightbox.open { display: flex; }
+  #lightbox img { max-width: 96vw; max-height: 82vh; border-radius: 4px; }
+  #lbcap { color: #f6f4ef; font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 14px; margin-top: 16px; text-align: center; }
+  #lbclose { position: absolute; top: 18px; right: 22px; background: none; border: 1px solid rgba(246,244,239,0.4); color: #f6f4ef; width: 44px; height: 44px; border-radius: 50%; font-size: 17px; cursor: pointer; }
+  .lbnav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(246,244,239,0.08); border: 1px solid rgba(246,244,239,0.4); color: #f6f4ef; width: 52px; height: 52px; border-radius: 50%; font-size: 26px; line-height: 1; cursor: pointer; z-index: 101; }
+  .lbnav:hover { background: rgba(246,244,239,0.22); }
+  #lbprev { left: 20px; } #lbnext { right: 20px; }
+  @media (max-width: 640px) { .lbnav { width: 42px; height: 42px; font-size: 21px; } #lbprev { left: 8px; } #lbnext { right: 8px; } }
+  footer { margin-top: 60px; border-top: 1px solid rgba(26,32,35,0.12); padding: 26px 0 40px; font-size: 13px; color: #8a908c; }
+  @media (max-width: 900px) { .navrow nav { display: none; } }
+</style>
+</head>
+<body>
+<header><div class="wrap navrow">
+  <a href="Home AI.dc.html" style="display:flex;align-items:center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" style="height:44px;width:auto;"></a>
+  <nav>
+    <a href="Home AI.dc.html">HOME</a>
+    <a href="AboutUs.dc.html">ABOUT US</a>
+    <a href="PlanLookup.html">FIND MY PLAN</a>
+    <a href="HousingIdentity.html">HOUSING IDENTITY</a>
+    <a href="FaqAndHelp.dc.html">FAQ &amp; HELP</a>
+    <a href="ContactUs.dc.html">CONTACT US</a>
+    <a href="Portfolio.html" style="color:#5a7e8a;border-bottom:1px solid #5a7e8a;padding-bottom:3px;">PORTFOLIO</a>
+  </nav>
+</div></header>
+
+<section class="wrap" style="padding-top: clamp(38px,5vw,60px);">
+  <p class="lbl" style="margin:0 0 14px;">DESIGN PORTFOLIO · PHOTOREAL RENDERS</p>
+  <h1 class="osw" style="font-weight:400;font-size:clamp(32px,4.6vw,52px);line-height:1.08;margin:0 0 14px;max-width:20ch;">Every design, labeled and browsable</h1>
+  <p style="font-size:16.5px;line-height:1.7;color:#4a5350;margin:0;max-width:70ch;">Our full render library across 2, 3, 4 and 5-room HDB layouts — grouped by design style, then by individual design scheme, with the room named on every image. Click any render to view it full-screen.</p>
+  <div class="tabs" id="tabs"></div>
+</section>
+
+<main class="wrap" id="gallery"></main>
+
+<div id="lightbox" role="dialog" aria-label="Render viewer">
+  <button id="lbclose" aria-label="Close">✕</button>
+  <button id="lbprev" class="lbnav" aria-label="Previous render">‹</button>
+  <img id="lbimg" alt="">
+  <button id="lbnext" class="lbnav" aria-label="Next render">›</button>
+  <p id="lbcap"></p>
+</div>
+
+<footer><div class="wrap">HOME AND ME PTE. LTD. · 21 Toh Guan Road East #03-02 Toh Guan Centre, Singapore 608609 · <a href="Home AI.dc.html#contact">Contact us</a></div></footer>
+
+<script>
+(async () => {
+  const data = await (await fetch('portfolio-data.json')).json();
+  const STYLE_ORDER = ['Contemporary','Modern','Modern Classic','Modern Oriental','Muji','Scandinavian','Minimalist','Industrial','Room Showcase'];
+  const styles = [...new Set(data.map(d => d.style))].sort((a,b) => STYLE_ORDER.indexOf(a) - STYLE_ORDER.indexOf(b));
+  const tabs = document.getElementById('tabs');
+  const gallery = document.getElementById('gallery');
+  const viewItems = [];
+  let activeStyle = 'ALL';
+
+  const mkTab = (label, target) => {
+    const b = document.createElement('button');
+    b.className = 'tab'; b.textContent = label.toUpperCase();
+    b.onclick = () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+      b.classList.add('on');
+      activeStyle = target;
+      if (target === 'ALL') { document.querySelectorAll('.styleblock').forEach(s => s.style.display = ''); window.scrollTo({top:0,behavior:'smooth'}); }
+      else document.querySelectorAll('.styleblock').forEach(s => s.style.display = (s.dataset.style === target ? '' : 'none'));
+    };
+    tabs.appendChild(b); return b;
+  };
+  mkTab('All styles', 'ALL').classList.add('on');
+  styles.forEach(s => mkTab(s === 'Room Showcase' ? 'Room Ideas' : s, s));
+
+  for (const style of styles) {
+    const block = document.createElement('section');
+    block.className = 'styleblock'; block.dataset.style = style;
+    const inStyle = data.filter(d => d.style === style);
+    block.innerHTML = `<div class="stylehead"><h2>${style === 'Room Showcase' ? 'Room Ideas' : style}</h2><span class="lbl">${inStyle.length} RENDERS</span></div>`;
+    if (style === 'Room Showcase') {
+      const note = document.createElement('p');
+      note.style.cssText = 'margin:10px 0 0;font-size:13px;color:#8a908c;max-width:78ch;';
+      note.textContent = 'Individual room ideas, grouped by flat type — not a complete design package. The named schemes above are the full packages you can choose on Design My Home.';
+      block.appendChild(note);
+    }
+    const groups = new Map();
+    for (const d of inStyle) {
+      const key = style === 'Room Showcase' ? d.flat : `${d.flat} · ${d.design}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(d);
+    }
+    for (const [label, imgs] of [...groups.entries()].sort((a,b) => a[0].localeCompare(b[0]))) {
+      const grp = document.createElement('div');
+      grp.className = 'designgrp';
+      grp.innerHTML = `<h3>${label}</h3>`;
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+      for (const d of imgs) {
+        const cap = d.room;
+        const fig = document.createElement('figure');
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.alt = `${style} — ${d.flat} ${d.design} — ${cap}`;
+        img.setAttribute('src', encodeURI(d.file));
+        const fc = document.createElement('figcaption');
+        const b = document.createElement('b'); b.textContent = cap;
+        const sp = document.createElement('span'); sp.textContent = style === 'Room Showcase' ? d.flat : d.design;
+        fc.append(b, sp);
+        fig.append(img, fc);
+        const idx = viewItems.length;
+        viewItems.push({ file: d.file, style, caption: `${style} · ${d.flat}${style === 'Room Showcase' ? '' : ' · ' + d.design} · ${cap}` });
+        fig.onclick = () => openLb(idx);
+        grid.appendChild(fig);
+      }
+      grp.appendChild(grid); block.appendChild(grp);
+    }
+    gallery.appendChild(block);
+  }
+
+  const lb = document.getElementById('lightbox');
+  let current = -1;
+  const show = (i) => {
+    current = i;
+    const it = viewItems[i];
+    document.getElementById('lbimg').setAttribute('src', encodeURI(it.file));
+    document.getElementById('lbcap').textContent = it.caption;
+  };
+  const openLb = (i) => { show(i); lb.classList.add('open'); };
+  const visible = (it) => activeStyle === 'ALL' || it.style === activeStyle;
+  const step = (dir) => {
+    if (current < 0) return;
+    let i = current;
+    for (let n = 0; n < viewItems.length; n++) {
+      i = (i + dir + viewItems.length) % viewItems.length;
+      if (visible(viewItems[i])) { show(i); return; }
+    }
+  };
+  const close = () => { lb.classList.remove('open'); current = -1; document.getElementById('lbimg').src = ''; };
+  document.getElementById('lbclose').onclick = close;
+  document.getElementById('lbprev').onclick = (e) => { e.stopPropagation(); step(-1); };
+  document.getElementById('lbnext').onclick = (e) => { e.stopPropagation(); step(1); };
+  lb.onclick = (e) => { if (e.target === lb) close(); };
+  document.addEventListener('keydown', (e) => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft') step(-1);
+    else if (e.key === 'ArrowRight') step(1);
+  });
+  let touchX = null;
+  lb.addEventListener('touchstart', (e) => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', (e) => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 48) step(dx > 0 ? -1 : 1);
+    touchX = null;
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>

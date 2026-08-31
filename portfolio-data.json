@@ -1,0 +1,2602 @@
+[
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Living",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-01-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-3-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Dining",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-01-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "contemporary-3-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "contemporary-3-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-01-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-3-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-01-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "contemporary-3-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-01-bedroom-2.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "contemporary-3-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-01-common-bathroom.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "contemporary-3-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 02",
+  "room": "Living",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-02-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-3-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 02",
+  "room": "Dining",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-02-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "contemporary-3-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 02",
+  "room": "Kitchen",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-02-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "contemporary-3-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 02",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-02-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-3-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 02",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-02-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "contemporary-3-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 02",
+  "room": "Study",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-02-study.jpg",
+  "roomBase": "Study",
+  "order": 9,
+  "packageId": "contemporary-3-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Living",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-03-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-3-room-hdb-design-03"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Dining",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-03-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "contemporary-3-room-hdb-design-03"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Kitchen \u2014 View I",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-03-kitchen-view-i.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "contemporary-3-room-hdb-design-03"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Kitchen \u2014 View II",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-03-kitchen-view-ii.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "contemporary-3-room-hdb-design-03"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-03-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-3-room-hdb-design-03"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-03-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "contemporary-3-room-hdb-design-03"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/contemporary-3-room-hdb-design-03-common-bathroom.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "contemporary-3-room-hdb-design-03"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Living",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-01-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-4-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Dining",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-01-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "contemporary-4-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "contemporary-4-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-01-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-4-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom \u2014 View I",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-01-master-bedroom-view-i.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-4-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom \u2014 View II",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-01-master-bedroom-view-ii.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-4-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom \u2014 View III",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-01-master-bedroom-view-iii.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-4-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-01-bedroom-2.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "contemporary-4-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Living",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-02-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-4-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Living \u2014 360\u00b0",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-02-living-room-360-360.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-4-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Dining",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-02-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "contemporary-4-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Kitchen",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-02-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "contemporary-4-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-02-master-view-i-4rm-contemp-02.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-4-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-02-master-view-ii-4rm-contemp-02.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-4-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-02-bedroom-02.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "contemporary-4-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-02-bedroom-02-2.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "contemporary-4-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Bedroom 2 \u2014 360\u00b0",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-02-bedroom-02-360.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "contemporary-4-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 03",
+  "room": "Living \u2014 View I",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-03-living-hall-view-i.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-4-room-hdb-design-03"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 03",
+  "room": "Living \u2014 View II",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-03-living-hall-view-ii.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-4-room-hdb-design-03"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 04",
+  "room": "Living",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-04-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-4-room-hdb-design-04"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 04",
+  "room": "Dining",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-04-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "contemporary-4-room-hdb-design-04"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 04",
+  "room": "Kitchen",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-04-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "contemporary-4-room-hdb-design-04"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 04",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-04-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-4-room-hdb-design-04"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 04",
+  "room": "Walk-in Wardrobe",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-04-walk-in-4rm-contemp-04.jpg",
+  "roomBase": "Walk-in Wardrobe",
+  "order": 6,
+  "packageId": "contemporary-4-room-hdb-design-04"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 04",
+  "room": "Study",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-04-study.jpg",
+  "roomBase": "Study",
+  "order": 9,
+  "packageId": "contemporary-4-room-hdb-design-04"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 04",
+  "room": "Shoe Cabinet",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-04-shoe-cabinet-4rm-contemp-04.jpg",
+  "roomBase": "Shoe Cabinet",
+  "order": 14,
+  "packageId": "contemporary-4-room-hdb-design-04"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 05",
+  "room": "Living",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-05-living-room.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-4-room-hdb-design-05"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 05",
+  "room": "Dining",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-05-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "contemporary-4-room-hdb-design-05"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 05",
+  "room": "Kitchen",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-05-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "contemporary-4-room-hdb-design-05"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 05",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-05-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "contemporary-4-room-hdb-design-05"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 06",
+  "room": "Living",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-06-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-4-room-hdb-design-06"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 06",
+  "room": "Living \u2014 View II",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-06-living-hall-view-ii.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-4-room-hdb-design-06"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 06",
+  "room": "Dining",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-06-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "contemporary-4-room-hdb-design-06"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 06",
+  "room": "Kitchen",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-06-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "contemporary-4-room-hdb-design-06"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 06",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-06-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-4-room-hdb-design-06"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "4-Room HDB",
+  "design": "Design 06",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/contemporary-4-room-hdb-design-06-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "contemporary-4-room-hdb-design-06"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Living \u2014 View I",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-01-living-hall-view-i.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-5-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Dining",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-01-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "contemporary-5-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "contemporary-5-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-01-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-5-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-01-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "contemporary-5-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-01-bedroom-02.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "contemporary-5-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-01-common-bathroom.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "contemporary-5-room-hdb-design-01"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Living",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-02-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "contemporary-5-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Dining",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-02-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "contemporary-5-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Kitchen",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-02-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "contemporary-5-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-02-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "contemporary-5-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Study \u2014 View I",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-02-study-view-i.jpg",
+  "roomBase": "Study",
+  "order": 9,
+  "packageId": "contemporary-5-room-hdb-design-02"
+ },
+ {
+  "style": "Contemporary",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Study \u2014 View II",
+  "file": "assets/portfolio/contemporary-5-room-hdb-design-02-study-view-ii.jpg",
+  "roomBase": "Study",
+  "order": 9,
+  "packageId": "contemporary-5-room-hdb-design-02"
+ },
+ {
+  "style": "Industrial",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Living",
+  "file": "assets/portfolio/industrial-4-room-hdb-design-01-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "industrial-4-room-hdb-design-01"
+ },
+ {
+  "style": "Industrial",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/industrial-4-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "industrial-4-room-hdb-design-01"
+ },
+ {
+  "style": "Industrial",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom \u2014 View I",
+  "file": "assets/portfolio/industrial-4-room-hdb-design-01-master-bedroom-view-i.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "industrial-4-room-hdb-design-01"
+ },
+ {
+  "style": "Industrial",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom \u2014 View II",
+  "file": "assets/portfolio/industrial-4-room-hdb-design-01-master-bedroom-view-ii.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "industrial-4-room-hdb-design-01"
+ },
+ {
+  "style": "Industrial",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/industrial-4-room-hdb-design-01-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "industrial-4-room-hdb-design-01"
+ },
+ {
+  "style": "Industrial",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/industrial-4-room-hdb-design-01-common-bathroom.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "industrial-4-room-hdb-design-01"
+ },
+ {
+  "style": "Minimalist",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Living",
+  "file": "assets/portfolio/minimalist-5-room-hdb-design-01-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "minimalist-5-room-hdb-design-01"
+ },
+ {
+  "style": "Minimalist",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Dining",
+  "file": "assets/portfolio/minimalist-5-room-hdb-design-01-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "minimalist-5-room-hdb-design-01"
+ },
+ {
+  "style": "Minimalist",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/minimalist-5-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "minimalist-5-room-hdb-design-01"
+ },
+ {
+  "style": "Minimalist",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom \u2014 View I",
+  "file": "assets/portfolio/minimalist-5-room-hdb-design-01-master-bedroom-view-i.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "minimalist-5-room-hdb-design-01"
+ },
+ {
+  "style": "Minimalist",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom \u2014 View II",
+  "file": "assets/portfolio/minimalist-5-room-hdb-design-01-master-bedroom-view-ii.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "minimalist-5-room-hdb-design-01"
+ },
+ {
+  "style": "Minimalist",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/minimalist-5-room-hdb-design-01-bedroom-2.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "minimalist-5-room-hdb-design-01"
+ },
+ {
+  "style": "Minimalist",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/minimalist-5-room-hdb-design-01-bedroom-2-2.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "minimalist-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Living \u2014 View I",
+  "file": "assets/portfolio/modern-oriental-3-room-hdb-design-01-living-hall-view-i.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-oriental-3-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Dining \u2014 View I",
+  "file": "assets/portfolio/modern-oriental-3-room-hdb-design-01-dining-view-i.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "modern-oriental-3-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Dining \u2014 View II",
+  "file": "assets/portfolio/modern-oriental-3-room-hdb-design-01-dining-view-ii.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "modern-oriental-3-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/modern-oriental-3-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "modern-oriental-3-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/modern-oriental-3-room-hdb-design-01-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "modern-oriental-3-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Living",
+  "file": "assets/portfolio/modern-oriental-5-room-hdb-design-01-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-oriental-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Dining \u2014 View I",
+  "file": "assets/portfolio/modern-oriental-5-room-hdb-design-01-dining-view-i.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "modern-oriental-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Dining \u2014 View II",
+  "file": "assets/portfolio/modern-oriental-5-room-hdb-design-01-dining-view-ii.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "modern-oriental-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/modern-oriental-5-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "modern-oriental-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/modern-oriental-5-room-hdb-design-01-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "modern-oriental-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/modern-oriental-5-room-hdb-design-01-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "modern-oriental-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Study",
+  "file": "assets/portfolio/modern-oriental-5-room-hdb-design-01-study.jpg",
+  "roomBase": "Study",
+  "order": 9,
+  "packageId": "modern-oriental-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Oriental",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/modern-oriental-5-room-hdb-design-01-common-bathroom.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "modern-oriental-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Living",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-01-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-classic-3-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "modern-classic-3-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-01-master-bedroom-3.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "modern-classic-3-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-01-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "modern-classic-3-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-01-bedroom-02.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "modern-classic-3-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-01-common-bathroom.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "modern-classic-3-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Foyer",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-01-foyer.jpg",
+  "roomBase": "Foyer",
+  "order": 12,
+  "packageId": "modern-classic-3-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 02",
+  "room": "Living",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-02-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-classic-3-room-hdb-design-02"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 02",
+  "room": "Dining",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-02-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "modern-classic-3-room-hdb-design-02"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 02",
+  "room": "Kitchen",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-02-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "modern-classic-3-room-hdb-design-02"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 02",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-02-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "modern-classic-3-room-hdb-design-02"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 02",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-02-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "modern-classic-3-room-hdb-design-02"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Living",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-03-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-classic-3-room-hdb-design-03"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Dining",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-03-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "modern-classic-3-room-hdb-design-03"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Kitchen",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-03-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "modern-classic-3-room-hdb-design-03"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-03-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "modern-classic-3-room-hdb-design-03"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-03-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "modern-classic-3-room-hdb-design-03"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "3-Room HDB",
+  "design": "Design 03",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/modern-classic-3-room-hdb-design-03-bedroom-02.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "modern-classic-3-room-hdb-design-03"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Living",
+  "file": "assets/portfolio/modern-classic-4-room-hdb-design-01-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-classic-4-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Dining",
+  "file": "assets/portfolio/modern-classic-4-room-hdb-design-01-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "modern-classic-4-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/modern-classic-4-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "modern-classic-4-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/modern-classic-4-room-hdb-design-01-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "modern-classic-4-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Living",
+  "file": "assets/portfolio/modern-classic-5-room-hdb-design-01-living-room.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-classic-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Living",
+  "file": "assets/portfolio/modern-classic-5-room-hdb-design-01-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-classic-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/modern-classic-5-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "modern-classic-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/modern-classic-5-room-hdb-design-01-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "modern-classic-5-room-hdb-design-01"
+ },
+ {
+  "style": "Modern Classic",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Study",
+  "file": "assets/portfolio/modern-classic-5-room-hdb-design-01-study.jpg",
+  "roomBase": "Study",
+  "order": 9,
+  "packageId": "modern-classic-5-room-hdb-design-01"
+ },
+ {
+  "style": "Muji",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Living \u2014 View I",
+  "file": "assets/portfolio/muji-3-room-hdb-design-01-living-room-view-i.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "muji-3-room-hdb-design-01"
+ },
+ {
+  "style": "Muji",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Living \u2014 View II",
+  "file": "assets/portfolio/muji-3-room-hdb-design-01-living-room-view-ii.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "muji-3-room-hdb-design-01"
+ },
+ {
+  "style": "Muji",
+  "flat": "3-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/muji-3-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "muji-3-room-hdb-design-01"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Living",
+  "file": "assets/portfolio/muji-5-room-hdb-design-02-living-room.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "muji-5-room-hdb-design-02"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Living",
+  "file": "assets/portfolio/muji-5-room-hdb-design-02-living-room-01.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "muji-5-room-hdb-design-02"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Living",
+  "file": "assets/portfolio/muji-5-room-hdb-design-02-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "muji-5-room-hdb-design-02"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Dining",
+  "file": "assets/portfolio/muji-5-room-hdb-design-02-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "muji-5-room-hdb-design-02"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Kitchen",
+  "file": "assets/portfolio/muji-5-room-hdb-design-02-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "muji-5-room-hdb-design-02"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Kitchen",
+  "file": "assets/portfolio/muji-5-room-hdb-design-02-kitchen-2.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "muji-5-room-hdb-design-02"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/muji-5-room-hdb-design-02-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "muji-5-room-hdb-design-02"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 02",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/muji-5-room-hdb-design-02-master-bedroom-2.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "muji-5-room-hdb-design-02"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Living \u2014 View I",
+  "file": "assets/portfolio/muji-5-room-hdb-design-01-living-room-view-i.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "muji-5-room-hdb-design-01"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Living \u2014 View II",
+  "file": "assets/portfolio/muji-5-room-hdb-design-01-living-room-view-ii.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "muji-5-room-hdb-design-01"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Dining",
+  "file": "assets/portfolio/muji-5-room-hdb-design-01-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "muji-5-room-hdb-design-01"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/muji-5-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "muji-5-room-hdb-design-01"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/muji-5-room-hdb-design-01-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "muji-5-room-hdb-design-01"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/muji-5-room-hdb-design-01-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "muji-5-room-hdb-design-01"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/muji-5-room-hdb-design-01-bedroom-2.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "muji-5-room-hdb-design-01"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/muji-5-room-hdb-design-01-bedroom-3.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "muji-5-room-hdb-design-01"
+ },
+ {
+  "style": "Muji",
+  "flat": "5-Room HDB",
+  "design": "Design 01",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/muji-5-room-hdb-design-01-common-bathroom.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "muji-5-room-hdb-design-01"
+ },
+ {
+  "style": "Scandinavian",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Living",
+  "file": "assets/portfolio/scandinavian-4-room-hdb-design-01-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "scandinavian-4-room-hdb-design-01"
+ },
+ {
+  "style": "Scandinavian",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Dining",
+  "file": "assets/portfolio/scandinavian-4-room-hdb-design-01-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "scandinavian-4-room-hdb-design-01"
+ },
+ {
+  "style": "Scandinavian",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/scandinavian-4-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "scandinavian-4-room-hdb-design-01"
+ },
+ {
+  "style": "Scandinavian",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/scandinavian-4-room-hdb-design-01-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "scandinavian-4-room-hdb-design-01"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Living",
+  "file": "assets/portfolio/modern-4-room-hdb-design-01-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-4-room-hdb-design-01"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Dining",
+  "file": "assets/portfolio/modern-4-room-hdb-design-01-dining.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "modern-4-room-hdb-design-01"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Kitchen",
+  "file": "assets/portfolio/modern-4-room-hdb-design-01-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "modern-4-room-hdb-design-01"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/modern-4-room-hdb-design-01-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "modern-4-room-hdb-design-01"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 01",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/modern-4-room-hdb-design-01-common-bathroom.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "modern-4-room-hdb-design-01"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Living \u2014 View I",
+  "file": "assets/portfolio/modern-4-room-hdb-design-02-living-hall-view-i.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-4-room-hdb-design-02"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Living \u2014 View II",
+  "file": "assets/portfolio/modern-4-room-hdb-design-02-living-hall-view-ii.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-4-room-hdb-design-02"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Dining \u2014 View I",
+  "file": "assets/portfolio/modern-4-room-hdb-design-02-dining-view-i.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "modern-4-room-hdb-design-02"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Dining \u2014 View II",
+  "file": "assets/portfolio/modern-4-room-hdb-design-02-dining-view-ii.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "modern-4-room-hdb-design-02"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Kitchen",
+  "file": "assets/portfolio/modern-4-room-hdb-design-02-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "modern-4-room-hdb-design-02"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Master Bedroom \u2014 View I",
+  "file": "assets/portfolio/modern-4-room-hdb-design-02-master-bedroom-view-i.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "modern-4-room-hdb-design-02"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 02",
+  "room": "Master Bedroom \u2014 View II",
+  "file": "assets/portfolio/modern-4-room-hdb-design-02-master-bedroom-view-ii.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "modern-4-room-hdb-design-02"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 03",
+  "room": "Living \u2014 View I",
+  "file": "assets/portfolio/modern-4-room-hdb-design-03-living-hall-view-i.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-4-room-hdb-design-03"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 03",
+  "room": "Living \u2014 View II",
+  "file": "assets/portfolio/modern-4-room-hdb-design-03-living-hall-view-ii.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "modern-4-room-hdb-design-03"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 03",
+  "room": "Dining \u2014 View I",
+  "file": "assets/portfolio/modern-4-room-hdb-design-03-dining-view-i.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "modern-4-room-hdb-design-03"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 03",
+  "room": "Dining \u2014 View II",
+  "file": "assets/portfolio/modern-4-room-hdb-design-03-dining-view-ii.jpg",
+  "roomBase": "Dining",
+  "order": 2,
+  "packageId": "modern-4-room-hdb-design-03"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 03",
+  "room": "Kitchen",
+  "file": "assets/portfolio/modern-4-room-hdb-design-03-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "modern-4-room-hdb-design-03"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 03",
+  "room": "Master Bedroom \u2014 View I",
+  "file": "assets/portfolio/modern-4-room-hdb-design-03-master-bedroom-view-i.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "modern-4-room-hdb-design-03"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 03",
+  "room": "Master Bedroom \u2014 View II",
+  "file": "assets/portfolio/modern-4-room-hdb-design-03-master-bedroom-view-ii.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "modern-4-room-hdb-design-03"
+ },
+ {
+  "style": "Modern",
+  "flat": "4-Room HDB",
+  "design": "Design 03",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/modern-4-room-hdb-design-03-bedroom-02.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "modern-4-room-hdb-design-03"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "2-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-2-room-hdb-showcase-living-room.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-2-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "2-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-2-room-hdb-showcase-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-2-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "2-Room HDB",
+  "design": "Showcase",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/room-showcase-2-room-hdb-showcase-bedroom.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "room-showcase-2-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "2-Room HDB",
+  "design": "Showcase",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/room-showcase-2-room-hdb-showcase-bathroom.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "room-showcase-2-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-dining.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-dining-2.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-dining-3.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-dining-4.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-dining-5.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining \u2014 View I",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-dining-view-i.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining \u2014 View I",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-dining-view-i-2.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining \u2014 View I",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-dining-view-i-3.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining \u2014 View I",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-dining-view-i-4.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining \u2014 View II",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-dining-view-ii.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining \u2014 View II",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-dining-view-ii-2.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining \u2014 View II",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-dining-view-ii-3.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-hall-2.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-hall-3.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-hall-4.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-hall-5.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-hall-6.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-living-hall-7.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-kitchen-2.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-kitchen-3.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-kitchen-4.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-kitchen-5.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-kitchen-6.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-master-bedroom-2.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-master-bedroom-3.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-master-bedroom-3-2.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-master-bathroom-2.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-master-bathroom-3.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-master-bathroom-4.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-bedroom-02.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-bedroom-2.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-common-bathroom.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-common-bathroom-2.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "3-Room HDB",
+  "design": "Showcase",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/room-showcase-3-room-hdb-showcase-common-bathroom-3.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "room-showcase-3-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-dining.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-dining-2.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-dining-3.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-dining-4.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-dining-5.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining \u2014 360\u00b0",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-dining-360.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-hall-2.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-hall-3.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-hall-4.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-hall-5.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living \u2014 View I",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-hall-view-i.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Living \u2014 View II",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-living-hall-view-ii.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-kitchen-2.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-kitchen-3.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-kitchen-4.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-kitchen-5.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-kitchen-6.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-master-bedroom-2.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom \u2014 View I",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-master-bedroom-view-i.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom \u2014 View I",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-master-bedroom-view-i-2.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom \u2014 View II",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-master-bedroom-view-ii.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom \u2014 View II",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-master-bedroom-view-ii-2.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom \u2014 View III",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-master-bedroom-view-iii.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-master-bathroom-2.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-bedroom-02.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-bedroom-02-2.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-bedroom-2.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-bedroom.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-bedroom-3.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Bedroom 2 \u2014 View I",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-bedroom-view-i.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Bedroom 2 \u2014 View II",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-bedroom-view-ii.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-common-bathroom.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "4-Room HDB",
+  "design": "Showcase",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/room-showcase-4-room-hdb-showcase-common-bathroom-2.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "room-showcase-4-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-living-dining.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-living-dining-2.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Living & Dining \u2014 View I",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-living-dining-view-i.jpg",
+  "roomBase": "Living & Dining",
+  "order": 0,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-living-hall.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Living",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-living-hall-2.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Living \u2014 View I",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-living-hall-view-i.jpg",
+  "roomBase": "Living",
+  "order": 1,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-kitchen.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-kitchen-2.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Kitchen",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-kitchen-3.jpg",
+  "roomBase": "Kitchen",
+  "order": 3,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-master-bedroom.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bedroom",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-master-bedroom-2.jpg",
+  "roomBase": "Master Bedroom",
+  "order": 4,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Master Bathroom",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-master-bathroom.jpg",
+  "roomBase": "Master Bathroom",
+  "order": 5,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-bedroom.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Bedroom 2",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-bedroom-2.jpg",
+  "roomBase": "Bedroom 2",
+  "order": 7,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ },
+ {
+  "style": "Room Showcase",
+  "flat": "5-Room HDB",
+  "design": "Showcase",
+  "room": "Common Bathroom",
+  "file": "assets/portfolio/room-showcase-5-room-hdb-showcase-common-bathroom.jpg",
+  "roomBase": "Common Bathroom",
+  "order": 10,
+  "packageId": "room-showcase-5-room-hdb-showcase"
+ }
+]

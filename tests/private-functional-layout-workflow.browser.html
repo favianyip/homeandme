@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Private functional layout continuation fixture</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/css/private-functional-layout.css">
+</head>
+<body data-result="running" data-test-fixture="private-functional-layout-continuation">
+  <main id="surface"></main>
+  <script type="module">
+    import {
+      PRIVATE_FUNCTIONAL_LAYOUT_REVIEW_SCHEMA,
+      PRIVATE_FUNCTIONAL_LAYOUT_WORKFLOW_SCHEMA,
+    } from '../private-functional-layout-workflow.js';
+    import { renderPrivateFunctionalLayout } from '../private-functional-layout-view.js';
+
+    const digest = (character) => character.repeat(64);
+    const projectId = 'private-layout-browser-01';
+    const option = (type, rank, recommended, character) => {
+      const roomCounts = type === 'circulation_reserve' ? [2, 1, 1] : [3, 2, 1];
+      return ({
+      layoutId: `layout-${type}-${character.repeat(10)}`,
+      layoutSha256: digest(character),
+      type,
+      rank,
+      recommended,
+      eligible: type !== 'circulation_reserve',
+      scoreBasisPoints: type === 'storage_optimised' ? 9400 : (type === 'practical' ? 9100 : 0),
+      placementCount: type === 'circulation_reserve' ? 4 : 6,
+      roomCount: 3,
+      hardViolationCount: type === 'circulation_reserve' ? 1 : 0,
+      doorSwingCheck: type === 'circulation_reserve' ? 'failed' : 'passed',
+      circulationCheck: type === 'circulation_reserve' ? 'failed' : 'passed',
+      solverStatus: type === 'circulation_reserve' ? 'INFEASIBLE' : 'OPTIMAL',
+      placementsByRoom: [
+        { roomId: 'living', roomName: 'Living & dining', placementCount: roomCounts[0], assetIds: ['sofa', 'table', 'dining'].slice(0, roomCounts[0]) },
+        { roomId: 'bedroom', roomName: 'Bedroom', placementCount: roomCounts[1], assetIds: ['bed', 'wardrobe'].slice(0, roomCounts[1]) },
+        { roomId: 'kitchen', roomName: 'Kitchen', placementCount: roomCounts[2], assetIds: ['kitchen-run'].slice(0, roomCounts[2]) },
+      ],
+      });
+    };
+    const review = {
+      schema: PRIVATE_FUNCTIONAL_LAYOUT_REVIEW_SCHEMA,
+      projectId,
+      optionSetVersion: 1,
+      optionSetSha256: digest('9'),
+      assetLibraryVersion: 'measured-procedural-browser/1',
+      assetLibrarySha256: digest('8'),
+      status: 'available',
+      recommendedLayoutId: 'layout-storage_optimised-bbbbbbbbbb',
+      learnedModelUsed: false,
+      decisionSupportOnly: true,
+      customerReleaseEligible: false,
+      source: {},
+      options: [
+        option('practical', 2, false, 'a'),
+        option('storage_optimised', 1, true, 'b'),
+        option('circulation_reserve', 3, false, 'c'),
+      ],
+      blockers: [
+        { code: 'DESIGN_SELECTION_CAPABILITY_OFF', message: 'Rights-cleared design selection remains locked.' },
+        { code: 'FURNISHED_MODEL_CAPABILITY_OFF', message: 'Furnished-model generation remains locked.' },
+        { code: 'AI_RENDERING_CAPABILITY_OFF', message: 'Deterministic rendering remains locked.' },
+        { code: 'REAL_HDB_ACCURACY_UNPROVEN', message: 'Furniture fit does not prove real-HDB detection or as-built fidelity.' },
+      ],
+    };
+    const snapshot = {
+      schema: PRIVATE_FUNCTIONAL_LAYOUT_WORKFLOW_SCHEMA,
+      enabled: true,
+      phase: 'layout_review',
+      projectId,
+      authority: {
+        sourceRegistrationSha256: digest('1'),
+        geometryVersion: 3,
+        geometrySha256: digest('2'),
+        shellModelVersion: 1,
+        shellModelSha256: digest('3'),
+        furnitureBriefVersion: 1,
+        furnitureBriefSha256: digest('4'),
+      },
+      review,
+      approval: null,
+      blockers: [],
+      actions: {
+        generateOptions: false,
+        recoverOptions: false,
+        approveLayout: true,
+        designSelection: false,
+        furnishedModel: false,
+        deterministicRender: false,
+      },
+      truth: {
+        sourcePixelsRendered: false,
+        privateArtifactBytesRendered: false,
+        learnedRankingUsed: false,
+        detectorAccuracyClaim: false,
+        asBuiltAccuracyClaim: false,
+        customerReleaseEligible: false,
+      },
+    };
+
+    try {
+      const probe = document.createElement('div');
+      let defaultOff = false;
+      try { renderPrivateFunctionalLayout(probe, snapshot); } catch (error) {
+        defaultOff = /disabled/i.test(error.message);
+      }
+      if (!defaultOff || probe.childElementCount !== 0) throw new Error('Surface did not fail closed by default.');
+
+      let selected = null;
+      const root = document.querySelector('#surface');
+      const view = renderPrivateFunctionalLayout(root, snapshot, {
+        enabled: true,
+        onApprove: (layoutId) => { selected = layoutId; },
+      });
+      const stages = [...root.querySelectorAll('.pfl-step')];
+      if (stages.map((item) => item.dataset.stage).join('|') !== 'source|shell|furniture|design|model|render') {
+        throw new Error('Six-stage continuation order is incorrect.');
+      }
+      if (stages.slice(3).some((item) => item.dataset.status !== 'locked')) {
+        throw new Error('Downstream release locks are not visible.');
+      }
+      const cards = [...root.querySelectorAll('.pfl-option')];
+      if (cards.length !== 3 || root.querySelectorAll('.pfl-approve:not(:disabled)').length !== 2) {
+        throw new Error('Functional option actions do not match hard-gate eligibility.');
+      }
+      root.querySelector('[data-layout-id="layout-storage_optimised-bbbbbbbbbb"] .pfl-approve').click();
+      if (selected !== review.recommendedLayoutId) throw new Error('Recommended option action lost its exact layout ID.');
+      if (view.customerReleaseEligible !== false
+        || root.querySelector('.private-functional-layout').dataset.customerReleaseEligible !== 'false') {
+        throw new Error('Private furniture review claimed customer release.');
+      }
+      if (root.querySelector('img, picture, video, canvas, model-viewer, iframe, a, input, form')) {
+        throw new Error('Metadata-only surface exposed media, navigation or form controls.');
+      }
+      if (/https?:\/\/|blob:|data:image|95\s*[–-]\s*99|accuracy achieved/i.test(root.innerHTML)) {
+        throw new Error('Private media or an accuracy percentage appeared in the DOM.');
+      }
+      const recoveredSnapshot = {
+        ...snapshot,
+        phase: 'layout_approved',
+        approval: {
+          schema: 'homeandme-private-functional-layout-approval/2',
+          projectId,
+          optionSetVersion: 1,
+          optionSetSha256: digest('9'),
+          layoutId: review.recommendedLayoutId,
+          selectedLayoutSha256: digest('b'),
+          selectedOptionSha256: digest('7'),
+          layoutVersion: 1,
+          layoutSha256: digest('6'),
+          reviewerActorId: `project_guest:${projectId}:${'5'.repeat(24)}`,
+          claimedReviewerActorId: 'reviewer:functional-layout',
+          approvalActorSha256: digest('4'),
+          recoveryReceiptSha256: digest('3'),
+          recoveredAfterReload: true,
+          designSelectionReleased: false,
+          furnishedModelReleased: false,
+          deterministicRenderReleased: false,
+        },
+        actions: {
+          ...snapshot.actions,
+          approveLayout: false,
+        },
+      };
+      const recoveredView = renderPrivateFunctionalLayout(root, recoveredSnapshot, {
+        enabled: true,
+      });
+      if (recoveredView.phase !== 'layout_approved'
+        || root.querySelector('[data-stage="furniture"]').dataset.status !== 'approved'
+        || root.querySelectorAll('.pfl-approve:not(:disabled)').length !== 0
+        || [...root.querySelectorAll('.pfl-step')].slice(3)
+          .some((item) => item.dataset.status !== 'locked')) {
+        throw new Error('Reloaded approval did not remain approved with every downstream stage locked.');
+      }
+      void root.offsetWidth;
+      if (document.documentElement.scrollWidth > document.documentElement.clientWidth + 1) {
+        throw new Error('Private functional layout has horizontal viewport overflow.');
+      }
+      document.body.dataset.result = 'pass';
+    } catch (error) {
+      document.body.dataset.result = 'fail';
+      document.body.textContent = error.stack || error.message;
+    }
+  </script>
+</body>
+</html>

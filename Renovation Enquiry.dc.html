@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Renovation Enquiry — Home &amp; Me</title>
+<meta name="description" content="Build a renovation scope from your floor plan, preferred styles, rooms and trades, then send it to the Home &amp; Me Singapore team in one tap.">
+<meta name="theme-color" content="#f2efe9">
+<link rel="canonical" href="https://homeandme.sg/Renovation%20Enquiry.dc.html">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+body { margin: 0; background: #f2efe9; color: #14191b; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
+a { color: #5a7e8a; text-decoration: none; } a:hover { color: #14191b; }
+input, select, textarea, button { font-family: inherit; color: inherit; }
+input, select, textarea { box-sizing: border-box; font-size: 16px; }
+select { appearance: none; -webkit-appearance: none; }
+@keyframes hnmIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes hnmPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+@media (max-width: 560px) {
+  [data-plan], [data-plan] > * { min-width: 0 !important; }
+  [data-plan-fields] { grid-template-columns: 1fr !important; }
+  [data-plan-fields] > * { min-width: 0 !important; }
+  [data-plan-fields] input { width: 100% !important; min-width: 0 !important; }
+}
+@media (min-width: 900px) {
+  [data-tabbar] { display: none !important; }
+  [data-actionbar] { bottom: 0 !important; }
+  [data-barinner] { flex-direction: row-reverse !important; align-items: center !important; }
+  [data-primary] { width: auto !important; min-width: 280px; }
+  [data-hint] { text-align: left !important; margin-right: auto !important; }
+  [data-fields] { grid-template-columns: 1fr 1fr !important; }
+  [data-wide] { grid-column: 1 / -1 !important; }
+  [data-plan] { grid-template-columns: 1.1fr 0.9fr !important; }
+  [data-styles] { grid-template-columns: repeat(4, 1fr) !important; }
+  [data-areas] { grid-template-columns: repeat(3, 1fr) !important; }
+  [data-review] { grid-template-columns: 1.1fr 0.9fr !important; align-items: start !important; }
+  [data-desk] { display: block !important; }
+  [data-shell] { padding-bottom: 130px !important; }
+}
+
+/* Adaptive enquiry: the live page keeps the Home & Me palette and five-screen
+   structure while changing the middle questions to fit the chosen project. */
+* { box-sizing: border-box; }
+button, input, select, textarea { border-radius: 0; }
+button { -webkit-tap-highlight-color: transparent; }
+button, a, input, select, textarea, summary { touch-action: manipulation; }
+.skip-link { position: fixed; top: 8px; left: 8px; z-index: 100; min-height: 44px; padding: 11px 14px; border-radius: 10px; background: #14191b; color: #fff; display: flex; align-items: center; box-sizing: border-box; transform: translateY(-150%); transition: transform 0.18s ease; }
+.skip-link:focus { transform: translateY(0); color: #fff; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
+  outline: 3px solid rgba(90,126,138,0.34);
+  outline-offset: 3px;
+}
+button:disabled { cursor: not-allowed !important; opacity: 0.58; }
+.adaptive-screen { animation: hnmIn 0.42s ease both; }
+.screen-heading { margin-bottom: 26px; }
+.screen-heading h1 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(36px, 7vw, 54px);
+  line-height: 0.98;
+  letter-spacing: -1px;
+  margin: 0 0 13px;
+  max-width: 14ch;
+  text-wrap: balance;
+  scroll-margin-top: 92px;
+}
+.screen-heading p { font-size: 15.5px; line-height: 1.65; color: #4a5350; margin: 0; max-width: 52ch; text-wrap: pretty; }
+.eyebrow { display: block; margin-bottom: 9px; font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.4px; color: #5a7e8a; }
+.route-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.route-card {
+  position: relative; overflow: hidden; min-width: 0; padding: 0; cursor: pointer;
+  text-align: left; border: 1px solid rgba(20,25,27,0.13); border-radius: 20px;
+  background: #fff;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.route-card:hover { transform: translateY(-2px); border-color: #5a7e8a; }
+.route-card:active { transform: scale(0.99); }
+.route-card img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; display: block; background: #e7e2d8; }
+.route-card-copy { display: flex; flex-direction: column; gap: 6px; padding: 18px 19px 20px; }
+.route-card-name { font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: 1.8px; color: #14191b; }
+.route-card-note { font-size: 13.5px; line-height: 1.5; color: #4a5350; }
+.route-summary {
+  display: grid; grid-template-columns: 92px 1fr auto; align-items: center; gap: 15px;
+  margin-bottom: 18px; padding: 10px; border: 1px solid rgba(20,25,27,0.12);
+  border-radius: 18px; background: rgba(255,255,255,0.72);
+}
+.route-summary img { width: 92px; height: 70px; object-fit: cover; border-radius: 12px; display: block; }
+.route-summary strong { display: block; margin-bottom: 4px; font-family: 'Oswald', sans-serif; font-size: 12.5px; letter-spacing: 1.6px; }
+.route-summary span { display: block; font-size: 12.5px; line-height: 1.45; color: #4a5350; }
+.text-button, .edit-button {
+  min-height: 44px; cursor: pointer; border: 0; background: none; padding: 9px 10px;
+  font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.8px; color: #5a7e8a;
+  text-decoration: underline; text-decoration-color: rgba(90,126,138,0.42); text-underline-offset: 4px;
+}
+.edit-button { min-width: 44px; }
+.inline-link { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.form-section, .truth-panel, .contact-intro, .review-panel {
+  border: 1px solid rgba(20,25,27,0.12); border-radius: 20px; background: #fff; padding: clamp(18px, 4vw, 25px);
+}
+.form-section + .form-section, .form-section + .truth-panel, .truth-panel + .form-section { margin-top: 14px; }
+.section-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 15px; }
+.section-title { margin: 0; font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 14px; letter-spacing: 1.6px; }
+.optional-copy { flex: none; font-size: 12px; color: #8a908c; }
+.field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.field.wide { grid-column: 1 / -1; }
+.field-label { font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.1px; color: #6d746f; }
+.field-note { font-size: 12px; line-height: 1.5; color: #8a908c; }
+.field input, .field select, .field textarea {
+  width: 100%; min-height: 54px; padding: 15px 16px; border: 1px solid rgba(20,25,27,0.17);
+  border-radius: 13px; background: #fff; color: #14191b; line-height: 1.45; scroll-margin-block: 100px 180px; transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.field textarea { min-height: 112px; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: #5a7e8a; box-shadow: 0 0 0 4px rgba(90,126,138,0.1); }
+.chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.choice-chip {
+  min-height: 44px; cursor: pointer; padding: 11px 15px; border: 1px solid rgba(20,25,27,0.18);
+  border-radius: 999px; background: #fff; color: #14191b; font-family: 'Oswald', sans-serif;
+  font-size: 11px; letter-spacing: 1.25px; line-height: 1.25; transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.choice-chip:hover { border-color: #5a7e8a; }
+.choice-chip[aria-pressed='true'] { border-color: #5a7e8a; background: #5a7e8a; color: #fff; }
+.choice-chip.advice[aria-pressed='true'] { background: #14191b; border-color: #14191b; }
+.area-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.area-choice {
+  min-height: 62px; cursor: pointer; padding: 14px 16px; text-align: left; display: flex; align-items: center; gap: 12px;
+  border: 1px solid rgba(20,25,27,0.14); border-radius: 16px; background: #fff; transition: border-color 0.2s ease, background 0.2s ease;
+}
+.area-choice[aria-pressed='true'] { border-color: #5a7e8a; background: rgba(90,126,138,0.08); }
+.area-choice strong { display: block; font-family: 'Oswald', sans-serif; font-size: 11.5px; font-weight: 400; letter-spacing: 1.3px; }
+.area-choice span { display: block; margin-top: 3px; font-size: 12px; color: #8a908c; }
+.area-tick { flex: none; width: 24px; height: 24px; border: 1px solid rgba(20,25,27,0.2); border-radius: 999px; display: grid !important; place-items: center; color: #fff !important; margin: 0 !important; }
+.area-choice[aria-pressed='true'] .area-tick { background: #5a7e8a; border-color: #5a7e8a; }
+.truth-panel { background: rgba(90,126,138,0.07); }
+.truth-panel strong { display: block; margin-bottom: 7px; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1.6px; }
+.truth-panel p, .truth-note { margin: 0; font-size: 13px; line-height: 1.6; color: #4a5350; }
+.plan-layout { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); gap: 16px; margin-bottom: 30px; }
+.dropzone { position: relative; min-height: 230px; cursor: pointer; display: grid; place-items: center; padding: 24px; text-align: center; border: 1.5px dashed rgba(20,25,27,0.28); border-radius: 20px; background: #fff; }
+.dropzone:focus-within { outline: 3px solid rgba(90,126,138,0.34); outline-offset: 3px; border-color: #5a7e8a; }
+.dropzone input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.dropzone-body { display: flex; flex-direction: column; align-items: center; gap: 10px; max-width: 34ch; }
+.dropzone-mark { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 999px; background: rgba(90,126,138,0.12); color: #5a7e8a; font-size: 23px; }
+.dropzone strong { font-family: 'Oswald', sans-serif; font-size: 12.5px; letter-spacing: 1.8px; }
+.dropzone small { font-size: 12.5px; line-height: 1.5; color: #8a908c; }
+.plan-preview { max-width: 100%; max-height: 170px; object-fit: contain; border-radius: 10px; display: block; }
+.upload-error { margin: 8px 0 0; color: #a8563c; font-size: 13px; line-height: 1.5; }
+.plan-meta { display: flex; flex-direction: column; gap: 14px; }
+.style-section { margin-top: 30px; }
+.style-section h2 { margin: 0 0 5px; font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(25px, 5vw, 34px); font-weight: 400; }
+.style-section > p { margin: 0 0 15px; font-size: 13.5px; line-height: 1.55; color: #4a5350; }
+.style-rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(168px, 22%); gap: 12px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: inline proximity; padding: 2px 2px 12px; }
+.style-card { position: relative; min-width: 0; padding: 0; cursor: pointer; text-align: left; overflow: hidden; scroll-snap-align: start; border: 2px solid transparent; border-radius: 16px; background: #fff; }
+.style-card[aria-pressed='true'] { border-color: #5a7e8a; }
+.style-card img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; display: block; background: #e7e2d8; }
+.style-card-copy { display: flex; flex-direction: column; gap: 3px; padding: 11px 11px 13px; }
+.style-name { font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.2px; line-height: 1.35; }
+.style-kind { font-size: 9.5px; letter-spacing: 0.8px; color: #8a908c; }
+.style-tick { position: absolute; top: 8px; right: 8px; width: 27px; height: 27px; display: grid; place-items: center; border-radius: 999px; background: #5a7e8a; color: #fff; font-size: 13px; }
+.concept-toggle { width: 100%; min-height: 54px; margin-top: 10px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 16px; border: 1px solid rgba(20,25,27,0.16); border-radius: 14px; background: #fff; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.5px; }
+.concept-drawer { margin-top: 12px; padding: 16px; border: 1px solid rgba(20,25,27,0.12); border-radius: 16px; background: rgba(255,255,255,0.55); }
+.concept-drawer > p { margin: 0 0 12px; font-size: 12.5px; line-height: 1.55; color: #4a5350; }
+.custom-style { margin-top: 12px; }
+.scope-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.scope-toolbar p { margin: 0; font-size: 13px; line-height: 1.5; color: #4a5350; }
+.scope-group { border: 1px solid rgba(20,25,27,0.13); border-radius: 17px; background: #fff; overflow: hidden; }
+.scope-group + .scope-group { margin-top: 10px; }
+.scope-group summary { min-height: 58px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 17px; list-style: none; }
+.scope-group summary::-webkit-details-marker { display: none; }
+.scope-group summary strong { font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 1.5px; }
+.scope-status { font-size: 10.5px; letter-spacing: 1px; color: #8a908c; text-align: right; }
+.scope-content { padding: 0 17px 18px; border-top: 1px solid rgba(20,25,27,0.08); }
+.scope-help { margin: 13px 0; font-size: 12.5px; line-height: 1.55; color: #4a5350; }
+.contact-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 14px; padding: 0; overflow: hidden; }
+.why-card { padding: 19px; }
+.why-card + .why-card { border-left: 1px solid rgba(20,25,27,0.1); }
+.why-card strong { font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.7px; }
+.why-card p { margin: 7px 0 0; font-size: 13px; line-height: 1.55; color: #4a5350; }
+.review-layout { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr); gap: 16px; align-items: start; }
+.review-panel { padding: 20px; }
+.review-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 13px; border-bottom: 1px solid rgba(20,25,27,0.1); }
+.review-head strong, .review-head span { font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.8px; }
+.review-head strong { color: #5a7e8a; }
+.review-head span { color: #8a908c; }
+.review-row { padding: 13px 0; border-bottom: 1px solid rgba(20,25,27,0.07); }
+.review-row-key { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+.review-key { font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.7px; color: #8a908c; }
+.review-value { font-size: 14px; line-height: 1.55; color: #14191b; white-space: pre-line; overflow-wrap: anywhere; }
+.review-side { display: flex; flex-direction: column; gap: 12px; }
+.consent-card { display: flex; gap: 13px; align-items: flex-start; cursor: pointer; border: 1px solid rgba(20,25,27,0.12); border-radius: 18px; background: #fff; padding: 17px; }
+.consent-card input { flex: none; width: 22px; height: 22px; margin: 1px 0 0; accent-color: #5a7e8a; }
+.consent-card span { font-size: 13.5px; line-height: 1.55; color: #4a5350; }
+.coordinator-card:focus-within { outline: 3px solid rgba(90,126,138,0.34); outline-offset: 3px; }
+.secondary-link { text-align: center; border: 1px solid rgba(20,25,27,0.2); border-radius: 999px; padding: 15px 20px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; color: #14191b; background: #fff; }
+.sent-panel { border: 1px solid rgba(90,126,138,0.45); background: rgba(90,126,138,0.09); border-radius: 18px; padding: 17px; }
+.sent-panel strong { font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.8px; color: #5a7e8a; }
+.sent-panel p { margin: 7px 0 12px; font-size: 13.5px; line-height: 1.55; color: #4a5350; }
+.error-summary { margin-top: 16px; border-left: 3px solid #a8563c; padding: 10px 13px; background: rgba(168,86,60,0.08); color: #873f2e; font-size: 13px; line-height: 1.5; }
+.journey-strip { margin: -4px 0 34px; }
+.journey-strip ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid rgba(20,25,27,0.14); }
+.journey-step { width: 100%; min-height: 74px; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 6px; padding: 12px 12px 10px 0; border: 0; border-top: 3px solid transparent; background: none; color: #8a908c; }
+.journey-step[aria-current='step'] { border-top-color: #5a7e8a; color: #14191b; }
+.journey-step[data-complete='true'] { color: #5a7e8a; }
+.journey-step span { font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.6px; }
+.journey-step strong { max-width: 17ch; font-family: 'Oswald', sans-serif; font-size: 10.5px; font-weight: 400; letter-spacing: 1.1px; line-height: 1.4; }
+[data-primary][aria-busy='true']::before { content: ''; display: inline-block; width: 13px; height: 13px; margin-right: 10px; border: 2px solid rgba(255,255,255,0.42); border-top-color: #fff; border-radius: 999px; vertical-align: -2px; animation: hnmSpin 0.7s linear infinite; }
+@keyframes hnmSpin { to { transform: rotate(360deg); } }
+
+@media (max-width: 760px) {
+  .route-card-grid, .field-grid, .area-grid, .plan-layout, .contact-intro, .review-layout { grid-template-columns: 1fr; }
+  .route-card img { aspect-ratio: 3 / 1; }
+  .route-summary { grid-template-columns: 74px 1fr; gap: 11px; }
+  .route-summary img { width: 74px; height: 62px; }
+  .route-summary .text-button { grid-column: 1 / -1; justify-self: start; }
+  .why-card + .why-card { border-left: 0; border-top: 1px solid rgba(20,25,27,0.1); }
+  .style-rail { grid-auto-columns: minmax(158px, 58vw); }
+  .scope-toolbar { align-items: flex-start; flex-direction: column; }
+}
+@media (max-width: 899px) { [data-head-chat] { display: none !important; } }
+@media (max-width: 899px) { .journey-strip { display: none; } }
+@media (max-width: 420px) {
+  .screen-heading h1 { font-size: 36px; }
+  .route-card-copy { padding: 14px 15px 16px; }
+  .form-section, .truth-panel, .review-panel { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</helmet>
+<div data-shell="1" style="min-height: 100vh; padding-bottom: 210px; box-sizing: border-box;">
+  <a class="skip-link" href="#enquiry-main">Skip to enquiry</a>
+
+  <header style="position: sticky; top: 0; z-index: 40; background: rgba(242,239,233,0.93); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(20,25,27,0.1);">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 0 clamp(14px, 4vw, 30px); height: 62px; display: flex; align-items: center; gap: 14px;">
+      <button type="button" onClick="{{ back }}" disabled="{{ sending }}" aria-label="Back" style="flex: none; width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(20,25,27,0.18); background: #fff; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center; opacity: {{ backOpacity }};">←</button>
+      <a href="Home%20Direct.dc.html" title="Back to Home &amp; Me" translate="no" style="flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" width="32" height="32" style="height: 32px; width: 32px; object-fit: contain;"></a>
+      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+        <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.6px; color: #5a7e8a;">{{ stepOf }}</span>
+        <span style="font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 1.6px; color: #14191b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ stepName }}</span>
+      </div>
+      <a data-head-chat="1" sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener" aria-label="WhatsApp us" style="flex: none; height: 44px; padding: 0 18px; border-radius: 999px; background: #5a7e8a; color: #fff; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; display: flex; align-items: center;">CHAT</a>
+    </div>
+    <div style="height: 3px; background: rgba(20,25,27,0.09);"><div style="height: 3px; background: #5a7e8a; width: {{ progress }};"></div></div>
+  </header>
+
+  <main id="enquiry-main" style="max-width: 1100px; margin: 0 auto; padding: clamp(22px, 5vw, 40px) clamp(14px, 4vw, 30px) 0;">
+
+    <sc-if value="{{ hasRoute }}" hint-placeholder-val="{{ false }}">
+      <nav class="journey-strip" aria-label="Enquiry progress">
+        <ol>
+          <sc-for list="{{ journeyItems }}" as="j" hint-placeholder-count="5">
+            <li><button class="journey-step" type="button" onClick="{{ j.go }}" disabled="{{ j.disabled }}" aria-current="{{ j.current }}" data-complete="{{ j.complete }}"><span>{{ j.number }}</span><strong>{{ j.label }}</strong></button></li>
+          </sc-for>
+        </ol>
+      </nav>
+    </sc-if>
+
+    <sc-if value="{{ onStep1 }}" hint-placeholder-val="{{ true }}">
+      <section class="adaptive-screen">
+        <div class="screen-heading">
+          <span class="eyebrow">PROJECT FIT</span>
+          <h1 data-step-heading="1" tabindex="-1">What are you renovating?</h1>
+          <p>Choose the closest fit. The next questions change around the work, while the full five-screen journey stays.</p>
+        </div>
+        <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><p class="error-summary" role="alert">{{ hint }}</p></sc-if>
+
+        <sc-if value="{{ noRoute }}" hint-placeholder-val="{{ true }}">
+          <div class="route-card-grid">
+            <button class="route-card" type="button" onClick="{{ pickWhole }}" aria-pressed="{{ wholeRoute }}">
+              <img src="assets/portfolio/cards/minimalist-5-room-hdb-design-01-living-hall.jpg" alt="Minimalist Home &amp; Me completed living room project" width="640" height="360" fetchpriority="high">
+              <span class="route-card-copy">
+                <span class="route-card-name">WHOLE HOME</span>
+                <span class="route-card-note">Plan the full renovation, room by room.</span>
+              </span>
+            </button>
+            <button class="route-card" type="button" onClick="{{ pickSelected }}" aria-pressed="{{ selectedRoute }}">
+              <img src="assets/portfolio/cards/modern-oriental-5-room-hdb-design-01-living-hall.jpg" alt="Modern Oriental Home &amp; Me completed living room project" width="640" height="360" fetchpriority="high">
+              <span class="route-card-copy">
+                <span class="route-card-name">SELECTED ROOMS</span>
+                <span class="route-card-note">Quote only the rooms you choose.</span>
+              </span>
+            </button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ hasRoute }}" hint-placeholder-val="{{ false }}">
+          <div class="route-summary">
+            {{ routePhoto }}
+            <div><strong>{{ routeName }}</strong><span>{{ routeNote }}</span></div>
+            <button class="text-button" type="button" onClick="{{ changeRoute }}">CHANGE PROJECT</button>
+          </div>
+
+          <sc-if value="{{ restored }}" hint-placeholder-val="{{ false }}">
+            <div class="truth-panel" style="margin-bottom: 14px;">
+              <strong>PROJECT CHOICES RESTORED</strong>
+              <p>Your non-contact project choices were restored on this device. Contact details are never saved here. <button class="text-button" type="button" onClick="{{ clearDraft }}">START AGAIN</button></p>
+            </div>
+          </sc-if>
+
+          <div class="form-section">
+            <div class="section-row"><h2 class="section-title">PROPERTY BASICS</h2><span class="optional-copy">No guessed defaults</span></div>
+            <div class="field-grid">
+              <label class="field">
+                <span class="field-label">PROPERTY TYPE</span>
+                <select name="flatType" value="{{ f.flatType }}" onChange="{{ setFlatType }}" autocomplete="off">
+                  <option value="">Choose one</option>
+                  <sc-for list="{{ flatTypes }}" as="t" hint-placeholder-count="9"><option value="{{ t }}">{{ t }}</option></sc-for>
+                </select>
+              </label>
+              <label class="field">
+                <span class="field-label">APPROX. AREA (SQM)</span>
+                <input type="tel" inputmode="decimal" name="sqm" value="{{ f.sqm }}" onInput="{{ setSqm }}" placeholder="e.g. 93…" maxlength="6" autocomplete="off">
+                <span class="field-note">Optional. Your floor plan can confirm it later.</span>
+              </label>
+              <div class="field wide">
+                <span class="field-label">KEY STATUS</span>
+                <div class="chip-group">
+                  <sc-for list="{{ keyStatuses }}" as="k" hint-placeholder-count="3">
+                    <button class="choice-chip" type="button" onClick="{{ k.pick }}" aria-pressed="{{ k.on }}">{{ k.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <sc-if value="{{ wholeRoute }}" hint-placeholder-val="{{ false }}">
+            <div class="truth-panel">
+              <strong>WHOLE HOME IS SELECTED</strong>
+              <p>All rooms stay visible on the scope screen, where each one can be itemised or marked for contractor advice.</p>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ selectedRoute }}" hint-placeholder-val="{{ false }}">
+            <div class="form-section">
+              <div class="section-row"><h2 class="section-title">CHOOSE THE ROOMS</h2><span class="optional-copy">Pick one or more</span></div>
+              <div class="area-grid">
+                <sc-for list="{{ areaCards }}" as="a" hint-placeholder-count="9">
+                  <button class="area-choice" type="button" onClick="{{ a.pick }}" aria-pressed="{{ a.on }}">
+                    <span class="area-tick">{{ a.tick }}</span>
+                    <span><strong>{{ a.name }}</strong><span>{{ a.note }}</span></span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ onIdeasStep }}" hint-placeholder-val="{{ false }}">
+      <section class="adaptive-screen">
+        <div class="screen-heading">
+          <span class="eyebrow">OPTIONAL REFERENCES</span>
+          <h1 data-step-heading="1" tabindex="-1">{{ ideasTitle }}</h1>
+          <p>{{ ideasIntro }}</p>
+        </div>
+        <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><p class="error-summary" role="alert">{{ hint }}</p></sc-if>
+        <div class="route-summary">
+          {{ routePhoto }}
+          <div><strong>{{ routeName }}</strong><span>{{ routeNote }}</span></div>
+          <button class="text-button" type="button" onClick="{{ changeRoute }}">CHANGE PROJECT</button>
+        </div>
+
+        <div class="plan-layout" data-plan="1">
+          <div>
+            <label class="dropzone">
+              <input type="file" name="plan" accept="image/png,image/jpeg,image/webp,application/pdf" onChange="{{ onFile }}">
+              <span class="dropzone-body">
+                {{ planImg }}
+                <sc-if value="{{ noPlan }}" hint-placeholder-val="{{ true }}"><span class="dropzone-mark">＋</span></sc-if>
+                <strong>{{ planTitle }}</strong>
+                <small>{{ planNote }}</small>
+              </span>
+            </label>
+            <sc-if value="{{ hasPlanError }}" hint-placeholder-val="{{ false }}"><p class="upload-error" role="alert">{{ planError }}</p></sc-if>
+            <sc-if value="{{ hasPlan }}" hint-placeholder-val="{{ false }}"><button class="text-button" type="button" onClick="{{ clearPlan }}">REMOVE FILE</button></sc-if>
+          </div>
+          <div class="form-section plan-meta">
+            <div>
+              <span class="eyebrow">HUMAN REVIEW</span>
+              <p class="truth-note">A Home &amp; Me coordinator reviews the original with your brief. This is not automatic floor-plan reading.</p>
+            </div>
+            <div data-plan-fields="1" class="field-grid">
+              <label class="field">
+                <span class="field-label">PLAN LAYOUT</span>
+                <input type="text" name="detectedType" value="{{ f.detectedType }}" onInput="{{ setDetectedType }}" placeholder="e.g. 4-room…" maxlength="60" autocomplete="off">
+              </label>
+              <label class="field">
+                <span class="field-label">AREA (SQM)</span>
+                <input type="tel" inputmode="decimal" name="sqm" value="{{ f.sqm }}" onInput="{{ setSqm }}" placeholder="e.g. 93…" maxlength="6" autocomplete="off">
+              </label>
+            </div>
+            <p class="truth-note">Both fields are optional. What you type is what the contractor reads.</p>
+          </div>
+        </div>
+
+        <div class="style-section">
+          <div class="section-row">
+            <div><h2>Choose a starting style</h2><p>Completed Home &amp; Me work comes first. Pick up to three.</p></div>
+            <span class="optional-copy">{{ styleCount }}</span>
+          </div>
+          <div class="style-rail" aria-label="Completed project styles">
+            <sc-for list="{{ completedStyleCards }}" as="c" hint-placeholder-count="7">
+              <button class="style-card" type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.on }}">
+                {{ c.photo }}
+                <span class="style-card-copy"><span class="style-name">{{ c.name }}</span><span class="style-kind">COMPLETED WORK</span></span>
+                <sc-if value="{{ c.on }}" hint-placeholder-val="{{ false }}"><span class="style-tick">✓</span></sc-if>
+              </button>
+            </sc-for>
+          </div>
+
+          <button class="concept-toggle" type="button" onClick="{{ toggleConcepts }}" aria-expanded="{{ conceptsOpen }}">
+            <span>EXPLORE 26 MORE DESIGN DIRECTIONS</span><span>{{ conceptMark }}</span>
+          </button>
+          <sc-if value="{{ conceptsOpen }}" hint-placeholder-val="{{ false }}">
+            <div class="concept-drawer">
+              <p>These are AI-visualised design directions, not completed projects or renders of your unit.</p>
+              <div class="style-rail" aria-label="AI-visualised design directions">
+                <sc-for list="{{ conceptStyleCards }}" as="c" hint-placeholder-count="26">
+                  <button class="style-card" type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.on }}">
+                    {{ c.photo }}
+                    <span class="style-card-copy"><span class="style-name">{{ c.name }}</span><span class="style-kind">DESIGN DIRECTION</span></span>
+                    <sc-if value="{{ c.on }}" hint-placeholder-val="{{ false }}"><span class="style-tick">✓</span></sc-if>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <div class="form-section custom-style">
+            <button class="choice-chip" type="button" onClick="{{ pickCustom }}" aria-pressed="{{ customOn }}">{{ customTick }} CUSTOM, SOMETHING ELSE</button>
+            <sc-if value="{{ customOn }}" hint-placeholder-val="{{ false }}">
+              <label class="field" style="margin-top: 12px;">
+                <span class="field-label">DESCRIBE THE LOOK</span>
+                <textarea name="customStyle" rows="3" value="{{ f.customStyle }}" onInput="{{ setCustomStyle }}" maxlength="500" autocomplete="off" placeholder="For example: dark green kitchen with fluted oak, like the café at Duxton…"></textarea>
+              </label>
+            </sc-if>
+          </div>
+          <p class="truth-note" style="margin-top: 12px;">Project photos show completed Home &amp; Me work; the remaining styles are AI-visualised design directions, not completed projects or renders of your unit.</p>
+        </div>
+        <sc-if value="{{ showTimingOnIdeas }}" hint-placeholder-val="{{ false }}">
+          <div class="form-section" style="margin-top: 22px;">
+            <div class="section-row"><h2 class="section-title">WHEN WOULD YOU LIKE TO START?</h2><span class="optional-copy">A guide, not a promise</span></div>
+            <div class="chip-group">
+              <sc-for list="{{ timings }}" as="t" hint-placeholder-count="4"><button class="choice-chip" type="button" onClick="{{ t.pick }}" aria-pressed="{{ t.on }}">{{ t.label }}</button></sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ onScopeStep }}" hint-placeholder-val="{{ false }}">
+      <section class="adaptive-screen">
+        <div class="screen-heading">
+          <span class="eyebrow">ROOM-BY-ROOM BRIEF</span>
+          <h1 data-step-heading="1" tabindex="-1">{{ scopeTitle }}</h1>
+          <p>{{ scopeIntro }}</p>
+        </div>
+        <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><p class="error-summary" role="alert">{{ hint }}</p></sc-if>
+        <div class="route-summary">
+          {{ routePhoto }}
+          <div><strong>{{ routeName }}</strong><span>{{ routeNote }}</span></div>
+          <button class="text-button" type="button" onClick="{{ changeRoute }}">CHANGE PROJECT</button>
+        </div>
+        <div class="scope-toolbar">
+          <p>Choose the work you know. Advice is a complete answer when you are unsure.</p>
+          <button class="text-button" type="button" onClick="{{ markAllAdvice }}">MARK ALL UNDECIDED FOR ADVICE</button>
+        </div>
+        <div>
+          <sc-for list="{{ scopeGroups }}" as="g" hint-placeholder-count="9">
+            <details class="scope-group" open="{{ g.open }}">
+              <summary><strong>{{ g.name }}</strong><span class="scope-status">{{ g.status }}</span></summary>
+              <div class="scope-content">
+                <p class="scope-help">Choose one or more trades, or ask the contractor to advise after reviewing the unit.</p>
+                <div class="chip-group">
+                  <button class="choice-chip advice" type="button" onClick="{{ g.pickAdvice }}" aria-pressed="{{ g.adviceOn }}">CONTRACTOR TO ADVISE</button>
+                  <sc-for list="{{ g.trades }}" as="t" hint-placeholder-count="12">
+                    <button class="choice-chip" type="button" onClick="{{ t.pick }}" title="{{ t.note }}" aria-pressed="{{ t.on }}">{{ t.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </details>
+          </sc-for>
+        </div>
+        <div class="form-section" style="margin-top: 14px;">
+          <label class="field">
+            <span class="field-label">WHAT SHOULD THE CONTRACTOR KNOW?</span>
+            <textarea name="notes" rows="4" value="{{ f.notes }}" onInput="{{ setNotes }}" maxlength="1800" autocomplete="off" placeholder="For example: the bathroom leaks, the kitchen storage is not working, or you plan to keep the existing cabinets…"></textarea>
+            <span class="field-note">Plain language is enough. You do not need to name the trade.</span>
+          </label>
+        </div>
+        <sc-if value="{{ showTimingOnScope }}" hint-placeholder-val="{{ false }}">
+          <div class="form-section" style="margin-top: 14px;">
+            <div class="section-row"><h2 class="section-title">WHEN WOULD YOU LIKE TO START?</h2><span class="optional-copy">A guide, not a promise</span></div>
+            <div class="chip-group">
+              <sc-for list="{{ timings }}" as="t" hint-placeholder-count="4"><button class="choice-chip" type="button" onClick="{{ t.pick }}" aria-pressed="{{ t.on }}">{{ t.label }}</button></sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ onStep4 }}" hint-placeholder-val="{{ false }}">
+      <section class="adaptive-screen">
+        <div class="screen-heading">
+          <span class="eyebrow">PRIVATE CONTACT DETAILS</span>
+          <h1 data-step-heading="1" tabindex="-1">Where can we reach you?</h1>
+          <p>Your project brief is ready. Add the details needed for a human review and a useful quote.</p>
+        </div>
+        <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><p class="error-summary" role="alert">{{ hint }}</p></sc-if>
+        <div class="route-summary">
+          {{ routePhoto }}
+          <div><strong>{{ routeName }}</strong><span>{{ routeNote }}</span></div>
+          <button class="text-button" type="button" onClick="{{ changeRoute }}">CHANGE PROJECT</button>
+        </div>
+        <div class="contact-intro">
+          <div class="why-card"><strong>WHY THE EXACT ADDRESS?</strong><p>Access, floor level and town affect how a contractor prepares the itemised quote.</p></div>
+          <div class="why-card"><strong>WHO SEES IT?</strong><p>Your details reach the Home &amp; Me team handling this enquiry. Read the <a class="inline-link" href="Legal.dc.html" target="_blank" rel="noopener">privacy terms</a>.</p></div>
+        </div>
+        <div class="form-section">
+          <div class="field-grid">
+            <label class="field wide"><span class="field-label">YOUR NAME</span><input type="text" name="name" value="{{ f.name }}" onInput="{{ setName }}" maxlength="120" placeholder="Full name…" autocomplete="name"></label>
+            <label class="field"><span class="field-label">MOBILE (WHATSAPP)</span><input type="tel" name="phone" value="{{ f.phone }}" onInput="{{ setPhone }}" maxlength="24" placeholder="9123 4567…" autocomplete="tel" inputmode="tel"></label>
+            <label class="field"><span class="field-label">EMAIL</span><input type="email" name="email" value="{{ f.email }}" onInput="{{ setEmail }}" maxlength="160" placeholder="you@email.com…" autocomplete="email" spellcheck="false"></label>
+            <label class="field wide"><span class="field-label">BLOCK &amp; STREET</span><input type="text" name="street" value="{{ f.street }}" onInput="{{ setStreet }}" maxlength="180" placeholder="e.g. 512 Woodlands Drive 14…" autocomplete="street-address"></label>
+            <label class="field"><span class="field-label">UNIT NO.</span><input type="text" name="unit" value="{{ f.unit }}" onInput="{{ setUnit }}" maxlength="24" placeholder="#10-234…" autocomplete="address-line2"></label>
+            <label class="field"><span class="field-label">POSTAL CODE</span><input type="tel" name="postal" value="{{ f.postal }}" onInput="{{ setPostal }}" maxlength="6" placeholder="730512…" autocomplete="postal-code" inputmode="numeric"></label>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ onStep5 }}" hint-placeholder-val="{{ false }}">
+      <section class="adaptive-screen">
+        <div class="screen-heading">
+          <span class="eyebrow">FINAL REVIEW</span>
+          <h1 data-step-heading="1" tabindex="-1">Check it, then send</h1>
+          <p>This is exactly what our team receives. Edit any section here before giving fresh contact consent.</p>
+        </div>
+        <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><p class="error-summary" role="alert">{{ hint }}</p></sc-if>
+        <div class="review-layout" data-review="1">
+          <div class="review-panel">
+            <div class="review-head"><strong>NEW ENQUIRY</strong><span>{{ ref }}</span></div>
+            <sc-for list="{{ summary }}" as="row" hint-placeholder-count="12">
+              <div class="review-row">
+                <div class="review-row-key"><span class="review-key">{{ row.k }}</span><button class="edit-button" type="button" onClick="{{ row.edit }}" disabled="{{ sending }}">EDIT</button></div>
+                <div class="review-value">{{ row.v }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div class="review-side">
+            <div class="coordinator-card" style="border: 1.5px solid {{ coordBorder }}; border-radius: 18px; background: {{ coordBg }}; padding: 17px;">
+              <label style="display: flex; gap: 14px; align-items: flex-start; cursor: pointer;">
+                <span style="flex: none; width: 52px; height: 30px; border-radius: 999px; background: {{ switchBg }}; position: relative; transition: background 0.25s ease; margin-top: 2px;">
+                  <input type="checkbox" name="coordinator" checked="{{ f.coordinator }}" onChange="{{ toggleCoordinator }}" disabled="{{ sending }}" style="position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer;">
+                  <span style="position: absolute; top: 3px; left: 3px; transform: translateX({{ switchX }}); width: 24px; height: 24px; border-radius: 999px; background: #fff; transition: transform 0.25s cubic-bezier(0.2,0.8,0.2,1); box-shadow: 0 2px 6px rgba(20,25,27,0.3);"></span>
+                </span>
+                <span style="display: flex; flex-direction: column; gap: 6px;">
+                  <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 1.4px;">ADD A PROJECT COORDINATOR</span>
+                  <span style="font-size: 13.5px; line-height: 1.55; color: #4a5350;">Someone from our side runs the schedule, checks the work on site and holds the trades to the quote. Priced to the job — a single toilet and a full-house strip are not the same fee, so we quote it with everything else.</span>
+                </span>
+              </label>
+            </div>
+            <label class="consent-card">
+              <input type="checkbox" name="consent" checked="{{ f.consent }}" onChange="{{ toggleConsent }}" disabled="{{ sending }}">
+              <span style="font-size: 13.5px; line-height: 1.55; color: #4a5350;">I agree Home &amp; Me may store this enquiry and contact me on WhatsApp, phone or email about it. No marketing lists, no passing my details to other firms.</span>
+            </label>
+            <a class="secondary-link" sc-camel-href="{{ mailHref }}">EMAIL IT INSTEAD</a>
+            <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+              <div class="sent-panel" role="status">
+                <strong>{{ sentTitle }}</strong>
+                <p>{{ sentNote }}</p>
+                <button class="choice-chip" type="button" onClick="{{ copyText }}">{{ copyLabel }}</button>
+              </div>
+            </sc-if>
+            <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #8a908c;">{{ sendHint }}</p>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <div data-desk="1" style="display: none; margin: 44px 0 0; padding-top: 22px; border-top: 1px solid rgba(20,25,27,0.12); font-size: 13px; color: #8a908c;">Home &amp; Me · Singapore · direct-contractor renovation, no middleman markup. Questions before you send? <a class="inline-link" sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener">WhatsApp {{ waPretty }}</a> · <a class="inline-link" sc-camel-href="{{ mailTo }}">{{ email }}</a></div>
+  </main>
+
+  <sc-if value="{{ showAction }}" hint-placeholder-val="{{ false }}">
+    <div data-actionbar="1" style="position: fixed; left: 0; right: 0; bottom: calc(69px + env(safe-area-inset-bottom, 0px)); z-index: 45; background: rgba(242,239,233,0.94); backdrop-filter: blur(16px); border-top: 1px solid rgba(20,25,27,0.1); padding: 14px clamp(14px, 4vw, 30px) 16px;">
+      <div data-barinner="1" style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
+        <button data-primary="1" type="button" onClick="{{ primary }}" disabled="{{ primaryDisabled }}" aria-busy="{{ sending }}" style="width: 100%; cursor: pointer; border: none; border-radius: 999px; background: {{ primaryBg }}; color: {{ primaryFg }}; padding: 19px 26px; font-family: 'Oswald', sans-serif; font-size: 12.5px; letter-spacing: 2.4px; transition: background 0.25s ease;">{{ primaryLabel }}</button>
+        <span data-hint="1" role="status" aria-live="polite" style="font-size: 13px; line-height: 1.45; color: {{ hintFg }}; text-align: center;">{{ hint }}</span>
+      </div>
+    </div>
+  </sc-if>
+
+  <nav data-tabbar="1" style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 46; background: rgba(255,255,255,0.96); backdrop-filter: blur(16px); border-top: 1px solid rgba(20,25,27,0.1); padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px)); display: grid; grid-template-columns: repeat(4, 1fr);">
+    <a href="Home%20Direct.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;">{{ iconHome }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">HOME</span></a>
+    <a href="Home%20Direct.dc.html#portfolio" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;">{{ iconWork }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">OUR WORK</span></a>
+    <span style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #5a7e8a;">{{ iconPlan }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">ENQUIRY</span></span>
+    <a sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener" style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 0; color: #8a908c;">{{ iconChat }}<span style="font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 1.4px;">CHAT</span></a>
+  </nav>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+6588376196&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;homeandme2017@gmail.com&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;coordinatorDefaultOn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;},&quot;autoRead&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;}}">
+const LEAD_ENDPOINT = 'https://spark-792d.tail223b04.ts.net/hnm/v1/leads';
+const PLAN_ENDPOINT = 'https://spark-792d.tail223b04.ts.net/hnm/v1/plans';
+const CONSENT_VERSION = '2026-08-22';
+const FLAT_TYPES = ['HDB 2-room', 'HDB 3-room', 'HDB 4-room', 'HDB 5-room', 'HDB Executive / Maisonette', 'HDB Jumbo', 'Condo / Apartment', 'Landed', 'Not sure yet'];
+const STYLE_ALIASES = { 'modern-contemporary': 'contemporary', 'wabi-sabi': 'muji' };
+
+// Thirty-three owner-reviewed directions: seven use completed Home & Me project
+// photography, while the other twenty-six use visibly disclosed AI concepts.
+const CATS = ['ALL', 'POPULAR', 'WARM', 'BOLD', 'CLASSIC', 'CALM'];
+const STYLES = [
+  { id: 'minimalist', name: 'MINIMALIST', note: 'Flat fronts, hidden handles, one material.', cat: 'POPULAR', img: 'portfolio/cards/minimalist-5-room-hdb-design-01-living-hall.jpg' },
+  { id: 'scandinavian', name: 'SCANDINAVIAN', note: 'Pale oak, white walls, daylight kept open.', cat: 'POPULAR', img: 'portfolio/cards/scandinavian-4-room-hdb-design-01-living-hall.jpg' },
+  { id: 'japandi', name: 'JAPANDI', note: 'Japanese calm meets Scandi warmth — low timber, muted tone.', cat: 'POPULAR', conceptImg: 'concepts/japandi-hdb-design.webp' },
+  { id: 'contemporary', name: 'MODERN CONTEMPORARY', note: 'Clean lines, neutral tones, bright and open.', cat: 'POPULAR', img: 'portfolio/cards/contemporary-3-room-hdb-design-01-living-hall.jpg' },
+  { id: 'muji', name: 'WABI-SABI / MUJI', note: 'Weathered timber, clay and plaster, imperfect by design.', cat: 'POPULAR', img: 'portfolio/cards/muji-5-room-hdb-design-02-living-hall.jpg' },
+  { id: 'contemporary-luxe', name: 'CONTEMPORARY LUXE', note: 'Full-height stone, dark joinery, layered light.', cat: 'POPULAR', conceptImg: 'concepts/contemporary-luxe-hdb-design.webp' },
+  { id: 'mid-century', name: 'MID-CENTURY MODERN', note: 'Walnut, tapered legs, organic shapes, retro colour.', cat: 'POPULAR', conceptImg: 'concepts/mid-century-hdb-design.webp' },
+
+  { id: 'rustic-wood', name: 'RUSTIC WOOD', note: 'Solid timber, visible grain, earthy tones.', cat: 'WARM', conceptImg: 'concepts/rustic-wood-hdb-design.webp' },
+  { id: 'warm-concrete', name: 'WARM CONCRETE', note: 'Greige plaster, concrete-look stone, oak table.', cat: 'WARM', conceptImg: 'concepts/warm-concrete-hdb-design.webp' },
+  { id: 'coastal', name: 'COASTAL', note: 'Chalk white, lightened wood, linen and rope.', cat: 'WARM', conceptImg: 'concepts/coastal-hdb-design.webp' },
+  { id: 'tropical', name: 'TROPICAL RESORT', note: 'Rattan and teak, deep green, planting indoors.', cat: 'WARM', conceptImg: 'concepts/tropical-hdb-design.webp' },
+  { id: 'cottagecore', name: 'COTTAGECORE', note: 'Cream cabinets, soft florals, vintage brass.', cat: 'WARM', conceptImg: 'concepts/cottagecore-hdb-design.webp' },
+  { id: 'biophilic', name: 'BIOPHILIC GREEN', note: 'Planting, daylight, raw stone and wood.', cat: 'WARM', conceptImg: 'concepts/biophilic-hdb-design.webp' },
+  { id: 'mediterranean', name: 'MEDITERRANEAN', note: 'Lime plaster, arches, hand-painted tile, wrought iron.', cat: 'WARM', conceptImg: 'concepts/mediterranean-hdb-design.webp' },
+
+  { id: 'industrial', name: 'INDUSTRIAL', note: 'Raw screed, black metal, exposed services.', cat: 'BOLD', img: 'portfolio/cards/industrial-4-room-hdb-design-01-living-hall.jpg' },
+  { id: 'dark-moody', name: 'DARK MOODY', note: 'Deep walls, matte black, pooled lighting.', cat: 'BOLD', conceptImg: 'concepts/dark-moody-hdb-design.webp' },
+  { id: 'gothic', name: 'GOTHIC REVIVAL', note: 'Ink walls, arches, carved dark timber.', cat: 'BOLD', conceptImg: 'concepts/gothic-hdb-design.webp' },
+  { id: 'cyberpunk', name: 'CYBERPUNK NEON', note: 'RGB coves, black lacquer, neon accents.', cat: 'BOLD', conceptImg: 'concepts/cyberpunk-hdb-design.webp' },
+  { id: 'gamer', name: 'GAMER SETUP', note: 'Strip lighting, acoustic panels, dark desk wall.', cat: 'BOLD', conceptImg: 'concepts/gamer-hdb-design.webp' },
+
+  { id: 'modern-classic', name: 'MODERN CLASSIC', note: 'Panelling, cornice, brass and marble accents.', cat: 'CLASSIC', img: 'portfolio/cards/modern-classic-3-room-hdb-design-01-living-hall.jpg' },
+  { id: 'modern-oriental', name: 'MODERN ORIENTAL', note: 'Dark timber, lattice screens, restrained colour.', cat: 'CLASSIC', img: 'portfolio/cards/modern-oriental-5-room-hdb-design-01-living-hall.jpg' },
+  { id: 'marble-luxe', name: 'MARBLE LUXE', note: 'Book-matched slabs, gold trim, polished finish.', cat: 'CLASSIC', conceptImg: 'concepts/marble-luxe-hdb-design.webp' },
+  { id: 'peranakan', name: 'PERANAKAN / STRAITS', note: 'Encaustic patterned tile, turquoise and crimson, carved teak.', cat: 'CLASSIC', conceptImg: 'concepts/peranakan-hdb-design.webp' },
+  { id: 'heritage-blue', name: 'HERITAGE BLUE', note: 'Deep blue fronts, brass pulls, speckled stone tile.', cat: 'CLASSIC', conceptImg: 'concepts/heritage-blue-hdb-design.webp' },
+  { id: 'art-deco', name: 'ART DECO', note: 'Geometry and symmetry, lacquer, brass, velvet.', cat: 'CLASSIC', conceptImg: 'concepts/art-deco-hdb-design.webp' },
+  { id: 'victorian', name: 'VICTORIAN HERITAGE', note: 'Wainscot panelling, deep green, ornate cornice.', cat: 'CLASSIC', conceptImg: 'concepts/victorian-hdb-design.webp' },
+  { id: 'retro-terrazzo', name: 'RETRO TERRAZZO', note: 'Speckled stone, mint and clay, resale charm kept.', cat: 'CLASSIC', conceptImg: 'concepts/retro-terrazzo-hdb-design.webp' },
+
+  { id: 'study-wfh', name: 'STUDY / WFH', note: 'Built-in desk and shelving, calm and quiet.', cat: 'CALM', conceptImg: 'concepts/study-wfh-hdb-design.webp' },
+  { id: 'family-warm', name: 'FAMILY WARM', note: 'Soft seating, durable finishes, warm light.', cat: 'CALM', conceptImg: 'concepts/family-warm-hdb-design.webp' },
+  { id: 'hotel-suite', name: 'HOTEL SUITE', note: 'Marble, vanity lighting, strict symmetry.', cat: 'CALM', conceptImg: 'concepts/hotel-suite-hdb-design.webp' },
+  { id: 'spa-stone', name: 'SPA STONE', note: 'Matte stone, timber, warm indirect light.', cat: 'CALM', conceptImg: 'concepts/spa-stone-hdb-design.webp' },
+  { id: 'soft-neutral', name: 'SOFT NEUTRAL', note: 'Beige joinery, sliding doors, small-room calm.', cat: 'CALM', conceptImg: 'concepts/soft-neutral-hdb-design.webp' },
+  { id: 'bohemian', name: 'BOHEMIAN', note: 'Layered textiles, rattan and jute, terracotta base.', cat: 'CALM', conceptImg: 'concepts/bohemian-hdb-design.webp' },
+];
+
+const AREAS = [
+  { id: 'whole', name: 'WHOLE HOUSE', note: 'Everything below, one project.', wet: false, icon: 'home' },
+  { id: 'living', name: 'LIVING & DINING', note: 'Feature wall, flooring, ceiling.', wet: false, icon: 'sofa' },
+  { id: 'kitchen', name: 'KITCHEN', note: 'Cabinets, worktop, tiling, sink.', wet: true, icon: 'kitchen' },
+  { id: 'master', name: 'MASTER BEDROOM', note: 'Wardrobe, bed feature, lighting.', wet: false, icon: 'bed' },
+  { id: 'common', name: 'COMMON BEDROOM(S)', note: 'One or more rooms.', wet: false, icon: 'bed' },
+  { id: 'mbath', name: 'MASTER BATHROOM', note: 'Tiles, waterproofing, sanitary.', wet: true, icon: 'bath' },
+  { id: 'cbath', name: 'COMMON BATHROOM', note: 'Tiles, waterproofing, sanitary.', wet: true, icon: 'bath' },
+  { id: 'yard', name: 'SERVICE YARD / UTILITY', note: 'Laundry, sink, storage, WC.', wet: true, icon: 'yard' },
+  { id: 'balcony', name: 'BALCONY', note: 'Decking, screens, parapet.', wet: true, icon: 'balcony' },
+  { id: 'study', name: 'STUDY / WFH CORNER', note: 'Desk carpentry, shelving, power.', wet: false, icon: 'desk' },
+];
+
+const TRADES = [
+  { id: 'hack', label: 'HACKING & DEMOLITION', note: 'Removing tiles, walls, old carpentry.' },
+  { id: 'tiling', label: 'MASONRY & TILING', note: 'Screeding, wall and floor tiles, plastering.' },
+  { id: 'paint', label: 'PAINTING', note: 'Prep, sealer, two coats.' },
+  { id: 'carpentry', label: 'CARPENTRY', note: 'Cabinets, wardrobes, vanity, feature panels.' },
+  { id: 'plumb', label: 'PLUMBING & SANITARY', note: 'Pipe runs, taps, WC, basin, shower.', wetOnly: true },
+  { id: 'elec', label: 'ELECTRICAL & LIGHTING', note: 'Points, circuits, DB work, light fittings.' },
+  { id: 'ceiling', label: 'FALSE CEILING & PARTITION', note: 'Boxing, cove lights, dry-wall partitions.' },
+  { id: 'glass', label: 'GLASS & ALUMINIUM', note: 'Shower screens, sliding doors, window work.' },
+  { id: 'water', label: 'WATERPROOFING', note: 'Membrane and ponding test — wet areas.', wetOnly: true },
+  { id: 'floor', label: 'FLOORING (VINYL / OVERLAY)', note: 'Vinyl, laminate or tile overlay.' },
+  { id: 'aircon', label: 'AIRCON', note: 'New system, relocation or servicing.', noWet: true },
+  { id: 'haul', label: 'HAULAGE & CLEANING', note: 'Debris disposal and post-reno clean.' },
+];
+
+// Material textures for the styles we have not photographed — timber slats, linen weave,
+// fluting, panelling, terrazzo speckle — drawn in CSS so no project photo is ever repeated.
+const TEXTURES = {
+  grain: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.09) 0 10px, transparent 10px 28px)',
+  'mid-century': 'repeating-linear-gradient(90deg, rgba(255,255,255,0.14) 0 12px, rgba(0,0,0,0.05) 12px 15px, transparent 15px 38px)',
+  coastal: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.3) 0 2px, transparent 2px 13px), repeating-linear-gradient(90deg, rgba(255,255,255,0.18) 0 2px, transparent 2px 13px)',
+  tropical: 'radial-gradient(circle at 76% 20%, rgba(255,255,255,0.28) 0 12%, transparent 46%), repeating-linear-gradient(72deg, rgba(255,255,255,0.1) 0 6px, transparent 6px 22px)',
+  cottagecore: 'radial-gradient(circle at 28% 26%, rgba(255,255,255,0.4) 0 14%, transparent 44%), repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0 2px, transparent 2px 26px)',
+  biophilic: 'repeating-linear-gradient(118deg, rgba(255,255,255,0.13) 0 7px, transparent 7px 26px), radial-gradient(circle at 82% 78%, rgba(255,255,255,0.22), transparent 45%)',
+  mediterranean: 'radial-gradient(ellipse 70% 55% at 50% 108%, rgba(255,255,255,0.42), transparent 70%), repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0 3px, transparent 3px 24px)',
+  gothic: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.12) 0 3px, transparent 3px 26px), radial-gradient(ellipse 46% 60% at 50% 0%, rgba(255,255,255,0.16), transparent 72%)',
+  cyberpunk: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.16) 0 2px, transparent 2px 11px), radial-gradient(circle at 20% 82%, rgba(255,255,255,0.3), transparent 44%)',
+  gamer: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.12) 0 5px, transparent 5px 17px), radial-gradient(circle at 74% 30%, rgba(255,255,255,0.24), transparent 42%)',
+  'art-deco': 'repeating-linear-gradient(90deg, rgba(255,255,255,0.2) 0 3px, rgba(0,0,0,0.07) 3px 5px, transparent 5px 17px)',
+  victorian: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.14) 0 3px, transparent 3px 38px), repeating-linear-gradient(90deg, rgba(0,0,0,0.06) 0 3px, transparent 3px 62px)',
+  'retro-terrazzo': 'radial-gradient(circle at 18% 24%, rgba(20,25,27,0.3) 0 3px, transparent 4px), radial-gradient(circle at 62% 14%, rgba(255,255,255,0.6) 0 4px, transparent 5px), radial-gradient(circle at 84% 46%, rgba(20,25,27,0.24) 0 3px, transparent 4px), radial-gradient(circle at 34% 62%, rgba(255,255,255,0.55) 0 5px, transparent 6px), radial-gradient(circle at 70% 76%, rgba(20,25,27,0.2) 0 4px, transparent 5px), radial-gradient(circle at 12% 82%, rgba(255,255,255,0.5) 0 3px, transparent 4px)',
+  bohemian: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.16) 0 4px, transparent 4px 14px), repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0 4px, transparent 4px 14px)',
+};
+
+const TIMINGS = ['ASAP', 'IN 1–3 MONTHS', 'IN 3–6 MONTHS', 'JUST EXPLORING'];
+const KEY_STATUSES = ['KEYS COLLECTED', 'COLLECTING SOON', 'STILL PLANNING'];
+const ROOM_AREAS = AREAS.filter((area) => area.id !== 'whole');
+const ROUTES = {
+  whole: { name: 'WHOLE HOME', note: 'Plan the full renovation, room by room.', image: 'portfolio/cards/minimalist-5-room-hdb-design-01-living-hall.jpg' },
+  selected: { name: 'SELECTED ROOMS', note: 'Quote only the rooms you choose.', image: 'portfolio/cards/modern-oriental-5-room-hdb-design-01-living-hall.jpg' },
+};
+const JOURNEYS = {
+  whole: ['WHAT ARE YOU RENOVATING?', 'PLAN AND STYLE', 'WHAT SHOULD BE QUOTED?', 'WHERE CAN WE REACH YOU?', 'REVIEW AND SEND'],
+  selected: ['WHAT ARE YOU RENOVATING?', 'WHAT NEEDS DOING?', 'ADD PLANS OR IDEAS', 'WHERE CAN WE REACH YOU?', 'REVIEW AND SEND'],
+};
+const TEAL = '#5a7e8a', INK = '#14191b';
+
+const ICONS = {
+  home: 'M3 10.5 12 4l9 6.5M5.5 9.5V20h13V9.5',
+  sofa: 'M4 11V8.5A1.5 1.5 0 0 1 5.5 7h13A1.5 1.5 0 0 1 20 8.5V11M3 11.5h18v5.5H3zM6 17v2M18 17v2',
+  kitchen: 'M4 4h16v16H4zM4 12h16M8 7.5h2M14 7.5h2M8 16h8',
+  bed: 'M3 18v-8M3 13h18v5M21 18v-5.5A2.5 2.5 0 0 0 18.5 10H10v3M6.5 8.5h.01',
+  bath: 'M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4zM7 12V6.5A1.5 1.5 0 0 1 8.5 5h1M6 19.5 5 21M18 19.5l1 1.5',
+  yard: 'M4 4h16v16H4zM12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM7.5 7h.01',
+  balcony: 'M4 9h16M4 9v11M20 9v11M9 9v11M15 9v11M4 20h16M12 3v6',
+  desk: 'M3 12h18M5 12v8M19 12v8M8 12V7h6v5M16 8h3',
+  chat: 'M21 11.5a8.4 8.4 0 0 1-9 8.5 9 9 0 0 1-3.9-.9L3 21l1.9-4.6A8.4 8.4 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5z',
+  work: 'M3 6.5h7v6H3zM14 6.5h7v11h-7zM3 15.5h7v2H3z',
+  plan: 'M4 4h16v16H4zM4 10h16M10 10v10M14 4v6',
+};
+
+class Component extends DCLogic {
+  state = {
+    step: 1, maxStep: 1, route: null, keyStatus: '', advice: {}, conceptsOpen: false,
+    hint: '', err: false, sent: false, delivered: false, fallbackOpened: false, planAttached: false, copied: false, sending: false, restored: false,
+    read: { status: 'idle', note: 'A person reviews your original plan before quoting.' },
+    plan: null, planError: '',
+    f: {
+      street: '', unit: '', postal: '', flatType: '', name: '', phone: '', email: '',
+      detectedType: '', sqm: '', styles: [], customStyle: '', areas: [], trades: {}, timing: '', notes: '',
+      coordinator: false, consent: false,
+    },
+  };
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeys);
+    window.addEventListener('beforeunload', this.onBeforeUnload);
+    this.setState((s) => ({ f: { ...s.f, coordinator: !!this.props.coordinatorDefaultOn } }));
+    try {
+      // v3 keeps only non-contact project choices for up to 24 hours. The
+      // former local draft is removed so names, addresses and contact details
+      // no longer remain in browser storage.
+      localStorage.removeItem('hnm.enquiry.v1');
+      localStorage.removeItem('hnm.enquiry.v2');
+      sessionStorage.removeItem('hnm.enquiry.v3');
+      const saved = JSON.parse(localStorage.getItem('hnm.enquiry.v3') || 'null');
+      const fresh = saved && saved.at && (Date.now() - saved.at) < 24 * 60 * 60 * 1000;
+      if (fresh && saved.project) {
+        const project = saved.project;
+        const route = ROUTES[project.route] ? project.route : null;
+        const areas = Array.isArray(project.areas) ? project.areas.filter((id) => ROOM_AREAS.some((area) => area.id === id)) : [];
+        const trades = {};
+        Object.keys(project.trades || {}).forEach((area) => {
+          if (!ROOM_AREAS.some((entry) => entry.id === area)) return;
+          trades[area] = (project.trades[area] || []).filter((id) => TRADES.some((trade) => trade.id === id));
+        });
+        const advice = {};
+        Object.keys(project.advice || {}).forEach((area) => { if (ROOM_AREAS.some((entry) => entry.id === area)) advice[area] = !!project.advice[area]; });
+        const restoredStyles = (project.styles || []).filter((id) => id === 'custom' || STYLES.some((style) => style.id === id)).slice(0, 3);
+        this.setState((s) => ({
+          route, keyStatus: KEY_STATUSES.includes(project.keyStatus) ? project.keyStatus : '', advice,
+          conceptsOpen: !!project.conceptsOpen, step: route ? Math.max(1, Math.min(5, Number(project.step) || 1)) : 1,
+          maxStep: route ? Math.max(1, Math.min(5, Number(project.maxStep) || 1)) : 1, restored: !!route,
+          f: { ...s.f, flatType: FLAT_TYPES.includes(project.flatType) ? project.flatType : '', detectedType: project.detectedType || '',
+            sqm: project.sqm || '', styles: restoredStyles,
+            customStyle: restoredStyles.includes('custom') ? (project.customStyle || '') : '', areas, trades, timing: TIMINGS.includes(project.timing) ? project.timing : '', notes: project.notes || '', consent: false },
+        }));
+      } else if (saved) localStorage.removeItem('hnm.enquiry.v3');
+    } catch (e) { /* first visit */ }
+    const m = /[#?&](?:style|s)=([\w-]+)/.exec(location.href);
+    if (m) {
+      const requested = m[1].toLowerCase();
+      const styleId = STYLE_ALIASES[requested] || requested;
+      const hit = STYLES.find((x) => x.id === styleId);
+      if (hit) this.setState((s) => ({ f: { ...s.f, styles: [hit.id] } }));
+    }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeys);
+    window.removeEventListener('beforeunload', this.onBeforeUnload);
+  }
+
+  onBeforeUnload = (event) => {
+    const f = this.state.f;
+    const hasUnsavedContact = !this.state.delivered && !!(f.name || f.phone || f.email || f.street || f.unit || f.postal);
+    if (!hasUnsavedContact) return;
+    event.preventDefault();
+    event.returnValue = '';
+  };
+
+  onKeys = (event) => {
+    if (event.defaultPrevented) return;
+    const target = event.target;
+    if (!target || !target.tagName) return;
+    const tag = target.tagName.toUpperCase();
+    const textareaSubmit = tag === 'TEXTAREA' && event.key === 'Enter' && (event.metaKey || event.ctrlKey);
+    const inputSubmit = tag === 'INPUT' && event.key === 'Enter' && !['checkbox', 'file', 'button', 'submit'].includes(String(target.type || '').toLowerCase());
+    if (!textareaSubmit && !inputSubmit) return;
+    event.preventDefault();
+    if (this.state.step === 5) this.send();
+    else if (this.state.route) this.next();
+  };
+
+  // Icons and photos are built here, not in the template: an img src written as a hole is
+  // fetched verbatim by the browser's preload parser before the runtime can resolve it.
+  icon(name, size, stroke) {
+    return React.createElement('svg', {
+      width: size || 22, height: size || 22, viewBox: '0 0 24 24', fill: 'none', 'aria-hidden': 'true',
+      stroke: stroke || 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round',
+    }, React.createElement('path', { d: ICONS[name] || ICONS.home }));
+  }
+
+  photo(s) {
+    if (s.img) {
+      return React.createElement('img', {
+        src: 'assets/' + s.img, alt: s.name + ' project', loading: 'lazy', width: 348, height: 348,
+        style: { width: '100%', aspectRatio: '1 / 1', objectFit: 'cover', display: 'block', background: '#e7e2d8' },
+      });
+    }
+    if (s.conceptImg) {
+      // Owner call 2026-08-21: no on-image badge. The AI-visualisation disclosure
+      // lives in the section note below the grid and in the alt text instead.
+      return React.createElement('img', {
+        src: 'assets/' + s.conceptImg, alt: s.name + ' AI design concept', loading: 'lazy', width: 348, height: 348,
+        style: { width: '100%', aspectRatio: '1 / 1', objectFit: 'cover', display: 'block', background: '#e7e2d8' },
+      });
+    }
+    // Not photographed yet. Drawn from the style's own palette and material texture — never a
+    // second copy of another style's room, which would read as the same offer twice.
+    const p = s.palette;
+    const light = this.luma(p[0]) > 0.62;
+    const ink = light ? 'rgba(20,25,27,0.26)' : 'rgba(255,255,255,0.3)';
+    return React.createElement('span', {
+      style: { position: 'relative', display: 'block', width: '100%', aspectRatio: '1 / 1', overflow: 'hidden', background: 'linear-gradient(152deg, ' + p[0] + ' 0%, ' + p[1] + ' 62%, ' + p[2] + ' 100%)' },
+    },
+      React.createElement('span', { key: 'tex', style: { position: 'absolute', inset: 0, backgroundImage: TEXTURES[s.id] || TEXTURES.grain } }),
+      React.createElement('span', {
+        key: 'mark',
+        style: { position: 'absolute', left: '14px', top: '6px', fontFamily: "'Instrument Serif', Georgia, serif", fontSize: '92px', lineHeight: 1, color: ink, letterSpacing: '-3px' },
+      }, s.name.charAt(0)),
+      React.createElement('span', {
+        key: 'strip', style: { position: 'absolute', left: 0, right: 0, bottom: 0, display: 'flex', height: '18px' },
+      }, p.map((c, i) => React.createElement('span', { key: c + i, style: { flex: 1, background: c } }))),
+      React.createElement('span', {
+        key: 'tag',
+        style: { position: 'absolute', left: '10px', bottom: '28px', fontFamily: "'Oswald', sans-serif", fontSize: '9px', letterSpacing: '1.6px', color: 'rgba(255,255,255,0.95)', background: 'rgba(20,25,27,0.55)', padding: '5px 9px', borderRadius: '999px' },
+      }, 'MOOD'));
+  }
+
+  luma(hex) {
+    const h = String(hex).replace('#', '');
+    const n = parseInt(h.length === 3 ? h.replace(/(.)/g, '$1$1') : h, 16);
+    return (0.2126 * ((n >> 16) & 255) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
+  }
+
+  routePhoto() {
+    const route = ROUTES[this.state.route];
+    if (!route) return null;
+    return React.createElement('img', { src: 'assets/' + route.image, alt: '', width: 184, height: 140 });
+  }
+
+  set(k) { return (e) => { const v = e.target.value; this.setState((s) => ({ f: { ...s.f, [k]: v }, hint: '', err: false })); }; }
+
+  clearDraft = () => {
+    try { localStorage.removeItem('hnm.enquiry.v3'); } catch (e) { /* private mode */ }
+    this.planFile = null;
+    this._ref = '';
+    this.setState({
+      step: 1, maxStep: 1, route: null, keyStatus: '', advice: {}, conceptsOpen: false,
+      hint: '', err: false, sent: false, delivered: false, fallbackOpened: false, planAttached: false, copied: false, sending: false, restored: false,
+      plan: null, planError: '', read: { status: 'idle', note: 'A person reviews your original plan before quoting.' },
+      f: { street: '', unit: '', postal: '', flatType: '', name: '', phone: '', email: '', detectedType: '', sqm: '',
+        styles: [], customStyle: '', areas: [], trades: {}, timing: '', notes: '', coordinator: !!this.props.coordinatorDefaultOn, consent: false },
+    }, () => { window.scrollTo(0, 0); });
+  };
+
+  persist() {
+    try {
+      const { f, route, keyStatus, advice, conceptsOpen, step, maxStep } = this.state;
+      localStorage.setItem('hnm.enquiry.v3', JSON.stringify({
+        at: Date.now(),
+        project: { route, keyStatus, advice, conceptsOpen, step, maxStep, flatType: f.flatType, detectedType: f.detectedType,
+          sqm: f.sqm, styles: f.styles, customStyle: f.customStyle, areas: f.areas, trades: f.trades, timing: f.timing, notes: f.notes },
+      }));
+    } catch (e) { /* private mode */ }
+  }
+
+  focusHeading() {
+    setTimeout(() => {
+      const heading = document.querySelector('[data-step-heading]');
+      if (heading) heading.focus({ preventScroll: true });
+    }, 40);
+  }
+
+  focusFirstError(step, message) {
+    setTimeout(() => {
+      let target = null;
+      if (step === 1) target = /property type/i.test(message) ? document.querySelector('select[name="flatType"]') : document.querySelector('.area-choice');
+      const ideasStep = this.state.route === 'whole' ? 2 : 3;
+      const scopeStep = this.state.route === 'whole' ? 3 : 2;
+      if (step === ideasStep) target = document.querySelector('.custom-style textarea');
+      if (step === scopeStep) {
+        const groups = Array.from(document.querySelectorAll('details.scope-group'));
+        const group = groups.find((entry) => /NEEDS AN ANSWER/i.test(entry.textContent || '')) || groups[0];
+        if (group) { group.open = true; target = group.querySelector('summary'); }
+      }
+      if (step === 4) {
+        if (/name/i.test(message)) target = document.querySelector('input[name="name"]');
+        else if (/mobile|digits/i.test(message)) target = document.querySelector('input[name="phone"]');
+        else if (/email/i.test(message)) target = document.querySelector('input[name="email"]');
+        else if (/block|street|access/i.test(message)) target = document.querySelector('input[name="street"]');
+        else if (/postal/i.test(message)) target = document.querySelector('input[name="postal"]');
+      }
+      if (step === 5) target = document.querySelector('.consent-card input');
+      if (target && target.focus) target.focus({ preventScroll: false });
+    }, 50);
+  }
+
+  go(step, hint) {
+    this.setState({ step, hint: hint || '', err: !!hint, sent: false, f: { ...this.state.f, consent: false } }, () => {
+      this.persist();
+      window.scrollTo(0, 0);
+      if (hint) this.focusFirstError(step, hint);
+      else this.focusHeading();
+    });
+  }
+
+  digits(v) { return String(v || '').replace(/[^\d]/g, ''); }
+
+  waTarget() { return this.digits(this.props.waNumber || '+6588376196') || '6588376196'; }
+
+  activeAreaIds() {
+    return this.state.route === 'whole'
+      ? ROOM_AREAS.map((area) => area.id)
+      : ROOM_AREAS.filter((area) => this.state.f.areas.includes(area.id)).map((area) => area.id);
+  }
+
+  validateStep(step) {
+    const { route, f, advice } = this.state;
+    if (step === 1) {
+      if (!route) return 'Choose Whole Home or Selected Rooms to continue.';
+      if (!f.flatType) return 'Choose the property type so the brief has the right starting point.';
+      if (route === 'selected' && !f.areas.length) return 'Choose at least one room to build the selected-room scope.';
+    }
+    const ideasStep = route === 'whole' ? 2 : 3;
+    const scopeStep = route === 'whole' ? 3 : 2;
+    if (step === ideasStep && f.styles.includes('custom') && !f.customStyle.trim()) {
+      return 'Describe the custom look, or unpick Custom.';
+    }
+    if (step === scopeStep) {
+      const areas = this.activeAreaIds();
+      if (!areas.length) return 'Return to the first screen and choose at least one room.';
+      const unanswered = areas.find((area) => !(f.trades[area] || []).length && !advice[area]);
+      if (unanswered) return 'Choose work or Contractor to advise for ' + this.areaName(unanswered).toLowerCase() + '.';
+    }
+    if (step === 4) {
+      if (!f.name.trim()) return 'Add your name so we know who the brief belongs to.';
+      const phoneDigits = this.digits(f.phone);
+      if (phoneDigits.length < 8 || phoneDigits.length > 15) return 'Add a mobile number with 8 to 15 digits.';
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email.trim())) return 'That email does not look complete.';
+      if (!f.street.trim()) return 'Add the block and street so the contractor can account for access.';
+      if (this.digits(f.postal).length !== 6) return 'Add the 6-digit Singapore postal code.';
+    }
+    return '';
+  }
+
+  next = () => {
+    const bad = this.validateStep(this.state.step);
+    if (bad) { this.setState({ hint: bad, err: true }, () => this.focusFirstError(this.state.step, bad)); return; }
+    const nextStep = Math.min(5, this.state.step + 1);
+    this.setState((s) => ({ step: nextStep, maxStep: Math.max(s.maxStep, nextStep), hint: '', err: false, f: { ...s.f, consent: false } }), () => {
+      this.persist();
+      window.scrollTo(0, 0);
+      this.focusHeading();
+    });
+  };
+
+  back = () => {
+    if (this.state.step > 1) { this.go(this.state.step - 1); return; }
+    if (this.state.route) { this.changeRoute(); return; }
+    window.location.href = 'Home Direct.dc.html';
+  };
+
+  selectRoute(route) {
+    if (!ROUTES[route]) return;
+    this.setState((s) => ({
+      route, step: 1, maxStep: 1, advice: {}, restored: false, hint: '', err: false, sent: false,
+      f: { ...s.f, areas: route === 'selected' ? [] : s.f.areas.filter((id) => ROOM_AREAS.some((area) => area.id === id)), trades: {}, notes: '', consent: false },
+    }), () => { this.persist(); this.focusHeading(); });
+  }
+
+  changeRoute = () => {
+    this.setState((s) => ({ route: null, step: 1, maxStep: 1, advice: {}, hint: '', err: false, sent: false,
+      f: { ...s.f, areas: [], trades: {}, notes: '', consent: false } }), () => {
+      this.persist();
+      window.scrollTo(0, 0);
+      this.focusHeading();
+    });
+  };
+
+  toggleIn(list, id) { return list.includes(id) ? list.filter((x) => x !== id) : list.concat([id]); }
+
+  pickStyle(id) {
+    return () => this.setState((s) => {
+      let styles = this.toggleIn(s.f.styles, id);
+      if (styles.length > 3) styles = styles.slice(styles.length - 3);
+      return { f: { ...s.f, styles, customStyle: styles.includes('custom') ? s.f.customStyle : '' }, hint: '', err: false };
+    });
+  }
+
+  styleName(id) {
+    if (id === 'custom') return 'CUSTOM' + (this.state.f.customStyle.trim() ? ' — ' + this.state.f.customStyle.trim() : '');
+    const x = STYLES.find((y) => y.id === id);
+    return x ? x.name : id;
+  }
+
+  pickArea(id) {
+    return () => this.setState((s) => {
+      const areas = this.toggleIn(s.f.areas, id);
+      const trades = { ...s.f.trades };
+      const advice = { ...s.advice };
+      if (!areas.includes(id)) { delete trades[id]; delete advice[id]; }
+      return { advice, f: { ...s.f, areas, trades }, hint: '', err: false };
+    });
+  }
+
+  pickAdvice(area) {
+    return () => this.setState((s) => {
+      const on = !s.advice[area];
+      const trades = { ...s.f.trades };
+      if (on) trades[area] = [];
+      return { advice: { ...s.advice, [area]: on }, f: { ...s.f, trades }, hint: '', err: false };
+    });
+  }
+
+  markAllAdvice = () => {
+    this.setState((s) => {
+      const advice = { ...s.advice };
+      this.activeAreaIds().forEach((area) => { if (!(s.f.trades[area] || []).length) advice[area] = true; });
+      return { advice, hint: '', err: false };
+    });
+  };
+
+  pickTrade(area, id) {
+    return () => this.setState((s) => {
+      const cur = s.f.trades[area] || [];
+      const next = this.toggleIn(cur, id);
+      return { advice: { ...s.advice, [area]: next.length ? false : true },
+        f: { ...s.f, trades: { ...s.f.trades, [area]: next } }, hint: '', err: false };
+    });
+  }
+
+  pickTiming(t) { return () => this.setState((s) => ({ f: { ...s.f, timing: s.f.timing === t ? '' : t }, hint: '', err: false })); }
+
+  clearPlan = () => {
+    const input = document.querySelector('input[name="plan"]');
+    if (input) input.value = '';
+    this.planFile = null;
+    this.setState({ plan: null, planError: '', planAttached: false, read: { status: 'idle', note: 'A person reviews your original plan before quoting.' } });
+  };
+
+  planContentType(file) {
+    const name = String(file && file.name || '');
+    if (/\.png$/i.test(name)) return 'image/png';
+    if (/\.jpe?g$/i.test(name)) return 'image/jpeg';
+    if (/\.webp$/i.test(name)) return 'image/webp';
+    if (/\.pdf$/i.test(name)) return 'application/pdf';
+    return String(file && file.type || 'application/octet-stream');
+  }
+
+  onFile = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/webp', 'application/pdf'];
+    const allowedName = /\.(png|jpe?g|webp|pdf)$/i.test(file.name);
+    if ((!allowedTypes.includes(file.type) && !(file.type === '' && allowedName)) || !allowedName) {
+      this.planFile = null;
+      this.setState({ plan: null, planError: 'Choose a PNG, JPG, WebP or PDF file.' });
+      e.target.value = '';
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      this.planFile = null;
+      this.setState({ plan: null, planError: 'That file is over 10\u00a0MB. Choose a smaller copy.' });
+      e.target.value = '';
+      return;
+    }
+    this.planFile = file;
+    const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+    this.setState({ plan: { name: file.name, src: '', isPdf }, planError: '', planAttached: false,
+      read: { status: 'manual', note: 'A person reviews the original before quoting.' } });
+    if (isPdf) return;
+    const fr = new FileReader();
+    fr.onload = () => {
+      const src = String(fr.result || '');
+      this.setState({ plan: { name: file.name, src, isPdf: false }, read: { status: 'manual', note: 'A person reviews the original before quoting.' } });
+    };
+    fr.onerror = () => this.setState({ plan: { name: file.name, src: '', isPdf: false }, read: { status: 'manual', note: 'Preview unavailable. The original file can still be sent for human review.' } });
+    fr.readAsDataURL(file);
+  };
+
+  async autoRead(src) {
+    // Automatic plan reading is off on the public site: the tracer modules are held back
+    // pending publication-rights/provenance review of the corpus they were built from.
+    // Saying so beats guessing at someone's floor area.
+    this.setState({ read: { status: 'manual', note: 'Type the layout and floor area below and send the plan anyway \u2014 a person reads your original sheet before we quote.' } });
+  }
+
+  areaName(id) { const a = AREAS.find((x) => x.id === id); return a ? a.name : id; }
+
+  tradesFor(areaId) {
+    const area = AREAS.find((x) => x.id === areaId);
+    const wet = area ? area.wet : false;
+    if (areaId === 'whole') return TRADES;
+    return TRADES.filter((t) => (!t.wetOnly || wet) && (!t.noWet || !wet));
+  }
+
+  scopeText(area) {
+    const picked = this.state.f.trades[area] || [];
+    if (picked.length) return picked.map((id) => {
+      const trade = TRADES.find((entry) => entry.id === id);
+      return trade ? trade.label.toLowerCase() : id;
+    }).join(', ');
+    return this.state.advice[area] ? 'contractor to advise' : 'not answered';
+  }
+
+  payloadAreas() {
+    const rooms = this.activeAreaIds();
+    return this.state.route === 'whole' ? ['whole'].concat(rooms) : rooms;
+  }
+
+  payloadTrades() {
+    const payload = {};
+    this.activeAreaIds().forEach((area) => {
+      const picked = (this.state.f.trades[area] || []).slice();
+      payload[area] = picked.length ? picked : (this.state.advice[area] ? ['contractor-to-advise'] : []);
+    });
+    return payload;
+  }
+
+  deliveryNotes() {
+    const { f, route, keyStatus } = this.state;
+    const lines = [
+      'Project path: ' + (ROUTES[route] ? ROUTES[route].name : 'not stated'),
+      'Key status: ' + (keyStatus || 'not stated'),
+      'Plan layout: ' + (f.detectedType.trim() || 'not stated'),
+    ];
+    if (f.notes.trim()) lines.push('', 'Customer note:', f.notes.trim());
+    return lines.join('\n');
+  }
+
+  message() {
+    const { f, route, keyStatus } = this.state;
+    const L = [];
+    L.push('*NEW ENQUIRY — HOME & ME*');
+    L.push('Ref: ' + this.ref());
+    L.push('');
+    L.push('*Client:* ' + f.name + ' · ' + f.phone + ' · ' + f.email);
+    L.push('*Address:* ' + [f.street, f.unit, f.postal].filter(Boolean).join(', '));
+    L.push('*Project:* ' + (ROUTES[route] ? ROUTES[route].name : 'not stated'));
+    L.push('*Property:* ' + f.flatType + (f.detectedType ? ' · plan layout ' + f.detectedType : '') + (f.sqm ? ' · ' + f.sqm + ' sqm' : ''));
+    L.push('*Key status:* ' + (keyStatus || 'not stated'));
+    L.push('*Floor plan:* ' + (this.state.plan ? this.state.plan.name : 'not uploaded'));
+    L.push('*Style:* ' + (f.styles.map((s) => this.styleName(s)).join(', ') || '—'));
+    L.push('');
+    L.push('*SCOPE*');
+    this.activeAreaIds().forEach((area) => L.push('• ' + this.areaName(area) + ': ' + this.scopeText(area)));
+    L.push('');
+    L.push('*Start:* ' + (f.timing || 'not stated'));
+    L.push('*Coordinator:* ' + (f.coordinator ? 'YES — quote coordination to job size' : 'no'));
+    if (f.notes.trim()) L.push('*Notes:* ' + f.notes.trim());
+    return L.join('\n');
+  }
+
+  ref() {
+    if (this._ref) return this._ref;
+    const d = new Date();
+    const p = (n) => String(n).padStart(2, '0');
+    this._ref = 'HNM-' + String(d.getFullYear()).slice(2) + p(d.getMonth() + 1) + p(d.getDate()) + '-' + String(Math.floor(1000 + Math.random() * 9000));
+    return this._ref;
+  }
+
+  send = async () => {
+    const { f } = this.state;
+    if (this._sendInFlight || this.state.sending || this.state.delivered) return;
+    for (let step = 1; step <= 4; step += 1) {
+      const bad = this.validateStep(step);
+      if (bad) { this.go(step, bad); return; }
+    }
+    if (!f.consent) {
+      const message = 'Tick the contact permission and we will send it.';
+      this.setState({ hint: message, err: true }, () => this.focusFirstError(5, message));
+      return;
+    }
+    this._sendInFlight = true;
+    const ref = this.ref();
+    const planFile = this.planFile;
+    const planFilename = this.state.plan ? this.state.plan.name : '';
+    // Freeze the complete validated brief before the first network wait. Even
+    // if the browser queues another interaction, one send stays one brief.
+    const leadPayload = {
+      ref: ref, name: f.name, phone: f.phone, email: f.email,
+      street: f.street, unit: f.unit, postal: f.postal, flatType: f.flatType,
+      sqm: f.sqm, styles: f.styles.slice(), customStyle: f.styles.includes('custom') ? f.customStyle : '', areas: this.payloadAreas(),
+      trades: this.payloadTrades(), timing: f.timing, notes: this.deliveryNotes(), coordinator: !!f.coordinator,
+      consent: true, planFilename: planFilename, hp: '', consentVersion: CONSENT_VERSION, page: 'renovation-enquiry',
+    };
+    const text = this.message();
+    this.setState({ sending: true, fallbackOpened: false, hint: 'Sending securely to Home & Me…', err: false });
+    this.persist();
+    // Deliver to the Home & Me lead service; the WhatsApp prefill below runs
+    // only as a fallback so the send button never dead-ends.
+    let delivered = false;
+    // Upload the floor plan first (when there is one) so the enquiry email
+    // can carry it; a failed upload never blocks the enquiry itself.
+    let planId = '';
+    let planAttached = !planFile;
+    if (planFile) {
+      const pc = new AbortController();
+      const pt = setTimeout(() => pc.abort(), 15000);
+      try {
+        const pr = await fetch(PLAN_ENDPOINT, {
+          method: 'POST', mode: 'cors', signal: pc.signal,
+          headers: {
+            'Content-Type': this.planContentType(planFile),
+            'X-Plan-Filename': encodeURIComponent(planFile.name).slice(0, 120),
+            'X-Lead-Ref': ref,
+          },
+          body: planFile,
+        });
+        if (pr.ok) { const pj = await pr.json(); planId = (pj && pj.planId) || ''; planAttached = !!planId; }
+      } catch (e) { planId = ''; } finally { clearTimeout(pt); }
+    }
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 6000);
+    try {
+      const res = await fetch(LEAD_ENDPOINT, {
+        method: 'POST', mode: 'cors',
+        headers: { 'Content-Type': 'application/json' },
+        signal: ctrl.signal,
+        body: JSON.stringify({ ...leadPayload, planId }),
+      });
+      delivered = res.ok;
+    } catch (e) { delivered = false; } finally { clearTimeout(timer); }
+    let fallbackOpened = false;
+    if (!delivered) {
+      try { fallbackOpened = !!window.open('https://wa.me/' + this.waTarget() + '?text=' + encodeURIComponent(text), '_blank', 'noopener'); } catch (e) { fallbackOpened = false; }
+    }
+    if (delivered) {
+      // A successful response means the enquiry was accepted and stored. Email
+      // and WhatsApp alerts are dispatched by the service after that response.
+      try { localStorage.removeItem('hnm.enquiry.v3'); } catch (e) { /* private mode */ }
+    }
+    this._sendInFlight = false;
+    this.setState({ sent: true, delivered, fallbackOpened, planAttached, sending: false, hint: '', err: false });
+  };
+
+  copyText = () => {
+    const t = this.message();
+    const done = () => { this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 2200); };
+    const failed = () => this.setState({ copied: false, hint: 'Copy did not work. Select the text in your email or WhatsApp fallback instead.', err: true });
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, failed);
+    else failed();
+  };
+
+  renderVals() {
+    const { step, f, route, advice } = this.state;
+    const wa = this.waTarget();
+    const mail = this.props.email || 'homeandme2017@gmail.com';
+    const routeInfo = ROUTES[route] || null;
+    const journey = JOURNEYS[route] || JOURNEYS.whole;
+    const journeyItems = journey.map((label, index) => ({
+      number: '0' + (index + 1), label, current: step === index + 1 ? 'step' : 'false',
+      complete: this.state.maxStep > index + 1, disabled: this.state.sending || index + 1 > this.state.maxStep, go: () => this.go(index + 1),
+    }));
+    const ideasStep = route === 'selected' ? 3 : 2;
+    const scopeStep = route === 'selected' ? 2 : 3;
+    const activeAreas = this.activeAreaIds();
+    const styleCard = (style) => ({ name: style.name, note: style.note, pick: this.pickStyle(style.id), photo: this.photo(style), on: f.styles.includes(style.id) });
+    const completedStyleCards = STYLES.filter((style) => !!style.img).map(styleCard);
+    const conceptStyleCards = STYLES.filter((style) => !!style.conceptImg).map(styleCard);
+    const areaCards = ROOM_AREAS.map((area) => {
+      const on = f.areas.includes(area.id);
+      return { name: area.name, note: area.note, pick: this.pickArea(area.id), on, tick: on ? '✓' : '' };
+    });
+    const scopeGroups = activeAreas.map((id, index) => {
+      const picked = f.trades[id] || [];
+      const adviceOn = !!advice[id];
+      return {
+        name: this.areaName(id), open: index === 0, adviceOn, pickAdvice: this.pickAdvice(id),
+        status: picked.length ? picked.length + ' SELECTED' : (adviceOn ? 'ADVICE REQUESTED' : 'NEEDS AN ANSWER'),
+        trades: this.tradesFor(id).map((trade) => ({ label: trade.label, note: trade.note, pick: this.pickTrade(id, trade.id), on: picked.includes(trade.id) })),
+      };
+    });
+    const timings = TIMINGS.map((timing) => ({ label: timing, pick: this.pickTiming(timing), on: f.timing === timing }));
+    const scopeValue = activeAreas.map((area) => this.areaName(area) + ': ' + this.scopeText(area)).join('\n') || 'Not added';
+    const roomsValue = activeAreas.map((area) => this.areaName(area)).join(', ') || 'Not chosen';
+    const propertyValue = (f.flatType || 'Not chosen') + (f.detectedType ? ' · plan layout ' + f.detectedType : '') + (f.sqm ? ' · ' + f.sqm + ' sqm' : '');
+    const edit = (targetStep) => () => this.go(targetStep);
+    const summary = [
+      { k: 'PROJECT', v: routeInfo ? routeInfo.name : 'Not chosen', edit: edit(1) },
+      { k: 'PROPERTY', v: propertyValue, edit: edit(1) },
+      { k: 'KEY STATUS', v: this.state.keyStatus || 'Not stated', edit: edit(1) },
+      { k: 'ROOMS', v: roomsValue, edit: edit(1) },
+      { k: 'ROOM-BY-ROOM SCOPE', v: scopeValue, edit: edit(scopeStep) },
+      { k: 'FLOOR PLAN / PHOTO', v: this.state.plan ? this.state.plan.name : 'Not uploaded', edit: edit(ideasStep) },
+      { k: 'STYLE', v: f.styles.map((style) => this.styleName(style)).join(', ') || 'Not selected (optional)', edit: edit(ideasStep) },
+      { k: 'START', v: f.timing || 'Not stated', edit: edit(route === 'whole' ? scopeStep : ideasStep) },
+      { k: 'YOUR NOTE', v: f.notes.trim() || 'None added', edit: edit(scopeStep) },
+      { k: 'NAME', v: f.name || 'Not added', edit: edit(4) },
+      { k: 'MOBILE', v: f.phone || 'Not added', edit: edit(4) },
+      { k: 'EMAIL', v: f.email || 'Not added', edit: edit(4) },
+      { k: 'ADDRESS', v: [f.street, f.unit, f.postal].filter(Boolean).join(', ') || 'Not added', edit: edit(4) },
+    ];
+    let primaryLabel = 'CONTINUE';
+    if (step === 1) primaryLabel = route === 'selected' ? 'CHOOSE THE WORK' : 'PLAN AND STYLE';
+    if (step === 2) primaryLabel = route === 'selected' ? 'ADD REFERENCES' : 'CHOOSE THE WORK';
+    if (step === 3) primaryLabel = 'ADD CONTACT DETAILS';
+    if (step === 4) primaryLabel = 'REVIEW ENQUIRY';
+    if (step === 5) primaryLabel = this.state.delivered ? 'ENQUIRY RECEIVED' : (this.state.sent ? 'TRY AGAIN' : 'SEND AS NEW ENQUIRY');
+    const defaultHints = {
+      1: route === 'selected' ? 'Only your chosen rooms continue.' : 'The full room-by-room scope stays ahead.',
+      2: route === 'selected' ? 'Contractor to advise is a complete answer.' : 'Plan and style are optional.',
+      3: route === 'selected' ? 'Plans, photos, style and timing are optional.' : 'Each room remains itemised.',
+      4: 'Your contact details are not saved in browser storage.',
+      5: f.consent ? 'Sends your enquiry straight to the Home & Me team. We reply on WhatsApp or email.' : 'Tick the contact permission to send.',
+    };
+    const planImg = this.state.plan && this.state.plan.src
+      ? React.createElement('img', { className: 'plan-preview', src: this.state.plan.src, alt: 'Preview of your selected floor plan or photo' })
+      : null;
+
+    return {
+      stepOf: 'STEP 0' + step + ' OF 05', stepName: journey[step - 1], progress: Math.round((step / 5) * 100) + '%',
+      backOpacity: 1, back: this.back,
+      onStep1: step === 1, onIdeasStep: !!route && step === ideasStep, onScopeStep: !!route && step === scopeStep,
+      onStep4: step === 4, onStep5: step === 5,
+      f, flatTypes: FLAT_TYPES, journeyItems, noRoute: !route, hasRoute: !!route, wholeRoute: route === 'whole', selectedRoute: route === 'selected',
+      pickWhole: () => this.selectRoute('whole'), pickSelected: () => this.selectRoute('selected'), changeRoute: this.changeRoute,
+      routeName: routeInfo ? routeInfo.name : '', routeNote: routeInfo ? routeInfo.note : '', routePhoto: this.routePhoto(),
+      keyStatuses: KEY_STATUSES.map((label) => ({ label, on: this.state.keyStatus === label, pick: () => this.setState({ keyStatus: this.state.keyStatus === label ? '' : label, hint: '', err: false }) })),
+      areaCards, scopeGroups, markAllAdvice: this.markAllAdvice,
+      ideasTitle: route === 'whole' ? 'Plan and style' : 'Add plans or ideas',
+      ideasIntro: route === 'whole' ? 'Add what you have. Both choices remain optional until you are ready.' : 'Helpful when finishes matter. Easy to skip for purely functional work.',
+      scopeTitle: route === 'whole' ? 'What should be quoted?' : 'What needs doing?',
+      scopeIntro: route === 'whole' ? 'Keep the whole-home brief detailed, room by room.' : 'Scope each chosen room. It is fine to ask the contractor to advise.',
+      showTimingOnIdeas: route === 'selected', showTimingOnScope: route === 'whole', timings,
+      setStreet: this.set('street'), setUnit: this.set('unit'), setPostal: this.set('postal'), setFlatType: this.set('flatType'),
+      setName: this.set('name'), setPhone: this.set('phone'), setEmail: this.set('email'), setDetectedType: this.set('detectedType'),
+      setSqm: this.set('sqm'), setNotes: this.set('notes'), setCustomStyle: this.set('customStyle'),
+      onFile: this.onFile, clearPlan: this.clearPlan, noPlan: !this.state.plan, hasPlan: !!this.state.plan,
+      hasPlanError: !!this.state.planError, planError: this.state.planError, planImg,
+      planTitle: this.state.plan ? this.state.plan.name : 'ADD A FLOOR PLAN OR PHOTO',
+      planNote: this.state.plan ? 'Selected for this enquiry. Remove it any time.' : 'PNG, JPG, WebP or PDF up to 10\u00a0MB. Optional.',
+      completedStyleCards, conceptStyleCards, conceptsOpen: this.state.conceptsOpen,
+      toggleConcepts: () => this.setState((state) => ({ conceptsOpen: !state.conceptsOpen })), conceptMark: this.state.conceptsOpen ? '×' : '＋',
+      styleCount: f.styles.length ? f.styles.length + ' OF 3 PICKED' : 'PICK UP TO 3', pickCustom: this.pickStyle('custom'),
+      customOn: f.styles.includes('custom'), customTick: f.styles.includes('custom') ? '✓' : '＋',
+      summary, ref: this.ref(),
+      toggleCoordinator: () => this.setState((state) => ({ f: { ...state.f, coordinator: !state.f.coordinator } })),
+      toggleConsent: () => this.setState((state) => ({ f: { ...state.f, consent: !state.f.consent }, hint: '', err: false })),
+      coordBorder: f.coordinator ? TEAL : 'rgba(20,25,27,0.12)', coordBg: f.coordinator ? 'rgba(90,126,138,0.07)' : '#fff',
+      switchBg: f.coordinator ? TEAL : 'rgba(20,25,27,0.22)', switchX: f.coordinator ? '22px' : '0px',
+      showAction: !!route, primary: step === 5 ? this.send : this.next,
+      primaryLabel, primaryDisabled: this.state.sending || this.state.delivered || (step === 5 && !f.consent), sending: this.state.sending,
+      primaryBg: step === 5 ? (f.consent || this.state.delivered ? INK : 'rgba(20,25,27,0.4)') : TEAL, primaryFg: '#f6f4ef',
+      hint: this.state.hint || defaultHints[step] || '', hasError: this.state.err && !!this.state.hint, hintFg: this.state.err ? '#a8563c' : '#8a908c',
+      restored: this.state.restored, clearDraft: this.clearDraft, sent: this.state.sent,
+      sentTitle: this.state.delivered ? 'RECEIVED AS ' + this.ref() : 'FALLBACK READY · ' + this.ref(),
+      sentNote: this.state.delivered
+        ? (this.state.plan && !this.state.planAttached
+          ? 'Your enquiry was received and stored, but the selected file did not attach. WhatsApp or email it with this reference.'
+          : 'Your enquiry was received and stored. We usually reply the same day. Quote the reference if you follow up.')
+        : (this.state.fallbackOpened
+          ? 'Our lead line did not respond. WhatsApp opened for you to review and press send. Quote the reference if you follow up.'
+          : 'Our lead line did not respond. We tried to open WhatsApp, but this browser could not confirm it opened. Check WhatsApp, or copy the enquiry text below.'),
+      sendHint: this.state.sent
+        ? (this.state.delivered
+          ? 'Want to add something? WhatsApp us at ' + this.pretty(wa) + ' or email ' + mail + ' with your reference.'
+          : 'If WhatsApp did not open, copy the text above and send it to ' + this.pretty(wa) + ' or email ' + mail + '.')
+        : 'Press send and it goes to our secure enquiry line. If it cannot connect, we open a WhatsApp fallback for you to review and send.',
+      copyText: this.copyText, copyLabel: this.state.copied ? 'COPIED' : 'COPY THE TEXT',
+      email: mail, mailTo: 'mailto:' + mail + '?subject=' + encodeURIComponent('Renovation enquiry, Home & Me'),
+      mailHref: 'mailto:' + mail + '?subject=' + encodeURIComponent('New enquiry ' + this.ref() + ' — Home & Me') + '&body=' + encodeURIComponent(this.message().replace(/\*/g, '')),
+      waPlain: 'https://wa.me/' + wa, waPretty: this.pretty(wa),
+      iconHome: this.icon('home', 21), iconWork: this.icon('work', 21), iconPlan: this.icon('plan', 21), iconChat: this.icon('chat', 21),
+    };
+  }
+
+  pretty(d) { return d && d.length > 8 ? '+' + d.slice(0, 2) + ' ' + d.slice(2, 6) + ' ' + d.slice(6) : '+' + d; }
+}
+
+</script>
+</body>
+</html>

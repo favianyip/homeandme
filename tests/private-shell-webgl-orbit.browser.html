@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Private bundled shell orbit runtime fixture</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/homeandme/assets/css/private-shell-workflow.css">
+  <style>
+    body { min-height: 100vh; padding: 28px; }
+    .runtime-proof { width: min(1240px, 100%); margin: 0 auto; border: 1px solid var(--psw-line); background: var(--psw-sheet); box-shadow: 0 28px 80px rgba(23, 33, 36, .14); }
+    .runtime-proof header { display: flex; justify-content: space-between; gap: 30px; align-items: end; padding: clamp(28px, 5vw, 62px); border-bottom: 1px solid var(--psw-line); }
+    .runtime-proof h1 { max-width: 780px; margin: 7px 0 0; font: 400 clamp(3rem, 7vw, 6.5rem)/.88 "HNM Centaur", Georgia, serif; letter-spacing: -.03em; }
+    .runtime-proof header p { max-width: 360px; margin: 0; color: var(--psw-soft); line-height: 1.65; }
+    .runtime-ledger { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0; border-bottom: 1px solid var(--psw-line); }
+    .runtime-ledger div { padding: 18px 22px; border-right: 1px solid var(--psw-line); }
+    .runtime-ledger div:last-child { border: 0; }
+    .runtime-ledger dt { color: var(--psw-soft); font-size: .75rem; }
+    .runtime-ledger dd { margin: 9px 0 0; font: 400 2rem "HNM Centaur", Georgia, serif; }
+    .runtime-stage { padding: clamp(18px, 3vw, 38px); }
+    .runtime-viewport { position: relative; height: min(64vw, 680px); min-height: 480px; overflow: hidden; border: 1px solid var(--psw-line); outline: none; touch-action: none; background: #d9dad4; }
+    .runtime-viewport:focus-visible { box-shadow: inset 0 0 0 3px var(--psw-blue-dark); }
+    .runtime-note { display: flex; justify-content: space-between; gap: 20px; padding-top: 14px; color: var(--psw-soft); font-size: .72rem; }
+    .runtime-note strong { color: var(--psw-green); text-transform: uppercase; letter-spacing: .13em; }
+    @media (max-width: 700px) {
+      body { padding: 0; }
+      .runtime-proof { border-width: 0; }
+      .runtime-proof header { display: block; }
+      .runtime-proof header p { margin-top: 24px; }
+      .runtime-ledger { grid-template-columns: repeat(2, 1fr); }
+      .runtime-ledger div:nth-child(2) { border-right: 0; }
+      .runtime-ledger div:nth-child(-n+2) { border-bottom: 1px solid var(--psw-line); }
+      .runtime-viewport { height: 520px; min-height: 0; }
+      .runtime-note { display: grid; }
+    }
+  </style>
+</head>
+<body data-result="running" data-runtime-fetches="unknown" data-rendered-pixels="unknown">
+  <main class="runtime-proof">
+    <header>
+      <div>
+        <div class="psw-kicker">Private geometry review / local WebGL2</div>
+        <h1>Walk around the shell, not around the truth.</h1>
+      </div>
+      <p>The runtime reads the already verified in-memory GLB. It has no network loader, editor, furniture, design or render controls.</p>
+    </header>
+    <dl class="runtime-ledger">
+      <div><dt>Scene nodes</dt><dd id="nodes">—</dd></div>
+      <div><dt>Triangle primitives</dt><dd id="primitives">—</dd></div>
+      <div><dt>Vertices</dt><dd id="vertices">—</dd></div>
+      <div><dt>Runtime requests</dt><dd id="requests">—</dd></div>
+    </dl>
+    <section class="runtime-stage" aria-labelledby="runtimeTitle">
+      <div class="psw-kicker" id="runtimeTitle">Receipt-bound geometry-only GLB</div>
+      <div id="viewport" class="runtime-viewport" role="application" tabindex="0" aria-label="Read-only geometry shell. Drag or use arrow keys to orbit; pinch or use plus and minus to zoom."></div>
+      <div class="runtime-note">
+        <strong id="status">Verifying runtime…</strong>
+        <span>Drag / one finger orbit · Shift + arrows pan · wheel / pinch / + − zoom · 0 reset</span>
+      </div>
+    </section>
+  </main>
+  <script type="module">
+    import { parsePrivateShellGlb } from '/homeandme/private-shell-glb.js';
+    import { PRIVATE_SHELL_WEBGL_ORBIT_PROVIDER } from '/homeandme/private-shell-webgl-orbit-runtime.js';
+
+    const modelPath = '/ai-interior-platform/artifacts/synthetic_hdb4_bare_shell_regression/approved-scene.glb';
+    let objectUrl = null;
+    let session = null;
+    let runtimeFetches = 0;
+    try {
+      const response = await fetch(modelPath, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`Fixture GLB request failed (${response.status}).`);
+      const bytes = await response.arrayBuffer();
+      const scene = parsePrivateShellGlb(bytes);
+      document.querySelector('#nodes').textContent = scene.counts.nodes;
+      document.querySelector('#primitives').textContent = scene.counts.primitives;
+      document.querySelector('#vertices').textContent = scene.counts.vertices.toLocaleString('en-SG');
+      globalThis.fetch = () => {
+        runtimeFetches += 1;
+        throw new Error('The private runtime attempted a forbidden network request.');
+      };
+      objectUrl = URL.createObjectURL(new Blob([bytes], { type: 'model/gltf-binary' }));
+      const controller = new AbortController();
+      session = await PRIVATE_SHELL_WEBGL_ORBIT_PROVIDER.mount({
+        viewport: document.querySelector('#viewport'),
+        objectUrl,
+        artifactBytes: bytes.slice(0),
+        receipt: {
+          schema: 'homeandme-private-shell-orbit-presentation/1',
+          artifactByteSize: bytes.byteLength,
+        },
+        signal: controller.signal,
+        readOnly: true,
+      });
+      await new Promise((resolve) => setTimeout(resolve, 120));
+      const canvas = document.querySelector('canvas');
+      if (!canvas || !canvas.width || !canvas.height) throw new Error('Runtime did not create a drawable canvas.');
+      const gl = canvas.getContext('webgl2');
+      const pixels = new Uint8Array(canvas.width * canvas.height * 4);
+      gl.readPixels(0, 0, canvas.width, canvas.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+      const clear = [Math.round(.86 * 255), Math.round(.865 * 255), Math.round(.84 * 255)];
+      let changed = 0;
+      for (let index = 0; index < pixels.length; index += 16) {
+        if (Math.abs(pixels[index] - clear[0]) > 5
+          || Math.abs(pixels[index + 1] - clear[1]) > 5
+          || Math.abs(pixels[index + 2] - clear[2]) > 5) changed += 1;
+      }
+      document.body.dataset.runtimeFetches = String(runtimeFetches);
+      document.body.dataset.renderedPixels = String(changed);
+      document.querySelector('#requests').textContent = runtimeFetches;
+      if (runtimeFetches !== 0 || changed < 500) throw new Error('Runtime network or pixel evidence failed.');
+      const viewport = document.querySelector('#viewport');
+      const keyboardEvent = new KeyboardEvent('keydown', {
+        key: 'ArrowRight', bubbles: true, cancelable: true,
+      });
+      viewport.dispatchEvent(keyboardEvent);
+      if (!keyboardEvent.defaultPrevented) throw new Error('Keyboard orbit input was not accepted.');
+      session.resetView();
+      await new Promise((resolve) => setTimeout(resolve, 120));
+      const mode = new URL(location.href).searchParams.get('mode');
+      if (mode === 'context-loss') {
+        const fatal = new Promise((resolve) => viewport.addEventListener(
+          'homeandme:private-shell-orbit-fatal', (event) => resolve(event.detail), { once: true },
+        ));
+        const extension = gl.getExtension('WEBGL_lose_context');
+        if (!extension) throw new Error('Context-loss test extension is unavailable.');
+        extension.loseContext();
+        const detail = await Promise.race([
+          fatal,
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Context loss did not fail closed.')), 2000)),
+        ]);
+        if (!/context was lost/i.test(detail?.message || '')) throw new Error('Context-loss evidence is missing.');
+        document.querySelector('#status').textContent = 'Context loss invalidated the model';
+      } else if (mode === 'teardown') {
+        session.dispose();
+        if (viewport.querySelector('canvas')) throw new Error('Runtime canvas survived teardown.');
+        document.querySelector('#status').textContent = 'Deterministic teardown verified';
+      } else {
+        document.querySelector('#status').textContent = 'Local runtime verified';
+      }
+      document.body.dataset.result = 'pass';
+      globalThis.__privateShellRuntimeFixture = { session, controller };
+    } catch (error) {
+      document.body.dataset.result = 'fail';
+      document.querySelector('#status').textContent = error.message;
+      document.querySelector('#requests').textContent = runtimeFetches;
+      console.error(error);
+    }
+    addEventListener('pagehide', () => {
+      session?.dispose();
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    }, { once: true });
+  </script>
+</body>
+</html>

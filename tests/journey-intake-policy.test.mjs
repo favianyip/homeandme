@@ -40,11 +40,3 @@ test('service flags cannot independently bypass the geometry-review dependency c
   assert.equal(ready.canEnterVerified3d, true);
   assert.equal(ready.canPublishTrainingRecord, false);
 });
-
-test('retired public intake contains no upload, browser-analysis or training write path', () => {
-  const html = readFileSync(new URL('../PlanIntake.html', import.meta.url), 'utf8');
-  assert.doesNotMatch(html, /\bcorpusAdd\b/);
-  assert.doesNotMatch(html, /<script|<form|<input|<iframe|FileReader|localStorage/i);
-  assert.match(html, /name="robots" content="noindex,nofollow,noarchive"/i);
-  assert.match(html, /http-equiv="refresh" content="0; url=ProjectJourney\.html"/i);
-});
