@@ -237,16 +237,24 @@ export function isParapetHostWall(wall, rooms = []) {
       && point.every((coordinate) => typeof coordinate === 'number' && Number.isFinite(coordinate)))
     ? Math.abs(polygonArea(polygon)) / 1_000_000
     : 0;
+  // Plan contracts may carry only the declared areaM2 field (no polygon); the
+  // declared area is authoritative when no polygon geometry can be derived.
+  const declaredAreaM2 = Number.isFinite(room.areaM2) ? room.areaM2 : 0;
+  const effectiveAreaM2 = derivedAreaM2 > 0 ? derivedAreaM2 : declaredAreaM2;
   if (room.minDim != null
     && (typeof room.minDim !== 'number' || !Number.isFinite(room.minDim)
       || room.minDim <= 0)) return false;
   if (room.labelSuspect != null && typeof room.labelSuspect !== 'boolean') return false;
   const derivedMinDim = polygonMinimumAxisSpan(polygon);
+  // Same fallback policy as the area: a contract without any polygon may only
+  // be judged on its declared minDim, and a contract with neither stays on the
+  // legacy full-height path decision made by the area gate above.
   const effectiveMinDim = room.minDim == null
-    ? derivedMinDim : Math.min(room.minDim, derivedMinDim);
+    ? (derivedMinDim > 0 ? derivedMinDim : Number.POSITIVE_INFINITY)
+    : (derivedMinDim > 0 ? Math.min(room.minDim, derivedMinDim) : room.minDim);
   return /BALCON|TERRACE|PATIO/i.test(label)
     && room.labelSuspect !== true
-    && derivedAreaM2 >= 1.5
+    && effectiveAreaM2 >= 1.5
     && effectiveMinDim >= 800;
 }
 

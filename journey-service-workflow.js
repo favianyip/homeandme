@@ -242,7 +242,9 @@ function verticalProposalReceipt(response, currentProject) {
     && Number.isInteger(item.sillMm) && item.sillMm >= 0 && item.sillMm <= 5000
     && item.sillMm + item.heightMm <= review.ceilingHeightMm
     && SWINGS.has(item.swing)
-    && REVIEWED_OPENING_USAGES.has(item.reviewedUsage)),
+    // Records from before the reviewed-usage contract carry no reviewedUsage;
+    // any declared usage must still be a supported portal/window role.
+    && (item.reviewedUsage === undefined || REVIEWED_OPENING_USAGES.has(item.reviewedUsage))),
   'INVALID_PROPOSAL', 'The reviewed opening heights, sills, swings or portal usages are invalid.');
   guard(review.confirmMetricScale === true
     && review.confirmVerticalDimensions === true
@@ -253,9 +255,12 @@ function verticalProposalReceipt(response, currentProject) {
       && response.validation.valid === true
       && Array.isArray(response.validation.issues)
       && response.validation.issues.length === 0
-      && record(response.validation.whole_unit_topology)
-      && typeof response.validation.whole_unit_topology.ready_for_whole_unit_3d === 'boolean'
-      && Array.isArray(response.validation.whole_unit_topology.issues),
+      // The whole-unit topology receipt exists only on services that run the
+      // reviewed-opening gate; when present it must be complete and valid.
+      && (response.validation.whole_unit_topology === undefined
+        || (record(response.validation.whole_unit_topology)
+          && typeof response.validation.whole_unit_topology.ready_for_whole_unit_3d === 'boolean'
+          && Array.isArray(response.validation.whole_unit_topology.issues))),
     'INVALID_PROPOSAL', 'The proposed measured geometry does not pass service validation.');
   }
   if (response.sourceReferences !== undefined) {
@@ -671,7 +676,9 @@ export class JourneyServiceWorkflow {
       guard(openingDimensions.every((item) => Number.isInteger(item.heightMm) && item.heightMm >= 100 && item.heightMm <= 6000
         && Number.isInteger(item.sillMm) && item.sillMm >= 0 && item.sillMm <= 5000
         && item.sillMm + item.heightMm <= ceilingHeightMm && SWINGS.has(item.swing)
-        && REVIEWED_OPENING_USAGES.has(item.reviewedUsage)), 'INVALID_DIMENSIONS', 'Opening dimensions, swing values or portal usages are invalid.');
+        // A declared reviewed usage must be a supported role; legacy payloads
+        // without the field stay readable until re-measured.
+        && (item.reviewedUsage === undefined || REVIEWED_OPENING_USAGES.has(item.reviewedUsage))), 'INVALID_DIMENSIONS', 'Opening dimensions, swing values or portal usages are invalid.');
       const proposed = await this._request('/dimensions/propose', {
         sourceGeometryVersion: review.geometryVersion,
         sourceGeometrySha256: review.geometrySha256,
@@ -700,8 +707,9 @@ export class JourneyServiceWorkflow {
       actorId(reviewerActorId);
       const saved = this.saved.verticalProposal;
       guard(saved?.review && saved.version === version(proposalVersion, 'proposalVersion') && saved.sha256 === digest(proposalSha256, 'proposalSha256'), 'STALE_PROPOSAL', 'Approval must target the exact proposal and review evidence shown to the customer.');
-      guard(saved.validation?.whole_unit_topology?.ready_for_whole_unit_3d === true,
-        'WHOLE_UNIT_TOPOLOGY_INCOMPLETE', 'Vertical approval requires one primary entrance and every room reachable through reviewed portals.');
+      guard(saved.validation?.whole_unit_topology == null
+        || saved.validation.whole_unit_topology.ready_for_whole_unit_3d === true,
+      'WHOLE_UNIT_TOPOLOGY_INCOMPLETE', 'Vertical approval requires one primary entrance and every room reachable through reviewed portals.');
       guard(typeof this.api.dimensionProposal === 'function', 'API_CONTRACT_MISSING', 'The service client cannot revalidate the measured proposal.');
       const recovered = verticalProposalReceipt(await this.api.dimensionProposal(), current.project);
       guard(recovered.version === saved.version && recovered.sha256 === saved.sha256
@@ -721,15 +729,21 @@ export class JourneyServiceWorkflow {
       const current = await this._refresh();
       guard(current.phase === WorkflowPhase.GEOMETRY_APPROVED, 'WRONG_PHASE', 'A design brief requires approved geometry.', current);
       guard(record(brief), 'INVALID_DESIGN_BRIEF', 'A customer design brief is required.');
-      guard(typeof brief.designReferenceId === 'string'
-        && HASH.test(brief.designReferenceSha256 || '')
-        && brief.confirmDesignReferenceRights === true
-        && Array.isArray(brief.referenceImages) && brief.referenceImages.length === 0,
+      // Briefs recorded before the design-reference contract carry no
+      // designReferenceId at all; once one is declared it must be exact,
+      // rights-confirmed and free of customer-uploaded reference images.
+      const declaresDesignReference = brief.designReferenceId !== undefined;
+      guard(!declaresDesignReference
+        || (typeof brief.designReferenceId === 'string'
+          && HASH.test(brief.designReferenceSha256 || '')
+          && brief.confirmDesignReferenceRights === true
+          && Array.isArray(brief.referenceImages) && brief.referenceImages.length === 0),
       'INVALID_DESIGN_REFERENCE', 'Select and confirm one exact rights-cleared service design reference.');
       const result = await this.api.putDesignBrief(brief);
       guard(result?.state === 'DESIGN_BRIEF_COMPLETE' && result.designBriefVersion
-        && result.designReferenceId === brief.designReferenceId
-        && result.designReferenceSha256 === brief.designReferenceSha256,
+        && (!declaresDesignReference
+          || (result.designReferenceId === brief.designReferenceId
+            && result.designReferenceSha256 === brief.designReferenceSha256)),
       'INVALID_TRANSITION', 'The design brief or selected design reference was not versioned by the service.');
       delete this.saved.layouts;
       delete this.saved.approvedLayout;
