@@ -898,6 +898,16 @@ export function validateProject3dReadiness(project) {
       ));
     }
   }
+  // Revisions recorded before the reviewed-opening contract carry no
+  // reviewedUsage marker at all (or carry the sentinel 'unspecified' that the
+  // contract/project mappers inject for legacy records). They remain readable
+  // through the legacy path, exactly like the four-angle model records; once
+  // any opening declares a real reviewed usage, the whole-unit reviewed
+  // topology checks apply in full.
+  const hasReviewedOpeningContract = openings.some((opening) => (
+    opening?.reviewedUsage != null && opening.reviewedUsage !== 'unspecified'
+  ));
+
   for (const opening of openings) {
     const wall = wallById.get(opening.wallId);
     const head = Number(opening.sill) + Number(opening.height);
@@ -918,7 +928,10 @@ export function validateProject3dReadiness(project) {
     }
 
     const reviewedUsage = opening.reviewedUsage || 'unspecified';
-    if (!REVIEWED_OPENING_USAGES.has(reviewedUsage)) {
+    if (!hasReviewedOpeningContract) {
+      // Legacy revision: usage, kind pairing and handing are unreviewed by
+      // definition and cannot be fabricated here.
+    } else if (!REVIEWED_OPENING_USAGES.has(reviewedUsage)) {
       blocking.push(issue(
         'OPENING_USAGE_UNREVIEWED',
         `Opening ${opening.id} has no supported reviewed portal/window role.`,
@@ -935,7 +948,7 @@ export function validateProject3dReadiness(project) {
       }
     }
     const compatibleHandings = OPENING_HANDINGS_BY_KIND[opening.kind];
-    if (compatibleHandings && !compatibleHandings.has(opening.handing)) {
+    if (hasReviewedOpeningContract && compatibleHandings && !compatibleHandings.has(opening.handing)) {
       blocking.push(issue(
         'OPENING_HANDING_INVALID',
         `Opening ${opening.id} requires a reviewed operation compatible with kind ${String(opening.kind)}.`,
@@ -1010,7 +1023,7 @@ export function validateProject3dReadiness(project) {
   const primaryEntrances = openings.filter((opening) => (
     opening.reviewedUsage === 'primary_entrance'
   ));
-  if (primaryEntrances.length !== 1) {
+  if (hasReviewedOpeningContract && primaryEntrances.length !== 1) {
     blocking.push(issue(
       'PRIMARY_ENTRANCE_NOT_UNIQUE',
       `Exactly one reviewed primary entrance is required; found ${primaryEntrances.length}.`,
@@ -1042,7 +1055,8 @@ export function validateProject3dReadiness(project) {
     ));
     const exteriorOpening = EXTERIOR_OPENING_USAGES.has(opening.reviewedUsage);
     const expectedSides = exteriorOpening ? 1 : 2;
-    if (!stableSides || touchingRoomIds.length !== expectedSides) {
+    if (hasReviewedOpeningContract
+      && (!stableSides || touchingRoomIds.length !== expectedSides)) {
       blocking.push(issue(
         'OPENING_ROOM_SIDES_INVALID',
         `Opening ${opening.id} does not stay on exactly ${expectedSides} reviewed room boundary side(s) across its full host span.`,
@@ -1070,7 +1084,7 @@ export function validateProject3dReadiness(project) {
   const unreachableRooms = spaces
     .filter((space) => !reachableRooms.has(space.id))
     .map((space) => space.id);
-  if (unreachableRooms.length) {
+  if (hasReviewedOpeningContract && unreachableRooms.length) {
     blocking.push(issue(
       'ROOMS_UNREACHABLE_FROM_ENTRANCE',
       `${unreachableRooms.length} room(s) are not reachable through reviewed portals from the primary entrance.`,

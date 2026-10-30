@@ -325,6 +325,15 @@ export function buildSolid(c, THREE, opts) {
             component: 'sliding-panel', representation: 'double-sliding-panel',
           });
         }
+      } else if (operation == null) {
+        // Legacy door with no reviewed handing: keep the old single closed leaf
+        // so a bare gap never reads as a missing wall.
+        addClosedPanel({
+          width: len * 0.93,
+          suffix: 'legacy',
+          component: primaryEntrance ? 'entrance-leaf' : 'door-leaf',
+          representation: 'single-closed-leaf',
+        });
       }
       stats.doors++;
       if (primaryEntrance) stats.entrance++;

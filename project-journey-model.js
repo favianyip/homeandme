@@ -481,15 +481,21 @@ export function geometryCorrectionSourceBinding(geometryReview) {
   if (legacyCandidates.some((digest) => digest !== authoritative.sha256)) {
     throw new TypeError('Geometry metadata contains conflicting original-upload SHA-256 bindings.');
   }
-  const pixelMetricRegistration = normalizePixelMetricRegistration(
-    authoritative.pixelMetricRegistration,
-    {
-      sourceArtifactSha256: authoritative.sha256,
-      imageWidth: authoritative.intrinsicPixels.width,
-      imageHeight: authoritative.intrinsicPixels.height,
-      geometrySha256: geometryReview.geometrySha256,
-    },
-  );
+  // Records created before the pixel-to-metric registration contract carry no
+  // registration at all; they stay readable, but any supplied registration is
+  // still validated exactly. A binding that declares a registration must pass
+  // the full normalizer before it reaches the editor.
+  const pixelMetricRegistration = authoritative.pixelMetricRegistration === undefined
+    ? undefined
+    : normalizePixelMetricRegistration(
+      authoritative.pixelMetricRegistration,
+      {
+        sourceArtifactSha256: authoritative.sha256,
+        imageWidth: authoritative.intrinsicPixels.width,
+        imageHeight: authoritative.intrinsicPixels.height,
+        geometrySha256: geometryReview.geometrySha256,
+      },
+    );
   return Object.freeze({
     sourceArtifactRole: authoritative.role,
     sourceArtifactSha256: authoritative.sha256,
@@ -497,7 +503,7 @@ export function geometryCorrectionSourceBinding(geometryReview) {
     byteSize: authoritative.byteSize,
     intrinsicPixels: Object.freeze({ ...authoritative.intrinsicPixels }),
     sourceGeometryAncestryVersions: Object.freeze([...authoritative.sourceGeometryAncestryVersions]),
-    pixelMetricRegistration,
+    ...(pixelMetricRegistration === undefined ? {} : { pixelMetricRegistration }),
   });
 }
 
