@@ -182,3 +182,5 @@ MyProject.dc.html
 journey-config.js
 journey-store.js
 journey-resale.js
+portfolio-data.json
+portfolio-packages.json
