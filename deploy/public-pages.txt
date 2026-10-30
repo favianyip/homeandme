@@ -40,6 +40,7 @@ assets/css/reviewed-references.css
 assets/fonts/Centaur.woff2
 assets/fonts/Balibold-Regular.woff2
 assets/images/hnm-logo.png
+assets/images/og-home.png
 assets/images/publication-rights-placeholder.svg
 
 # Hash-pinned, rights-safe synthetic whole-unit reference proof
