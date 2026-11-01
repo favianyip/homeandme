@@ -608,6 +608,9 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
       <div data-barinner="1" style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
         <button data-primary="1" type="button" onClick="{{ primary }}" disabled="{{ primaryDisabled }}" aria-busy="{{ sending }}" style="width: 100%; cursor: pointer; border: none; border-radius: 999px; background: {{ primaryBg }}; color: {{ primaryFg }}; padding: 19px 26px; font-family: 'Oswald', sans-serif; font-size: 12.5px; letter-spacing: 2.4px; transition: background 0.25s ease;">{{ primaryLabel }}</button>
         <span data-hint="1" role="status" aria-live="polite" style="font-size: 13px; line-height: 1.45; color: {{ hintFg }}; text-align: center;">{{ hint }}</span>
+        <sc-if value="{{ showPlanPending }}" hint-placeholder-val="{{ false }}">
+          <span data-plan-pending="1" style="font-size: 12.5px; line-height: 1.45; color: #8a908c; text-align: center;">{{ planPendingNote }}</span>
+        </sc-if>
       </div>
     </div>
   </sc-if>
@@ -751,7 +754,7 @@ const ICONS = {
 class Component extends DCLogic {
   state = {
     step: 1, maxStep: 1, route: null, keyStatus: '', advice: {}, conceptsOpen: false,
-    hint: '', err: false, sent: false, delivered: false, fallbackOpened: false, timedOut: false, planAttached: false, copied: false, sending: false, restored: false,
+    hint: '', err: false, sent: false, delivered: false, fallbackOpened: false, timedOut: false, retryWait: false, planAttached: false, copied: false, sending: false, restored: false,
     read: { status: 'idle', note: 'A person checks your plan before we prepare your render.' },
     plan: null, planError: '',
     f: {
@@ -808,6 +811,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeys);
     window.removeEventListener('beforeunload', this.onBeforeUnload);
+    clearTimeout(this._retryTimer);
   }
 
   onBeforeUnload = (event) => {
@@ -897,7 +901,7 @@ class Component extends DCLogic {
     this._ref = '';
     this.setState({
       step: 1, maxStep: 1, route: null, keyStatus: '', advice: {}, conceptsOpen: false,
-      hint: '', err: false, sent: false, delivered: false, fallbackOpened: false, timedOut: false, planAttached: false, copied: false, sending: false, restored: false,
+      hint: '', err: false, sent: false, delivered: false, fallbackOpened: false, timedOut: false, retryWait: false, planAttached: false, copied: false, sending: false, restored: false,
       plan: null, planError: '', read: { status: 'idle', note: 'A person checks your plan before we prepare your render.' },
       f: { street: '', unit: '', postal: '', flatType: '', name: '', phone: '', email: '', detectedType: '', sqm: '',
         styles: [], customStyle: '', areas: [], trades: {}, timing: '', notes: '', coordinator: !!this.props.coordinatorDefaultOn, consent: false },
@@ -1214,6 +1218,7 @@ class Component extends DCLogic {
   send = async () => {
     const { f } = this.state;
     if (this._sendInFlight || this.state.sending || this.state.delivered) return;
+    if (this.state.retryWait) return; // 60 s pause after a timeout (duplicate guard)
     for (let step = 1; step <= 4; step += 1) {
       const bad = this.validateStep(step);
       if (bad) { this.go(step, bad); return; }
@@ -1294,7 +1299,13 @@ class Component extends DCLogic {
       try { localStorage.removeItem('hnm.enquiry.v3'); } catch (e) { /* private mode */ }
     }
     this._sendInFlight = false;
-    this.setState({ sent: true, delivered, fallbackOpened, timedOut, planAttached, sending: false, hint: '', err: false });
+    // After a timeout the server may already have the enquiry, so the main
+    // button stays disabled for 60 s to stop an instant duplicate send.
+    this.setState({ sent: true, delivered, fallbackOpened, timedOut, retryWait: timedOut, planAttached, sending: false, hint: '', err: false });
+    if (timedOut) {
+      clearTimeout(this._retryTimer);
+      this._retryTimer = setTimeout(() => this.setState({ retryWait: false }), 60000);
+    }
   };
 
   copyText = () => {
@@ -1359,7 +1370,7 @@ class Component extends DCLogic {
     if (step === 2) primaryLabel = route === 'selected' ? 'ADD REFERENCES' : 'CHOOSE THE WORK';
     if (step === 3) primaryLabel = 'ADD CONTACT DETAILS';
     if (step === 4) primaryLabel = 'REVIEW ENQUIRY';
-    if (step === 5) primaryLabel = this.state.delivered ? 'ENQUIRY RECEIVED' : (this.state.sent ? 'TRY AGAIN' : 'SEND AS NEW ENQUIRY');
+    if (step === 5) primaryLabel = this.state.delivered ? 'ENQUIRY RECEIVED' : (this.state.timedOut && this.state.retryWait ? 'PLEASE WAIT A MINUTE' : (this.state.sent ? 'TRY AGAIN' : 'SEND AS NEW ENQUIRY'));
     const defaultHints = {
       1: route === 'selected' ? 'Only your chosen rooms continue.' : 'The full room-by-room scope stays ahead.',
       2: route === 'selected' ? (SHOW_CONTRACTOR_OPTIONS ? 'Contractor to advise is a complete answer.' : 'Leave a room blank if you are not sure yet.') : 'Plan and style are optional.',
@@ -1394,7 +1405,7 @@ class Component extends DCLogic {
       onFile: this.onFile, clearPlan: this.clearPlan, noPlan: !this.state.plan, hasPlan: !!this.state.plan,
       hasPlanError: !!this.state.planError, planError: this.state.planError, planImg,
       planTitle: this.state.plan ? this.state.plan.name : 'ADD A FLOOR PLAN OR PHOTO',
-      planNote: this.state.plan ? 'Selected for this enquiry. Remove it any time.' : 'PNG, JPG, WebP or PDF up to 10\u00a0MB. Optional.',
+      planNote: this.state.plan ? 'Selected for this enquiry. Remove it any time. Not sent yet - your floor plan is sent when you press the final send button on the last step.' : 'PNG, JPG, WebP or PDF up to 10\u00a0MB. Optional.',
       completedStyleCards, conceptStyleCards, conceptsOpen: this.state.conceptsOpen,
       toggleConcepts: () => this.setState((state) => ({ conceptsOpen: !state.conceptsOpen })), conceptMark: this.state.conceptsOpen ? '×' : '＋',
       styleCount: f.styles.length ? f.styles.length + ' OF 3 PICKED' : 'PICK UP TO 3', pickCustom: this.pickStyle('custom'),
@@ -1404,8 +1415,9 @@ class Component extends DCLogic {
       toggleConsent: () => this.setState((state) => ({ f: { ...state.f, consent: !state.f.consent }, hint: '', err: false })),
       coordBorder: f.coordinator ? TEAL : 'rgba(20,25,27,0.12)', coordBg: f.coordinator ? 'rgba(90,126,138,0.07)' : '#fff',
       switchBg: f.coordinator ? TEAL : 'rgba(20,25,27,0.22)', switchX: f.coordinator ? '22px' : '0px',
+      showPlanPending: !!this.state.plan && step < 5, planPendingNote: 'Not sent yet - your floor plan is sent when you press the final send button on the last step.',
       showAction: !!route, primary: step === 5 ? this.send : this.next,
-      primaryLabel, primaryDisabled: this.state.sending || this.state.delivered || (step === 5 && !f.consent), sending: this.state.sending,
+      primaryLabel, primaryDisabled: this.state.sending || this.state.delivered || (step === 5 && this.state.timedOut && this.state.retryWait) || (step === 5 && !f.consent), sending: this.state.sending,
       primaryBg: step === 5 ? (f.consent || this.state.delivered ? INK : 'rgba(20,25,27,0.4)') : TEAL, primaryFg: '#f6f4ef',
       hint: this.state.hint || defaultHints[step] || '', hasError: this.state.err && !!this.state.hint, hintFg: this.state.err ? '#a8563c' : '#8a908c',
       restored: this.state.restored, clearDraft: this.clearDraft, sent: this.state.sent,
