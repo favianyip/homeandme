@@ -5,15 +5,20 @@ import { readFileSync } from 'node:fs';
 
 const BACKUP = '/home/favianyip/homeandme/operations/tailscale/serve-config-backup-20261101.json';
 const SCRIPT = '/home/favianyip/homeandme/.jobs/fav-50-status/scripts/enable_customer_status_link.sh';
+// These two deployment checks need this operator host's private inventory.
+// They remain explicit local gates; CI runs the public-page contract below.
+const operatorOnly = { skip: process.env.HNM_OPERATOR_CHECKS !== '1'
+  && 'operator-host check: run with HNM_OPERATOR_CHECKS=1 on the deployment host' };
+
 const OLD443 = 'spark-792d-old.tail223b04.ts.net:443';
 
-test('(a) backup: -old:443 holds private paths and was not public', () => {
+test('(a) backup: -old:443 holds private paths and was not public', operatorOnly, () => {
   const c = JSON.parse(readFileSync(BACKUP, 'utf8'));
   assert.ok('/api/chat-webhooks/' in c.Web[OLD443].Handlers);
   assert.notEqual((c.AllowFunnel || {})[OLD443], true);
 });
 
-test('(b) script reads Funnel/serve status before any funnel change, and never touches 443 or 8443', () => {
+test('(b) script reads Funnel/serve status before any funnel change, and never touches 443 or 8443', operatorOnly, () => {
   const lines = readFileSync(SCRIPT, 'utf8').split('\n');
   const code = lines.filter((l) => !/^\s*#/.test(l));
   const firstFunnel = lines.findIndex((l) => !/^\s*#/.test(l) && /tailscale funnel --bg/.test(l));
