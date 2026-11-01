@@ -49,6 +49,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
   [data-overlap] { margin: 0 !important; }
 }
 @media (max-width: 1100px) { [data-masonry] { column-count: 2 !important; } }
+@media (max-width: 720px) { [data-f2r] { grid-template-columns: 1fr !important; } }
 @media (max-width: 700px) {
   [data-herofoot] { grid-template-columns: 1fr !important; }
   [data-tabbar] { display: grid !important; }
@@ -123,6 +124,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
   </sc-if>
 
   <section id="top" tabindex="-1" style="position: relative; min-height: min(94vh, 940px); background: #14191b; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
+    <!-- FAV-87: hero video slot (Higgsfield, pending owner approval) -->
     <img src="assets/portfolio/hero-minimalist-living.jpg" alt="Minimalist 5-room HDB living hall, a Home &amp; Me project" width="1900" height="950" fetchpriority="high" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.96;">
     <div style="position: absolute; inset: 0; background: linear-gradient(96deg, rgba(20,25,27,0.92) 0%, rgba(20,25,27,0.78) 34%, rgba(20,25,27,0.34) 62%, rgba(20,25,27,0.1) 100%);"></div>
     <div style="position: absolute; inset: auto 0 0 0; height: 46%; background: linear-gradient(to top, rgba(20,25,27,0.82), rgba(20,25,27,0));"></div>
@@ -216,6 +218,43 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
         <sc-for list="{{ weDont }}" as="i" hint-placeholder-count="4">
           <p style="display: grid; grid-template-columns: 22px 1fr; gap: 12px; margin: 0 0 18px; font-size: 16px; line-height: 1.6; color: #4a5350;"><span style="color: #a8563c;">✕</span>{{ i }}</p>
         </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="floorplan-to-render" style="background: #f6f4ef; border-top: 1px solid rgba(20,25,27,0.1); padding: clamp(60px, 9vw, 120px) clamp(16px, 4vw, 44px); scroll-margin-top: 78px;">
+    <div style="max-width: 1360px; margin: 0 auto;">
+      <div data-reveal="1" style="max-width: 680px; margin-bottom: clamp(34px, 5vw, 58px);">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 20px;">YOUR FREE RENDER</p>
+        <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0; color: #14191b;">Floor plan to 3D to render. Free.</h2>
+      </div>
+      <div data-f2r="1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 2.4vw, 32px);">
+        <figure data-reveal="1" style="margin: 0; background: #fdfcfa; border: 1px solid rgba(20,25,27,0.12); border-radius: 5px; overflow: hidden; display: flex; flex-direction: column;">
+          <img src="assets/how-it-works/step1-floor-plan.jpg" alt="Floor plan of a sample HDB flat, drawn by our engine" width="1600" height="1220" loading="lazy" style="width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: #ececea;">
+          <figcaption style="padding: 22px 22px 28px; display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 1.8px; color: #14191b;">1. SEND YOUR FLOOR PLAN</span>
+            <span style="font-size: 14.5px; line-height: 1.62; color: #4a5350;">Upload your HDB floor plan with your enquiry. We redraw it room by room.</span>
+          </figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin: 0; background: #fdfcfa; border: 1px solid rgba(20,25,27,0.12); border-radius: 5px; overflow: hidden; display: flex; flex-direction: column;">
+          <img src="assets/how-it-works/step2-3d-model.jpg" alt="3D model of the same sample HDB flat, built by our engine" width="1400" height="1050" loading="lazy" style="width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: #ececea;">
+          <figcaption style="padding: 22px 22px 28px; display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 1.8px; color: #14191b;">2. WE BUILD IT IN 3D</span>
+            <span style="font-size: 14.5px; line-height: 1.62; color: #4a5350;">Your walls, doors and windows become a 3D model of your actual flat.</span>
+          </figcaption>
+        </figure>
+        <figure data-reveal="1" style="margin: 0; background: #fdfcfa; border: 1px solid rgba(20,25,27,0.12); border-radius: 5px; overflow: hidden; display: flex; flex-direction: column;">
+          <!-- FAV-87: swap for the real render of this sample flat once the owner approves the Higgsfield render -->
+          <img src="assets/portfolio/minimalist-5-room-hdb-design-01-living-hall.jpg" alt="Example finished design: a minimalist HDB living hall" width="1600" height="800" loading="lazy" style="width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: #ececea;">
+          <figcaption style="padding: 22px 22px 28px; display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 1.8px; color: #14191b;">3. YOU GET YOUR DESIGN, RENDERED</span>
+            <span style="font-size: 14.5px; line-height: 1.62; color: #4a5350;">We render your flat in the style you choose, free. Example finished design (minimalist style).</span>
+          </figcaption>
+        </figure>
+      </div>
+      <p style="font-size: 13.5px; line-height: 1.6; color: #6d746f; margin: 18px 0 0; max-width: 70ch;">Sample flat. Steps 1 and 2 are made by our own engine from a real HDB layout; step 3 shows the finished style.</p>
+      <div style="margin-top: 34px; display: flex; align-items: center; gap: 22px; flex-wrap: wrap;">
+        <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #14191b; color: #f6f4ef; padding: 19px 36px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">GET MY FREE RENDER</a>
       </div>
     </div>
   </section>
