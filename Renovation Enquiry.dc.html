@@ -211,6 +211,21 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
 .sent-panel { border: 1px solid rgba(90,126,138,0.45); background: rgba(90,126,138,0.09); border-radius: 18px; padding: 17px; }
 .sent-panel strong { font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.8px; color: #5a7e8a; }
 .sent-panel p { margin: 7px 0 12px; font-size: 13.5px; line-height: 1.55; color: #4a5350; }
+.track-panel { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+.track-ref { margin: 0; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; color: #5a7e8a; }
+.track-panel h1 { margin: 0; }
+.track-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.track-steps li { display: flex; align-items: center; gap: 12px; font-size: 15px; line-height: 1.4; color: #8a908c; }
+.track-steps .track-num { flex: none; font-weight: 400; width: 28px; height: 28px; border-radius: 999px; border: 1px solid rgba(20,25,27,0.2); display: flex; align-items: center; justify-content: center; font-family: 'Oswald', sans-serif; font-size: 12px; background: #fff; }
+.track-steps li[data-state="done"] { color: #14191b; }
+.track-steps li[data-state="done"] .track-num { background: #5a7e8a; border-color: #5a7e8a; color: #fff; }
+.track-steps li[data-state="now"] { color: #14191b; font-weight: 600; }
+.track-steps li[data-state="now"] .track-num { border: 2px solid #5a7e8a; color: #5a7e8a; }
+.track-note { margin: 0; font-size: 14.5px; line-height: 1.6; color: #4a5350; }
+.track-open { display: block; text-align: center; text-decoration: none; border-radius: 999px; background: #14191b; color: #f6f4ef; padding: 20px 26px; font-family: 'Oswald', sans-serif; font-size: 15px; letter-spacing: 1.6px; }
+.track-save { border: 1px solid rgba(90,126,138,0.45); background: rgba(90,126,138,0.09); border-radius: 18px; padding: 17px; display: flex; flex-direction: column; gap: 10px; }
+.track-save p { margin: 0; font-size: 13.5px; line-height: 1.55; color: #4a5350; }
+.track-url { font-size: 12.5px; line-height: 1.5; color: #14191b; word-break: break-all; background: #fff; border-radius: 10px; padding: 10px 12px; }
 .error-summary { margin-top: 16px; border-left: 3px solid #a8563c; padding: 10px 13px; background: rgba(168,86,60,0.08); color: #873f2e; font-size: 13px; line-height: 1.5; }
 .journey-strip { margin: -4px 0 34px; }
 .journey-strip ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid rgba(20,25,27,0.14); }
@@ -261,6 +276,31 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
   </header>
 
   <main id="enquiry-main" style="max-width: 1100px; margin: 0 auto; padding: clamp(22px, 5vw, 40px) clamp(14px, 4vw, 30px) 0;">
+
+    <sc-if value="{{ tracking }}" hint-placeholder-val="{{ false }}">
+      <section class="track-panel" data-track="1" aria-labelledby="track-title">
+        <p class="track-ref">YOUR REFERENCE · {{ trackRef }}</p>
+        <h1 id="track-title" data-step-heading="1" tabindex="-1">{{ trackTitle }}</h1>
+        <ol class="track-steps" aria-label="Design progress">
+          <sc-for list="{{ trackSteps }}" as="t" hint-placeholder-count="4">
+            <li data-state="{{ t.state }}" aria-current="{{ t.current }}"><b class="track-num">{{ t.number }}</b><span class="track-label">{{ t.label }}</span></li>
+          </sc-for>
+        </ol>
+        <p class="track-note" data-track-note="1" role="status" aria-live="polite">{{ trackNote }}</p>
+        <sc-if value="{{ trackReady }}" hint-placeholder-val="{{ false }}">
+          <a class="track-open" data-design-link="1" sc-camel-href="{{ trackLink }}" target="_blank" rel="noopener">Open your free design</a>
+        </sc-if>
+        <sc-if value="{{ trackGaveUp }}" hint-placeholder-val="{{ false }}">
+          <a class="choice-chip" sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener" style="display: inline-block; text-decoration: none; align-self: flex-start;">MESSAGE US ON WHATSAPP</a>
+        </sc-if>
+        <div class="track-save">
+          <p><strong>Closing this page? Save this link to check your design later.</strong></p>
+          <div class="track-url" data-track-url="1">{{ trackUrl }}</div>
+          <button class="choice-chip" type="button" onClick="{{ copyTrackLink }}" style="align-self: flex-start;">{{ copyTrackLabel }}</button>
+        </div>
+        <button class="secondary-link" type="button" onClick="{{ newEnquiry }}" style="cursor: pointer;">START A NEW ENQUIRY</button>
+      </section>
+    </sc-if>
 
     <sc-if value="{{ hasRoute }}" hint-placeholder-val="{{ false }}">
       <nav class="journey-strip" aria-label="Enquiry progress">
@@ -636,6 +676,47 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
 <script type="text/x-dc" data-dc-script data-props="{&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+6588376196&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;homeandme2017@gmail.com&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;coordinatorDefaultOn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;},&quot;autoRead&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;}}">
 const LEAD_ENDPOINT = 'https://spark-792d.tail223b04.ts.net/hnm/v1/leads';
 const PLAN_ENDPOINT = 'https://spark-792d.tail223b04.ts.net/hnm/v1/plans';
+const STATUS_BASE = 'https://spark-792d-old.tail223b04.ts.net/hnm-status/v1/';
+// FAV-50 design-link helpers (start)
+const DESIGN_LINK_PREFIX = 'https://spark-792d-old.tail223b04.ts.net/design-';
+const TRACK_STORE = 'hnm.track.v1';
+const POLL_MS = 30000;
+const POLL_GIVE_UP_MS = 3 * 60 * 60 * 1000;
+const TRACK_STEPS = ['received', 'designing', 'checking', 'ready'];
+const REF_RE = /^HNM-\d{6}-\d{4}$/;
+const KEY_RE = /^[0-9a-f]{32}$/;
+function makeStatusKey(cryptoObj) {
+  const bytes = new Uint8Array(16);
+  cryptoObj.getRandomValues(bytes);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+}
+function parseTrack(text) {
+  if (typeof text !== 'string') return null;
+  const m = /^(HNM-\d{6}-\d{4})\.([0-9a-f]{32})$/.exec(text);
+  return m ? { ref: m[1], statusKey: m[2] } : null;
+}
+function trackFromHash(hash) {
+  if (typeof hash !== 'string' || hash.indexOf('#track=') !== 0) return null;
+  return parseTrack(hash.slice(7));
+}
+function statusUrl(ref, statusKey) { return STATUS_BASE + encodeURIComponent(ref) + '?k=' + encodeURIComponent(statusKey); }
+function safeDesignLink(link) {
+  if (typeof link !== 'string' || link.length > 2000) return '';
+  if (link.indexOf(DESIGN_LINK_PREFIX) !== 0 || /[\s"'<>\\]/.test(link)) return '';
+  return link;
+}
+// One status reply -> { step, link } to show, or null to keep the last state.
+function readStatus(httpStatus, body) {
+  if (httpStatus === 404) return { step: 'received', link: '' };
+  if (httpStatus !== 200 || !body || typeof body !== 'object') return null;
+  if (body.step === 'ready') { const link = safeDesignLink(body.link); return link ? { step: 'ready', link } : null; }
+  if (['received', 'designing', 'checking', 'stopped'].includes(body.step)) return { step: body.step, link: '' };
+  return null;
+}
+function keepPolling(step, startedAt, now) {
+  return step !== 'ready' && step !== 'stopped' && (now - startedAt) < POLL_GIVE_UP_MS;
+}
+// FAV-50 design-link helpers (end)
 const CONSENT_VERSION = '2026-08-22';
 // Soft launch: the contractor-advice chip, 'mark all for advice' and the paid
 // coordinator toggle stay in the code but are hidden and never sent while false.
@@ -768,6 +849,7 @@ class Component extends DCLogic {
   state = {
     step: 1, maxStep: 1, route: null, keyStatus: '', advice: {}, conceptsOpen: false,
     hint: '', err: false, sent: false, delivered: false, fallbackOpened: false, timedOut: false, retryWait: false, planAttached: false, copied: false, sending: false, restored: false,
+    track: null, trackGaveUp: false, trackCopied: false,
     read: { status: 'idle', note: 'A person checks your plan before we prepare your render.' },
     plan: null, planError: '',
     f: {
@@ -819,12 +901,93 @@ class Component extends DCLogic {
       const hit = STYLES.find((x) => x.id === styleId);
       if (hit) this.setState((s) => ({ f: { ...s.f, styles: [hit.id] } }));
     }
+    document.addEventListener('visibilitychange', this.onVisibility);
+    window.addEventListener('focus', this.onVisibility);
+    window.addEventListener('hashchange', this.onHash);
+    let resume = trackFromHash(location.hash);
+    if (!resume) {
+      try { const saved = JSON.parse(localStorage.getItem(TRACK_STORE) || 'null'); resume = saved ? parseTrack(saved.ref + '.' + saved.statusKey) : null; } catch (e) { resume = null; }
+    }
+    if (resume) this.startTracking(resume.ref, resume.statusKey);
   }
+
+  // FAV-50: after a send, the same page shows progress and, when ready, the design link.
+  startTracking(ref, statusKey) {
+    try { localStorage.setItem(TRACK_STORE, JSON.stringify({ ref, statusKey, at: Date.now() })); } catch (e) { /* private mode */ }
+    this._pollStart = Date.now();
+    this.setState({ track: { ref, statusKey, step: 'received', link: '' }, trackGaveUp: false, trackCopied: false }, () => { window.scrollTo(0, 0); this.poll(); });
+  }
+
+  poll = async () => {
+    clearTimeout(this._pollTimer);
+    const t = this.state.track;
+    if (!t || this._polling) return;
+    if (!keepPolling(t.step, this._pollStart, Date.now())) {
+      if (t.step !== 'ready' && t.step !== 'stopped') this.setState({ trackGaveUp: true });
+      return;
+    }
+    if (document.hidden) return; // resumes on visibilitychange / focus
+    this._polling = true;
+    this._lastPoll = Date.now();
+    let next = null;
+    try {
+      const res = await fetch(statusUrl(t.ref, t.statusKey), { method: 'GET', mode: 'cors', credentials: 'omit', cache: 'no-store' });
+      let body = null;
+      try { body = await res.json(); } catch (e) { body = null; }
+      next = readStatus(res.status, body);
+    } catch (e) { next = null; } // network error: keep the last shown state
+    this._polling = false;
+    const cur = this.state.track;
+    if (!cur || cur.ref !== t.ref) return;
+    const step = next ? next.step : cur.step;
+    if (next) this.setState({ track: { ...cur, step: next.step, link: next.link } });
+    if (keepPolling(step, this._pollStart, Date.now())) {
+      if (!document.hidden) this._pollTimer = setTimeout(this.poll, POLL_MS);
+    } else if (step !== 'ready' && step !== 'stopped') this.setState({ trackGaveUp: true });
+  };
+
+  onHash = () => {
+    const t = trackFromHash(location.hash);
+    const cur = this.state.track;
+    if (t && !(cur && cur.ref === t.ref && cur.statusKey === t.statusKey)) { clearTimeout(this._pollTimer); this.startTracking(t.ref, t.statusKey); }
+  };
+
+  onVisibility = () => {
+    if (document.hidden) { clearTimeout(this._pollTimer); return; }
+    const t = this.state.track;
+    if (!t || this.state.trackGaveUp || t.step === 'ready' || t.step === 'stopped' || this._polling) return;
+    // Resume on focus, but never check more often than every 10 s.
+    if (Date.now() - (this._lastPoll || 0) > 10000) this.poll();
+    else { clearTimeout(this._pollTimer); this._pollTimer = setTimeout(this.poll, POLL_MS); }
+  };
+
+  trackUrl() {
+    const t = this.state.track;
+    return t ? location.href.split('#')[0] + '#track=' + t.ref + '.' + t.statusKey : '';
+  }
+
+  copyTrackLink = () => {
+    const url = this.trackUrl();
+    const done = () => { this.setState({ trackCopied: true }); setTimeout(() => this.setState({ trackCopied: false }), 2200); };
+    try { navigator.clipboard.writeText(url).then(done, () => window.prompt('Copy this link:', url)); } catch (e) { window.prompt('Copy this link:', url); }
+  };
+
+  newEnquiry = () => {
+    clearTimeout(this._pollTimer);
+    try { localStorage.removeItem(TRACK_STORE); } catch (e) { /* private mode */ }
+    if (location.hash.indexOf('#track=') === 0) { try { history.replaceState(null, '', location.href.split('#')[0]); } catch (e) { /* ignore */ } }
+    this.setState({ track: null, trackGaveUp: false, trackCopied: false });
+    this.clearDraft();
+  };
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeys);
     window.removeEventListener('beforeunload', this.onBeforeUnload);
+    document.removeEventListener('visibilitychange', this.onVisibility);
+    window.removeEventListener('focus', this.onVisibility);
+    window.removeEventListener('hashchange', this.onHash);
     clearTimeout(this._retryTimer);
+    clearTimeout(this._pollTimer);
   }
 
   onBeforeUnload = (event) => {
@@ -912,6 +1075,7 @@ class Component extends DCLogic {
     try { localStorage.removeItem('hnm.enquiry.v3'); } catch (e) { /* private mode */ }
     this.planFile = null;
     this._ref = '';
+    this._statusKey = '';
     this.setState({
       step: 1, maxStep: 1, route: null, keyStatus: '', advice: {}, conceptsOpen: false,
       hint: '', err: false, sent: false, delivered: false, fallbackOpened: false, timedOut: false, retryWait: false, planAttached: false, copied: false, sending: false, restored: false,
@@ -1224,6 +1388,12 @@ class Component extends DCLogic {
     return L.join('\n');
   }
 
+  // One random status key per reference, made at send time (FAV-50).
+  statusKey() {
+    if (!this._statusKey) this._statusKey = makeStatusKey(window.crypto);
+    return this._statusKey;
+  }
+
   ref() {
     if (this._ref) return this._ref;
     const d = new Date();
@@ -1247,6 +1417,7 @@ class Component extends DCLogic {
     }
     this._sendInFlight = true;
     const ref = this.ref();
+    const statusKey = this.statusKey();
     const planFile = this.planFile;
     const planFilename = this.state.plan ? this.state.plan.name : '';
     // Freeze the complete validated brief before the first network wait. Even
@@ -1259,6 +1430,7 @@ class Component extends DCLogic {
       // coordinator is only sent when the contractor options are shown.
       ...(SHOW_CONTRACTOR_OPTIONS ? { coordinator: !!f.coordinator } : {}),
       consent: true, planFilename: planFilename, hp: '', consentVersion: CONSENT_VERSION, page: 'renovation-enquiry',
+      statusKey: statusKey,
     };
     const text = this.message();
     this.setState({ sending: true, fallbackOpened: false, timedOut: false, hint: 'Sending securely to Home & Me…', err: false });
@@ -1323,6 +1495,9 @@ class Component extends DCLogic {
       clearTimeout(this._retryTimer);
       this._retryTimer = setTimeout(() => this.setState({ retryWait: false }), 60000);
     }
+    // A design is only made from a floor plan, so the progress view opens when
+    // the enquiry was stored and the plan attached.
+    if (delivered && planFile && planId) this.startTracking(ref, statusKey);
   };
 
   copyText = () => {
@@ -1465,6 +1640,34 @@ class Component extends DCLogic {
       showManualWa: this.state.sent && !this.state.delivered && this.state.timedOut,
       waFallbackHref: 'https://wa.me/' + wa + '?text=' + encodeURIComponent(this.message()),
       iconHome: this.icon('home', 21), iconWork: this.icon('work', 21), iconPlan: this.icon('plan', 21), iconChat: this.icon('chat', 21),
+      tracking: false,
+      ...(this.state.track ? this.trackView() : {}),
+    };
+  }
+
+  trackView() {
+    const t = this.state.track;
+    const at = TRACK_STEPS.indexOf(t.step === 'stopped' ? 'checking' : t.step);
+    const labels = { received: 'Received', designing: 'Designing', checking: 'Our designer is checking it', ready: 'Ready' };
+    const trackSteps = TRACK_STEPS.map((id, i) => ({
+      number: String(i + 1), label: labels[id],
+      state: t.step === 'ready' || i < at ? 'done' : (i === at && t.step !== 'stopped' ? 'now' : 'todo'),
+      current: i === at && t.step !== 'ready' && t.step !== 'stopped' ? 'step' : 'false',
+    }));
+    const wa = this.waTarget();
+    let trackNote = 'Usually within 30 minutes. You can keep this page open.';
+    let trackTitle = 'We are making your free design';
+    if (t.step === 'ready') { trackTitle = 'Your free design is ready'; trackNote = 'Open it below. It opens in a new tab.'; }
+    else if (t.step === 'stopped') { trackTitle = 'Thank you, we have your floor plan'; trackNote = 'We need a closer look at your floor plan. We will contact you.'; }
+    else if (this.state.trackGaveUp) trackNote = 'This is taking longer than usual. Please WhatsApp us at ' + this.pretty(wa) + ' with your reference.';
+    const link = t.step === 'ready' ? safeDesignLink(t.link) : '';
+    return {
+      tracking: true, trackRef: t.ref, trackTitle, trackSteps, trackNote,
+      trackReady: !!link, trackLink: link, trackGaveUp: this.state.trackGaveUp && t.step !== 'ready' && t.step !== 'stopped',
+      trackUrl: this.trackUrl(), copyTrackLink: this.copyTrackLink, copyTrackLabel: this.state.trackCopied ? 'COPIED' : 'COPY LINK',
+      newEnquiry: this.newEnquiry,
+      onStep1: false, onIdeasStep: false, onScopeStep: false, onStep4: false, onStep5: false, hasRoute: false, noRoute: false, showAction: false,
+      stepOf: 'YOUR FREE DESIGN', stepName: t.ref, progress: '100%', backOpacity: 0.35, back: () => {},
     };
   }
 

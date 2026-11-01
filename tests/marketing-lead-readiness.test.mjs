@@ -87,9 +87,12 @@ test('enquiry calls exactly the sanctioned lead endpoint and nothing else', () =
   assert.equal(endpoints.length, 1, 'LEAD_ENDPOINT must be declared exactly once');
   assert.match(enquiry, /const LEAD_ENDPOINT = 'https:\/\/spark-792d\.tail223b04\.ts\.net\/hnm\/v1\/leads'/);
   const fetches = enquiry.match(/fetch\s*\(/g) || [];
-  assert.equal(fetches.length, 2, 'exactly two fetch calls (plan upload + lead POST)');
+  // FAV-148: the third is the read-only design status check (GET, no credentials).
+  assert.equal(fetches.length, 3, 'exactly three fetch calls (plan upload + lead POST + design status GET)');
   assert.match(enquiry, /fetch\(LEAD_ENDPOINT/);
   assert.match(enquiry, /fetch\(PLAN_ENDPOINT/);
+  assert.match(enquiry, /fetch\(statusUrl\(t\.ref, t\.statusKey\), \{ method: 'GET', mode: 'cors', credentials: 'omit', cache: 'no-store' \}\)/);
+  assert.match(enquiry, /const STATUS_BASE = 'https:\/\/spark-792d-old\.tail223b04\.ts\.net\/hnm-status\/v1\/';/);
   assert.match(enquiry, /const PLAN_ENDPOINT = 'https:\/\/spark-792d\.tail223b04\.ts\.net\/hnm\/v1\/plans'/);
   assert.doesNotMatch(enquiry, /webhookUrl|webhook-url/);
   // Consent gate still guards the send, and the honeypot field is sent empty.
