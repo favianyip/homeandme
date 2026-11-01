@@ -32,22 +32,23 @@ test('statusKey is 32 lowercase hex from getRandomValues and is in the lead body
   assert.match(page, /const statusKey = this\.statusKey\(\);/);
   assert.match(page, /\n      statusKey: statusKey,\n    \};/, 'statusKey is a field of the frozen lead payload');
   assert.match(page, /body: JSON\.stringify\(\{ \.\.\.leadPayload, planId \}\)/, 'payload still posted to LEAD_ENDPOINT');
-  assert.match(page, /const LEAD_ENDPOINT = 'https:\/\/spark-792d\.tail223b04\.ts\.net\/hnm\/v1\/leads';\nconst PLAN_ENDPOINT = [^\n]+\nconst STATUS_BASE = 'https:\/\/spark-792d-old\.tail223b04\.ts\.net\/hnm-status\/v1\/';/);
+  assert.match(page, /const LEAD_ENDPOINT = 'https:\/\/spark-792d\.tail223b04\.ts\.net\/hnm\/v1\/leads';\nconst PLAN_ENDPOINT = [^\n]+\nconst STATUS_BASE = 'https:\/\/spark-792d-old\.tail223b04\.ts\.net:10000\/hnm-status\/v1\/';/);
 });
 
 test('status URL follows the contract', () => {
-  assert.equal(h.statusUrl('HNM-261101-1234', KEY), 'https://spark-792d-old.tail223b04.ts.net/hnm-status/v1/HNM-261101-1234?k=' + KEY);
+  assert.equal(h.statusUrl('HNM-261101-1234', KEY), 'https://spark-792d-old.tail223b04.ts.net:10000/hnm-status/v1/HNM-261101-1234?k=' + KEY);
   assert.match(page, /credentials: 'omit'/);
 });
 
 test('only the allowed design link prefix is ever shown', () => {
-  const good = 'https://spark-792d-old.tail223b04.ts.net/design-HNM-261101-1234/index.html';
+  const good = 'https://spark-792d-old.tail223b04.ts.net:10000/design-HNM-261101-1234/index.html';
   assert.equal(h.safeDesignLink(good), good);
   for (const bad of [
-    'http://spark-792d-old.tail223b04.ts.net/design-x', 'https://spark-792d-old.tail223b04.ts.net.evil.com/design-x',
-    'https://evil.com/https://spark-792d-old.tail223b04.ts.net/design-x', 'javascript:alert(1)', 'https://spark-792d-old.tail223b04.ts.net/other',
-    'https://spark-792d.tail223b04.ts.net/design-x', 'https://spark-792d-old.tail223b04.ts.net/design-x" onclick="x', '', null, 42, {},
-    'https://spark-792d-old.tail223b04.ts.net/design-' + 'a'.repeat(2000),
+    'http://spark-792d-old.tail223b04.ts.net:10000/design-x', 'https://spark-792d-old.tail223b04.ts.net.evil.com/design-x',
+    'https://evil.com/https://spark-792d-old.tail223b04.ts.net:10000/design-x', 'javascript:alert(1)', 'https://spark-792d-old.tail223b04.ts.net:10000/other',
+    'https://spark-792d.tail223b04.ts.net/design-x', 'https://spark-792d-old.tail223b04.ts.net:10000/design-x" onclick="x', '', null, 42, {},
+    'https://spark-792d-old.tail223b04.ts.net:10000/design-' + 'a'.repeat(2000),
+    'https://spark-792d-old.tail223b04.ts.net/design-x', 'https://spark-792d-old.tail223b04.ts.net:443/design-x', 'https://spark-792d-old.tail223b04.ts.net:8443/design-x', 'https://spark-792d-old.tail223b04.ts.net:100000/design-x',
   ]) assert.equal(h.safeDesignLink(bad), '', String(bad));
   assert.deepEqual({ ...h.readStatus(200, { step: 'ready', link: good }) }, { step: 'ready', link: good });
   assert.equal(h.readStatus(200, { step: 'ready', link: 'https://evil.com/design-x' }), null, 'bad link: keep last state, no link');
@@ -73,7 +74,7 @@ test('404 reads as received; other replies map to the 4 steps or keep the last s
   assert.deepEqual({ ...h.readStatus(404, null) }, { step: 'received', link: '' });
   for (const step of ['received', 'designing', 'checking', 'stopped']) assert.equal(h.readStatus(200, { step }).step, step);
   assert.equal(h.readStatus(200, { step: 'weird' }), null);
-  assert.equal(h.readStatus(500, { step: 'ready', link: 'https://spark-792d-old.tail223b04.ts.net/design-x' }), null);
+  assert.equal(h.readStatus(500, { step: 'ready', link: 'https://spark-792d-old.tail223b04.ts.net:10000/design-x' }), null);
   assert.equal(h.readStatus(200, null), null);
   assert.match(page, /catch \(e\) \{ next = null; \} \/\/ network error: keep the last shown state/);
 });

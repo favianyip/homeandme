@@ -676,9 +676,9 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
 <script type="text/x-dc" data-dc-script data-props="{&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+6588376196&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;homeandme2017@gmail.com&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Lead routing&quot;},&quot;coordinatorDefaultOn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;},&quot;autoRead&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Flow&quot;}}">
 const LEAD_ENDPOINT = 'https://spark-792d.tail223b04.ts.net/hnm/v1/leads';
 const PLAN_ENDPOINT = 'https://spark-792d.tail223b04.ts.net/hnm/v1/plans';
-const STATUS_BASE = 'https://spark-792d-old.tail223b04.ts.net/hnm-status/v1/';
+const STATUS_BASE = 'https://spark-792d-old.tail223b04.ts.net:10000/hnm-status/v1/';
 // FAV-50 design-link helpers (start)
-const DESIGN_LINK_PREFIX = 'https://spark-792d-old.tail223b04.ts.net/design-';
+const DESIGN_LINK_PREFIX = 'https://spark-792d-old.tail223b04.ts.net:10000/design-';
 const TRACK_STORE = 'hnm.track.v1';
 const POLL_MS = 30000;
 const POLL_GIVE_UP_MS = 3 * 60 * 60 * 1000;

@@ -92,7 +92,7 @@ test('enquiry calls exactly the sanctioned lead endpoint and nothing else', () =
   assert.match(enquiry, /fetch\(LEAD_ENDPOINT/);
   assert.match(enquiry, /fetch\(PLAN_ENDPOINT/);
   assert.match(enquiry, /fetch\(statusUrl\(t\.ref, t\.statusKey\), \{ method: 'GET', mode: 'cors', credentials: 'omit', cache: 'no-store' \}\)/);
-  assert.match(enquiry, /const STATUS_BASE = 'https:\/\/spark-792d-old\.tail223b04\.ts\.net\/hnm-status\/v1\/';/);
+  assert.match(enquiry, /const STATUS_BASE = 'https:\/\/spark-792d-old\.tail223b04\.ts\.net:10000\/hnm-status\/v1\/';/);
   assert.match(enquiry, /const PLAN_ENDPOINT = 'https:\/\/spark-792d\.tail223b04\.ts\.net\/hnm\/v1\/plans'/);
   assert.doesNotMatch(enquiry, /webhookUrl|webhook-url/);
   // Consent gate still guards the send, and the honeypot field is sent empty.
