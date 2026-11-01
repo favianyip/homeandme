@@ -50,6 +50,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
 }
 @media (max-width: 1100px) { [data-masonry] { column-count: 2 !important; } }
 @media (max-width: 720px) { [data-f2r] { grid-template-columns: 1fr !important; } }
+@media (max-width: 640px) { [data-herofoot] { grid-template-columns: 1fr !important; } }
 @media (max-width: 700px) {
   [data-herofoot] { grid-template-columns: 1fr !important; }
   [data-tabbar] { display: grid !important; }
@@ -96,7 +97,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
       <a href="#top" style="display: flex; align-items: center;"><img src="assets/images/hnm-logo.png" alt="Home &amp; Me" width="168" height="168" style="height: 42px; width: auto; filter: {{ logoFilter }}; transition: filter 0.4s ease;"></a>
       <nav id="navLinks" style="display: flex; gap: 30px; margin-left: auto; align-items: center; font-family: 'Oswald', sans-serif; font-size: 11.5px; letter-spacing: 2.4px;">
         <a href="#direct" style="color: {{ navFg }}; padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">WHY DIRECT</a>
-        <a href="#how" style="color: {{ navFg }}; padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">HOW IT WORKS</a>
+        <a href="#floorplan-to-render" style="color: {{ navFg }}; padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">HOW IT WORKS</a>
         <a href="#portfolio" style="color: {{ navFg }}; padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">OUR WORK</a>
         <a href="#coordinator" style="color: {{ navFg }}; padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">COORDINATOR</a>
         <a href="Renovation%20Guides.dc.html" style="color: {{ navFg }}; padding-bottom: 3px; border-bottom: 1px solid transparent;" style-hover="border-bottom-color: #5a7e8a; color: #5a7e8a;">GUIDES</a>
@@ -111,7 +112,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
     <div id="mobile-nav" style="position: fixed; inset: 0; z-index: 58; background: #14191b; padding: 112px clamp(24px, 6vw, 48px) 40px; overflow: auto;">
       <nav style="display: grid; gap: 4px; font-family: 'Oswald', sans-serif; font-size: 26px; letter-spacing: 2.4px;">
         <a href="#direct" onClick="{{ closeMenu }}" style="color: #f6f4ef; padding: 14px 0; border-bottom: 1px solid rgba(246,244,239,0.14);">WHY DIRECT</a>
-        <a href="#how" onClick="{{ closeMenu }}" style="color: #f6f4ef; padding: 14px 0; border-bottom: 1px solid rgba(246,244,239,0.14);">HOW IT WORKS</a>
+        <a href="#floorplan-to-render" onClick="{{ closeMenu }}" style="color: #f6f4ef; padding: 14px 0; border-bottom: 1px solid rgba(246,244,239,0.14);">HOW IT WORKS</a>
         <a href="#portfolio" onClick="{{ closeMenu }}" style="color: #f6f4ef; padding: 14px 0; border-bottom: 1px solid rgba(246,244,239,0.14);">OUR WORK</a>
         <a href="#coordinator" onClick="{{ closeMenu }}" style="color: #f6f4ef; padding: 14px 0; border-bottom: 1px solid rgba(246,244,239,0.14);">COORDINATOR</a>
         <a href="Renovation%20Guides.dc.html" style="color: #f6f4ef; padding: 14px 0; border-bottom: 1px solid rgba(246,244,239,0.14);">RENOVATION GUIDES</a>
@@ -129,11 +130,11 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
     <div style="position: absolute; inset: auto 0 0 0; height: 46%; background: linear-gradient(to top, rgba(20,25,27,0.82), rgba(20,25,27,0));"></div>
     <div style="position: relative; max-width: 1360px; width: 100%; margin: 0 auto; padding: 168px clamp(16px, 4vw, 44px) 0; box-sizing: border-box;">
       <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.8px; color: #a9c4cc; margin: 0 0 30px; display: flex; align-items: center; gap: 14px;"><span style="width: 44px; height: 1px; background: #a9c4cc;"></span>DIRECT CONTRACTOR RENOVATION · SINGAPORE</p>
-      <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(44px, 8.2vw, 112px); line-height: 0.97; letter-spacing: -1.5px; margin: 0 0 28px; color: #f6f4ef; max-width: 15ch; animation: hnmRise 1s ease both;">Quoted by the people <em style="font-style: italic; color: #a9c4cc;">doing the work.</em></h1>
-      <p style="font-size: clamp(16px, 1.9vw, 19.5px); line-height: 1.66; color: rgba(246,244,239,0.76); margin: 0 0 38px; max-width: 470px; text-wrap: pretty; animation: hnmRise 1s ease 0.12s both;">Choose whole home or selected rooms, build the scope, and add a floor plan if you have one.</p>
+      <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(40px, 7vw, 96px); line-height: 0.99; letter-spacing: -1.5px; margin: 0 0 28px; color: #f6f4ef; max-width: 16ch; animation: hnmRise 1s ease both;">Your home, designed free. <em style="font-style: italic; color: #a9c4cc;">Built by the people doing the work.</em></h1>
+      <p style="font-size: clamp(16px, 1.9vw, 19.5px); line-height: 1.66; color: rgba(246,244,239,0.76); margin: 0 0 38px; max-width: 470px; text-wrap: pretty; animation: hnmRise 1s ease 0.12s both;">Choose whole home or selected rooms, build the scope, and add a floor plan if you have one. A real person reviews every enquiry.</p>
       <div style="display: flex; align-items: center; gap: 22px; flex-wrap: wrap; animation: hnmRise 1s ease 0.24s both;">
         <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #f6f4ef; color: #14191b; padding: 19px 36px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START ENQUIRY</a>
-        <a href="#how" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; color: #f6f4ef; border: 1px solid rgba(246,244,239,0.38); padding: 19px 32px; border-radius: 999px;" style-hover="border-color: #f6f4ef; background: rgba(246,244,239,0.1);">HOW IT WORKS</a>
+        <a href="#floorplan-to-render" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; color: #f6f4ef; border: 1px solid rgba(246,244,239,0.38); padding: 19px 32px; border-radius: 999px;" style-hover="border-color: #f6f4ef; background: rgba(246,244,239,0.1);">HOW IT WORKS</a>
       </div>
     </div>
     <div data-herofoot="1" style="position: relative; max-width: 1360px; width: 100%; margin: 0 auto; padding: 64px clamp(16px, 4vw, 44px) 40px; box-sizing: border-box; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;">
@@ -158,69 +159,6 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
     </div>
   </div>
 
-  <section id="direct" style="padding: clamp(60px, 9vw, 128px) clamp(16px, 4vw, 44px) clamp(50px, 7vw, 90px); scroll-margin-top: 78px;">
-    <div data-two="1" style="max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(30px, 5vw, 76px);">
-      <div data-sticky="1" data-reveal="1" style="position: sticky; top: 130px; align-self: start; min-width: 0;">
-        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(20,25,27,0.14); display: block; margin-bottom: 18px;">01</span>
-        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 20px;">WHY DIRECT</p>
-        <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0 0 20px;">Every hand between you and the trade has to earn something.</h2>
-        <p style="font-size: 16.5px; line-height: 1.68; color: #4a5350; margin: 0; max-width: 40ch; text-wrap: pretty;">Not because anyone is dishonest — that is simply how the chain is built. So we show you the route your job actually takes, and shorten it.</p>
-      </div>
-      <div style="min-width: 0; display: flex; flex-direction: column; gap: 18px;">
-        <div data-reveal="1" style="border: 1px solid rgba(20,25,27,0.14); border-radius: 5px; padding: 30px 30px 34px; background: #fdfcfa;">
-          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 26px;">
-            <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3px; color: #8a908c; margin: 0;">THE USUAL ROUTE</p>
-            <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #a8563c; border: 1px solid rgba(168,86,60,0.4); border-radius: 999px; padding: 6px 12px;">5 HANDS</span>
-          </div>
-          <sc-for list="{{ usual }}" as="n" hint-placeholder-count="5">
-            <div style="display: grid; grid-template-columns: 30px 1fr auto; gap: 16px; align-items: start; padding: 0 0 20px; position: relative; border-left: 1px solid {{ n.line }}; margin-left: 5px; padding-left: 22px;">
-              <span style="position: absolute; left: -5px; top: 5px; width: 9px; height: 9px; border-radius: 50%; background: {{ n.dot }};"></span>
-              <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #b3b7b2; padding-top: 3px;">{{ n.no }}</span>
-              <span style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
-                <span style="font-size: 16px; color: {{ n.fg }}; text-decoration: {{ n.deco }};">{{ n.who }}</span>
-                <span style="font-size: 13.5px; line-height: 1.5; color: #8a908c;">{{ n.cost }}</span>
-              </span>
-              <span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.8px; color: {{ n.tagFg }}; border: 1px solid {{ n.tagBorder }}; border-radius: 999px; padding: 5px 10px; white-space: nowrap;">{{ n.tag }}</span>
-            </div>
-          </sc-for>
-        </div>
-        <div data-reveal="1" style="border: 1px solid #5a7e8a; border-radius: 5px; padding: 30px 30px 34px; background: linear-gradient(150deg, rgba(90,126,138,0.1), rgba(90,126,138,0.03));">
-          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 26px;">
-            <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3px; color: #3e5d68; margin: 0;">WITH HOME &amp; ME</p>
-            <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #3e5d68; border: 1px solid rgba(62,93,104,0.4); border-radius: 999px; padding: 6px 12px;">3 HANDS</span>
-          </div>
-          <sc-for list="{{ direct }}" as="n" hint-placeholder-count="3">
-            <div style="display: grid; grid-template-columns: 30px 1fr; gap: 16px; align-items: start; padding: 0 0 20px; position: relative; border-left: 1px solid {{ n.line }}; margin-left: 5px; padding-left: 22px;">
-              <span style="position: absolute; left: -5px; top: 5px; width: 9px; height: 9px; border-radius: 50%; background: {{ n.dot }};"></span>
-              <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #5a7e8a; padding-top: 3px;">{{ n.no }}</span>
-              <span style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
-                <span style="font-size: 16px; color: #14191b;">{{ n.who }}</span>
-                <span style="font-size: 13.5px; line-height: 1.5; color: #6d746f;">{{ n.cost }}</span>
-              </span>
-            </div>
-          </sc-for>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section style="padding: 0 clamp(16px, 4vw, 44px) clamp(56px, 8vw, 104px);">
-    <div data-two="1" style="max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(20,25,27,0.14); border: 1px solid rgba(20,25,27,0.14); border-radius: 5px; overflow: hidden;">
-      <div data-reveal="1" style="background: #14191b; padding: clamp(28px, 3.5vw, 44px);">
-        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3px; color: #a9c4cc; margin: 0 0 26px;">WHAT YOU SEE</p>
-        <sc-for list="{{ weShow }}" as="i" hint-placeholder-count="4">
-          <p style="display: grid; grid-template-columns: 22px 1fr; gap: 12px; margin: 0 0 18px; font-size: 16px; line-height: 1.6; color: #f6f4ef;"><span style="color: #a9c4cc;">✓</span>{{ i }}</p>
-        </sc-for>
-      </div>
-      <div data-reveal="1" style="background: #fdfcfa; padding: clamp(28px, 3.5vw, 44px);">
-        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3px; color: #a8563c; margin: 0 0 26px;">WHAT WE DON'T DO</p>
-        <sc-for list="{{ weDont }}" as="i" hint-placeholder-count="4">
-          <p style="display: grid; grid-template-columns: 22px 1fr; gap: 12px; margin: 0 0 18px; font-size: 16px; line-height: 1.6; color: #4a5350;"><span style="color: #a8563c;">✕</span>{{ i }}</p>
-        </sc-for>
-      </div>
-    </div>
-  </section>
-
   <section id="floorplan-to-render" style="background: #f6f4ef; border-top: 1px solid rgba(20,25,27,0.1); padding: clamp(60px, 9vw, 120px) clamp(16px, 4vw, 44px); scroll-margin-top: 78px;">
     <div style="max-width: 1360px; margin: 0 auto;">
       <div data-reveal="1" style="max-width: 680px; margin-bottom: clamp(34px, 5vw, 58px);">
@@ -233,7 +171,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
           <img src="assets/how-it-works/step1-floor-plan.jpg" alt="Floor plan of a sample HDB flat, drawn by our engine" width="1600" height="1220" loading="lazy" style="width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: #ececea;">
           <figcaption style="padding: 22px 22px 28px; display: flex; flex-direction: column; gap: 10px;">
             <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 1.8px; color: #14191b;">1. SEND YOUR FLOOR PLAN</span>
-            <span style="font-size: 14.5px; line-height: 1.62; color: #4a5350;">Upload your HDB floor plan with your enquiry. We redraw it room by room.</span>
+            <span style="font-size: 14.5px; line-height: 1.62; color: #4a5350;">Send your floor plan if you have one, or tell us your rooms. We draw it up room by room.</span>
           </figcaption>
         </figure>
         <figure data-reveal="1" style="margin: 0; background: #fdfcfa; border: 1px solid rgba(20,25,27,0.12); border-radius: 5px; overflow: hidden; display: flex; flex-direction: column;">
@@ -259,69 +197,10 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
     </div>
   </section>
 
-  <section id="how" style="background: #fdfcfa; border-top: 1px solid rgba(20,25,27,0.1); border-bottom: 1px solid rgba(20,25,27,0.1); padding: clamp(60px, 9vw, 120px) clamp(16px, 4vw, 44px); scroll-margin-top: 78px;">
-    <div style="max-width: 1360px; margin: 0 auto;">
-      <div data-reveal="1" style="display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; flex-wrap: wrap; margin-bottom: clamp(34px, 5vw, 58px);">
-        <div style="max-width: 620px;">
-          <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(20,25,27,0.14); display: block; margin-bottom: 18px;">02</span>
-          <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 20px;">HOW IT WORKS</p>
-          <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0;">Five screens, then a real person.</h2>
-        </div>
-        <p style="font-size: 15.5px; line-height: 1.65; color: #6d746f; max-width: 300px; margin: 0;">About four minutes. Your non-contact project choices stay here for 24 hours, so you can finish later.</p>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(232px, 1fr)); gap: 1px; background: rgba(20,25,27,0.13); border-top: 1px solid rgba(20,25,27,0.13);">
-        <sc-for list="{{ how }}" as="s" hint-placeholder-count="5">
-          <div data-reveal="1" data-howcard="{{ s.i }}" style="background: #fdfcfa; padding: 28px 22px 34px; display: flex; flex-direction: column; gap: 12px; border-bottom: 2px solid {{ s.edge }}; transition: border-color 0.6s ease;">
-            <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 42px; line-height: 1; color: {{ s.numFg }}; transition: color 0.6s ease;">{{ s.no }}</span>
-            <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 1.8px; color: #14191b;">{{ s.title }}</span>
-            <span style="font-size: 14.5px; line-height: 1.62; color: #4a5350; text-wrap: pretty;">{{ s.body }}</span>
-          </div>
-        </sc-for>
-      </div>
-      <div style="margin-top: 40px; display: flex; align-items: center; gap: 22px; flex-wrap: wrap;">
-        <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #14191b; color: #f6f4ef; padding: 19px 36px; border-radius: 999px;" style-hover="background: #5a7e8a; color: #fff;">START ENQUIRY</a>
-        <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #8a908c;">FREE · NO OBLIGATION · NO SHOWROOM VISIT</span>
-      </div>
-    </div>
-  </section>
-
-  <section id="quote" style="background: #14191b; color: #f6f4ef; padding: clamp(60px, 9vw, 124px) clamp(16px, 4vw, 44px); scroll-margin-top: 78px;">
-    <div data-two="1" style="max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(30px, 5vw, 76px);">
-      <div data-sticky="1" style="position: sticky; top: 130px; align-self: start; min-width: 0;">
-        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(246,244,239,0.16); display: block; margin-bottom: 18px;">03</span>
-        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #a9c4cc; margin: 0 0 20px;">WHAT YOU'LL RECEIVE</p>
-        <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0 0 20px;">Watch your quote build itself.</h2>
-        <p style="font-size: 16.5px; line-height: 1.68; color: rgba(246,244,239,0.72); margin: 0; max-width: 44ch; text-wrap: pretty;">Keep scrolling — each line of an itemised quote arrives with the trade doing that work named against it. This is the format every Home &amp; Me quote takes.</p>
-        <div style="margin-top: 30px; max-width: 340px;">
-          <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #a9c4cc; margin: 0 0 12px;">{{ qCount }}</p>
-          <div style="height: 2px; background: rgba(246,244,239,0.16); border-radius: 2px; overflow: hidden;">
-            <div style="height: 100%; width: {{ qBar }}; background: #a9c4cc; transition: width 0.7s ease;"></div>
-          </div>
-        </div>
-      </div>
-      <div style="min-width: 0;">
-        <sc-for list="{{ qlines }}" as="l" hint-placeholder-count="5">
-          <div data-qline="{{ l.i }}" style="border-left: 2px solid {{ l.edge }}; opacity: {{ l.op }}; transform: {{ l.ty }}; transition: opacity 0.7s ease, transform 0.7s ease, border-color 0.7s ease; padding: 22px 0 22px 24px; border-bottom: 1px solid rgba(246,244,239,0.12); display: grid; gap: 7px;">
-            <div style="display: flex; justify-content: space-between; gap: 14px; align-items: baseline; flex-wrap: wrap;">
-              <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 2px; color: #f6f4ef;">{{ l.trade }}</span>
-              <span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 2px; color: #a9c4cc; border: 1px solid rgba(169,196,204,0.4); border-radius: 999px; padding: 5px 11px; white-space: nowrap;">{{ l.who }}</span>
-            </div>
-            <span style="font-size: 14.5px; line-height: 1.6; color: rgba(246,244,239,0.66);">{{ l.scope }}</span>
-          </div>
-        </sc-for>
-        <div style="margin-top: 26px; border: 1px solid rgba(169,196,204,0.35); border-radius: 5px; padding: 26px 26px 30px; background: linear-gradient(150deg, rgba(90,126,138,0.16), rgba(90,126,138,0.04)); opacity: {{ qDoneOp }}; transition: opacity 0.8s ease;">
-          <p style="font-size: 16.5px; line-height: 1.6; color: #f6f4ef; margin: 0 0 10px;">Every line arrives priced — in your quote, not on this page.</p>
-          <p style="font-size: 14.5px; line-height: 1.66; color: rgba(246,244,239,0.66); margin: 0 0 22px; text-wrap: pretty;">An honest number depends on your unit, its condition and your materials, so we don't publish rates that would be wrong for you. Start with the rooms and work you need. Add a floor plan if you have one.</p>
-          <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 12.5px; background: #f6f4ef; color: #14191b; padding: 16px 30px; border-radius: 999px; display: inline-block;" style-hover="background: #5a7e8a; color: #fff;">GET MY ITEMISED QUOTE</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section id="portfolio" style="padding: clamp(60px, 9vw, 120px) 0 clamp(56px, 8vw, 104px); scroll-margin-top: 78px;">
     <div data-reveal="1" style="max-width: 1360px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 44px) clamp(30px, 4vw, 46px); display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; flex-wrap: wrap;">
       <div style="max-width: 640px;">
-        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(20,25,27,0.14); display: block; margin-bottom: 18px;">04</span>
+        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(20,25,27,0.14); display: block; margin-bottom: 18px;">01</span>
         <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 20px;">OUR WORK</p>
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0 0 16px;">Seven designs. Take your time.</h2>
         <p style="font-size: 16px; line-height: 1.66; color: #4a5350; margin: 0; max-width: 48ch; text-wrap: pretty;">Every photo is a Home &amp; Me project visual. Scroll — each design introduces itself with its rooms. Start your enquiry in the one that feels like home.</p>
@@ -368,6 +247,123 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
             <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #8a908c;">{{ dCount }}</span>
             <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #8a908c;">{{ dViews }}</span>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="direct" style="padding: clamp(60px, 9vw, 128px) clamp(16px, 4vw, 44px) clamp(50px, 7vw, 90px); scroll-margin-top: 78px;">
+    <div data-two="1" style="max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(30px, 5vw, 76px);">
+      <div data-reveal="1" style="align-self: start; min-width: 0;">
+        {{ directPhoto }}
+        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(20,25,27,0.14); display: block; margin-bottom: 18px;">02</span>
+        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 20px;">WHY DIRECT</p>
+        <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0 0 20px;">Every hand between you and the trade has to earn something.</h2>
+        <p style="font-size: 16.5px; line-height: 1.68; color: #4a5350; margin: 0; max-width: 40ch; text-wrap: pretty;">Not because anyone is dishonest — that is simply how the chain is built. So we show you the route your job actually takes, and shorten it.</p>
+      </div>
+      <div style="min-width: 0; display: flex; flex-direction: column; gap: 18px;">
+        <div data-reveal="1" style="border: 1px solid rgba(20,25,27,0.14); border-radius: 5px; padding: 30px 30px 34px; background: #fdfcfa;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 26px;">
+            <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3px; color: #8a908c; margin: 0;">THE USUAL ROUTE</p>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #a8563c; border: 1px solid rgba(168,86,60,0.4); border-radius: 999px; padding: 6px 12px;">5 HANDS</span>
+          </div>
+          <sc-for list="{{ usual }}" as="n" hint-placeholder-count="5">
+            <div style="display: grid; grid-template-columns: 30px 1fr auto; gap: 16px; align-items: start; padding: 0 0 20px; position: relative; border-left: 1px solid {{ n.line }}; margin-left: 5px; padding-left: 22px;">
+              <span style="position: absolute; left: -5px; top: 5px; width: 9px; height: 9px; border-radius: 50%; background: {{ n.dot }};"></span>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #b3b7b2; padding-top: 3px;">{{ n.no }}</span>
+              <span style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                <span style="font-size: 16px; color: {{ n.fg }}; text-decoration: {{ n.deco }};">{{ n.who }}</span>
+                <span style="font-size: 13.5px; line-height: 1.5; color: #8a908c;">{{ n.cost }}</span>
+              </span>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.8px; color: {{ n.tagFg }}; border: 1px solid {{ n.tagBorder }}; border-radius: 999px; padding: 5px 10px; white-space: nowrap;">{{ n.tag }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div data-reveal="1" style="border: 1px solid #5a7e8a; border-radius: 5px; padding: 30px 30px 34px; background: linear-gradient(150deg, rgba(90,126,138,0.1), rgba(90,126,138,0.03));">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 26px;">
+            <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3px; color: #3e5d68; margin: 0;">WITH HOME &amp; ME</p>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 2.2px; color: #3e5d68; border: 1px solid rgba(62,93,104,0.4); border-radius: 999px; padding: 6px 12px;">3 HANDS</span>
+          </div>
+          <sc-for list="{{ direct }}" as="n" hint-placeholder-count="3">
+            <div style="display: grid; grid-template-columns: 30px 1fr; gap: 16px; align-items: start; padding: 0 0 20px; position: relative; border-left: 1px solid {{ n.line }}; margin-left: 5px; padding-left: 22px;">
+              <span style="position: absolute; left: -5px; top: 5px; width: 9px; height: 9px; border-radius: 50%; background: {{ n.dot }};"></span>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.6px; color: #5a7e8a; padding-top: 3px;">{{ n.no }}</span>
+              <span style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                <span style="font-size: 16px; color: #14191b;">{{ n.who }}</span>
+                <span style="font-size: 13.5px; line-height: 1.5; color: #6d746f;">{{ n.cost }}</span>
+              </span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    <div data-two="1" style="max-width: 1360px; margin: clamp(40px, 5vw, 64px) auto 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(20,25,27,0.14); border: 1px solid rgba(20,25,27,0.14); border-radius: 5px; overflow: hidden;">
+      <div data-reveal="1" style="background: #14191b; padding: clamp(28px, 3.5vw, 44px);">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3px; color: #a9c4cc; margin: 0 0 26px;">WHAT YOU SEE</p>
+        <sc-for list="{{ weShow }}" as="i" hint-placeholder-count="3">
+          <p style="display: grid; grid-template-columns: 22px 1fr; gap: 12px; margin: 0 0 18px; font-size: 16px; line-height: 1.6; color: #f6f4ef;"><span style="color: #a9c4cc;">✓</span>{{ i }}</p>
+        </sc-for>
+      </div>
+      <div data-reveal="1" style="background: #fdfcfa; padding: clamp(28px, 3.5vw, 44px);">
+        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3px; color: #a8563c; margin: 0 0 26px;">WHAT WE DON'T DO</p>
+        <sc-for list="{{ weDont }}" as="i" hint-placeholder-count="3">
+          <p style="display: grid; grid-template-columns: 22px 1fr; gap: 12px; margin: 0 0 18px; font-size: 16px; line-height: 1.6; color: #4a5350;"><span style="color: #a8563c;">✕</span>{{ i }}</p>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" style="background: #fdfcfa; border-top: 1px solid rgba(20,25,27,0.1); border-bottom: 1px solid rgba(20,25,27,0.1); padding: clamp(60px, 9vw, 120px) clamp(16px, 4vw, 44px); scroll-margin-top: 78px;">
+    <div style="max-width: 1360px; margin: 0 auto;">
+      <div data-two="1" data-reveal="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 5vw, 76px); align-items: center; margin-bottom: clamp(34px, 5vw, 58px);">
+        <img src="assets/portfolio/muji-5-room-hdb-design-02-living-hall.jpg" alt="Muji-style 5-room HDB living and dining area, a Home &amp; Me project" width="1600" height="800" loading="lazy" style="width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 5px; display: block; background: #ececea;">
+        <div style="min-width: 0;">
+          <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(20,25,27,0.14); display: block; margin-bottom: 18px;">03</span>
+          <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 20px;">HOW IT WORKS</p>
+          <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0 0 20px;">Five short screens. About four minutes.</h2>
+          <p style="font-size: 16px; line-height: 1.65; color: #4a5350; max-width: 44ch; margin: 0;">Your non-contact project choices stay here for 24 hours, so you can finish later.</p>
+          <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.4px; color: #8a908c; margin: 22px 0 0;">FREE · NO OBLIGATION · NO SHOWROOM VISIT</p>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(232px, 1fr)); gap: 1px; background: rgba(20,25,27,0.13); border-top: 1px solid rgba(20,25,27,0.13);">
+        <sc-for list="{{ how }}" as="s" hint-placeholder-count="5">
+          <div data-reveal="1" data-howcard="{{ s.i }}" style="background: #fdfcfa; padding: 28px 22px 34px; display: flex; flex-direction: column; gap: 12px; border-bottom: 2px solid {{ s.edge }}; transition: border-color 0.6s ease;">
+            <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 42px; line-height: 1; color: {{ s.numFg }}; transition: color 0.6s ease;">{{ s.no }}</span>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 1.8px; color: #14191b;">{{ s.title }}</span>
+            <span style="font-size: 14.5px; line-height: 1.62; color: #4a5350; text-wrap: pretty;">{{ s.body }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="quote" style="background: #14191b; color: #f6f4ef; padding: clamp(60px, 9vw, 124px) clamp(16px, 4vw, 44px); scroll-margin-top: 78px;">
+    <div data-two="1" style="max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(30px, 5vw, 76px);">
+      <div data-sticky="1" style="position: sticky; top: 130px; align-self: start; min-width: 0;">
+        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(246,244,239,0.16); display: block; margin-bottom: 18px;">04</span>
+        <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #a9c4cc; margin: 0 0 20px;">WHAT YOU'LL RECEIVE</p>
+        <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0 0 20px;">Watch your quote build itself.</h2>
+        <p style="font-size: 16.5px; line-height: 1.68; color: rgba(246,244,239,0.72); margin: 0; max-width: 44ch; text-wrap: pretty;">Keep scrolling — each line of an itemised quote arrives with the trade doing that work named against it. This is the format every Home &amp; Me quote takes.</p>
+        <div style="margin-top: 30px; max-width: 340px;">
+          <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #a9c4cc; margin: 0 0 12px;">{{ qCount }}</p>
+          <div style="height: 2px; background: rgba(246,244,239,0.16); border-radius: 2px; overflow: hidden;">
+            <div style="height: 100%; width: {{ qBar }}; background: #a9c4cc; transition: width 0.7s ease;"></div>
+          </div>
+        </div>
+      </div>
+      <div style="min-width: 0;">
+        <sc-for list="{{ qlines }}" as="l" hint-placeholder-count="5">
+          <div data-qline="{{ l.i }}" style="border-left: 2px solid {{ l.edge }}; opacity: {{ l.op }}; transform: {{ l.ty }}; transition: opacity 0.7s ease, transform 0.7s ease, border-color 0.7s ease; padding: 22px 0 22px 24px; border-bottom: 1px solid rgba(246,244,239,0.12); display: grid; gap: 7px;">
+            <div style="display: flex; justify-content: space-between; gap: 14px; align-items: baseline; flex-wrap: wrap;">
+              <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 2px; color: #f6f4ef;">{{ l.trade }}</span>
+              <span style="font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 2px; color: #a9c4cc; border: 1px solid rgba(169,196,204,0.4); border-radius: 999px; padding: 5px 11px; white-space: nowrap;">{{ l.who }}</span>
+            </div>
+            <span style="font-size: 14.5px; line-height: 1.6; color: rgba(246,244,239,0.66);">{{ l.scope }}</span>
+          </div>
+        </sc-for>
+        <div style="margin-top: 26px; border: 1px solid rgba(169,196,204,0.35); border-radius: 5px; padding: 26px 26px 30px; background: linear-gradient(150deg, rgba(90,126,138,0.16), rgba(90,126,138,0.04)); opacity: {{ qDoneOp }}; transition: opacity 0.8s ease;">
+          <p style="font-size: 16.5px; line-height: 1.6; color: #f6f4ef; margin: 0 0 10px;">Every line arrives priced — in your quote, not on this page.</p>
+          <p style="font-size: 14.5px; line-height: 1.66; color: rgba(246,244,239,0.66); margin: 0; text-wrap: pretty;">An honest number depends on your unit, its condition and your materials, so we don't publish rates that would be wrong for you. Start with the rooms and work you need.</p>
         </div>
       </div>
     </div>
@@ -432,7 +428,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
   <section style="position: relative; overflow: hidden; background: #5a7e8a; color: #fff; padding: clamp(64px, 9vw, 120px) clamp(16px, 4vw, 44px); text-align: center;">
     <div style="position: relative; max-width: 900px; margin: 0 auto;">
       <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(34px, 6vw, 74px); line-height: 1.02; letter-spacing: -1px; margin: 0 0 22px;">Start with the job, not the document.</h2>
-      <p style="font-size: 17px; line-height: 1.66; color: rgba(255,255,255,0.88); margin: 0 0 34px;">Choose whole home or selected rooms. Add a floor plan if you have one. Five screens, then a human review.</p>
+      <p style="font-size: 17px; line-height: 1.66; color: rgba(255,255,255,0.88); margin: 0 0 34px;">Choose whole home or selected rooms. It takes about four minutes, and it is free.</p>
       <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
         <a href="Renovation%20Enquiry.dc.html" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; background: #14191b; color: #f6f4ef; padding: 19px 36px; border-radius: 999px;" style-hover="background: #f6f4ef; color: #14191b;">START ENQUIRY</a>
         <a sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener" style="font-family: 'Oswald', sans-serif; letter-spacing: 2.4px; font-size: 13px; border: 1px solid rgba(255,255,255,0.55); color: #fff; padding: 19px 34px; border-radius: 999px;" style-hover="background: rgba(255,255,255,0.14);">WHATSAPP {{ waPretty }}</a>
@@ -753,6 +749,12 @@ class Component extends DCLogic {
       email,
       mailTo: 'mailto:' + email + '?subject=' + encodeURIComponent('Renovation enquiry — Home & Me'),
       tickerRows: [{ items: TICKER }, { items: TICKER }],
+      directPhoto: React.createElement('img', {
+        src: 'assets/portfolio/scandinavian-4-room-hdb-design-01-living-hall.jpg',
+        alt: 'Scandinavian 4-room HDB living hall, a Home & Me project',
+        width: 1600, height: 800, loading: 'lazy',
+        style: { width: '100%', height: 'auto', aspectRatio: '3 / 2', objectFit: 'cover', borderRadius: '5px', display: 'block', background: '#ececea', marginBottom: '34px' },
+      }),
       iconHome: this.icon('home'), iconWork: this.icon('work'),
       iconPlan: this.icon('plan'), iconChat: this.icon('chat'),
 
@@ -774,20 +776,18 @@ class Component extends DCLogic {
         teal('03', 'The contractor doing the work', 'quotes you directly, itemised'),
       ],
       weShow: [
-        'The contractor’s own itemised quote — line by line, per trade.',
         'Who is doing the work, and which trades are subcontracted.',
         'What is excluded, before you sign anything.',
         'Any variation in writing, with the reason for it.',
       ],
       weDont: [
         'Mark up your tiles, sanitary ware or carpentry.',
-        'Pay sales commission out of your renovation budget.',
         'Bundle you into a package you did not ask for.',
         'Sell or share your details with other firms.',
       ],
       how: [
         { no: '01', title: 'PROJECT FIT', body: 'Choose whole home or selected rooms, then add the property details you know.' },
-        { no: '02', title: 'YOUR PRIORITIES', body: 'The questions adapt to your route. Add room scope first or start with optional plans and style.' },
+        { no: '02', title: 'YOUR PRIORITIES', body: 'The questions adapt to your route. Add room scope first or start with your style.' },
         { no: '03', title: 'COMPLETE THE BRIEF', body: 'Add the remaining room details, timing and references. Contractor to advise is a complete answer when you are unsure.' },
         { no: '04', title: 'CONTACT DETAILS', body: 'Add your address and contact details after the project brief. They are not saved in browser storage.' },
         { no: '05', title: 'REVIEW & SEND', body: 'Review the enquiry and press send. It is stored securely, then our team is alerted by WhatsApp and email.' },
