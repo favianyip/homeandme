@@ -682,6 +682,7 @@ const DESIGN_LINK_PREFIX = 'https://spark-792d-old.tail223b04.ts.net/design-';
 const TRACK_STORE = 'hnm.track.v1';
 const POLL_MS = 30000;
 const POLL_GIVE_UP_MS = 3 * 60 * 60 * 1000;
+const TRACK_KEEP_MS = 14 * 24 * 60 * 60 * 1000;
 const TRACK_STEPS = ['received', 'designing', 'checking', 'ready'];
 const REF_RE = /^HNM-\d{6}-\d{4}$/;
 const KEY_RE = /^[0-9a-f]{32}$/;
@@ -715,6 +716,14 @@ function readStatus(httpStatus, body) {
 }
 function keepPolling(step, startedAt, now) {
   return step !== 'ready' && step !== 'stopped' && (now - startedAt) < POLL_GIVE_UP_MS;
+}
+// Saved entry -> { ref, statusKey, at } while under 14 days old, else null (then the normal form shows).
+function readSavedTrack(saved, now) {
+  if (!saved || typeof saved !== 'object') return null;
+  const t = parseTrack(saved.ref + '.' + saved.statusKey);
+  const at = saved.at;
+  if (!t || typeof at !== 'number' || !isFinite(at) || at > now || now - at >= TRACK_KEEP_MS) return null;
+  return { ref: t.ref, statusKey: t.statusKey, at };
 }
 // FAV-50 design-link helpers (end)
 const CONSENT_VERSION = '2026-08-22';
@@ -904,17 +913,28 @@ class Component extends DCLogic {
     document.addEventListener('visibilitychange', this.onVisibility);
     window.addEventListener('focus', this.onVisibility);
     window.addEventListener('hashchange', this.onHash);
-    let resume = trackFromHash(location.hash);
-    if (!resume) {
-      try { const saved = JSON.parse(localStorage.getItem(TRACK_STORE) || 'null'); resume = saved ? parseTrack(saved.ref + '.' + saved.statusKey) : null; } catch (e) { resume = null; }
-    }
-    if (resume) this.startTracking(resume.ref, resume.statusKey);
+    let saved = null;
+    try {
+      const raw = JSON.parse(localStorage.getItem(TRACK_STORE) || 'null');
+      saved = readSavedTrack(raw, Date.now());
+      if (raw && !saved) localStorage.removeItem(TRACK_STORE); // older than 14 days or damaged
+    } catch (e) { saved = null; }
+    const fromHash = trackFromHash(location.hash);
+    if (fromHash) {
+      const same = saved && saved.ref === fromHash.ref && saved.statusKey === fromHash.statusKey;
+      this.startTracking(fromHash.ref, fromHash.statusKey, same ? saved.at : undefined);
+    } else if (saved) this.startTracking(saved.ref, saved.statusKey, saved.at);
   }
 
   // FAV-50: after a send, the same page shows progress and, when ready, the design link.
-  startTracking(ref, statusKey) {
-    try { localStorage.setItem(TRACK_STORE, JSON.stringify({ ref, statusKey, at: Date.now() })); } catch (e) { /* private mode */ }
-    this._pollStart = Date.now();
+  // savedAt: when this enquiry was sent (resume), so the 3-hour give-up does not restart on reload.
+  startTracking(ref, statusKey, savedAt) {
+    if (typeof savedAt === 'number') this._pollStart = savedAt;
+    else {
+      try { localStorage.setItem(TRACK_STORE, JSON.stringify({ ref, statusKey, at: Date.now() })); } catch (e) { /* private mode */ }
+      this._pollStart = Date.now();
+    }
+    this._checkOnce = true; // always ask once, so a design finished after 3 hours still shows
     this.setState({ track: { ref, statusKey, step: 'received', link: '' }, trackGaveUp: false, trackCopied: false }, () => { window.scrollTo(0, 0); this.poll(); });
   }
 
@@ -922,12 +942,13 @@ class Component extends DCLogic {
     clearTimeout(this._pollTimer);
     const t = this.state.track;
     if (!t || this._polling) return;
-    if (!keepPolling(t.step, this._pollStart, Date.now())) {
+    if (!this._checkOnce && !keepPolling(t.step, this._pollStart, Date.now())) {
       if (t.step !== 'ready' && t.step !== 'stopped') this.setState({ trackGaveUp: true });
       return;
     }
     if (document.hidden) return; // resumes on visibilitychange / focus
     this._polling = true;
+    this._checkOnce = false;
     this._lastPoll = Date.now();
     let next = null;
     try {
@@ -1655,7 +1676,7 @@ class Component extends DCLogic {
       current: i === at && t.step !== 'ready' && t.step !== 'stopped' ? 'step' : 'false',
     }));
     const wa = this.waTarget();
-    let trackNote = 'Usually within 30 minutes. You can keep this page open.';
+    let trackNote = 'Our designer checks every design before it is ready. Usually within 30 minutes in the daytime. You can keep this page open.';
     let trackTitle = 'We are making your free design';
     if (t.step === 'ready') { trackTitle = 'Your free design is ready'; trackNote = 'Open it below. It opens in a new tab.'; }
     else if (t.step === 'stopped') { trackTitle = 'Thank you, we have your floor plan'; trackNote = 'We need a closer look at your floor plan. We will contact you.'; }

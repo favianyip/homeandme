@@ -65,7 +65,7 @@ test('#track parsing is strict', () => {
     '#track=HNM-261101-1234.' + KEY + '\n', null, undefined, 7,
   ]) assert.equal(h.trackFromHash(bad), null, JSON.stringify(bad));
   assert.equal(h.parseTrack('<script>.' + KEY), null);
-  assert.match(page, /saved \? parseTrack\(saved\.ref \+ '\.' \+ saved\.statusKey\) : null/, 'saved entry validated the same way');
+  assert.match(page, /const t = parseTrack\(saved\.ref \+ '\.' \+ saved\.statusKey\);/, 'saved entry validated the same way');
 });
 
 test('404 reads as received; other replies map to the 4 steps or keep the last state', () => {
@@ -92,7 +92,7 @@ test('polling every 30 s stops at ready or stopped and gives up after 3 hours', 
 });
 
 test('customer copy: plain, no instant, no quote; come-back link and new enquiry', () => {
-  for (const text of ['Usually within 30 minutes. You can keep this page open.', "'Our designer is checking it'",
+  for (const text of ['Our designer checks every design before it is ready. Usually within 30 minutes in the daytime. You can keep this page open.', "'Our designer is checking it'",
     'We need a closer look at your floor plan. We will contact you.', 'Closing this page? Save this link to check your design later.',
     "'COPY LINK'", 'START A NEW ENQUIRY', "'#track=' + t.ref + '.' + t.statusKey"]) assert.ok(page.includes(text), text);
   const view = page.match(/  trackView\(\) \{[\s\S]*?\n  \}\n/)[0] + page.match(/<sc-if value="\{\{ tracking \}\}"[\s\S]*?\n    <\/sc-if>/)[0];
