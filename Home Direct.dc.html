@@ -48,6 +48,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
   [data-imgfirst] { order: -1; }
   [data-sticky] { position: static !important; }
   [data-overlap] { margin: 0 !important; }
+  [data-imgfirst] img { aspect-ratio: 3 / 2 !important; }
 }
 @media (max-width: 1100px) { [data-masonry] { column-count: 2 !important; } }
 @media (max-width: 720px) { [data-f2r] { grid-template-columns: 1fr !important; } }
@@ -126,7 +127,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
   </sc-if>
 
   <section id="top" tabindex="-1" style="position: relative; min-height: min(94vh, 940px); background: #14191b; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;">
-    <img src="assets/portfolio/hero-minimalist-living.jpg" alt="Minimalist 5-room HDB living hall, a Home &amp; Me project" width="1900" height="950" fetchpriority="high" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.96;">
+    <img src="assets/portfolio/hero-minimalist-living.jpg" alt="Minimalist 5-room HDB living hall design" width="1900" height="950" fetchpriority="high" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.96;">
     <div style="position: absolute; inset: 0; background: linear-gradient(96deg, rgba(20,25,27,0.92) 0%, rgba(20,25,27,0.78) 34%, rgba(20,25,27,0.34) 62%, rgba(20,25,27,0.1) 100%);"></div>
     <div style="position: absolute; inset: auto 0 0 0; height: 46%; background: linear-gradient(to top, rgba(20,25,27,0.82), rgba(20,25,27,0));"></div>
     <div style="position: relative; max-width: 1360px; width: 100%; margin: 0 auto; padding: 168px clamp(16px, 4vw, 44px) 0; box-sizing: border-box;">
@@ -183,11 +184,10 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
           </figcaption>
         </figure>
         <figure data-reveal="1" style="margin: 0; background: #fdfcfa; border: 1px solid rgba(20,25,27,0.12); border-radius: 5px; overflow: hidden; display: flex; flex-direction: column;">
-          <!-- FAV-87: step 3 image slot -->
-          <img src="assets/portfolio/minimalist-5-room-hdb-design-01-living-hall.jpg" alt="Example finished design: a minimalist HDB living hall" width="1600" height="800" loading="lazy" style="width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: #ececea;">
+          <img src="assets/portfolio/modern-classic-3-room-hdb-design-02-living-hall.jpg" alt="Example finished design: a modern classic HDB living hall" width="1600" height="800" loading="lazy" style="width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: #ececea;">
           <figcaption style="padding: 22px 22px 28px; display: flex; flex-direction: column; gap: 10px;">
             <span style="font-family: 'Oswald', sans-serif; font-size: 13.5px; letter-spacing: 1.8px; color: #14191b;">3. YOU GET YOUR DESIGN, RENDERED</span>
-            <span style="font-size: 14.5px; line-height: 1.62; color: #4a5350;">We render your flat in the style you choose, free. Example finished design (minimalist style).</span>
+            <span style="font-size: 14.5px; line-height: 1.62; color: #4a5350;">We render your flat in the style you choose, free. Example finished design (modern classic style).</span>
           </figcaption>
         </figure>
       </div>
@@ -204,7 +204,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid #5a7e8a !important; o
         <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(64px, 8vw, 104px); line-height: 0.85; color: rgba(20,25,27,0.14); display: block; margin-bottom: 18px;">01</span>
         <p style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3.6px; color: #5a7e8a; margin: 0 0 20px;">OUR WORK</p>
         <h2 style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.4vw, 54px); line-height: 1.06; letter-spacing: -0.6px; margin: 0 0 16px;">Seven designs. Take your time.</h2>
-        <p style="font-size: 16px; line-height: 1.66; color: #4a5350; margin: 0; max-width: 48ch; text-wrap: pretty;">Every photo is a Home &amp; Me project visual. Scroll — each design introduces itself with its rooms. Start your enquiry in the one that feels like home.</p>
+        <p style="font-size: 16px; line-height: 1.66; color: #4a5350; margin: 0; max-width: 48ch; text-wrap: pretty;">Every photo is a Home &amp; Me design visual. Scroll — each design introduces itself with its rooms. Start your enquiry in the one that feels like home.</p>
       </div>
       <span style="font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2.6px; color: #8a908c; border: 1px solid rgba(20,25,27,0.2); border-radius: 999px; padding: 10px 18px;">{{ galleryCount }}</span>
     </div>
@@ -513,9 +513,7 @@ const ICONS = {
   chat: 'M21 11.5a8.4 8.4 0 0 1-9 8.5 9 9 0 0 1-3.9-.9L3 21l1.9-4.6A8.4 8.4 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5z',
 };
 
-// Completed-work gallery. The hero holds its own clean export (hero-minimalist-living,
-// the one image on the page without the corner mark); the coordinator section holds
-// contemporary-4-room design-02; these 25 photos back the design-by-design scroll:
+// Design gallery: 25 photos, seven styles. These back the design-by-design scroll:
 // the left column steps through the seven style families, the sticky right stage
 // crossfades to the active design's rooms.
 const STYLE_ORDER = ['contemporary', 'modern-classic', 'muji', 'modern-oriental', 'minimalist', 'industrial', 'scandinavian'];
