@@ -7,13 +7,13 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Home &amp; Me">
 <meta property="og:title" content="Renovation Enquiry — Home &amp; Me">
-<meta property="og:description" content="Build a renovation scope from your floor plan, preferred styles, rooms and trades, then send it to the Home &amp; Me Singapore team in one tap.">
+<meta property="og:description" content="Send your floor plan and pick your styles. Home &amp; Me prepares a full design render of your home and sends it to you free, checked by a person.">
 <meta property="og:url" content="https://homeandme.sg/Renovation%20Enquiry.dc.html">
 <meta property="og:image" content="https://homeandme.sg/assets/images/og-home.png">
 <meta name="twitter:card" content="summary_large_image">
 
 <title>Renovation Enquiry — Home &amp; Me</title>
-<meta name="description" content="Build a renovation scope from your floor plan, preferred styles, rooms and trades, then send it to the Home &amp; Me Singapore team in one tap.">
+<meta name="description" content="Send your floor plan and pick your styles. Home &amp; Me prepares a full design render of your home and sends it to you free, checked by a person.">
 <meta name="theme-color" content="#f2efe9">
 <link rel="canonical" href="https://homeandme.sg/Renovation%20Enquiry.dc.html">
 <script src="./support.js"></script>
@@ -277,7 +277,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
         <div class="screen-heading">
           <span class="eyebrow">PROJECT FIT</span>
           <h1 data-step-heading="1" tabindex="-1">What are you renovating?</h1>
-          <p>Choose the closest fit. The next questions change around the work, while the full five-screen journey stays.</p>
+          <p>Send your floor plan and pick your styles. We prepare a full design render of your home and send it to you free, checked by a person. Start with the closest fit.</p>
         </div>
         <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><p class="error-summary" role="alert">{{ hint }}</p></sc-if>
 
@@ -294,7 +294,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
               <img src="assets/portfolio/cards/modern-oriental-5-room-hdb-design-01-living-hall.jpg" alt="Modern Oriental Home &amp; Me completed living room project" width="640" height="360" fetchpriority="high">
               <span class="route-card-copy">
                 <span class="route-card-name">SELECTED ROOMS</span>
-                <span class="route-card-note">Quote only the rooms you choose.</span>
+                <span class="route-card-note">Plan only the rooms you choose.</span>
               </span>
             </button>
           </div>
@@ -343,7 +343,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
           <sc-if value="{{ wholeRoute }}" hint-placeholder-val="{{ false }}">
             <div class="truth-panel">
               <strong>WHOLE HOME IS SELECTED</strong>
-              <p>All rooms stay visible on the scope screen, where each one can be itemised or marked for contractor advice.</p>
+              <p>All rooms stay visible on the scope screen, where you can pick the work for each one.</p>
             </div>
           </sc-if>
 
@@ -394,8 +394,8 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
           </div>
           <div class="form-section plan-meta">
             <div>
-              <span class="eyebrow">HUMAN REVIEW</span>
-              <p class="truth-note">A Home &amp; Me coordinator reviews the original with your brief. This is not automatic floor-plan reading.</p>
+              <span class="eyebrow">YOUR FREE RENDER</span>
+              <p class="truth-note">Our team uses your floor plan and chosen styles to prepare a full design render of your home. A person checks it, then we send it to you free. It is not instant. This is not automatic floor-plan reading.</p>
             </div>
             <div data-plan-fields="1" class="field-grid">
               <label class="field">
@@ -407,7 +407,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
                 <input type="tel" inputmode="decimal" name="sqm" value="{{ f.sqm }}" onInput="{{ setSqm }}" placeholder="e.g. 93…" maxlength="6" autocomplete="off">
               </label>
             </div>
-            <p class="truth-note">Both fields are optional. What you type is what the contractor reads.</p>
+            <p class="truth-note">Both fields are optional. What you type is what our team reads.</p>
           </div>
         </div>
 
@@ -431,7 +431,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
           </button>
           <sc-if value="{{ conceptsOpen }}" hint-placeholder-val="{{ false }}">
             <div class="concept-drawer">
-              <p>These are AI-visualised design directions, not completed projects or renders of your unit.</p>
+              <p>These are AI-visualised design directions, not completed projects or renders of your unit. Your own render comes after you send your floor plan.</p>
               <div class="style-rail" aria-label="AI-visualised design directions">
                 <sc-for list="{{ conceptStyleCards }}" as="c" hint-placeholder-count="26">
                   <button class="style-card" type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.on }}">
@@ -453,7 +453,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
               </label>
             </sc-if>
           </div>
-          <p class="truth-note" style="margin-top: 12px;">Project photos show completed Home &amp; Me work; the remaining styles are AI-visualised design directions, not completed projects or renders of your unit.</p>
+          <p class="truth-note" style="margin-top: 12px;">Project photos show completed Home &amp; Me work; the remaining styles are AI-visualised design directions, not completed projects or renders of your unit. Your own free render comes after you send your floor plan.</p>
         </div>
         <sc-if value="{{ showTimingOnIdeas }}" hint-placeholder-val="{{ false }}">
           <div class="form-section" style="margin-top: 22px;">
@@ -480,17 +480,17 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
           <button class="text-button" type="button" onClick="{{ changeRoute }}">CHANGE PROJECT</button>
         </div>
         <div class="scope-toolbar">
-          <p>Choose the work you know. Advice is a complete answer when you are unsure.</p>
-          <button class="text-button" type="button" onClick="{{ markAllAdvice }}">MARK ALL UNDECIDED FOR ADVICE</button>
+          <p>{{ scopeToolbarNote }}</p>
+          <sc-if value="{{ showContractorOptions }}" hint-placeholder-val="{{ false }}"><button class="text-button" type="button" onClick="{{ markAllAdvice }}">MARK ALL UNDECIDED FOR ADVICE</button></sc-if>
         </div>
         <div>
           <sc-for list="{{ scopeGroups }}" as="g" hint-placeholder-count="9">
             <details class="scope-group" open="{{ g.open }}">
               <summary><strong>{{ g.name }}</strong><span class="scope-status">{{ g.status }}</span></summary>
               <div class="scope-content">
-                <p class="scope-help">Choose one or more trades, or ask the contractor to advise after reviewing the unit.</p>
+                <p class="scope-help">{{ scopeHelp }}</p>
                 <div class="chip-group">
-                  <button class="choice-chip advice" type="button" onClick="{{ g.pickAdvice }}" aria-pressed="{{ g.adviceOn }}">CONTRACTOR TO ADVISE</button>
+                  <sc-if value="{{ showContractorOptions }}" hint-placeholder-val="{{ false }}"><button class="choice-chip advice" type="button" onClick="{{ g.pickAdvice }}" aria-pressed="{{ g.adviceOn }}">CONTRACTOR TO ADVISE</button></sc-if>
                   <sc-for list="{{ g.trades }}" as="t" hint-placeholder-count="12">
                     <button class="choice-chip" type="button" onClick="{{ t.pick }}" title="{{ t.note }}" aria-pressed="{{ t.on }}">{{ t.label }}</button>
                   </sc-for>
@@ -501,7 +501,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
         </div>
         <div class="form-section" style="margin-top: 14px;">
           <label class="field">
-            <span class="field-label">WHAT SHOULD THE CONTRACTOR KNOW?</span>
+            <span class="field-label">ANYTHING ELSE WE SHOULD KNOW?</span>
             <textarea name="notes" rows="4" value="{{ f.notes }}" onInput="{{ setNotes }}" maxlength="1800" autocomplete="off" placeholder="For example: the bathroom leaks, the kitchen storage is not working, or you plan to keep the existing cabinets…"></textarea>
             <span class="field-note">Plain language is enough. You do not need to name the trade.</span>
           </label>
@@ -522,7 +522,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
         <div class="screen-heading">
           <span class="eyebrow">PRIVATE CONTACT DETAILS</span>
           <h1 data-step-heading="1" tabindex="-1">Where can we reach you?</h1>
-          <p>Your project brief is ready. Add the details needed for a human review and a useful quote.</p>
+          <p>Your project brief is ready. Add your details so we can send you your free design render.</p>
         </div>
         <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><p class="error-summary" role="alert">{{ hint }}</p></sc-if>
         <div class="route-summary">
@@ -531,7 +531,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
           <button class="text-button" type="button" onClick="{{ changeRoute }}">CHANGE PROJECT</button>
         </div>
         <div class="contact-intro">
-          <div class="why-card"><strong>WHY THE EXACT ADDRESS?</strong><p>Access, floor level and town affect how a contractor prepares the itemised quote.</p></div>
+          <div class="why-card"><strong>WHY THE EXACT ADDRESS?</strong><p>Block, floor level and town help us match the right layout for your home.</p></div>
           <div class="why-card"><strong>WHO SEES IT?</strong><p>Your details reach the Home &amp; Me team handling this enquiry. Read the <a class="inline-link" href="Legal.dc.html" target="_blank" rel="noopener">privacy terms</a>.</p></div>
         </div>
         <div class="form-section">
@@ -566,6 +566,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
             </sc-for>
           </div>
           <div class="review-side">
+            <sc-if value="{{ showContractorOptions }}" hint-placeholder-val="{{ false }}">
             <div class="coordinator-card" style="border: 1.5px solid {{ coordBorder }}; border-radius: 18px; background: {{ coordBg }}; padding: 17px;">
               <label style="display: flex; gap: 14px; align-items: flex-start; cursor: pointer;">
                 <span style="flex: none; width: 52px; height: 30px; border-radius: 999px; background: {{ switchBg }}; position: relative; transition: background 0.25s ease; margin-top: 2px;">
@@ -578,6 +579,8 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
                 </span>
               </label>
             </div>
+            </sc-if>
+            <p class="truth-note" style="margin: 0;">After you receive your free render, you can choose what happens next: use your own contractor, let us connect you with a direct contractor, or hire a coordinator (paid service).</p>
             <label class="consent-card">
               <input type="checkbox" name="consent" checked="{{ f.consent }}" onChange="{{ toggleConsent }}" disabled="{{ sending }}">
               <span style="font-size: 13.5px; line-height: 1.55; color: #4a5350;">I agree Home &amp; Me may store this enquiry and contact me on WhatsApp, phone or email about it. No marketing lists, no passing my details to other firms.</span>
@@ -587,6 +590,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
               <div class="sent-panel" role="status">
                 <strong>{{ sentTitle }}</strong>
                 <p>{{ sentNote }}</p>
+                <sc-if value="{{ showManualWa }}" hint-placeholder-val="{{ false }}"><a class="choice-chip" sc-camel-href="{{ waFallbackHref }}" target="_blank" rel="noopener" style="display: inline-block; text-decoration: none; margin: 0 8px 8px 0;">MESSAGE US ON WHATSAPP</a></sc-if>
                 <button class="choice-chip" type="button" onClick="{{ copyText }}">{{ copyLabel }}</button>
               </div>
             </sc-if>
@@ -596,7 +600,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
       </section>
     </sc-if>
 
-    <div data-desk="1" style="display: none; margin: 44px 0 0; padding-top: 22px; border-top: 1px solid rgba(20,25,27,0.12); font-size: 13px; color: #8a908c;">Home &amp; Me · Singapore · direct-contractor renovation, no middleman markup. Questions before you send? <a class="inline-link" sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener">WhatsApp {{ waPretty }}</a> · <a class="inline-link" sc-camel-href="{{ mailTo }}">{{ email }}</a></div>
+    <div data-desk="1" style="display: none; margin: 44px 0 0; padding-top: 22px; border-top: 1px solid rgba(20,25,27,0.12); font-size: 13px; color: #8a908c;">Home &amp; Me · Singapore · free design render from your floor plan. Questions before you send? <a class="inline-link" sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener">WhatsApp {{ waPretty }}</a> · <a class="inline-link" sc-camel-href="{{ mailTo }}">{{ email }}</a></div>
   </main>
 
   <sc-if value="{{ showAction }}" hint-placeholder-val="{{ false }}">
@@ -604,6 +608,9 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
       <div data-barinner="1" style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
         <button data-primary="1" type="button" onClick="{{ primary }}" disabled="{{ primaryDisabled }}" aria-busy="{{ sending }}" style="width: 100%; cursor: pointer; border: none; border-radius: 999px; background: {{ primaryBg }}; color: {{ primaryFg }}; padding: 19px 26px; font-family: 'Oswald', sans-serif; font-size: 12.5px; letter-spacing: 2.4px; transition: background 0.25s ease;">{{ primaryLabel }}</button>
         <span data-hint="1" role="status" aria-live="polite" style="font-size: 13px; line-height: 1.45; color: {{ hintFg }}; text-align: center;">{{ hint }}</span>
+        <sc-if value="{{ showPlanPending }}" hint-placeholder-val="{{ false }}">
+          <span data-plan-pending="1" style="font-size: 12.5px; line-height: 1.45; color: #8a908c; text-align: center;">{{ planPendingNote }}</span>
+        </sc-if>
       </div>
     </div>
   </sc-if>
@@ -621,6 +628,9 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
 const LEAD_ENDPOINT = 'https://spark-792d.tail223b04.ts.net/hnm/v1/leads';
 const PLAN_ENDPOINT = 'https://spark-792d.tail223b04.ts.net/hnm/v1/plans';
 const CONSENT_VERSION = '2026-08-22';
+// Soft launch: the contractor-advice chip, 'mark all for advice' and the paid
+// coordinator toggle stay in the code but are hidden and never sent while false.
+const SHOW_CONTRACTOR_OPTIONS = false;
 const FLAT_TYPES = ['HDB 2-room', 'HDB 3-room', 'HDB 4-room', 'HDB 5-room', 'HDB Executive / Maisonette', 'HDB Jumbo', 'Condo / Apartment', 'Landed', 'Not sure yet'];
 const STYLE_ALIASES = { 'modern-contemporary': 'contemporary', 'wabi-sabi': 'muji' };
 
@@ -719,10 +729,10 @@ const KEY_STATUSES = ['KEYS COLLECTED', 'COLLECTING SOON', 'STILL PLANNING'];
 const ROOM_AREAS = AREAS.filter((area) => area.id !== 'whole');
 const ROUTES = {
   whole: { name: 'WHOLE HOME', note: 'Plan the full renovation, room by room.', image: 'portfolio/cards/minimalist-5-room-hdb-design-01-living-hall.jpg' },
-  selected: { name: 'SELECTED ROOMS', note: 'Quote only the rooms you choose.', image: 'portfolio/cards/modern-oriental-5-room-hdb-design-01-living-hall.jpg' },
+  selected: { name: 'SELECTED ROOMS', note: 'Plan only the rooms you choose.', image: 'portfolio/cards/modern-oriental-5-room-hdb-design-01-living-hall.jpg' },
 };
 const JOURNEYS = {
-  whole: ['WHAT ARE YOU RENOVATING?', 'PLAN AND STYLE', 'WHAT SHOULD BE QUOTED?', 'WHERE CAN WE REACH YOU?', 'REVIEW AND SEND'],
+  whole: ['WHAT ARE YOU RENOVATING?', 'PLAN AND STYLE', 'WHAT NEEDS DOING?', 'WHERE CAN WE REACH YOU?', 'REVIEW AND SEND'],
   selected: ['WHAT ARE YOU RENOVATING?', 'WHAT NEEDS DOING?', 'ADD PLANS OR IDEAS', 'WHERE CAN WE REACH YOU?', 'REVIEW AND SEND'],
 };
 const TEAL = '#5a7e8a', INK = '#14191b';
@@ -744,8 +754,8 @@ const ICONS = {
 class Component extends DCLogic {
   state = {
     step: 1, maxStep: 1, route: null, keyStatus: '', advice: {}, conceptsOpen: false,
-    hint: '', err: false, sent: false, delivered: false, fallbackOpened: false, planAttached: false, copied: false, sending: false, restored: false,
-    read: { status: 'idle', note: 'A person reviews your original plan before quoting.' },
+    hint: '', err: false, sent: false, delivered: false, fallbackOpened: false, timedOut: false, retryWait: false, planAttached: false, copied: false, sending: false, restored: false,
+    read: { status: 'idle', note: 'A person checks your plan before we prepare your render.' },
     plan: null, planError: '',
     f: {
       street: '', unit: '', postal: '', flatType: '', name: '', phone: '', email: '',
@@ -801,6 +811,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeys);
     window.removeEventListener('beforeunload', this.onBeforeUnload);
+    clearTimeout(this._retryTimer);
   }
 
   onBeforeUnload = (event) => {
@@ -890,8 +901,8 @@ class Component extends DCLogic {
     this._ref = '';
     this.setState({
       step: 1, maxStep: 1, route: null, keyStatus: '', advice: {}, conceptsOpen: false,
-      hint: '', err: false, sent: false, delivered: false, fallbackOpened: false, planAttached: false, copied: false, sending: false, restored: false,
-      plan: null, planError: '', read: { status: 'idle', note: 'A person reviews your original plan before quoting.' },
+      hint: '', err: false, sent: false, delivered: false, fallbackOpened: false, timedOut: false, retryWait: false, planAttached: false, copied: false, sending: false, restored: false,
+      plan: null, planError: '', read: { status: 'idle', note: 'A person checks your plan before we prepare your render.' },
       f: { street: '', unit: '', postal: '', flatType: '', name: '', phone: '', email: '', detectedType: '', sqm: '',
         styles: [], customStyle: '', areas: [], trades: {}, timing: '', notes: '', coordinator: !!this.props.coordinatorDefaultOn, consent: false },
     }, () => { window.scrollTo(0, 0); });
@@ -973,7 +984,7 @@ class Component extends DCLogic {
     if (step === scopeStep) {
       const areas = this.activeAreaIds();
       if (!areas.length) return 'Return to the first screen and choose at least one room.';
-      const unanswered = areas.find((area) => !(f.trades[area] || []).length && !advice[area]);
+      const unanswered = SHOW_CONTRACTOR_OPTIONS && areas.find((area) => !(f.trades[area] || []).length && !advice[area]);
       if (unanswered) return 'Choose work or Contractor to advise for ' + this.areaName(unanswered).toLowerCase() + '.';
     }
     if (step === 4) {
@@ -981,7 +992,7 @@ class Component extends DCLogic {
       const phoneDigits = this.digits(f.phone);
       if (phoneDigits.length < 8 || phoneDigits.length > 15) return 'Add a mobile number with 8 to 15 digits.';
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email.trim())) return 'That email does not look complete.';
-      if (!f.street.trim()) return 'Add the block and street so the contractor can account for access.';
+      if (!f.street.trim()) return 'Add the block and street so we can account for access.';
       if (this.digits(f.postal).length !== 6) return 'Add the 6-digit Singapore postal code.';
     }
     return '';
@@ -1079,7 +1090,7 @@ class Component extends DCLogic {
     const input = document.querySelector('input[name="plan"]');
     if (input) input.value = '';
     this.planFile = null;
-    this.setState({ plan: null, planError: '', planAttached: false, read: { status: 'idle', note: 'A person reviews your original plan before quoting.' } });
+    this.setState({ plan: null, planError: '', planAttached: false, read: { status: 'idle', note: 'A person checks your plan before we prepare your render.' } });
   };
 
   planContentType(file) {
@@ -1111,12 +1122,12 @@ class Component extends DCLogic {
     this.planFile = file;
     const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
     this.setState({ plan: { name: file.name, src: '', isPdf }, planError: '', planAttached: false,
-      read: { status: 'manual', note: 'A person reviews the original before quoting.' } });
+      read: { status: 'manual', note: 'A person checks the original before we prepare your render.' } });
     if (isPdf) return;
     const fr = new FileReader();
     fr.onload = () => {
       const src = String(fr.result || '');
-      this.setState({ plan: { name: file.name, src, isPdf: false }, read: { status: 'manual', note: 'A person reviews the original before quoting.' } });
+      this.setState({ plan: { name: file.name, src, isPdf: false }, read: { status: 'manual', note: 'A person checks the original before we prepare your render.' } });
     };
     fr.onerror = () => this.setState({ plan: { name: file.name, src: '', isPdf: false }, read: { status: 'manual', note: 'Preview unavailable. The original file can still be sent for human review.' } });
     fr.readAsDataURL(file);
@@ -1126,7 +1137,7 @@ class Component extends DCLogic {
     // Automatic plan reading is off on the public site: the tracer modules are held back
     // pending publication-rights/provenance review of the corpus they were built from.
     // Saying so beats guessing at someone's floor area.
-    this.setState({ read: { status: 'manual', note: 'Type the layout and floor area below and send the plan anyway \u2014 a person reads your original sheet before we quote.' } });
+    this.setState({ read: { status: 'manual', note: 'Type the layout and floor area below and send the plan anyway \u2014 a person reads your original sheet before we prepare your render.' } });
   }
 
   areaName(id) { const a = AREAS.find((x) => x.id === id); return a ? a.name : id; }
@@ -1144,6 +1155,7 @@ class Component extends DCLogic {
       const trade = TRADES.find((entry) => entry.id === id);
       return trade ? trade.label.toLowerCase() : id;
     }).join(', ');
+    if (!SHOW_CONTRACTOR_OPTIONS) return 'not sure yet';
     return this.state.advice[area] ? 'contractor to advise' : 'not answered';
   }
 
@@ -1156,7 +1168,7 @@ class Component extends DCLogic {
     const payload = {};
     this.activeAreaIds().forEach((area) => {
       const picked = (this.state.f.trades[area] || []).slice();
-      payload[area] = picked.length ? picked : (this.state.advice[area] ? ['contractor-to-advise'] : []);
+      payload[area] = picked.length ? picked : (SHOW_CONTRACTOR_OPTIONS && this.state.advice[area] ? ['contractor-to-advise'] : []);
     });
     return payload;
   }
@@ -1190,7 +1202,7 @@ class Component extends DCLogic {
     this.activeAreaIds().forEach((area) => L.push('• ' + this.areaName(area) + ': ' + this.scopeText(area)));
     L.push('');
     L.push('*Start:* ' + (f.timing || 'not stated'));
-    L.push('*Coordinator:* ' + (f.coordinator ? 'YES — quote coordination to job size' : 'no'));
+    if (SHOW_CONTRACTOR_OPTIONS) L.push('*Coordinator:* ' + (f.coordinator ? 'YES — quote coordination to job size' : 'no'));
     if (f.notes.trim()) L.push('*Notes:* ' + f.notes.trim());
     return L.join('\n');
   }
@@ -1206,6 +1218,7 @@ class Component extends DCLogic {
   send = async () => {
     const { f } = this.state;
     if (this._sendInFlight || this.state.sending || this.state.delivered) return;
+    if (this.state.retryWait) return; // 60 s pause after a timeout (duplicate guard)
     for (let step = 1; step <= 4; step += 1) {
       const bad = this.validateStep(step);
       if (bad) { this.go(step, bad); return; }
@@ -1225,11 +1238,13 @@ class Component extends DCLogic {
       ref: ref, name: f.name, phone: f.phone, email: f.email,
       street: f.street, unit: f.unit, postal: f.postal, flatType: f.flatType,
       sqm: f.sqm, styles: f.styles.slice(), customStyle: f.styles.includes('custom') ? f.customStyle : '', areas: this.payloadAreas(),
-      trades: this.payloadTrades(), timing: f.timing, notes: this.deliveryNotes(), coordinator: !!f.coordinator,
+      trades: this.payloadTrades(), timing: f.timing, notes: this.deliveryNotes(),
+      // coordinator is only sent when the contractor options are shown.
+      ...(SHOW_CONTRACTOR_OPTIONS ? { coordinator: !!f.coordinator } : {}),
       consent: true, planFilename: planFilename, hp: '', consentVersion: CONSENT_VERSION, page: 'renovation-enquiry',
     };
     const text = this.message();
-    this.setState({ sending: true, fallbackOpened: false, hint: 'Sending securely to Home & Me…', err: false });
+    this.setState({ sending: true, fallbackOpened: false, timedOut: false, hint: 'Sending securely to Home & Me…', err: false });
     this.persist();
     // Deliver to the Home & Me lead service; the WhatsApp prefill below runs
     // only as a fallback so the send button never dead-ends.
@@ -1255,7 +1270,10 @@ class Component extends DCLogic {
       } catch (e) { planId = ''; } finally { clearTimeout(pt); }
     }
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 6000);
+    // 20 s: a slow server may still store the enquiry, so a timeout is not
+    // treated as a failure (see timedOut below).
+    const timer = setTimeout(() => ctrl.abort(), 20000);
+    let timedOut = false;
     try {
       const res = await fetch(LEAD_ENDPOINT, {
         method: 'POST', mode: 'cors',
@@ -1264,9 +1282,15 @@ class Component extends DCLogic {
         body: JSON.stringify({ ...leadPayload, planId }),
       });
       delivered = res.ok;
-    } catch (e) { delivered = false; } finally { clearTimeout(timer); }
+    } catch (e) {
+      delivered = false;
+      timedOut = ctrl.signal.aborted || !!(e && e.name === 'AbortError');
+    } finally { clearTimeout(timer); }
     let fallbackOpened = false;
-    if (!delivered) {
+    // Auto-open WhatsApp only on a clear failure (network error or non-2xx).
+    // On a timeout the server may already have the enquiry, so we never
+    // auto-open; the sent panel offers a manual WhatsApp button instead.
+    if (!delivered && !timedOut) {
       try { fallbackOpened = !!window.open('https://wa.me/' + this.waTarget() + '?text=' + encodeURIComponent(text), '_blank', 'noopener'); } catch (e) { fallbackOpened = false; }
     }
     if (delivered) {
@@ -1275,7 +1299,13 @@ class Component extends DCLogic {
       try { localStorage.removeItem('hnm.enquiry.v3'); } catch (e) { /* private mode */ }
     }
     this._sendInFlight = false;
-    this.setState({ sent: true, delivered, fallbackOpened, planAttached, sending: false, hint: '', err: false });
+    // After a timeout the server may already have the enquiry, so the main
+    // button stays disabled for 60 s to stop an instant duplicate send.
+    this.setState({ sent: true, delivered, fallbackOpened, timedOut, retryWait: timedOut, planAttached, sending: false, hint: '', err: false });
+    if (timedOut) {
+      clearTimeout(this._retryTimer);
+      this._retryTimer = setTimeout(() => this.setState({ retryWait: false }), 60000);
+    }
   };
 
   copyText = () => {
@@ -1308,10 +1338,10 @@ class Component extends DCLogic {
     });
     const scopeGroups = activeAreas.map((id, index) => {
       const picked = f.trades[id] || [];
-      const adviceOn = !!advice[id];
+      const adviceOn = SHOW_CONTRACTOR_OPTIONS && !!advice[id];
       return {
         name: this.areaName(id), open: index === 0, adviceOn, pickAdvice: this.pickAdvice(id),
-        status: picked.length ? picked.length + ' SELECTED' : (adviceOn ? 'ADVICE REQUESTED' : 'NEEDS AN ANSWER'),
+        status: picked.length ? picked.length + ' SELECTED' : (adviceOn ? 'ADVICE REQUESTED' : (SHOW_CONTRACTOR_OPTIONS ? 'NEEDS AN ANSWER' : 'OPTIONAL')),
         trades: this.tradesFor(id).map((trade) => ({ label: trade.label, note: trade.note, pick: this.pickTrade(id, trade.id), on: picked.includes(trade.id) })),
       };
     });
@@ -1340,10 +1370,10 @@ class Component extends DCLogic {
     if (step === 2) primaryLabel = route === 'selected' ? 'ADD REFERENCES' : 'CHOOSE THE WORK';
     if (step === 3) primaryLabel = 'ADD CONTACT DETAILS';
     if (step === 4) primaryLabel = 'REVIEW ENQUIRY';
-    if (step === 5) primaryLabel = this.state.delivered ? 'ENQUIRY RECEIVED' : (this.state.sent ? 'TRY AGAIN' : 'SEND AS NEW ENQUIRY');
+    if (step === 5) primaryLabel = this.state.delivered ? 'ENQUIRY RECEIVED' : (this.state.timedOut && this.state.retryWait ? 'PLEASE WAIT A MINUTE' : (this.state.sent ? 'TRY AGAIN' : 'SEND AS NEW ENQUIRY'));
     const defaultHints = {
       1: route === 'selected' ? 'Only your chosen rooms continue.' : 'The full room-by-room scope stays ahead.',
-      2: route === 'selected' ? 'Contractor to advise is a complete answer.' : 'Plan and style are optional.',
+      2: route === 'selected' ? (SHOW_CONTRACTOR_OPTIONS ? 'Contractor to advise is a complete answer.' : 'Leave a room blank if you are not sure yet.') : 'Plan and style are optional.',
       3: route === 'selected' ? 'Plans, photos, style and timing are optional.' : 'Each room remains itemised.',
       4: 'Your contact details are not saved in browser storage.',
       5: f.consent ? 'Sends your enquiry straight to the Home & Me team. We reply on WhatsApp or email.' : 'Tick the contact permission to send.',
@@ -1361,11 +1391,13 @@ class Component extends DCLogic {
       pickWhole: () => this.selectRoute('whole'), pickSelected: () => this.selectRoute('selected'), changeRoute: this.changeRoute,
       routeName: routeInfo ? routeInfo.name : '', routeNote: routeInfo ? routeInfo.note : '', routePhoto: this.routePhoto(),
       keyStatuses: KEY_STATUSES.map((label) => ({ label, on: this.state.keyStatus === label, pick: () => this.setState({ keyStatus: this.state.keyStatus === label ? '' : label, hint: '', err: false }) })),
-      areaCards, scopeGroups, markAllAdvice: this.markAllAdvice,
+      areaCards, scopeGroups, markAllAdvice: this.markAllAdvice, showContractorOptions: SHOW_CONTRACTOR_OPTIONS,
+      scopeToolbarNote: SHOW_CONTRACTOR_OPTIONS ? 'Choose the work you know. Advice is a complete answer when you are unsure.' : 'Choose the work you know. Leave a room blank if you are not sure yet.',
+      scopeHelp: SHOW_CONTRACTOR_OPTIONS ? 'Choose one or more trades, or ask the contractor to advise after reviewing the unit.' : 'Choose one or more trades, or leave it blank if you are not sure yet.',
       ideasTitle: route === 'whole' ? 'Plan and style' : 'Add plans or ideas',
       ideasIntro: route === 'whole' ? 'Add what you have. Both choices remain optional until you are ready.' : 'Helpful when finishes matter. Easy to skip for purely functional work.',
-      scopeTitle: route === 'whole' ? 'What should be quoted?' : 'What needs doing?',
-      scopeIntro: route === 'whole' ? 'Keep the whole-home brief detailed, room by room.' : 'Scope each chosen room. It is fine to ask the contractor to advise.',
+      scopeTitle: 'What needs doing?',
+      scopeIntro: route === 'whole' ? 'Keep the whole-home brief detailed, room by room.' : (SHOW_CONTRACTOR_OPTIONS ? 'Scope each chosen room. It is fine to ask the contractor to advise.' : 'Pick the work for each chosen room. Leave it blank if you are not sure yet.'),
       showTimingOnIdeas: route === 'selected', showTimingOnScope: route === 'whole', timings,
       setStreet: this.set('street'), setUnit: this.set('unit'), setPostal: this.set('postal'), setFlatType: this.set('flatType'),
       setName: this.set('name'), setPhone: this.set('phone'), setEmail: this.set('email'), setDetectedType: this.set('detectedType'),
@@ -1373,7 +1405,7 @@ class Component extends DCLogic {
       onFile: this.onFile, clearPlan: this.clearPlan, noPlan: !this.state.plan, hasPlan: !!this.state.plan,
       hasPlanError: !!this.state.planError, planError: this.state.planError, planImg,
       planTitle: this.state.plan ? this.state.plan.name : 'ADD A FLOOR PLAN OR PHOTO',
-      planNote: this.state.plan ? 'Selected for this enquiry. Remove it any time.' : 'PNG, JPG, WebP or PDF up to 10\u00a0MB. Optional.',
+      planNote: this.state.plan ? 'Selected for this enquiry. Remove it any time. Not sent yet - your floor plan is sent when you press the final send button on the last step.' : 'PNG, JPG, WebP or PDF up to 10\u00a0MB. Optional.',
       completedStyleCards, conceptStyleCards, conceptsOpen: this.state.conceptsOpen,
       toggleConcepts: () => this.setState((state) => ({ conceptsOpen: !state.conceptsOpen })), conceptMark: this.state.conceptsOpen ? '×' : '＋',
       styleCount: f.styles.length ? f.styles.length + ' OF 3 PICKED' : 'PICK UP TO 3', pickCustom: this.pickStyle('custom'),
@@ -1383,28 +1415,35 @@ class Component extends DCLogic {
       toggleConsent: () => this.setState((state) => ({ f: { ...state.f, consent: !state.f.consent }, hint: '', err: false })),
       coordBorder: f.coordinator ? TEAL : 'rgba(20,25,27,0.12)', coordBg: f.coordinator ? 'rgba(90,126,138,0.07)' : '#fff',
       switchBg: f.coordinator ? TEAL : 'rgba(20,25,27,0.22)', switchX: f.coordinator ? '22px' : '0px',
+      showPlanPending: !!this.state.plan && step < 5, planPendingNote: 'Not sent yet - your floor plan is sent when you press the final send button on the last step.',
       showAction: !!route, primary: step === 5 ? this.send : this.next,
-      primaryLabel, primaryDisabled: this.state.sending || this.state.delivered || (step === 5 && !f.consent), sending: this.state.sending,
+      primaryLabel, primaryDisabled: this.state.sending || this.state.delivered || (step === 5 && this.state.timedOut && this.state.retryWait) || (step === 5 && !f.consent), sending: this.state.sending,
       primaryBg: step === 5 ? (f.consent || this.state.delivered ? INK : 'rgba(20,25,27,0.4)') : TEAL, primaryFg: '#f6f4ef',
       hint: this.state.hint || defaultHints[step] || '', hasError: this.state.err && !!this.state.hint, hintFg: this.state.err ? '#a8563c' : '#8a908c',
       restored: this.state.restored, clearDraft: this.clearDraft, sent: this.state.sent,
-      sentTitle: this.state.delivered ? 'RECEIVED AS ' + this.ref() : 'FALLBACK READY · ' + this.ref(),
+      sentTitle: this.state.delivered ? 'RECEIVED AS ' + this.ref() : (this.state.timedOut ? 'PLEASE WAIT · ' + this.ref() : 'FALLBACK READY · ' + this.ref()),
       sentNote: this.state.delivered
         ? (this.state.plan && !this.state.planAttached
           ? 'Your enquiry was received and stored, but the selected file did not attach. WhatsApp or email it with this reference.'
-          : 'Your enquiry was received and stored. We usually reply the same day. Quote the reference if you follow up.')
-        : (this.state.fallbackOpened
-          ? 'Our lead line did not respond. WhatsApp opened for you to review and press send. Quote the reference if you follow up.'
+          : 'Your enquiry was received and stored. We will prepare your free design render, and a person checks it before we send it. We usually reply the same day. Mention the reference if you follow up.')
+        : this.state.timedOut
+          ? 'We may already have your enquiry. Please wait a minute before sending again, or message us on WhatsApp with this reference.'
+          : (this.state.fallbackOpened
+          ? 'Our lead line did not respond. WhatsApp opened for you to review and press send. Mention the reference if you follow up.'
           : 'Our lead line did not respond. We tried to open WhatsApp, but this browser could not confirm it opened. Check WhatsApp, or copy the enquiry text below.'),
       sendHint: this.state.sent
         ? (this.state.delivered
           ? 'Want to add something? WhatsApp us at ' + this.pretty(wa) + ' or email ' + mail + ' with your reference.'
-          : 'If WhatsApp did not open, copy the text above and send it to ' + this.pretty(wa) + ' or email ' + mail + '.')
+          : this.state.timedOut
+            ? 'Please wait a minute before sending again. Or WhatsApp us at ' + this.pretty(wa) + ' or email ' + mail + ' with your reference.'
+            : 'If WhatsApp did not open, copy the text above and send it to ' + this.pretty(wa) + ' or email ' + mail + '.')
         : 'Press send and it goes to our secure enquiry line. If it cannot connect, we open a WhatsApp fallback for you to review and send.',
       copyText: this.copyText, copyLabel: this.state.copied ? 'COPIED' : 'COPY THE TEXT',
       email: mail, mailTo: 'mailto:' + mail + '?subject=' + encodeURIComponent('Renovation enquiry, Home & Me'),
       mailHref: 'mailto:' + mail + '?subject=' + encodeURIComponent('New enquiry ' + this.ref() + ' — Home & Me') + '&body=' + encodeURIComponent(this.message().replace(/\*/g, '')),
       waPlain: 'https://wa.me/' + wa, waPretty: this.pretty(wa),
+      showManualWa: this.state.sent && !this.state.delivered && this.state.timedOut,
+      waFallbackHref: 'https://wa.me/' + wa + '?text=' + encodeURIComponent(this.message()),
       iconHome: this.icon('home', 21), iconWork: this.icon('work', 21), iconPlan: this.icon('plan', 21), iconChat: this.icon('chat', 21),
     };
   }
