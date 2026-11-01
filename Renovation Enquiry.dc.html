@@ -343,7 +343,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
           <sc-if value="{{ wholeRoute }}" hint-placeholder-val="{{ false }}">
             <div class="truth-panel">
               <strong>WHOLE HOME IS SELECTED</strong>
-              <p>All rooms stay visible on the scope screen, where you can pick the work for each one.</p>
+              <p>{{ wholePanelText }}</p>
             </div>
           </sc-if>
 
@@ -988,6 +988,7 @@ class Component extends DCLogic {
     if (step === 1) {
       if (!route) return 'Choose Whole Home or Selected Rooms to continue.';
       if (!f.flatType) return 'Choose the property type so the brief has the right starting point.';
+      if (route === 'selected' && !f.areas.length && !SHOW_TRADES_STEP) return 'Choose at least one room for your free design.';
       if (route === 'selected' && !f.areas.length) return 'Choose at least one room to build the selected-room scope.';
     }
     const ideasStep = route === 'whole' ? 2 : 3;
@@ -1391,7 +1392,7 @@ class Component extends DCLogic {
     if (step === 5) primaryLabel = this.state.delivered ? 'ENQUIRY RECEIVED' : (this.state.timedOut && this.state.retryWait ? 'PLEASE WAIT A MINUTE' : (this.state.sent ? 'TRY AGAIN' : 'SEND AS NEW ENQUIRY'));
     const defaultHints = {
       1: route === 'selected' ? 'Only your chosen rooms continue.' : (SHOW_TRADES_STEP ? 'The full room-by-room scope stays ahead.' : 'Plan and style come next.'),
-      2: route === 'selected' ? (SHOW_CONTRACTOR_OPTIONS ? 'Contractor to advise is a complete answer.' : 'Leave a room blank if you are not sure yet.') : 'Plan and style are optional.',
+      2: route === 'selected' ? (SHOW_CONTRACTOR_OPTIONS ? 'Contractor to advise is a complete answer.' : 'Leave a room blank if you are not sure yet.') : (SHOW_TRADES_STEP ? 'Plan and style are optional.' : 'Everything on this screen is optional.'),
       3: route === 'selected' ? 'Plans, photos, style and timing are optional.' : 'Each room remains itemised.',
       4: 'Your contact details are not saved in browser storage.',
       5: f.consent ? 'Sends your enquiry straight to the Home & Me team. We reply on WhatsApp or email.' : 'Tick the contact permission to send.',
@@ -1413,7 +1414,8 @@ class Component extends DCLogic {
       scopeToolbarNote: SHOW_CONTRACTOR_OPTIONS ? 'Choose the work you know. Advice is a complete answer when you are unsure.' : 'Choose the work you know. Leave a room blank if you are not sure yet.',
       scopeHelp: SHOW_CONTRACTOR_OPTIONS ? 'Choose one or more trades, or ask the contractor to advise after reviewing the unit.' : 'Choose one or more trades, or leave it blank if you are not sure yet.',
       ideasTitle: route === 'whole' ? 'Plan and style' : 'Add plans or ideas',
-      ideasIntro: route === 'whole' ? 'Add what you have. Both choices remain optional until you are ready.' : 'Helpful when finishes matter. Easy to skip for purely functional work.',
+      ideasIntro: route === 'whole' ? (SHOW_TRADES_STEP ? 'Add what you have. Both choices remain optional until you are ready.' : 'Add what you have. Everything on this screen is optional.') : 'Helpful when finishes matter. Easy to skip for purely functional work.',
+      wholePanelText: SHOW_TRADES_STEP ? 'All rooms stay visible on the scope screen, where you can pick the work for each one.' : 'All rooms are included. Next, add your floor plan and pick a style for your free design.',
       scopeTitle: 'What needs doing?',
       scopeIntro: route === 'whole' ? 'Keep the whole-home brief detailed, room by room.' : (SHOW_CONTRACTOR_OPTIONS ? 'Scope each chosen room. It is fine to ask the contractor to advise.' : 'Pick the work for each chosen room. Leave it blank if you are not sure yet.'),
       showTimingOnIdeas: route === 'selected' || !SHOW_TRADES_STEP, showTimingOnScope: route === 'whole' && SHOW_TRADES_STEP, showNotesOnIdeas: !SHOW_TRADES_STEP, timings,
