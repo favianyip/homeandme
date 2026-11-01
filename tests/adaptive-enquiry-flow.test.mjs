@@ -22,7 +22,8 @@ test('adaptive enquiry keeps two distinct five-screen routes', () => {
   assert.equal(journeys.selected.length, 5);
   assert.notDeepEqual(journeys.whole, journeys.selected, 'the middle questions must adapt to the route');
   assert.match(page, /onIdeasStep: !!route && step === ideasStep/);
-  assert.match(page, /onScopeStep: !!route && step === scopeStep/);
+  // FAV-119: the scope (trades) step is kept in code but gated by SHOW_TRADES_STEP.
+  assert.match(page, /onScopeStep: SHOW_TRADES_STEP && !!route && step === scopeStep/);
   assert.match(page, /onStep4: step === 4, onStep5: step === 5/);
 });
 

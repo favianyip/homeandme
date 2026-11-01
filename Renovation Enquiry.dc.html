@@ -455,6 +455,15 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
           </div>
           <p class="truth-note" style="margin-top: 12px;">Project photos show completed Home &amp; Me work; the remaining styles are AI-visualised design directions, not completed projects or renders of your unit. Your own free render comes after you send your floor plan.</p>
         </div>
+        <sc-if value="{{ showNotesOnIdeas }}" hint-placeholder-val="{{ false }}">
+          <div class="form-section" style="margin-top: 22px;">
+            <label class="field">
+              <span class="field-label">ANYTHING ELSE WE SHOULD KNOW?</span>
+              <textarea name="notes" rows="4" value="{{ f.notes }}" onInput="{{ setNotes }}" maxlength="1800" autocomplete="off" placeholder="For example: the bathroom leaks, the kitchen storage is not working, or you plan to keep the existing cabinets…"></textarea>
+              <span class="field-note">Plain language is enough.</span>
+            </label>
+          </div>
+        </sc-if>
         <sc-if value="{{ showTimingOnIdeas }}" hint-placeholder-val="{{ false }}">
           <div class="form-section" style="margin-top: 22px;">
             <div class="section-row"><h2 class="section-title">WHEN WOULD YOU LIKE TO START?</h2><span class="optional-copy">A guide, not a promise</span></div>
@@ -631,6 +640,10 @@ const CONSENT_VERSION = '2026-08-22';
 // Soft launch: the contractor-advice chip, 'mark all for advice' and the paid
 // coordinator toggle stay in the code but are hidden and never sent while false.
 const SHOW_CONTRACTOR_OPTIONS = false;
+// The trades ("What needs doing?") step is hidden: the form is only for a free design. Set true to bring it back.
+const SHOW_TRADES_STEP = false;
+const SCOPE_STEP = { whole: 3, selected: 2 };
+function visibleSteps(route) { return [1, 2, 3, 4, 5].filter((step) => SHOW_TRADES_STEP || step !== SCOPE_STEP[route || 'whole']); }
 const FLAT_TYPES = ['HDB 2-room', 'HDB 3-room', 'HDB 4-room', 'HDB 5-room', 'HDB Executive / Maisonette', 'HDB Jumbo', 'Condo / Apartment', 'Landed', 'Not sure yet'];
 const STYLE_ALIASES = { 'modern-contemporary': 'contemporary', 'wabi-sabi': 'muji' };
 
@@ -791,7 +804,7 @@ class Component extends DCLogic {
         const restoredStyles = (project.styles || []).filter((id) => id === 'custom' || STYLES.some((style) => style.id === id)).slice(0, 3);
         this.setState((s) => ({
           route, keyStatus: KEY_STATUSES.includes(project.keyStatus) ? project.keyStatus : '', advice,
-          conceptsOpen: !!project.conceptsOpen, step: route ? Math.max(1, Math.min(5, Number(project.step) || 1)) : 1,
+          conceptsOpen: !!project.conceptsOpen, step: route ? visibleSteps(route).find((s) => s >= Math.max(1, Math.min(5, Number(project.step) || 1))) : 1,
           maxStep: route ? Math.max(1, Math.min(5, Number(project.maxStep) || 1)) : 1, restored: !!route,
           f: { ...s.f, flatType: FLAT_TYPES.includes(project.flatType) ? project.flatType : '', detectedType: project.detectedType || '',
             sqm: project.sqm || '', styles: restoredStyles,
@@ -951,6 +964,7 @@ class Component extends DCLogic {
   }
 
   go(step, hint) {
+    if (!visibleSteps(this.state.route).includes(step)) step = visibleSteps(this.state.route).find((s) => s > step) || 5;
     this.setState({ step, hint: hint || '', err: !!hint, sent: false, f: { ...this.state.f, consent: false } }, () => {
       this.persist();
       window.scrollTo(0, 0);
@@ -1001,7 +1015,7 @@ class Component extends DCLogic {
   next = () => {
     const bad = this.validateStep(this.state.step);
     if (bad) { this.setState({ hint: bad, err: true }, () => this.focusFirstError(this.state.step, bad)); return; }
-    const nextStep = Math.min(5, this.state.step + 1);
+    const nextStep = visibleSteps(this.state.route).find((s) => s > this.state.step) || 5;
     this.setState((s) => ({ step: nextStep, maxStep: Math.max(s.maxStep, nextStep), hint: '', err: false, f: { ...s.f, consent: false } }), () => {
       this.persist();
       window.scrollTo(0, 0);
@@ -1010,7 +1024,7 @@ class Component extends DCLogic {
   };
 
   back = () => {
-    if (this.state.step > 1) { this.go(this.state.step - 1); return; }
+    if (this.state.step > 1) { this.go(visibleSteps(this.state.route).filter((s) => s < this.state.step).pop() || 1); return; }
     if (this.state.route) { this.changeRoute(); return; }
     window.location.href = 'Home Direct.dc.html';
   };
@@ -1198,8 +1212,10 @@ class Component extends DCLogic {
     L.push('*Floor plan:* ' + (this.state.plan ? this.state.plan.name : 'not uploaded'));
     L.push('*Style:* ' + (f.styles.map((s) => this.styleName(s)).join(', ') || '—'));
     L.push('');
-    L.push('*SCOPE*');
-    this.activeAreaIds().forEach((area) => L.push('• ' + this.areaName(area) + ': ' + this.scopeText(area)));
+    if (SHOW_TRADES_STEP) {
+      L.push('*SCOPE*');
+      this.activeAreaIds().forEach((area) => L.push('• ' + this.areaName(area) + ': ' + this.scopeText(area)));
+    } else L.push('*Rooms:* ' + (this.activeAreaIds().map((area) => this.areaName(area)).join(', ') || '—'));
     L.push('');
     L.push('*Start:* ' + (f.timing || 'not stated'));
     if (SHOW_CONTRACTOR_OPTIONS) L.push('*Coordinator:* ' + (f.coordinator ? 'YES — quote coordination to job size' : 'no'));
@@ -1322,10 +1338,12 @@ class Component extends DCLogic {
     const mail = this.props.email || 'homeandme2017@gmail.com';
     const routeInfo = ROUTES[route] || null;
     const journey = JOURNEYS[route] || JOURNEYS.whole;
-    const journeyItems = journey.map((label, index) => ({
-      number: '0' + (index + 1), label, current: step === index + 1 ? 'step' : 'false',
-      complete: this.state.maxStep > index + 1, disabled: this.state.sending || index + 1 > this.state.maxStep, go: () => this.go(index + 1),
+    const shownSteps = visibleSteps(route);
+    const journeyItems = shownSteps.map((target, index) => ({
+      number: '0' + (index + 1), label: journey[target - 1], current: step === target ? 'step' : 'false',
+      complete: this.state.maxStep > target, disabled: this.state.sending || target > this.state.maxStep, go: () => this.go(target),
     }));
+    const stepPosition = Math.max(1, shownSteps.indexOf(step) + 1);
     const ideasStep = route === 'selected' ? 3 : 2;
     const scopeStep = route === 'selected' ? 2 : 3;
     const activeAreas = this.activeAreaIds();
@@ -1355,24 +1373,24 @@ class Component extends DCLogic {
       { k: 'PROPERTY', v: propertyValue, edit: edit(1) },
       { k: 'KEY STATUS', v: this.state.keyStatus || 'Not stated', edit: edit(1) },
       { k: 'ROOMS', v: roomsValue, edit: edit(1) },
-      { k: 'ROOM-BY-ROOM SCOPE', v: scopeValue, edit: edit(scopeStep) },
+      ...(SHOW_TRADES_STEP ? [{ k: 'ROOM-BY-ROOM SCOPE', v: scopeValue, edit: edit(scopeStep) }] : []),
       { k: 'FLOOR PLAN / PHOTO', v: this.state.plan ? this.state.plan.name : 'Not uploaded', edit: edit(ideasStep) },
       { k: 'STYLE', v: f.styles.map((style) => this.styleName(style)).join(', ') || 'Not selected (optional)', edit: edit(ideasStep) },
-      { k: 'START', v: f.timing || 'Not stated', edit: edit(route === 'whole' ? scopeStep : ideasStep) },
-      { k: 'YOUR NOTE', v: f.notes.trim() || 'None added', edit: edit(scopeStep) },
+      { k: 'START', v: f.timing || 'Not stated', edit: edit(route === 'whole' && SHOW_TRADES_STEP ? scopeStep : ideasStep) },
+      { k: 'YOUR NOTE', v: f.notes.trim() || 'None added', edit: edit(SHOW_TRADES_STEP ? scopeStep : ideasStep) },
       { k: 'NAME', v: f.name || 'Not added', edit: edit(4) },
       { k: 'MOBILE', v: f.phone || 'Not added', edit: edit(4) },
       { k: 'EMAIL', v: f.email || 'Not added', edit: edit(4) },
       { k: 'ADDRESS', v: [f.street, f.unit, f.postal].filter(Boolean).join(', ') || 'Not added', edit: edit(4) },
     ];
     let primaryLabel = 'CONTINUE';
-    if (step === 1) primaryLabel = route === 'selected' ? 'CHOOSE THE WORK' : 'PLAN AND STYLE';
-    if (step === 2) primaryLabel = route === 'selected' ? 'ADD REFERENCES' : 'CHOOSE THE WORK';
+    if (step === 1) primaryLabel = route === 'selected' ? (SHOW_TRADES_STEP ? 'CHOOSE THE WORK' : 'ADD REFERENCES') : 'PLAN AND STYLE';
+    if (step === 2) primaryLabel = route === 'selected' ? 'ADD REFERENCES' : (SHOW_TRADES_STEP ? 'CHOOSE THE WORK' : 'ADD CONTACT DETAILS');
     if (step === 3) primaryLabel = 'ADD CONTACT DETAILS';
     if (step === 4) primaryLabel = 'REVIEW ENQUIRY';
     if (step === 5) primaryLabel = this.state.delivered ? 'ENQUIRY RECEIVED' : (this.state.timedOut && this.state.retryWait ? 'PLEASE WAIT A MINUTE' : (this.state.sent ? 'TRY AGAIN' : 'SEND AS NEW ENQUIRY'));
     const defaultHints = {
-      1: route === 'selected' ? 'Only your chosen rooms continue.' : 'The full room-by-room scope stays ahead.',
+      1: route === 'selected' ? 'Only your chosen rooms continue.' : (SHOW_TRADES_STEP ? 'The full room-by-room scope stays ahead.' : 'Plan and style come next.'),
       2: route === 'selected' ? (SHOW_CONTRACTOR_OPTIONS ? 'Contractor to advise is a complete answer.' : 'Leave a room blank if you are not sure yet.') : 'Plan and style are optional.',
       3: route === 'selected' ? 'Plans, photos, style and timing are optional.' : 'Each room remains itemised.',
       4: 'Your contact details are not saved in browser storage.',
@@ -1383,9 +1401,9 @@ class Component extends DCLogic {
       : null;
 
     return {
-      stepOf: 'STEP 0' + step + ' OF 05', stepName: journey[step - 1], progress: Math.round((step / 5) * 100) + '%',
+      stepOf: 'STEP 0' + stepPosition + ' OF 0' + shownSteps.length, stepName: journey[step - 1], progress: Math.round((stepPosition / shownSteps.length) * 100) + '%',
       backOpacity: 1, back: this.back,
-      onStep1: step === 1, onIdeasStep: !!route && step === ideasStep, onScopeStep: !!route && step === scopeStep,
+      onStep1: step === 1, onIdeasStep: !!route && step === ideasStep, onScopeStep: SHOW_TRADES_STEP && !!route && step === scopeStep,
       onStep4: step === 4, onStep5: step === 5,
       f, flatTypes: FLAT_TYPES, journeyItems, noRoute: !route, hasRoute: !!route, wholeRoute: route === 'whole', selectedRoute: route === 'selected',
       pickWhole: () => this.selectRoute('whole'), pickSelected: () => this.selectRoute('selected'), changeRoute: this.changeRoute,
@@ -1398,7 +1416,7 @@ class Component extends DCLogic {
       ideasIntro: route === 'whole' ? 'Add what you have. Both choices remain optional until you are ready.' : 'Helpful when finishes matter. Easy to skip for purely functional work.',
       scopeTitle: 'What needs doing?',
       scopeIntro: route === 'whole' ? 'Keep the whole-home brief detailed, room by room.' : (SHOW_CONTRACTOR_OPTIONS ? 'Scope each chosen room. It is fine to ask the contractor to advise.' : 'Pick the work for each chosen room. Leave it blank if you are not sure yet.'),
-      showTimingOnIdeas: route === 'selected', showTimingOnScope: route === 'whole', timings,
+      showTimingOnIdeas: route === 'selected' || !SHOW_TRADES_STEP, showTimingOnScope: route === 'whole' && SHOW_TRADES_STEP, showNotesOnIdeas: !SHOW_TRADES_STEP, timings,
       setStreet: this.set('street'), setUnit: this.set('unit'), setPostal: this.set('postal'), setFlatType: this.set('flatType'),
       setName: this.set('name'), setPhone: this.set('phone'), setEmail: this.set('email'), setDetectedType: this.set('detectedType'),
       setSqm: this.set('sqm'), setNotes: this.set('notes'), setCustomStyle: this.set('customStyle'),
