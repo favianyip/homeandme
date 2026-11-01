@@ -44,6 +44,10 @@ assets/images/og-home.png
 assets/images/publication-rights-placeholder.svg
 assets/how-it-works/step1-floor-plan.jpg
 assets/how-it-works/step2-3d-model.jpg
+assets/home/home-direct.jpg
+assets/home/home-plan-to-design.jpg
+assets/home/home-finished-living.jpg
+assets/home/home-finished-kitchen.jpg
 
 # Hash-pinned, rights-safe synthetic whole-unit reference proof
 assets/reviewed-whole-unit/proof-manifest.json
