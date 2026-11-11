@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import vm from 'node:vm';
 
 const root = new URL('../', import.meta.url);
-const page = readFileSync(new URL('Renovation%20Enquiry.dc.html', root), 'utf8');
+const page = readFileSync(new URL('Renovation%20Enquiry.dc.html', root), 'utf8').replace('const ENQUIRY_OPEN = false;', 'const ENQUIRY_OPEN = true;');
 
 function constantValue(name, nextName) {
   const match = page.match(new RegExp(`const ${name} = ([\\s\\S]*?);\\n(?:\\n|const ${nextName})`));

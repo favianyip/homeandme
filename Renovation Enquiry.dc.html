@@ -207,6 +207,9 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
 .consent-card input { flex: none; width: 22px; height: 22px; margin: 1px 0 0; accent-color: #5a7e8a; }
 .consent-card span { font-size: 13.5px; line-height: 1.55; color: #4a5350; }
 .coordinator-card:focus-within { outline: 3px solid rgba(90,126,138,0.34); outline-offset: 3px; }
+.soon-actions { display: grid; gap: 12px; max-width: 360px; }
+.soon-primary { text-align: center; border-radius: 999px; padding: 17px 24px; background: #5a7e8a; color: #fff; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 2.2px; text-decoration: none; }
+.soon-primary:hover, .soon-primary:focus-visible { background: #14191b; }
 .secondary-link { text-align: center; border: 1px solid rgba(20,25,27,0.2); border-radius: 999px; padding: 15px 20px; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.8px; color: #14191b; background: #fff; }
 .sent-panel { border: 1px solid rgba(90,126,138,0.45); background: rgba(90,126,138,0.09); border-radius: 18px; padding: 17px; }
 .sent-panel strong { font-family: 'Oswald', sans-serif; font-size: 10.5px; letter-spacing: 1.8px; color: #5a7e8a; }
@@ -302,6 +305,21 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
       </section>
     </sc-if>
 
+    <sc-if value="{{ comingSoon }}" hint-placeholder-val="{{ true }}">
+      <section class="adaptive-screen" data-coming-soon="1" aria-labelledby="soon-title">
+        <div class="screen-heading">
+          <span class="eyebrow">ONLINE ENQUIRY</span>
+          <h1 id="soon-title">Coming soon</h1>
+          <p>Our online enquiry is not open yet. Until it is, WhatsApp us and we will help you directly.</p>
+        </div>
+        <div class="soon-actions">
+          <a class="soon-primary" sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener">WHATSAPP US</a>
+          <a class="secondary-link" href="Home%20Direct.dc.html">BACK TO HOME</a>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ enquiryOpen }}" hint-placeholder-val="{{ false }}">
     <sc-if value="{{ hasRoute }}" hint-placeholder-val="{{ false }}">
       <nav class="journey-strip" aria-label="Enquiry progress">
         <ol>
@@ -650,8 +668,10 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
     </sc-if>
 
     <div data-desk="1" style="display: none; margin: 44px 0 0; padding-top: 22px; border-top: 1px solid rgba(20,25,27,0.12); font-size: 13px; color: #8a908c;">Home &amp; Me · Singapore · free design render from your floor plan. Questions before you send? <a class="inline-link" sc-camel-href="{{ waPlain }}" target="_blank" rel="noopener">WhatsApp {{ waPretty }}</a> · <a class="inline-link" sc-camel-href="{{ mailTo }}">{{ email }}</a></div>
+    </sc-if>
   </main>
 
+  <sc-if value="{{ enquiryOpen }}" hint-placeholder-val="{{ false }}">
   <sc-if value="{{ showAction }}" hint-placeholder-val="{{ false }}">
     <div data-actionbar="1" style="position: fixed; left: 0; right: 0; bottom: calc(69px + env(safe-area-inset-bottom, 0px)); z-index: 45; background: rgba(242,239,233,0.94); backdrop-filter: blur(16px); border-top: 1px solid rgba(20,25,27,0.1); padding: 14px clamp(14px, 4vw, 30px) 16px;">
       <div data-barinner="1" style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
@@ -662,6 +682,7 @@ button:disabled { cursor: not-allowed !important; opacity: 0.58; }
         </sc-if>
       </div>
     </div>
+  </sc-if>
   </sc-if>
 
   <nav data-tabbar="1" style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 46; background: rgba(255,255,255,0.96); backdrop-filter: blur(16px); border-top: 1px solid rgba(20,25,27,0.1); padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px)); display: grid; grid-template-columns: repeat(4, 1fr);">
@@ -732,6 +753,10 @@ const CONSENT_VERSION = '2026-08-22';
 const SHOW_CONTRACTOR_OPTIONS = false;
 // The trades ("What needs doing?") step is hidden: the form is only for a free design. Set true to bring it back.
 const SHOW_TRADES_STEP = false;
+// 12 Nov 2026 (owner: "Do not let customer submit anything first. Just say it's coming soon on the live website."):
+// while false the page shows COMING SOON, the form and its send bar are not drawn, and nothing can be sent or
+// uploaded. A come-back link of an enquiry that was already sent still shows its status. Set true to reopen.
+const ENQUIRY_OPEN = false;
 const SCOPE_STEP = { whole: 3, selected: 2 };
 function visibleSteps(route) { return [1, 2, 3, 4, 5].filter((step) => SHOW_TRADES_STEP || step !== SCOPE_STEP[route || 'whole']); }
 const FLAT_TYPES = ['HDB 2-room', 'HDB 3-room', 'HDB 4-room', 'HDB 5-room', 'HDB Executive / Maisonette', 'HDB Jumbo', 'Condo / Apartment', 'Landed', 'Not sure yet'];
@@ -1424,6 +1449,7 @@ class Component extends DCLogic {
   }
 
   send = async () => {
+    if (!ENQUIRY_OPEN) return; // closed: no lead and no floor plan is sent
     const { f } = this.state;
     if (this._sendInFlight || this.state.sending || this.state.delivered) return;
     if (this.state.retryWait) return; // 60 s pause after a timeout (duplicate guard)
@@ -1663,6 +1689,8 @@ class Component extends DCLogic {
       iconHome: this.icon('home', 21), iconWork: this.icon('work', 21), iconPlan: this.icon('plan', 21), iconChat: this.icon('chat', 21),
       tracking: false,
       ...(this.state.track ? this.trackView() : {}),
+      enquiryOpen: ENQUIRY_OPEN, comingSoon: !ENQUIRY_OPEN && !this.state.track,
+      ...(!ENQUIRY_OPEN && !this.state.track ? { stepOf: 'ONLINE ENQUIRY', stepName: 'COMING SOON', progress: '0%' } : {}),
     };
   }
 

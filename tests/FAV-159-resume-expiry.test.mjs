@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import vm from 'node:vm';
 
 // FAV-159 (FAV-50 round 2): resume uses the saved send time; saved entry expires after 14 days.
-const page = readFileSync(new URL('../Renovation%20Enquiry.dc.html', import.meta.url), 'utf8');
+const page = readFileSync(new URL('../Renovation%20Enquiry.dc.html', import.meta.url), 'utf8').replace('const ENQUIRY_OPEN = false;', 'const ENQUIRY_OPEN = true;');
 const base = page.match(/const STATUS_BASE = '[^']+';/);
 const block = page.match(/\/\/ FAV-50 design-link helpers \(start\)([\s\S]*?)\/\/ FAV-50 design-link helpers \(end\)/);
 const ctx = Object.create(null);

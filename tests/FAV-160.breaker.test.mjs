@@ -38,7 +38,7 @@ test('(b) script reads Funnel/serve status before any funnel change, and never t
 });
 
 test('page points status and design links at :10000 only', () => {
-  const page = readFileSync(new URL('../Renovation Enquiry.dc.html', import.meta.url), 'utf8');
+  const page = readFileSync(new URL('../Renovation Enquiry.dc.html', import.meta.url), 'utf8').replace('const ENQUIRY_OPEN = false;', 'const ENQUIRY_OPEN = true;');
   assert.match(page, /STATUS_BASE = 'https:\/\/spark-792d-old\.tail223b04\.ts\.net:10000\/hnm-status\/v1\/'/);
   assert.match(page, /DESIGN_LINK_PREFIX = 'https:\/\/spark-792d-old\.tail223b04\.ts\.net:10000\/design-'/);
 });

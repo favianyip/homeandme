@@ -5,7 +5,7 @@ import vm from 'node:vm';
 import { webcrypto } from 'node:crypto';
 
 // FAV-148 (FAV-50 page side): after sending, the Enquiry page shows progress and the design link.
-const page = readFileSync(new URL('../Renovation%20Enquiry.dc.html', import.meta.url), 'utf8');
+const page = readFileSync(new URL('../Renovation%20Enquiry.dc.html', import.meta.url), 'utf8').replace('const ENQUIRY_OPEN = false;', 'const ENQUIRY_OPEN = true;');
 
 function load() {
   const base = page.match(/const STATUS_BASE = '[^']+';/);

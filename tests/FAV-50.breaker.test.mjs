@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
-const html = readFileSync(new URL('../Renovation Enquiry.dc.html', import.meta.url), 'utf8');
+const html = readFileSync(new URL('../Renovation Enquiry.dc.html', import.meta.url), 'utf8').replace('const ENQUIRY_OPEN = false;', 'const ENQUIRY_OPEN = true;');
 
 test('after a send timeout the main button does not offer an instant TRY AGAIN (duplicate-enquiry risk)', () => {
   const labelLine = html.split('\n').find((l) => l.includes("if (step === 5) primaryLabel ="));

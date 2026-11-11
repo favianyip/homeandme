@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import vm from 'node:vm';
 
 // FAV-119: the "What needs doing?" (trades) step is hidden on both routes.
-const page = readFileSync(new URL('../Renovation%20Enquiry.dc.html', import.meta.url), 'utf8');
+const page = readFileSync(new URL('../Renovation%20Enquiry.dc.html', import.meta.url), 'utf8').replace('const ENQUIRY_OPEN = false;', 'const ENQUIRY_OPEN = true;');
 
 function load() {
   const flag = page.match(/const SHOW_TRADES_STEP = (true|false);/);
