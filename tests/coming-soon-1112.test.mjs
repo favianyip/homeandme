@@ -91,3 +91,11 @@ test('Home no longer invites an enquiry that cannot be sent', () => {
   assert.doesNotMatch(home, />START ENQUIRY<|>START THIS DESIGN|>ADD ONE TO MY ENQUIRY<|>Start enquiry</);
   assert.equal((home.match(/>START<\/a>/g) || []).length, 4, 'owner, 12 Nov: the enquiry button says START');
 });
+
+test('closed: START always lands on the coming-soon page, even in a browser that holds an earlier enquiry; a come-back link still works', () => {
+  const mount = script.slice(script.indexOf('  componentDidMount() {'), script.indexOf('// FAV-50: after a send, the same page shows progress'));
+  assert.match(mount, /if \(fromHash\) \{[\s\S]*?this\.startTracking\(fromHash\.ref, fromHash\.statusKey/);
+  assert.match(mount, /\} else if \(saved && ENQUIRY_OPEN\) this\.startTracking\(saved\.ref, saved\.statusKey, saved\.at\);/);
+  assert.doesNotMatch(mount, /else if \(saved\) this\.startTracking/);
+  assert.doesNotMatch(mount, /ENQUIRY_OPEN[^\n]*removeItem\(TRACK_STORE\)/, 'the saved enquiry is left in the browser, not deleted');
+});

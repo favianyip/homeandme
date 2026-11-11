@@ -36,7 +36,7 @@ test('resume uses the saved send time, so the 3-hour give-up does not restart on
   const s = h.readSavedTrack({ ref: REF, statusKey: KEY, at: NOW - 4 * 60 * 60 * 1000 }, NOW);
   assert.equal(h.keepPolling('designing', s.at, NOW), false, '4 hours after sending: no more repeated checks');
   assert.match(page, /saved = readSavedTrack\(raw, Date\.now\(\)\);\n      if \(raw && !saved\) localStorage\.removeItem\(TRACK_STORE\);/);
-  assert.match(page, /\} else if \(saved\) this\.startTracking\(saved\.ref, saved\.statusKey, saved\.at\);/);
+  assert.match(page, /\} else if \(saved && ENQUIRY_OPEN\) this\.startTracking\(saved\.ref, saved\.statusKey, saved\.at\);/); // 12 Nov 2026: resumes by itself only while the enquiry is open
   assert.match(page, /this\.startTracking\(fromHash\.ref, fromHash\.statusKey, same \? saved\.at : undefined\);/);
   assert.match(page, /if \(typeof savedAt === 'number'\) this\._pollStart = savedAt;/);
   // A resume still asks once, so a design that finished after 3 hours is shown, not "taking longer".

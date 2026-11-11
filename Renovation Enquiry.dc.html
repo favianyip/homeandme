@@ -1034,7 +1034,10 @@ class Component extends DCLogic {
     if (fromHash) {
       const same = saved && saved.ref === fromHash.ref && saved.statusKey === fromHash.statusKey;
       this.startTracking(fromHash.ref, fromHash.statusKey, same ? saved.at : undefined);
-    } else if (saved) this.startTracking(saved.ref, saved.statusKey, saved.at);
+    } else if (saved && ENQUIRY_OPEN) this.startTracking(saved.ref, saved.statusKey, saved.at);
+    // 12 Nov 2026 (owner clicked START and landed on an old test enquiry's status instead of the coming-soon page):
+    // while the enquiry is closed, only an explicit come-back link (#track=...) shows a status. A saved one stays in
+    // the browser untouched and resumes by itself again once the enquiry reopens.
   }
 
   // FAV-50: after a send, the same page shows progress and, when ready, the design link.
