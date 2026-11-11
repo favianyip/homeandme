@@ -424,3 +424,12 @@ assets/portfolio/room-showcase-5-room-hdb-showcase-master-bathroom.jpg
 assets/portfolio/room-showcase-5-room-hdb-showcase-master-bedroom-2.jpg
 assets/portfolio/room-showcase-5-room-hdb-showcase-master-bedroom.jpg
 assets/portfolio/scandinavian-4-room-hdb-design-01-dining.jpg
+
+# Coming-soon showcase (12 Nov 2026): the owner-approved KK594 v3 design renders of one HDB flat, shown as renders of a
+# proposed design (never as completed work). No floor plan, address or unit number is published.
+assets/visualise/kk594-living-tv-wall.jpg
+assets/visualise/kk594-living-dining.jpg
+assets/visualise/kk594-kitchen.jpg
+assets/visualise/kk594-master-bedroom.jpg
+assets/visualise/kk594-bedroom-2.jpg
+assets/visualise/kk594-bathroom.jpg

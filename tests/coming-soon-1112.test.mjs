@@ -46,7 +46,8 @@ test('closed: the page says COMING SOON and draws neither the form nor its send 
   }
   const bar = page.indexOf('data-actionbar="1"');
   assert.ok(page.lastIndexOf('<sc-if value="{{ enquiryOpen }}"', bar) > page.indexOf('</main>'), 'the send bar has its own closed wrapper');
-  assert.match(page, /<h1 id="soon-title">Coming soon<\/h1>/);
+  assert.match(page, /<span class="soon-badge">COMING SOON<\/span>/);
+  assert.match(page, /<h1 id="soon-title">See your own flat designed/);
 });
 
 test('closed, known-bad: a send forced past the screen sends nothing (no lead, no floor plan, no WhatsApp prefill)', async () => {
@@ -76,7 +77,17 @@ test('a come-back link of an enquiry already sent still shows its status, not th
   assert.equal(v.comingSoon, false);
 });
 
+test('the showcase shows one whole flat as renders of a proposed design, honestly labelled, from the public list only', () => {
+  const soon = page.slice(page.indexOf('data-coming-soon="1"'), page.indexOf('<sc-if value="{{ enquiryOpen }}"'));
+  const imgs = [...soon.matchAll(/<img src="([^"]+)"[^>]*alt="([^"]+)"[^>]*width="1344" height="752"/g)];
+  assert.equal(imgs.length, 6);   // the hero and one photo a room
+  const list = readFileSync(new URL('../deploy/public-pages.txt', import.meta.url), 'utf8');
+  for (const [, src] of imgs) assert.ok(list.split('\n').includes(src), src + ' is in the public list');
+  assert.match(soon, /Every image is a render of a proposed design for one HDB flat[^<]*They are not photos of completed work\./);
+  assert.doesNotMatch(soon, /\$|S\$|\u2014|type="file"|<input|<form/);   // no price, no em dash, nothing to fill in
+});
+
 test('Home no longer invites an enquiry that cannot be sent', () => {
   assert.doesNotMatch(home, />START ENQUIRY<|>START THIS DESIGN|>ADD ONE TO MY ENQUIRY<|>Start enquiry</);
-  assert.equal((home.match(/>ENQUIRY OPENS SOON<\/a>/g) || []).length, 4);
+  assert.equal((home.match(/>START<\/a>/g) || []).length, 4, 'owner, 12 Nov: the enquiry button says START');
 });
