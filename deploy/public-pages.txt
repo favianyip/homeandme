@@ -104,6 +104,12 @@ assets/images/fb-icon.svg
 # Public direct-contractor pages, guides and imagery (restored to the exact
 # Pages manifest after the reviewed-reference gallery merge dropped them).
 Home Direct.dc.html
+Home Atelier.html
+atelier/home.css
+atelier/tokens.css
+atelier/base.css
+atelier/home.js
+atelier/air.jpg
 Renovation Enquiry.dc.html
 Renovation Guides.dc.html
 guides/how-to-read-hdb-floor-plan.html
