@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Four themes, Home &amp; Me</title>
+<meta name="description" content="Choose one of four themes for your design. Each theme shows the living room, main bedroom, kitchen and toilet.">
+<link rel="icon" href="../favicon.svg">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=sentient@300,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="journey.css">
+</head>
+<body>
+<div class="air" aria-hidden="true"></div>
+<header class="mast"><div class="container mast__in">
+  <a class="wordmark" href="../" aria-label="Home &amp; Me, home page"><img src="../assets/images/hnm-logo.png" alt="" width="30" height="30" onerror="this.remove()"><span>Home &amp; Me</span></a>
+</div></header>
+
+<main class="jmain" id="main"><div class="container wide jsplit jsplit--viewer">
+  <div data-rail></div>
+
+  <div class="jhead">
+    <h1 id="h1">Four themes, one home.</h1>
+    <p class="lead" id="lead">Same flat, same design, four ways to fit it out. Each theme shows the living room, main bedroom, kitchen and toilet together.</p>
+    <p class="truth" id="fallback" hidden></p>
+  </div>
+
+  <section class="viewer" aria-label="Compare the four themes">
+    <div class="viewer__bar">
+      <div class="seg" role="group" aria-label="Theme" id="themeSeg"></div>
+    </div>
+
+    <div class="set" id="set"></div>
+
+    <div class="viewer__about" aria-live="polite">
+      <h2 id="tName">Theme 1</h2>
+      <dl class="sum">
+        <div><dt>Furniture placement</dt><dd id="tPlacement"></dd></div>
+        <div><dt>Carpentry</dt><dd id="tCarpentry"></dd></div>
+        <div><dt>Set-up</dt><dd id="tSetup"></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <div class="jbar">
+    <a class="textlink" href="style.html">Back</a>
+    <a class="btn btn--fill grow" id="go" href="check.html">Choose theme 1</a>
+  </div>
+
+  <p class="footline">The pictures are AI-visualised samples of one sample 5-room flat, not photos of a finished home. Your own flat is designed in the theme you choose, after you send your floor plan.</p>
+</div></main>
+
+<dialog class="zoom" id="zoom" aria-label="Larger picture">
+  <img id="zoomImg" alt="">
+  <div class="zoom__bar"><p id="zoomCap"></p><button type="button" class="btn" id="zoomClose">Close</button></div>
+</dialog>
+
+<script src="products.js"></script>
+<script src="config.js"></script>
+<script src="flow.js"></script>
+<script>
+(function () {
+  HNM_FLOW.mountRail('themes');
+  var J = window.HNM_JOURNEY, s = HNM_FLOW.load();
+  var styleId = s.style || 'minimalist';
+  var styleName = J.styleById(styleId).name;
+  var set = J.themesFor(styleId), items = set.items;
+
+  document.getElementById('h1').textContent = 'Four ' + styleName + ' themes.';
+  if (!set.own) {
+    var fb = document.getElementById('fallback'); fb.hidden = false;
+    fb.textContent = 'Sample pictures: the Minimalist set is shown until the ' + styleName + ' set is ready.';
+  }
+
+  var setBox = document.getElementById('set');
+  var themeSeg = document.getElementById('themeSeg');
+  var go = document.getElementById('go');
+  var zoom = document.getElementById('zoom'), zoomImg = document.getElementById('zoomImg'), zoomCap = document.getElementById('zoomCap');
+  var cur = (s.style === styleId && typeof s.theme === 'number' && items[s.theme]) ? s.theme : 0;
+
+  // the four pictures of a theme, built once and re-pointed on every switch
+  var cells = set.rooms.map(function (r, k) {
+    var fig = document.createElement('figure'); fig.className = 'set__shot';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'set__open';
+    var img = document.createElement('img'); img.width = 1200; img.height = 675; img.decoding = 'async';
+    b.appendChild(img);
+    if (k === 0) { var chip = document.createElement('span'); chip.className = 'sample-chip'; chip.textContent = 'Sample'; b.appendChild(chip); }
+    var cap = document.createElement('figcaption'); cap.textContent = r[1];
+    fig.appendChild(b); fig.appendChild(cap); setBox.appendChild(fig);
+    b.addEventListener('click', function () {
+      zoomImg.src = img.src; zoomImg.alt = img.alt;
+      zoomCap.textContent = 'Theme ' + (cur + 1) + ', ' + r[1].toLowerCase();
+      if (zoom.showModal) zoom.showModal(); else zoom.setAttribute('open', '');
+    });
+    return { img: img, btn: b, name: r[1] };
+  });
+  function closeZoom() { if (zoom.close) zoom.close(); else zoom.removeAttribute('open'); }
+  document.getElementById('zoomClose').addEventListener('click', closeZoom);
+  zoom.addEventListener('click', function (e) { if (e.target === zoom || e.target === zoomImg) closeZoom(); });
+
+  function render() {
+    var t = items[cur];
+    Array.prototype.forEach.call(themeSeg.children, function (b, i) { b.setAttribute('aria-pressed', String(i === cur)); });
+    cells.forEach(function (c, k) {
+      c.img.src = t.shots[k].src;
+      c.img.alt = styleName + ' theme ' + (cur + 1) + ', ' + c.name.toLowerCase() + ', an AI-visualised sample';
+      c.btn.setAttribute('aria-label', 'Enlarge the ' + c.name.toLowerCase() + ' picture');
+    });
+    document.getElementById('tName').textContent = 'Theme ' + (cur + 1) + '. ' + t.n;
+    document.getElementById('tPlacement').textContent = t.placement;
+    document.getElementById('tCarpentry').textContent = t.carpentry;
+    document.getElementById('tSetup').textContent = t.setup;
+    go.textContent = 'Choose theme ' + (cur + 1);
+    HNM_FLOW.patch({ theme: cur, themeName: t.n });
+  }
+
+  items.forEach(function (t, i) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = 'Theme ' + (i + 1);
+    b.title = t.n;
+    b.addEventListener('click', function () { cur = i; render(); });
+    themeSeg.appendChild(b);
+  });
+  // load the other themes' pictures once the first set is on screen, so switching is instant
+  window.addEventListener('load', function () {
+    items.forEach(function (t, i) { if (i !== cur) t.shots.forEach(function (sh) { var im = new Image(); im.src = sh.src; }); });
+  });
+  // left and right arrow keys step through the themes
+  document.addEventListener('keydown', function (e) {
+    if (zoom.open) return;
+    if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight') { cur = (cur + 1) % items.length; render(); }
+    if (e.key === 'ArrowLeft') { cur = (cur + items.length - 1) % items.length; render(); }
+  });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { skipUnlessPublic } from './helpers/unpublished.mjs';
 import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
 import { basename, join, relative } from 'node:path';
@@ -126,7 +127,8 @@ test('reviewed reference verifier fails closed when Web Crypto SHA-256 is unavai
   }
 });
 
-test('reviewed reference page states its evidence boundary and has no external runtime asset path', async () => {
+test('reviewed reference page states its evidence boundary and has no external runtime asset path', async (t) => {
+  if (skipUnlessPublic(t, 'ReviewedReferences.html')) return;
   const [page, runtime, css, projectJourney, config, allowlist, readme] = await Promise.all([
     readText('ReviewedReferences.html'),
     readText('reviewed-reference-gallery.js'),

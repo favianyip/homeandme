@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Check and send, Home &amp; Me</title>
+<meta name="description" content="Check your details, then send your floor plan for your free design.">
+<link rel="icon" href="../favicon.svg">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=sentient@300,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="journey.css">
+</head>
+<body>
+<div class="air" aria-hidden="true"></div>
+<header class="mast"><div class="container mast__in">
+  <a class="wordmark" href="../" aria-label="Home &amp; Me, home page"><img src="../assets/images/hnm-logo.png" alt="" width="30" height="30" onerror="this.remove()"><span>Home &amp; Me</span></a>
+</div></header>
+
+<main class="jmain" id="main"><div class="container wide jsplit">
+  <div data-rail></div>
+
+  <div class="jhead">
+    <h1>Check it, then send.</h1>
+    <p class="lead" id="lead">Your photos are free. We start as soon as you send this.</p>
+  </div>
+
+  <div class="form-card">
+    <dl class="sum">
+      <div id="rowPlan"><dt>Floor plan</dt><dd id="vPlan">Not added yet</dd></div>
+      <div><dt>Name</dt><dd id="vName">Not added yet</dd></div>
+      <div><dt>WhatsApp</dt><dd id="vWa">Not added yet</dd></div>
+      <div><dt>Email</dt><dd id="vEmail">Not given</dd></div>
+      <div><dt>Design</dt><dd id="vStyle">Minimalist</dd></div>
+      <div><dt>Theme</dt><dd id="vTheme">Theme 1</dd></div>
+    </dl>
+    <p class="truth"><a href="upload.html">Change your details</a></p>
+
+    <h2 class="sum__head">What happens next</h2>
+    <ol class="steps steps--plain" id="nextSteps">
+      <li>We read your floor plan and build your flat in 3D.</li>
+      <li>We design every room in your theme and make the photos.</li>
+      <li>Our designer checks them, then we WhatsApp you a private link.</li>
+    </ol>
+
+    <div class="field" id="replan" hidden>
+      <label for="planAgain">Add your floor plan again</label>
+      <input type="file" id="planAgain" accept="image/png,image/jpeg,image/webp,application/pdf">
+      <p class="field-err" id="planErr" role="alert" hidden></p>
+    </div>
+    <input type="text" id="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" hidden>
+
+    <label class="consent">
+      <input type="checkbox" id="consent">
+      <span>I agree Home &amp; Me may store this enquiry and contact me on WhatsApp, phone or email about it. No marketing lists, no passing my details to other firms.</span>
+    </label>
+  </div>
+
+  <div class="note" id="sendFail" role="alert" hidden>
+    <p id="sendFailText">We could not reach our server just now. Nothing was lost.</p>
+    <p><a class="btn" id="waFallback" href="https://wa.me/6588376196" rel="noopener">Send it on WhatsApp instead</a></p>
+  </div>
+
+  <div class="jbar">
+    <a class="textlink" href="themes.html">Back</a>
+    <a class="btn btn--fill grow is-off" id="go" href="sent.html" aria-disabled="true">Tick the box to send</a>
+  </div>
+
+  <p class="footline" id="foot">Your floor plan and details are sent to Home &amp; Me only when you tap Send.</p>
+</div></main>
+
+<script src="products.js"></script>
+<script src="config.js"></script>
+<script src="flow.js"></script>
+<script src="send.js"></script>
+<script>
+(function () {
+  HNM_FLOW.mountRail('check');
+  var J = window.HNM_JOURNEY, s = HNM_FLOW.load();
+  function put(id, v) { if (v) document.getElementById(id).textContent = v; }
+  put('vPlan', s.planName); put('vName', s.name); put('vWa', s.wa); put('vEmail', s.email);
+  var style = J.styleById(s.style || 'minimalist');
+  put('vStyle', style.name);
+  var set = J.themesFor(style.id), i = (typeof s.theme === 'number') ? s.theme : 0;
+  put('vTheme', 'Theme ' + (i + 1) + ', ' + set.items[i].n);
+
+  var box = document.getElementById('consent'), go = document.getElementById('go');
+  function refresh() {
+    if (box.checked) { go.classList.remove('is-off'); go.removeAttribute('aria-disabled'); go.textContent = HNM_FLOW.PLAN ? 'Send and start my design' : 'Send my request'; }
+    else { go.classList.add('is-off'); go.setAttribute('aria-disabled', 'true'); go.textContent = 'Tick the box to send'; }
+  }
+  box.addEventListener('change', refresh);
+  if (!HNM_FLOW.LIVE) {
+    go.addEventListener('click', function () { HNM_FLOW.patch({ sent: true }); });
+    refresh();
+    return;
+  }
+
+  // ---- live site: a person reviews every request first, and Send really sends
+  document.getElementById('nextSteps').innerHTML =
+    '<li>Our designer looks at your floor plan, your design and your theme.</li>' +
+    '<li>We message you on WhatsApp to confirm the details.</li>' +
+    '<li>We design your flat in your theme and send you the photos, free.</li>';
+  document.getElementById('foot').textContent = 'Your floor plan and details are sent to Home & Me only when you tap Send.';
+  var PLAN = HNM_FLOW.PLAN;
+  if (!PLAN) {
+    // Floor plan upload is closed: the request goes without a plan, and the page says so.
+    document.getElementById('rowPlan').remove();
+    document.getElementById('lead').textContent = 'A person reviews your request first. Floor plan upload opens soon.';
+    document.getElementById('nextSteps').innerHTML =
+      '<li>Our designer looks at your design and your theme.</li>' +
+      '<li>We message you on WhatsApp to confirm the details.</li>' +
+      '<li>Floor plan upload opens soon. We ask for your floor plan then.</li>';
+    document.getElementById('foot').textContent = 'Your details are sent to Home & Me only when you tap Send.';
+  }
+  go.setAttribute('href', 'sent.html');
+  if (s.sent && s.ref) { location.replace('sent.html'); return; }
+  if (HNM_SEND.nameProblem(s.name) || HNM_SEND.phoneProblem(s.wa) || HNM_SEND.emailProblem(s.email)) { location.replace('upload.html'); return; }
+
+  var planFile = null, sending = false;
+  var replan = document.getElementById('replan');
+  function showErr(msg) { var el = document.getElementById('planErr'); el.textContent = msg; el.hidden = !msg; }
+  if (PLAN) HNM_FLOW.loadPlan().then(function (f) {
+    planFile = f;
+    if (!f) { replan.hidden = false; document.getElementById('vPlan').textContent = 'Please add it again below'; }
+  });
+  document.getElementById('planAgain').addEventListener('change', function () {
+    var f = this.files && this.files[0];
+    var bad = HNM_SEND.planProblem(f || null);
+    showErr(bad);
+    if (!bad) { planFile = f; HNM_FLOW.patch({ planName: f.name }); document.getElementById('vPlan').textContent = f.name; }
+  });
+
+  var details = {
+    name: s.name, wa: s.wa, email: s.email, planName: s.planName,
+    styleName: style.name, themeNo: i + 1, themeName: set.items[i].n
+  };
+  go.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (sending || !box.checked) return;
+    var bad = PLAN ? HNM_SEND.planProblem(planFile) : '';
+    if (bad) { replan.hidden = false; showErr(bad); replan.scrollIntoView({ block: 'center' }); return; }
+    sending = true;
+    go.classList.add('is-off'); go.setAttribute('aria-disabled', 'true'); go.textContent = 'Sending your request';
+    document.getElementById('sendFail').hidden = true;
+    var st = HNM_FLOW.load();
+    details.ref = st.ref || HNM_SEND.newRef();
+    details.hp = document.getElementById('hp').value;
+    details.planName = PLAN ? ((planFile && planFile.name) || s.planName) : '';
+    details.noPlan = !PLAN;
+    HNM_FLOW.patch({ ref: details.ref });      // a retry keeps the same reference
+    HNM_SEND.send(details, PLAN ? planFile : null).then(function (r) {
+      if (r.ok) {
+        HNM_FLOW.patch({ sent: true, ref: r.ref, planAttached: r.planAttached });
+        HNM_FLOW.clearPlan();
+        location.href = 'sent.html';
+        return;
+      }
+      sending = false;
+      refresh();
+      go.textContent = 'Try sending again';
+      document.getElementById('waFallback').href = HNM_SEND.whatsappLink(details, details.ref);
+      var fail = document.getElementById('sendFail'); fail.hidden = false; fail.scrollIntoView({ block: 'center' });
+    });
+  });
+  refresh();
+})();
+</script>
+</body>
+</html>

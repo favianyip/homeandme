@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Request received, Home &amp; Me</title>
+<meta name="description" content="We have your request. Our designer reviews it and contacts you on WhatsApp.">
+<link rel="icon" href="../favicon.svg">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=sentient@300,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="journey.css">
+</head>
+<body>
+<div class="air" aria-hidden="true"></div>
+<header class="mast"><div class="container mast__in">
+  <a class="wordmark" href="../" aria-label="Home &amp; Me, home page"><img src="../assets/images/hnm-logo.png" alt="" width="30" height="30" onerror="this.remove()"><span>Home &amp; Me</span></a>
+</div></header>
+
+<main class="jmain" id="main"><div class="container wide jsplit">
+  <div data-rail></div>
+
+  <div class="jhead">
+    <h1>We have your request.</h1>
+    <p class="lead" id="lead">Our designer reviews it first, then contacts you on WhatsApp.</p>
+  </div>
+
+  <div class="form-card">
+    <dl class="sum">
+      <div><dt>Reference</dt><dd id="vRef">Not sent yet</dd></div>
+      <div><dt>Design</dt><dd id="vStyle">Minimalist</dd></div>
+      <div><dt>Theme</dt><dd id="vTheme">Theme 1</dd></div>
+      <div><dt>WhatsApp</dt><dd id="vWa">Not given</dd></div>
+    </dl>
+    <p class="note" id="planNote" hidden></p>
+
+    <h2 class="sum__head">What happens next</h2>
+    <ol class="steps steps--plain" id="nextSteps">
+      <li>Our designer looks at your floor plan, your design and your theme.</li>
+      <li>We message you on WhatsApp to confirm the details.</li>
+      <li>We design your flat in your theme and send you the photos, free.</li>
+    </ol>
+    <p class="truth">Keep your reference. Quote it if you message us.</p>
+  </div>
+
+  <div class="jbar">
+    <a class="textlink" href="../">Home</a>
+    <a class="btn btn--fill grow" id="wa" href="https://wa.me/6588376196" rel="noopener">Message us on WhatsApp</a>
+  </div>
+</div></main>
+
+<script src="products.js"></script>
+<script src="config.js"></script>
+<script src="flow.js"></script>
+<script src="send.js"></script>
+<script>
+(function () {
+  HNM_FLOW.mountRail('sent');
+  var J = window.HNM_JOURNEY, s = HNM_FLOW.load();
+  // Opened without a sent enquiry: go to the start, never show a made-up reference.
+  if (!s.sent || !s.ref) { location.replace('upload.html'); return; }
+  var style = J.styleById(s.style || 'minimalist');
+  var set = J.themesFor(style.id), i = (typeof s.theme === 'number' && set.items[s.theme]) ? s.theme : 0;
+  document.getElementById('vRef').textContent = s.ref;
+  document.getElementById('vStyle').textContent = style.name;
+  document.getElementById('vTheme').textContent = 'Theme ' + (i + 1) + ', ' + set.items[i].n;
+  if (s.wa) document.getElementById('vWa').textContent = s.wa;
+  var wa = document.getElementById('wa');
+  if (!HNM_FLOW.PLAN) {
+    document.getElementById('nextSteps').innerHTML =
+      '<li>Our designer looks at your design and your theme.</li>' +
+      '<li>We message you on WhatsApp to confirm the details.</li>' +
+      '<li>Floor plan upload opens soon. We ask for your floor plan then.</li>';
+  }
+  if (HNM_FLOW.PLAN && s.planAttached === false) {
+    var n = document.getElementById('planNote'); n.hidden = false;
+    n.textContent = 'Your floor plan did not come through with the request. Please send it to us on WhatsApp so we can start.';
+    wa.textContent = 'Send my floor plan on WhatsApp';
+    wa.href = 'https://wa.me/' + HNM_SEND.WHATSAPP + '?text=' + encodeURIComponent('Hello Home & Me, here is my floor plan for ' + s.ref + '.');
+  } else {
+    wa.href = 'https://wa.me/' + HNM_SEND.WHATSAPP + '?text=' + encodeURIComponent('Hello Home & Me, my reference is ' + s.ref + '.');
+  }
+})();
+</script>
+</body>
+</html>

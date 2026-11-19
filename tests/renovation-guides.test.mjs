@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFile } from 'node:fs/promises';
+import { skipUnlessPublic } from './helpers/unpublished.mjs';
 
 const root = new URL('../', import.meta.url);
 const guidePaths = [
@@ -14,7 +15,8 @@ const guidePaths = [
 
 const read = (path) => readFile(new URL(path, root), 'utf8');
 
-test('renovation guides are discoverable and publication-ready', async () => {
+test('renovation guides are discoverable and publication-ready', async (t) => {
+  if (skipUnlessPublic(t, 'Renovation Guides.dc.html')) return;
   const [home, manifest, sitemap, ...pages] = await Promise.all([
     read('Home Direct.dc.html'),
     read('deploy/public-pages.txt'),

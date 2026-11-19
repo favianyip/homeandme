@@ -10,6 +10,7 @@ import {
 import { createHash } from 'node:crypto';
 import { dirname, extname, isAbsolute, posix, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolveLocalTarget } from './public-references.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const manifestPath = resolve(root, 'deploy/public-pages.txt');
@@ -21,6 +22,7 @@ const blockedPrefixes = [
   '.github/',
   '.understand-anything/',
   'deploy/',
+  'design/',
   'docs/',
   'plans/',
   'research/',
@@ -172,10 +174,8 @@ for (const file of artifactFiles) {
 }
 
 for (const { file, ref } of references) {
-  const target = ref.startsWith('/')
-    ? posix.normalize(ref.slice(1) || 'index.html')
-    : posix.normalize(posix.join(posix.dirname(file), ref));
-  if (target === '..' || target.startsWith('../')) fail(`reference escapes artifact from ${file}: ${ref}`);
+  const target = resolveLocalTarget(file, ref);
+  if (target === null) fail(`reference escapes artifact from ${file}: ${ref}`);
   if (!artifactSet.has(target)) fail(`missing local dependency from ${file}: ${ref} -> ${target}`);
 }
 

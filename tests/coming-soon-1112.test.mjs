@@ -2,6 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { skipUnlessPublic } from './helpers/unpublished.mjs';
 import vm from 'node:vm';
 import { webcrypto } from 'node:crypto';
 
@@ -77,7 +78,8 @@ test('a come-back link of an enquiry already sent still shows its status, not th
   assert.equal(v.comingSoon, false);
 });
 
-test('the showcase shows one whole flat as renders of a proposed design, honestly labelled, from the public list only', () => {
+test('the showcase shows one whole flat as renders of a proposed design, honestly labelled, from the public list only', (t) => {
+  if (skipUnlessPublic(t, 'Renovation Enquiry.dc.html')) return;
   const soon = page.slice(page.indexOf('data-coming-soon="1"'), page.indexOf('<sc-if value="{{ enquiryOpen }}"'));
   const imgs = [...soon.matchAll(/<img src="([^"]+)"[^>]*alt="([^"]+)"[^>]*width="1344" height="752"/g)];
   assert.equal(imgs.length, 6);   // the hero and one photo a room

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start your design, Home &amp; Me</title>
+<meta name="description" content="Tell us where to reach you, then choose a design and a theme for your HDB flat.">
+<link rel="icon" href="../favicon.svg">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=sentient@300,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="journey.css">
+</head>
+<body>
+<div class="air" aria-hidden="true"></div>
+<header class="mast"><div class="container mast__in">
+  <a class="wordmark" href="../" aria-label="Home &amp; Me, home page"><img src="../assets/images/hnm-logo.png" alt="" width="30" height="30" onerror="this.remove()"><span>Home &amp; Me</span></a>
+</div></header>
+
+<main class="jmain" id="main"><div class="container wide jsplit">
+  <div data-rail></div>
+
+  <div class="jhead">
+    <h1 id="h1">Start with your floor plan.</h1>
+    <p class="lead" id="lead">Upload the plan and add your details. We design your flat free, and a person checks it before it reaches you.</p>
+  </div>
+
+  <div class="form-card">
+    <label class="dropzone" id="dz">
+      <input type="file" id="plan" accept="image/*,application/pdf" aria-label="Upload your floor plan">
+      <span class="dz-mark" aria-hidden="true">+</span>
+      <span class="dz-title" id="dzTitle">Upload your floor plan</span>
+      <span class="dz-note" id="dzNote">A JPG, a PNG or a PDF, up to 10 MB.</span>
+    </label>
+    <p class="field-err" id="planErr" role="alert" hidden></p>
+    <p class="truth" id="planHint">For HDB flats, for now. A PDF floor plan from HDB works best; a clear photo or scan is fine too.</p>
+
+    <div class="fields">
+      <div class="field">
+        <label for="name">Your name</label>
+        <input type="text" id="name" name="name" autocomplete="name" placeholder="e.g. Wei Ling">
+        <p class="field-err" id="nameErr" role="alert" hidden></p>
+      </div>
+      <div class="fields two" style="margin-top:0">
+        <div class="field">
+          <label for="wa">WhatsApp number</label>
+          <input type="tel" id="wa" name="wa" autocomplete="tel" inputmode="tel" placeholder="e.g. 9123 4567">
+          <p class="field-err" id="waErr" role="alert" hidden></p>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com">
+          <p class="field-err" id="emailErr" role="alert" hidden></p>
+        </div>
+      </div>
+    </div>
+    <p class="truth">Your details reach our team only.</p>
+  </div>
+
+  <div class="jbar">
+    <a class="btn btn--fill grow" id="go" href="style.html">Choose your design</a>
+  </div>
+
+  <p class="footline" id="foot">Nothing is sent until you tap Send on the last step.</p>
+</div></main>
+
+<script src="products.js"></script>
+<script src="config.js"></script>
+<script src="flow.js"></script>
+<script src="send.js"></script>
+<script>
+(function () {
+  HNM_FLOW.mountRail('upload');
+  var J = window.HNM_JOURNEY;
+  var picked = (location.hash.match(/style=([a-z-]+)/) || [])[1];
+  if (picked && J.styleById(picked).id === picked) HNM_FLOW.patch({ style: picked, styleName: J.styleById(picked).name });
+  var s = HNM_FLOW.load();
+  if (s.planName && HNM_FLOW.PLAN) { document.getElementById('dzTitle').textContent = s.planName; document.getElementById('dzNote').textContent = 'Added. Tap to change it.'; }
+  // restore fields
+  ['name','wa','email'].forEach(function (id) { if (s[id]) document.getElementById(id).value = s[id]; });
+
+  var LIVE = HNM_FLOW.LIVE, PLAN = HNM_FLOW.PLAN, planFile = null;
+  if (!PLAN) {
+    // Floor plan upload is closed: no way to add a file on this page, and none is kept.
+    ['dz', 'planErr', 'planHint'].forEach(function (id) { var el = document.getElementById(id); if (el) el.remove(); });
+    document.getElementById('h1').textContent = 'Start with your details.';
+    document.getElementById('lead').textContent = 'Tell us where to reach you, then choose your design and theme. Floor plan upload opens soon.';
+    document.title = 'Start your design, Home & Me';
+    HNM_FLOW.patch({ planName: '', planSaved: false });
+    HNM_FLOW.clearPlan();
+  }
+  function show(id, msg) { var el = document.getElementById(id); el.textContent = msg; el.hidden = !msg; }
+  if (LIVE) document.getElementById('foot').textContent = 'Nothing is sent until you tap Send on the last step.';
+  var input = document.getElementById('plan');
+  if (input) input.addEventListener('change', function () {
+    var f = input.files && input.files[0];
+    if (!f) return;
+    document.getElementById('dzTitle').textContent = f.name;      // textContent: safe
+    document.getElementById('dzNote').textContent = 'Added. Tap to change it.';
+    HNM_FLOW.patch({ planName: f.name, planSaved: false });
+    planFile = f;
+    if (LIVE) {
+      show('planErr', HNM_SEND.planProblem(f));
+      HNM_FLOW.savePlan(f).then(function (ok) { HNM_FLOW.patch({ planSaved: !!ok }); });
+    }
+    var img = document.getElementById('dzPreview');
+    if (!img) { img = document.createElement('img'); img.id = 'dzPreview'; img.className = 'dz-preview'; img.alt = 'Your floor plan'; img.hidden = true; document.getElementById('dz').appendChild(img); }
+    if (/^image\//.test(f.type)) {
+      var r = new FileReader();                                   // local preview only, no network
+      r.onload = function () { img.src = r.result; img.hidden = false; };
+      r.readAsDataURL(f);
+    } else { img.hidden = true; }
+  });
+
+  document.getElementById('go').addEventListener('click', function (e) {
+    if (LIVE) {
+      var st = HNM_FLOW.load();
+      var pErr = !PLAN ? '' : (planFile ? HNM_SEND.planProblem(planFile) : (st.planName ? '' : HNM_SEND.planProblem(null)));
+      var nErr = HNM_SEND.nameProblem(document.getElementById('name').value);
+      var wErr = HNM_SEND.phoneProblem(document.getElementById('wa').value);
+      var eErr = HNM_SEND.emailProblem(document.getElementById('email').value);
+      if (PLAN) show('planErr', pErr);
+      show('nameErr', nErr); show('waErr', wErr); show('emailErr', eErr);
+      if (pErr || nErr || wErr || eErr) {
+        e.preventDefault();
+        var first = pErr ? 'dz' : (nErr ? 'name' : (wErr ? 'wa' : 'email'));
+        var el = document.getElementById(first); if (el.focus) el.focus(); el.scrollIntoView({ block: 'center' });
+        return;
+      }
+    }
+    HNM_FLOW.patch({
+      name: document.getElementById('name').value.trim(),
+      wa: document.getElementById('wa').value.trim(),
+      email: document.getElementById('email').value.trim()
+    });
+  });
+})();
+</script>
+</body>
+</html>
