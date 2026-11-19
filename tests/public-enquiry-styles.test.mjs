@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import { skipUnlessPublic } from './helpers/unpublished.mjs';
 import { test } from 'node:test';
 import vm from 'node:vm';
 
@@ -26,7 +27,8 @@ function constantValue(name, nextName) {
   return vm.runInNewContext(`(${match[1]})`, Object.create(null), { timeout: 500 });
 }
 
-test('public enquiry exposes the ZIP style directions without weakening publication gates', () => {
+test('public enquiry exposes the ZIP style directions without weakening publication gates', (t) => {
+  if (skipUnlessPublic(t, 'Renovation Enquiry.dc.html')) return;
   const categories = Array.from(constantValue('CATS', 'STYLES'));
   const styles = Array.from(constantValue('STYLES', 'AREAS'));
 

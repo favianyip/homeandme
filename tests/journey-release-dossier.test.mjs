@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { skipUnlessPublic } from './helpers/unpublished.mjs';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
@@ -62,7 +63,8 @@ test('flags alone cannot claim release and downstream capabilities remain depend
   assert.ok(released.stages.every((stage) => stage.publicState === 'released'));
 });
 
-test('public dossier integration is actionless, accessible and privacy allowlisted', async () => {
+test('public dossier integration is actionless, accessible and privacy allowlisted', async (t) => {
+  if (skipUnlessPublic(t, 'ProjectJourney.html')) return;
   const [page, runtime, stylesheet, manifest] = await Promise.all([
     readFile(new URL('../ProjectJourney.html', import.meta.url), 'utf8'),
     readFile(new URL('../project-journey.js', import.meta.url), 'utf8'),

@@ -21,10 +21,15 @@ test('public artifact includes crawl controls and a canonical sitemap', () => {
   assert.match(robots, /^Sitemap: https:\/\/homeandme\.sg\/sitemap\.xml$/m);
   for (const url of [
     'https://homeandme.sg/',
-    'https://homeandme.sg/Home%20Direct.dc.html',
-    'https://homeandme.sg/Renovation%20Enquiry.dc.html',
+    'https://homeandme.sg/journey/upload.html',
+    'https://homeandme.sg/ContactUs.dc.html',
     'https://homeandme.sg/Legal.dc.html',
   ]) assert.match(sitemap, new RegExp(`<loc>${url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}</loc>`));
+  // 20 Nov 2026: a page that is off the public list is off the sitemap too
+  for (const loc of sitemap.matchAll(/<loc>https:\/\/homeandme\.sg\/([^<]*)<\/loc>/g)) {
+    const path = decodeURIComponent(loc[1]) || 'index.html';
+    assert.ok(manifest.has(path), `${path} is in the sitemap but not public`);
+  }
 });
 
 test('content pages expose page-specific search metadata', () => {
@@ -76,7 +81,11 @@ test('homepage describes the adaptive journey and keeps floor plans optional', (
   assert.match(home, /class="skip-link" href="#top"/);
   assert.match(home, /aria-label="\{\{ menuLabel \}\}" aria-expanded="\{\{ menuOpen \}\}"/);
   assert.match(home, /@media \(prefers-reduced-motion: reduce\)/);
-  assert.match(index, /add a floor plan if you have one/);
+  // the front door is the home page itself: no redirect, the search-console tag kept, one canonical address
+  assert.match(index, /<meta name="google-site-verification" content="[^"]+">/);
+  assert.match(index, /<link rel="canonical" href="https:\/\/homeandme\.sg\/">/);
+  assert.doesNotMatch(index, /http-equiv="refresh"|location\.replace/);
+  assert.match(index, /<h1[^>]*>Renovation without the middlemen\.<\/h1>/);
   assert.doesNotMatch(home, /UPLOAD FLOOR PLAN|we read the layout and size|lands with our team instantly|Floor plan to 3D|plan reading is tuned/i);
 });
 

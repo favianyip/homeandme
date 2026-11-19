@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Page not found, Home &amp; Me</title>
+<meta name="description" content="This Home &amp; Me page has moved. Start again from the home page.">
+<link rel="icon" href="/favicon.svg">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=sentient@300,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400&display=swap" rel="stylesheet">
+<style>
+/* This page is served for any address that is not found, at any depth, so it carries its own
+   styles and links from the site root. Same paper, ink and faces as the home page. */
+:root {
+  color-scheme: light;
+  --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px;
+  --text-sm: 0.875rem; --text-md: 1rem; --text-xl: 1.5625rem;
+  --text-display-s: clamp(2.25rem, 4vw + 0.5rem, 3.75rem); --text-lead: clamp(1.125rem, 0.35vw + 1rem, 1.375rem);
+  --color-paper: oklch(94.5% 0.010 76); --color-ink: oklch(19% 0.024 52); --color-ink-2: oklch(31% 0.018 54);
+  --color-rule: oklch(81% 0.011 70); --color-accent: oklch(45.9% 0.040 222); --color-focus: oklch(50% 0.095 222);
+  --lit-55: oklch(99.6% 0.004 85 / 0.55); --lit-10: oklch(99.6% 0.004 85 / 0.1);
+  --font-display: "Sentient", Georgia, serif; --font-body: "Hanken Grotesk", system-ui, sans-serif;
+  --gutter: 64px; --nav-h: 76px;
+}
+@media (max-width: 60rem) { :root { --gutter: 24px; } }
+@media (max-width: 40rem) { :root { --gutter: 16px; } }
+*, *::before, *::after { box-sizing: border-box; }
+html, body { overflow-x: clip; }
+html { scrollbar-color: var(--color-ink-2) var(--color-paper); }
+::selection { background: var(--color-ink); color: var(--color-paper); }
+body { margin: 0; min-height: 100svh; display: grid; grid-template-rows: auto 1fr; background: var(--color-paper); color: var(--color-ink); font: 400 var(--text-md)/1.55 var(--font-body); -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.mast { display: grid; place-items: center; height: var(--nav-h); border-bottom: 1px solid var(--color-rule); }
+.wordmark { display: inline-flex; align-items: center; gap: var(--space-sm); min-height: 44px; font: 400 var(--text-xl)/1 var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); text-decoration: none; white-space: nowrap; }
+.wordmark img { width: 30px; height: 30px; display: block; }
+main { align-self: center; width: 100%; max-width: 46rem; margin-inline: auto; padding: var(--space-2xl) var(--gutter); }
+h1 { margin: 0; max-width: 16ch; font: 300 var(--text-display-s)/1.05 var(--font-display); letter-spacing: -0.018em; text-wrap: balance; }
+.lead { margin: var(--space-lg) 0 0; max-width: 36ch; font-size: var(--text-lead); line-height: 1.45; color: var(--color-ink-2); text-wrap: pretty; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-md) var(--space-lg); margin: var(--space-xl) 0 0; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 var(--space-lg); border: 1px solid var(--color-ink); border-radius: 3px; color: var(--color-ink); text-decoration: none; white-space: nowrap; box-shadow: inset 0 1px 0 var(--lit-55); transition: background-color 220ms cubic-bezier(0.16, 1, 0.3, 1), color 220ms cubic-bezier(0.16, 1, 0.3, 1); }
+.btn:hover { background: var(--color-ink); color: var(--color-paper); box-shadow: inset 0 1px 0 var(--lit-10); }
+.btn:active { transform: translateY(1px); }
+.textlink { display: inline-flex; align-items: center; min-height: 48px; color: var(--color-ink); text-decoration: underline; text-decoration-color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.24em; white-space: nowrap; }
+.textlink:hover { text-decoration-thickness: 2px; }
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+</style>
+</head>
+<body>
+<header class="mast">
+  <a class="wordmark" href="/" aria-label="Home &amp; Me, home page"><img src="/assets/images/hnm-logo.png" alt="" width="30" height="30"><span>Home &amp; Me</span></a>
+</header>
+<main id="main">
+  <h1>This page has moved.</h1>
+  <p class="lead">The address you opened is not here any more. Everything starts from the home page.</p>
+  <p class="actions">
+    <a class="btn" href="/">Go to the home page</a>
+    <a class="textlink" href="https://wa.me/6588376196" target="_blank" rel="noopener">WhatsApp +65 8837 6196</a>
+  </p>
+</main>
+</body>
+</html>

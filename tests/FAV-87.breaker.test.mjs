@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { skipUnlessPublic } from './helpers/unpublished.mjs';
 
 const root = new URL('../', import.meta.url);
 const read = (p) => readFileSync(new URL(p, root), 'utf8');
@@ -9,7 +10,8 @@ const html = read('Home Direct.dc.html');
 const fpStart = html.indexOf('id="floorplan-to-render"');
 const section = html.slice(fpStart, html.indexOf('</section>', fpStart));
 
-test('FAV-87: every image in #floorplan-to-render ships in the Pages manifest', () => {
+test('FAV-87: every image in #floorplan-to-render ships in the Pages manifest', (t) => {
+  if (skipUnlessPublic(t, 'Home Direct.dc.html')) return;
   const srcs = [...section.matchAll(/<img[^>]*src="([^"]+)"/g)].map((m) => decodeURIComponent(m[1]));
   assert.ok(srcs.length === 3);
   const missing = srcs.filter((s) => !manifest.includes(s));

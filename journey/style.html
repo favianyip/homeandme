@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Choose your design, Home &amp; Me</title>
+<meta name="description" content="Choose the design you want for your flat from the Home &amp; Me designs.">
+<link rel="icon" href="../favicon.svg">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=sentient@300,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="journey.css">
+</head>
+<body>
+<div class="air" aria-hidden="true"></div>
+<header class="mast"><div class="container mast__in">
+  <a class="wordmark" href="../" aria-label="Home &amp; Me, home page"><img src="../assets/images/hnm-logo.png" alt="" width="30" height="30" onerror="this.remove()"><span>Home &amp; Me</span></a>
+</div></header>
+
+<main class="jmain" id="main"><div class="container wide">
+  <div data-rail></div>
+
+  <div class="jhead">
+    <h1>Choose your design.</h1>
+    <p class="lead">Pick the design closest to what you want. Next, you choose one of its four themes.</p>
+  </div>
+
+  <div class="picks" id="styles" role="group" aria-label="Our seven designs"></div>
+
+  <div class="jsub">
+    <h2>More designs.</h2>
+    <p class="lead">These are AI-visualised design directions, not completed projects or renders of your unit.</p>
+  </div>
+  <div class="picks" id="looks" role="group" aria-label="More designs"></div>
+
+  <div class="jbar">
+    <a class="textlink" href="upload.html">Back</a>
+    <a class="btn btn--fill grow is-off" id="go" href="themes.html" aria-disabled="true">Choose a design</a>
+  </div>
+
+  <p class="footline">The first seven designs are Home &amp; Me design visuals. No picture here is a photo of your flat. Your own design is made from your floor plan.</p>
+</div></main>
+
+<script src="products.js"></script>
+<script src="config.js"></script>
+<script src="flow.js"></script>
+<script>
+(function () {
+  HNM_FLOW.mountRail('style');
+  var J = window.HNM_JOURNEY, s = HNM_FLOW.load();
+  var chosen = s.style || null;
+  var hash = (location.hash.match(/style=([a-z-]+)/) || [])[1];
+  if (hash && J.styleById(hash).id === hash) chosen = hash;
+
+  var wrap = document.getElementById('styles'), looks = document.getElementById('looks');
+  var go = document.getElementById('go');
+
+  function select(id) {
+    chosen = id;
+    HNM_FLOW.patch({ style: id, styleName: J.styleById(id).name });
+    Array.prototype.forEach.call(document.querySelectorAll('.picks .pick'), function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.id === id));
+    });
+    go.classList.remove('is-off'); go.removeAttribute('aria-disabled');
+    go.textContent = 'Continue';
+    var more = document.createElement('span'); more.className = 'go__more'; more.textContent = ' with ' + J.styleById(id).name; go.appendChild(more);
+  }
+
+  function card(st) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'pick'; b.dataset.id = st.id;
+    b.setAttribute('aria-pressed', 'false');
+
+    var fig = document.createElement('span'); fig.className = 'pick__img';
+    var img = document.createElement('img');
+    img.src = '../' + st.rooms[0].src;
+    img.alt = st.concept ? st.name + ', an AI-visualised design direction' : st.name + ' living hall, a Home & Me design visual';
+    img.loading = 'lazy'; img.width = 1600; img.height = 800;
+    fig.appendChild(img);
+    var tick = document.createElement('span'); tick.className = 'pick__tick'; tick.setAttribute('aria-hidden', 'true'); tick.textContent = '\u2713';
+    fig.appendChild(tick);
+
+    var body = document.createElement('span'); body.className = 'pick__body';
+    var nm = document.createElement('span'); nm.className = 'pick__name'; nm.textContent = st.name;
+    body.appendChild(nm);
+    if (st.line) { var ln = document.createElement('span'); ln.className = 'pick__line'; ln.textContent = st.line; body.appendChild(ln); }
+
+    b.appendChild(fig); b.appendChild(body);
+    b.addEventListener('click', function () { select(st.id); });
+    return b;
+  }
+
+  // whole rows at every width: the first cards of a group are set larger so its count divides evenly
+  function fill(el, list) {
+    list.forEach(function (st) { el.appendChild(card(st)); });
+    var n = list.length;
+    el.dataset.ld = String(3 * ((4 - n % 4) % 4));
+    el.dataset.lt = String(2 * (n % 3 === 0 ? 0 : (n % 3 === 2 ? 1 : 2)));
+    el.dataset.lp = String(n % 2);
+  }
+  fill(wrap, J.STYLES.filter(function (st) { return !st.concept; }));
+  fill(looks, J.STYLES.filter(function (st) { return st.concept; }));
+
+  if (chosen) select(chosen);
+})();
+</script>
+</body>
+</html>
