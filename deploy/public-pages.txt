@@ -486,6 +486,7 @@ assets/concepts/hotel-suite-hdb-design.webp
 assets/site/tokens.css
 assets/site/base.css
 assets/images/hnm-logo.png
+assets/images/og-home.png
 support.js
 assets/site/home.css
 assets/portfolio/hero-minimalist-living.jpg
