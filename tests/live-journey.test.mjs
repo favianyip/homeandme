@@ -177,7 +177,24 @@ test('what is sent: the checks on the floor plan step and the enquiry itself', a
 // off the pages still work without a plan (the 20 Nov behaviour), so the off path is pinned too.
 test('floor plan upload is open behind one switch, and switched off the request still goes', async () => {
   assert.match(read('journey/config.js'), /^window\.HNM_PLAN_UPLOAD = true;$/m);
-  assert.match(read('journey/flow.js'), /var PLAN = LIVE \? window\.HNM_PLAN_UPLOAD === true : true;/);
+  assert.match(read('journey/flow.js'), /var PLAN = LIVE \? \(window\.HNM_PLAN_UPLOAD === true \|\| \(window\.HNM_PLAN_UPLOAD === 'testers' && hasTesterKey\(\)\)\) : true;/);
+  // the three switch values, run for real: open, closed, testers (with and without a key from the link)
+  const planFor = (value, stored, hash) => {
+    const store = stored ? { hnm_tester: stored } : {};
+    const sandbox = {
+      window: { HNM_LIVE: true, HNM_PLAN_UPLOAD: value }, location: { hash: hash || '', pathname: '/journey/upload.html', search: '' },
+      history: { replaceState: () => {} },
+      sessionStorage: { getItem: (k) => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = v; } },
+    };
+    vm.runInNewContext(read('journey/flow.js'), sandbox);
+    return sandbox.window.HNM_FLOW.PLAN;
+  };
+  assert.equal(planFor(true), true);
+  assert.equal(planFor(false), false);
+  assert.equal(planFor('true'), false, 'only the value true opens it');
+  assert.equal(planFor('testers'), false, 'testers mode without a key: no upload box');
+  assert.equal(planFor('testers', '', '#tester=TEST_ONLY_KEY_000001'), true, 'a tester link opens the box');
+  assert.equal(planFor('testers', 'short'), false, 'a malformed stored key does not');
   const upload = read('journey/upload.html');
   assert.match(upload, /if \(!PLAN\) \{[\s\S]*?\['dz', 'planErr', 'planHint'\]\.forEach\(function \(id\) \{ var el = document\.getElementById\(id\); if \(el\) el\.remove\(\); \}\);/,
     'the upload box is taken off the page while the switch is off');
