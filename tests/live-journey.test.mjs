@@ -196,7 +196,7 @@ test('floor plan upload is open behind one switch, and switched off the request 
   assert.equal(planFor('testers', '', '#tester=TEST_ONLY_KEY_000001'), true, 'a tester link opens the box');
   assert.equal(planFor('testers', 'short'), false, 'a malformed stored key does not');
   const upload = read('journey/upload.html');
-  assert.match(upload, /if \(!PLAN\) \{[\s\S]*?\['dz', 'planErr', 'planHint'\]\.forEach\(function \(id\) \{ var el = document\.getElementById\(id\); if \(el\) el\.remove\(\); \}\);/,
+  assert.match(upload, /if \(!PLAN\) \{[\s\S]*?\['dz', 'planErr', 'planHint', 'unitField'\]\.forEach\(function \(id\) \{ var el = document\.getElementById\(id\); if \(el\) el\.remove\(\); \}\);/,
     'the upload box is taken off the page while the switch is off');
   const check = read('journey/check.html');
   assert.match(check, /HNM_SEND\.send\(details, PLAN \? planFile : null\)/, 'no file is handed to Send while the switch is off');

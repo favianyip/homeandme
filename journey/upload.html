@@ -35,6 +35,11 @@
       <span class="dz-note" id="dzNote">The PDF floor plan, up to 10 MB.</span>
     </label>
     <p class="field-err" id="planErr" role="alert" hidden></p>
+    <div class="field" id="unitField">
+      <label for="planUnit">Unit number on the plan (only if your PDF shows several flats)</label>
+      <input type="text" id="planUnit" name="planUnit" maxlength="12" autocomplete="off" placeholder="e.g. 710">
+      <p class="field-err" id="unitErr" role="alert" hidden></p>
+    </div>
     <p class="truth" id="planHint">For HDB flats, for now. Use the PDF floor plan of your flat from HDB.</p>
 
     <div class="fields">
@@ -84,7 +89,7 @@
   var LIVE = HNM_FLOW.LIVE, PLAN = HNM_FLOW.PLAN, planFile = null;
   if (!PLAN) {
     // Floor plan upload is closed: no way to add a file on this page, and none is kept.
-    ['dz', 'planErr', 'planHint'].forEach(function (id) { var el = document.getElementById(id); if (el) el.remove(); });
+    ['dz', 'planErr', 'planHint', 'unitField'].forEach(function (id) { var el = document.getElementById(id); if (el) el.remove(); });
     document.getElementById('h1').textContent = 'Start with your details.';
     document.getElementById('lead').textContent = 'Tell us where to reach you, then choose your design and theme. Floor plan upload opens soon.';
     document.title = 'Start your design, Home & Me';
@@ -121,11 +126,14 @@
       var nErr = HNM_SEND.nameProblem(document.getElementById('name').value);
       var wErr = HNM_SEND.phoneProblem(document.getElementById('wa').value);
       var eErr = HNM_SEND.emailProblem(document.getElementById('email').value);
+      var uEl = document.getElementById('planUnit');
+      var uErr = (PLAN && uEl) ? HNM_SEND.unitProblem(uEl.value) : '';
+      if (PLAN && uEl) show('unitErr', uErr);
       if (PLAN) show('planErr', pErr);
       show('nameErr', nErr); show('waErr', wErr); show('emailErr', eErr);
-      if (pErr || nErr || wErr || eErr) {
+      if (pErr || nErr || wErr || eErr || uErr) {
         e.preventDefault();
-        var first = pErr ? 'dz' : (nErr ? 'name' : (wErr ? 'wa' : 'email'));
+        var first = pErr ? 'dz' : (nErr ? 'name' : (wErr ? 'wa' : (eErr ? 'email' : 'planUnit')));
         var el = document.getElementById(first); if (el.focus) el.focus(); el.scrollIntoView({ block: 'center' });
         return;
       }
@@ -133,7 +141,8 @@
     HNM_FLOW.patch({
       name: document.getElementById('name').value.trim(),
       wa: document.getElementById('wa').value.trim(),
-      email: document.getElementById('email').value.trim()
+      email: document.getElementById('email').value.trim(),
+      planUnit: (document.getElementById('planUnit') || { value: '' }).value.trim()
     });
   });
 })();

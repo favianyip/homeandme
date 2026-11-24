@@ -35,6 +35,16 @@ window.HNM_SEND = (function () {
     if (file.size > PLAN_MAX_BYTES) return 'That file is over 10 MB. Use the PDF floor plan from HDB.';
     return '';
   }
+  // The unit number of the flat as printed on a plan that shows several flats (a sales brochure), e.g. 710.
+  // Optional; letters, digits and one dash, at most 8, an optional # in front.
+  function unitToken(v) {
+    var u = String(v || '').trim().replace(/^#/, '').toUpperCase();
+    return /^[0-9A-Z][0-9A-Z-]{0,7}$/.test(u) ? u : '';
+  }
+  function unitProblem(v) {
+    if (!String(v || '').trim()) return '';
+    return unitToken(v) ? '' : 'Use the unit number as printed on the plan, for example 710.';
+  }
   function nameProblem(v) { return String(v || '').trim() ? '' : 'Tell us your name.'; }
   function phoneProblem(v) {
     var n = digits(v).length;
@@ -89,7 +99,8 @@ window.HNM_SEND = (function () {
         phone: String(d.wa || '').trim(),
         email: String(d.email || '').trim(),
         // the design's id, then the theme number as "theme:N" (the enquiry service keeps only its own fields)
-        styles: [d.styleId || d.styleName].concat(d.themeNo >= 1 && d.themeNo <= 4 ? ['theme:' + d.themeNo] : []),
+        styles: [d.styleId || d.styleName].concat(d.themeNo >= 1 && d.themeNo <= 4 ? ['theme:' + d.themeNo] : [])
+          .concat(unitToken(d.planUnit) ? ['unit:' + unitToken(d.planUnit)] : []),
         theme: d.themeNo,
         notes: 'Design: ' + d.styleName + '. Theme ' + d.themeNo + ': ' + d.themeName + '. Sent from the website journey; a person reviews it first.' +
           (d.noPlan ? ' Floor plan upload is closed on the website for now, so no plan comes with this request.' : ''),
@@ -123,7 +134,7 @@ window.HNM_SEND = (function () {
 
   return {
     send: send, newRef: newRef, whatsappLink: whatsappLink, WHATSAPP: WHATSAPP,
-    planProblem: planProblem, nameProblem: nameProblem, phoneProblem: phoneProblem, emailProblem: emailProblem,
+    planProblem: planProblem, unitProblem: unitProblem, unitToken: unitToken, nameProblem: nameProblem, phoneProblem: phoneProblem, emailProblem: emailProblem,
     LEAD_ENDPOINT: LEAD_ENDPOINT, PLAN_ENDPOINT: PLAN_ENDPOINT, CONSENT_VERSION: CONSENT_VERSION
   };
 })();
