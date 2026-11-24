@@ -5,6 +5,7 @@ CNAME
 favicon.svg
 robots.txt
 sitemap.xml
+llms.txt
 index.html
 404.html
 ContactUs.dc.html

@@ -22,6 +22,57 @@
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site/home.css">
 <script>document.documentElement.classList.add('js');</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "HomeAndConstructionBusiness",
+      "@id": "https://homeandme.sg/#business",
+      "name": "Home & Me",
+      "url": "https://homeandme.sg/",
+      "description": "See your own HDB flat designed free, then get an itemised quote straight from the contractor doing the work.",
+      "logo": "https://homeandme.sg/assets/images/hnm-logo.png",
+      "areaServed": { "@type": "Country", "name": "Singapore" },
+      "telephone": "+65 8837 6196",
+      "email": "homeandme2017@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "21 Toh Guan Road East, #03-02 Toh Guan Centre",
+        "postalCode": "608609",
+        "addressCountry": "SG"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "telephone": "+65 8837 6196",
+        "email": "homeandme2017@gmail.com"
+      },
+      "sameAs": [
+        "https://www.instagram.com/homeandmesg",
+        "https://www.facebook.com/share/19EwNzh3n5/"
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://homeandme.sg/journey/upload.html#design-request",
+      "name": "Free design request for your flat",
+      "serviceType": "Home design request",
+      "url": "https://homeandme.sg/journey/upload.html",
+      "description": "Send a design request in four steps: your details, one of seven designs, one of its four themes, then check and send. Home & Me designs your flat free, for HDB flats for now. A designer reviews the request and Home & Me messages you on WhatsApp. Floor plan upload is not open yet.",
+      "provider": { "@id": "https://homeandme.sg/#business" },
+      "areaServed": { "@type": "Country", "name": "Singapore" },
+      "offers": {
+        "@type": "Offer",
+        "name": "Design request and design pictures",
+        "price": "0",
+        "priceCurrency": "SGD",
+        "description": "Free. There is no design fee, no deposit and no showroom appointment."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
