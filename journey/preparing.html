@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Designing your home, Home &amp; Me</title>
+<meta name="description" content="Your Home &amp; Me design is being made. This page shows its progress.">
+<link rel="icon" href="../favicon.svg">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=sentient@300,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="journey.css">
+</head>
+<body class="white">
+<div class="air" aria-hidden="true"></div>
+<header class="mast"><div class="container mast__in">
+  <a class="wordmark" href="../" aria-label="Home &amp; Me, home page"><img src="../assets/images/hnm-logo.png" alt="" width="30" height="30" onerror="this.remove()"><span>Home &amp; Me</span></a>
+</div></header>
+
+<main class="jmain" id="main"><div class="container wide jsplit">
+  <div data-rail></div>
+
+  <div class="jhead">
+    <h1 id="h1">We&rsquo;re designing your home.</h1>
+    <p class="lead" id="lead">We prepare photos of your home in this design, our designer checks them, and we send you a private link. Free, usually within 1 working day.</p>
+  </div>
+
+  <!-- the five rows follow status.json: progress.stage 1 to 5 -->
+  <ol class="steps" id="steps" aria-label="Progress" aria-live="polite">
+    <li class="now">Plan received <span class="state">Now</span></li>
+    <li>Reading your floor plan <span class="state">Next</span></li>
+    <li>Building your 3D model <span class="state">Next</span></li>
+    <li>Setting cameras and making your photos <span class="state">Next</span></li>
+    <li>Checked by our designer <span class="state">Next</span></li>
+  </ol>
+
+  <p class="note" id="liveWords" role="status" hidden></p>
+  <!-- the theme step: shown when status.json says the themes are laid out (theme.canPick) -->
+  <section class="extras" id="themePick" aria-label="Pick your theme" hidden>
+    <h2 class="extras__head" id="themeHead">Pick your theme.</h2>
+    <p class="hint" id="themeHint">Your plan is read and the furniture is laid out in each theme. Pick the one you like; we make its photos next. The pictures here are layout drawings, not the photos.</p>
+    <div id="themeList" style="display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>
+    <p class="note" id="themeSaid" role="status" hidden></p>
+  </section>
+  <p class="note" id="waitNote">A person checks your design before it reaches you. This page updates by itself, so keep its link.</p>
+
+  <!-- Optional extras on the waiting screen too (owner, 12 Nov 2026): names only, no price, no buy; payment is not open -->
+  <section class="extras extras--quiet" id="extras" aria-label="Optional extras" hidden>
+    <h2 class="extras__head">Extras, coming soon.</h2>
+    <p class="hint">Your photos are free. Paid extras made from your design are coming soon. Nothing to pay now.</p>
+    <div id="extraList"></div>
+  </section>
+
+  <div class="jbar" id="readyBar" hidden>
+    <a class="btn btn--fill grow" id="readyBtn" href="result.html">See your free design</a>
+  </div>
+  <p class="footline" id="foot">This page looks for news once a minute. Keep this page open, or keep its link.</p>
+</div></main>
+
+<script src="products.js"></script>
+<script src="config.js"></script>
+<script src="flow.js"></script>
+<script>
+(function () {
+  // the rail has the journey's four steps, all done once the request is sent
+  HNM_FLOW.mountRail('sent');
+  var J = window.HNM_JOURNEY, s = HNM_FLOW.load();
+  if (s.styleName) {
+    document.getElementById('lead').textContent = 'We prepare photos of your ' + s.styleName + ' home, our designer checks them, and we send you a private link. Free, usually within 1 working day.';
+  }
+
+  // status.json lives on the Home & Me enquiry service (config.js HNM_PAGES). Once a minute: the contract asks for 60 s or slower.
+  var PAGES = String(window.HNM_PAGES || '');
+  var POLL_MS = 60000;
+  var rows = document.querySelectorAll('#steps li');
+  var words = document.getElementById('liveWords'), note = document.getElementById('waitNote');
+  var bar = document.getElementById('readyBar'), btn = document.getElementById('readyBtn'), foot = document.getElementById('foot');
+  var h1 = document.getElementById('h1');
+  var fromLink = (location.search.match(/[?&]plan=([0-9a-f]{16})(?:&|$)/) || [])[1];
+  var planId = fromLink || (/^[0-9a-f]{16}$/.test(s.planId || '') ? s.planId : '');
+  var timer = null;
+
+  function tick(stage, allDone) {            // rows before `stage` done, row `stage` now, the rest next
+    Array.prototype.forEach.call(rows, function (li, k) {
+      var n = k + 1, st = li.querySelector('.state');
+      var cls = (allDone || n < stage) ? 'done' : (n === stage ? 'now' : '');
+      li.className = cls;
+      if (st) st.textContent = cls === 'done' ? 'Done' : (cls === 'now' ? 'Now' : 'Next');
+    });
+    document.getElementById('steps').setAttribute('data-stage', allDone ? 'done' : String(stage));
+  }
+  function say(text) { words.textContent = text || ''; words.hidden = !text; }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+  if (!planId || !/^https:\/\//.test(PAGES)) {
+    tick(1, false);
+    h1.textContent = 'We could not find your plan on this page.';
+    say('This page has no plan number, so it cannot show progress. Your request may still have reached us: we message you on WhatsApp.');
+    note.hidden = true;
+    foot.textContent = 'Open this page from the Send step, or from the link we give you.';
+    return;
+  }
+  if (!fromLink && history.replaceState) history.replaceState(null, '', 'preparing.html?plan=' + planId);   // a link worth keeping
+  tick(1, false);
+
+  // the extras: names and what they are, never a price, never a buy button (payment is not open)
+  var extras = document.getElementById('extras'), elist = document.getElementById('extraList'), shownExtras = '';
+  function showExtras(opts) {
+    var list = (opts && opts.products) || [];
+    list = list.filter(function (p) { return p && typeof p.name === 'string' && /^[a-z][a-z0-9-]{1,40}$/.test(p.id || ''); }).slice(0, 4);
+    var key = JSON.stringify(list.map(function (p) { return p.id; }));
+    if (key === shownExtras) return;
+    shownExtras = key;
+    elist.textContent = '';
+    extras.hidden = !list.length;
+    list.forEach(function (p) {
+      var row = document.createElement('div'); row.className = 'extra';
+      var top = document.createElement('div'); top.className = 'extra__top';
+      var nm = document.createElement('span'); nm.className = 'extra__name'; nm.textContent = p.name;
+      top.appendChild(nm);
+      var d = document.createElement('p'); d.className = 'extra__desc';
+      d.textContent = (typeof p.description === 'string' ? p.description + ' ' : '') + 'Coming soon.';
+      row.appendChild(top); row.appendChild(d); elist.appendChild(row);
+    });
+  }
+
+  // the theme step (status.json `theme`): the customer picks one of the laid-out themes
+  var pick = document.getElementById('themePick'), plist = document.getElementById('themeList');
+  var said = document.getElementById('themeSaid'), sending = false, shownKey = '';
+  var NAMES = (J.THEMES || []).map(function (t) { return t.n; });
+  var MINE = PAGES + planId + '/';
+  function choose(n, button) {
+    if (sending) return;
+    sending = true; button.disabled = true; said.hidden = false; said.textContent = 'Saving your choice...';
+    fetch(MINE + 'theme', { method: 'POST', mode: 'cors', cache: 'no-store', credentials: 'omit',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'theme=' + n })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j.ok, j: j }; }); })
+      .then(function (r) {
+        sending = false;
+        if (r.ok) { said.textContent = 'Theme ' + n + ' chosen. We are making its photos now.'; }
+        else { button.disabled = false; said.textContent = (r.j && typeof r.j.words === 'string' && r.j.words) || 'That theme cannot be picked now. Please try again.'; }
+      })
+      .catch(function () { sending = false; button.disabled = false; said.textContent = 'We could not save that. Please try again.'; });
+  }
+  function themes(th) {
+    if (!th || !th.options) { pick.hidden = true; return; }
+    var key = JSON.stringify([th.state, th.canPick, th.chosen, th.options.map(function (o) { return o.state + (o.picture ? 1 : 0); })]);
+    if (key === shownKey) return;
+    shownKey = key;
+    pick.hidden = false;
+    var head = document.getElementById('themeHead'), hint = document.getElementById('themeHint');
+    if (th.chosen) { head.textContent = 'Your theme: theme ' + th.chosen + (NAMES[th.chosen - 1] ? ', ' + NAMES[th.chosen - 1] : '') + '.'; hint.textContent = 'We are making the photos of this theme.'; }
+    else if (!th.canPick) { head.textContent = 'Laying out your themes.'; hint.textContent = (th.optionsReady || 0) + ' of ' + (th.optionsTotal || 4) + ' themes laid out so far.'; }
+    else { head.textContent = 'Pick your theme.'; }
+    plist.textContent = '';
+    th.options.forEach(function (o) {
+      var card = document.createElement('div'); card.className = 'extra'; card.setAttribute('data-theme', o.theme);
+      var top = document.createElement('div'); top.className = 'extra__top';
+      var nm = document.createElement('span'); nm.className = 'extra__name';
+      nm.textContent = 'Theme ' + o.theme + (NAMES[o.theme - 1] ? ': ' + NAMES[o.theme - 1] : '');
+      top.appendChild(nm); card.appendChild(top);
+      if (o.state === 'ready' && typeof o.picture === 'string' && o.picture.indexOf(MINE + 'themes/') === 0) {
+        var img = document.createElement('img'); img.src = o.picture; img.alt = 'Layout drawing of theme ' + o.theme;
+        img.loading = 'lazy'; img.style.cssText = 'width:100%;height:auto;background:#fff;border:1px solid #ddd;border-radius:3px';
+        card.appendChild(img);
+      }
+      var d = document.createElement('p'); d.className = 'extra__desc';
+      d.textContent = o.state === 'ready' ? (o.placeholder ? 'Layout drawing (the photos come after you pick).' : '')
+                    : (o.state === 'failed' ? 'This theme does not fit your plan.' : 'Being laid out...');
+      card.appendChild(d);
+      if (th.canPick && o.state === 'ready') {
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn--fill';
+        b.textContent = (th.suggested === o.theme ? 'Use this theme (your pick)' : 'Use this theme');
+        b.setAttribute('data-pick', o.theme);
+        b.addEventListener('click', function () { choose(o.theme, b); });
+        card.appendChild(b);
+      }
+      if (th.chosen === o.theme) card.style.outline = '2px solid #2d2a26';
+      plist.appendChild(card);
+    });
+  }
+
+  function show(doc) {
+    themes(doc.theme);
+    showExtras(doc.options);
+    var state = String(doc.state || doc.step || '');
+    var p = doc.progress || {};
+    var stage = Math.max(1, Math.min(rows.length, parseInt(p.stage, 10) || 1));
+    document.getElementById('steps').setAttribute('data-state', state);
+    if (state === 'ready') {
+      tick(rows.length, true);
+      h1.textContent = 'Your design is ready.';
+      say('');
+      btn.href = 'result.html?plan=' + planId; btn.textContent = 'See your free design'; bar.hidden = false;
+      note.hidden = true;
+      foot.textContent = 'Your design is ready. Keep the link.';
+      stop();
+      return;
+    }
+    if (state === 'designer' || state === 'resubmit') {      // final answers: stop looking
+      say(doc.words || (state === 'resubmit' ? 'We need a clearer floor plan to make your design. We message you on WhatsApp.'
+                                             : 'Our designer is looking at your plan and will message you on WhatsApp.'));
+      stop();
+      return;
+    }
+    tick(stage, false);                        // received, preparing, checking, waitlist, duplicate
+    var ahead = doc.queue && parseInt(doc.queue.ahead, 10);
+    say(doc.words || (ahead > 0 ? 'About ' + ahead + (ahead === 1 ? ' home is' : ' homes are') + ' ahead of yours. Yours starts after them.' : ''));
+  }
+  function look() {
+    var ctrl = new AbortController(), t = setTimeout(function () { ctrl.abort(); }, 12000);
+    fetch(MINE + 'status.json', { mode: 'cors', cache: 'no-store', credentials: 'omit', signal: ctrl.signal })
+      .then(function (r) { clearTimeout(t); if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+      .then(show)
+      .catch(function () { clearTimeout(t); });   // keep the last picture; try again next minute
+  }
+  look();
+  timer = setInterval(look, POLL_MS);
+})();
+</script>
+</body>
+</html>

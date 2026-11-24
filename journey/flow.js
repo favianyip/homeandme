@@ -11,6 +11,14 @@
   // floor plan upload: always part of the preview; on the live site only when the switch is on
   var PLAN = LIVE ? window.HNM_PLAN_UPLOAD === true : true;
 
+  // A tester link (#tester=<key>): the key is kept on this device for the visit and taken out of the address bar.
+  (function () {
+    var m = /(?:^#|&)tester=([A-Za-z0-9_-]{16,128})(?:&|$)/.exec(location.hash || '');
+    if (!m) return;
+    try { sessionStorage.setItem('hnm_tester', m[1]); } catch (e) { /* private mode: no key kept */ }
+    if (history.replaceState) history.replaceState(null, '', location.pathname + location.search);
+  })();
+
   function load() {
     try { return JSON.parse(sessionStorage.getItem(KEY)) || {}; }
     catch (e) { return {}; }

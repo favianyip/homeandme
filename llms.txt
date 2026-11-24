@@ -17,16 +17,15 @@ Homeowners in Singapore planning a renovation. The free design from a floor plan
 
 The request has four steps and takes a few minutes. Start at https://homeandme.sg/journey/upload.html
 
-1. Your details: name, WhatsApp number and email.
+1. Your floor plan and details: the PDF floor plan of your HDB flat, your name, WhatsApp number and email.
 2. Design: choose one of seven designs (Modern Classic, Muji, Scandinavian, Minimalist, Contemporary, Industrial, Modern Oriental).
 3. Theme: choose one of the design's four themes.
 4. Check and send: tick the consent box, then send. Nothing is sent until you tap Send.
 
-After you send, a designer looks at your design and theme, and Home & Me messages you on WhatsApp to confirm the details. The design pictures are free. The pictures on the site are Home & Me design visuals, not photos of a finished home.
+After you send, a page shows how your design is going. A designer checks every design before it reaches you, and Home & Me messages you on WhatsApp. The design pictures are free. The pictures on the site are Home & Me design visuals, not photos of a finished home.
 
 ## Not offered yet
 
-- Floor plan upload is closed. The site says it opens soon, and that your floor plan is asked for then.
 - Paid extras (a walkthrough video, carpentry drawings) are not on sale yet. The site says they are priced on your private page after the photos.
 
 ## Contact

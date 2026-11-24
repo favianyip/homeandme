@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Your design, Home &amp; Me</title>
+<meta name="description" content="Your free Home &amp; Me design: photos of your flat, checked by our designer.">
+<link rel="icon" href="../favicon.svg">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=sentient@300,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="journey.css">
+</head>
+<body class="white">
+<div class="air" aria-hidden="true"></div>
+<header class="mast"><div class="container mast__in">
+  <a class="wordmark" href="../" aria-label="Home &amp; Me, home page"><img src="../assets/images/hnm-logo.png" alt="" width="30" height="30" onerror="this.remove()"><span>Home &amp; Me</span></a>
+</div></header>
+
+<main class="jmain" id="main"><div class="container wide">
+  <div data-rail></div>
+
+  <div class="jhead">
+    <h1 id="readyHead">Your design.</h1>
+    <p class="lead" id="readyLead">Looking for your design...</p>
+  </div>
+
+  <!-- Paid options FIRST, at the top of the result page (owner, 12 Nov 2026). Payment is not open: coming soon, no price -->
+  <section class="extras" id="extras" aria-label="Optional extras" hidden>
+    <h2 class="extras__title">A walkthrough video or carpentry drawings, coming soon.</h2>
+    <p class="lead extras__lead">Paid extras made from this same design. They are not on sale yet; nothing to pay now.</p>
+    <div class="extra-list" id="extraList"></div>
+    <p class="extras-note">After your photos you can ask for a contractor&rsquo;s quote or a project coordinator. <a href="#next">See what comes next</a></p>
+  </section>
+
+  <!-- The free design: the approved photos, from the private page on the Home & Me enquiry service -->
+  <div class="jhead jhead--section" id="freeBlock" hidden>
+    <h2 id="freeHead">Your home, designed.</h2>
+    <p class="lead" id="freeLead">Free, and checked by our designer.</p>
+  </div>
+  <div class="gallery" id="gallery"></div>
+
+  <div class="jbar" id="pageBar" hidden>
+    <a class="btn btn--fill grow" id="pageBtn" href="#" rel="noopener">Open your full design page</a>
+  </div>
+
+  <!-- After the render: the contractor's quote and the coordinator (owner, 19 Nov 2026) -->
+  <section class="next" id="next" aria-labelledby="nextHead" hidden>
+    <div class="jhead">
+      <h2 id="nextHead">When you are ready to build.</h2>
+      <p class="lead">The contractor sends you their own itemised quote. We add nothing to it.</p>
+    </div>
+    <ul class="ways">
+      <li class="way">
+        <h3>A contractor&rsquo;s quote</h3>
+        <p>We find a contractor that fits your job and tell you who it is. They price it line by line.</p>
+        <a class="btn" id="askQuote" href="https://wa.me/6588376196" rel="noopener">Ask for a quote</a>
+      </li>
+      <li class="way">
+        <h3>A project coordinator</h3>
+        <p>Someone from our team plans the schedule and runs the job with the contractor. A paid service: we tell you the fee first.</p>
+        <a class="btn" id="askCoord" href="https://wa.me/6588376196" rel="noopener">Ask about a coordinator</a>
+      </li>
+    </ul>
+    <p class="own">Already have a contractor? Keep this page. The photos stay here for them.</p>
+  </section>
+
+  <p class="footline" id="foot">Your photos are on your own private page. Keep its link.</p>
+</div></main>
+
+<script src="products.js"></script>
+<script src="config.js"></script>
+<script src="flow.js"></script>
+<script>
+(function () {
+  HNM_FLOW.mountRail('sent');
+  var J = window.HNM_JOURNEY, s = HNM_FLOW.load();
+  var PAGES = String(window.HNM_PAGES || '');
+  var fromLink = (location.search.match(/[?&]plan=([0-9a-f]{16})(?:&|$)/) || [])[1];
+  var planId = fromLink || (/^[0-9a-f]{16}$/.test(s.planId || '') ? s.planId : '');
+  var head = document.getElementById('readyHead'), lead = document.getElementById('readyLead');
+  var style = J.styleById(s.style || 'minimalist');
+  var MINE = PAGES + planId + '/';
+
+  function notReady(text) {
+    head.textContent = 'Your design is not ready yet.';
+    lead.textContent = text;
+    var a = document.createElement('a'); a.className = 'textlink'; a.textContent = 'See how it is going';
+    a.href = planId ? 'preparing.html?plan=' + planId : 'upload.html';
+    lead.appendChild(document.createTextNode(' ')); lead.appendChild(a);
+  }
+  if (!planId || !/^https:\/\//.test(PAGES)) { notReady('This page has no plan number.'); return; }
+  if (!fromLink && history.replaceState) history.replaceState(null, '', 'result.html?plan=' + planId);
+
+  function extras(opts) {
+    var list = ((opts && opts.products) || []).filter(function (p) {
+      return p && typeof p.name === 'string' && /^[a-z][a-z0-9-]{1,40}$/.test(p.id || '');
+    }).slice(0, 4);
+    var box = document.getElementById('extraList');
+    box.textContent = '';
+    list.forEach(function (p) {
+      var row = document.createElement('div'); row.className = 'extra';
+      var top = document.createElement('div'); top.className = 'extra__top';
+      var nm = document.createElement('span'); nm.className = 'extra__name'; nm.textContent = p.name;
+      var soon = document.createElement('span'); soon.className = 'extra__price'; soon.textContent = 'Coming soon';
+      top.appendChild(nm); top.appendChild(soon);
+      var d = document.createElement('p'); d.className = 'extra__desc'; d.textContent = typeof p.description === 'string' ? p.description : '';
+      row.appendChild(top); row.appendChild(d); box.appendChild(row);
+    });
+    document.getElementById('extras').hidden = !list.length;
+  }
+
+  function gallery(man) {
+    var g = document.getElementById('gallery');
+    g.textContent = '';
+    var photos = (man && man.photos) || [];
+    photos.forEach(function (p) {
+      if (!/^p1-[0-9]{2}[a-z]\.jpg$/.test(p.src || '') || !/^p1-[0-9]{2}[a-z]-s\.jpg$/.test(p.thumb || '')) return;
+      var fig = document.createElement('figure');
+      var shot = document.createElement('a'); shot.className = 'shot'; shot.href = MINE + p.src; shot.rel = 'noopener';
+      var img = document.createElement('img'); img.src = MINE + p.thumb; img.loading = 'lazy';
+      img.alt = (typeof p.caption === 'string' && p.caption ? p.caption + ', ' : '') + 'your Home & Me design';
+      shot.appendChild(img);
+      var cap = document.createElement('figcaption'); cap.textContent = typeof p.caption === 'string' ? p.caption : '';
+      fig.appendChild(shot); fig.appendChild(cap); g.appendChild(fig);
+    });
+    return g.children.length;
+  }
+
+  function get(name) {
+    return fetch(MINE + name, { mode: 'cors', cache: 'no-store', credentials: 'omit' })
+      .then(function (r) { if (!r.ok) throw new Error(name + ' ' + r.status); return r.json(); });
+  }
+
+  get('status.json').then(function (doc) {
+    extras(doc.options);
+    if (doc.state !== 'ready' || typeof doc.link !== 'string' || doc.link !== MINE) {
+      notReady('A person checks your design before it reaches you.');
+      return;
+    }
+    head.textContent = 'Your ' + style.name + ' home is ready.';
+    lead.textContent = 'Your free photos are below, checked by our designer.';
+    var pb = document.getElementById('pageBtn'); pb.href = doc.link;
+    document.getElementById('pageBar').hidden = false;
+    var ref = s.ref ? ' My reference is ' + s.ref + '.' : '';
+    document.getElementById('askQuote').href = 'https://wa.me/6588376196?text=' + encodeURIComponent('Hello Home & Me, I would like a contractor’s quote for my design.' + ref);
+    document.getElementById('askCoord').href = 'https://wa.me/6588376196?text=' + encodeURIComponent('Hello Home & Me, I would like to ask about a project coordinator.' + ref);
+    document.getElementById('next').hidden = false;
+    return get('result.json').then(function (man) {
+      if (gallery(man)) {
+        document.getElementById('freeHead').textContent = 'Your home in ' + style.name + '.';
+        document.getElementById('freeBlock').hidden = false;
+      }
+    });
+  }).catch(function () {
+    notReady('We could not reach your design just now. Please try again in a minute.');
+  });
+})();
+</script>
+</body>
+</html>
