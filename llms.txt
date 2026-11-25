@@ -19,7 +19,7 @@ The request has four steps and takes a few minutes. Start at https://homeandme.s
 
 1. Your details: name, WhatsApp number and email.
 2. Design: choose one of seven designs (Modern Classic, Muji, Scandinavian, Minimalist, Contemporary, Industrial, Modern Oriental).
-3. Theme: choose one of the design's four themes.
+3. Theme: choose a theme. Minimalist and Industrial come in four themes; the other designs come in one theme for now.
 4. Check and send: tick the consent box, then send. Nothing is sent until you tap Send.
 
 After you send, a designer looks at your design and theme, and Home & Me messages you on WhatsApp to confirm the details. The design pictures are free. The pictures on the site are Home & Me design visuals, not photos of a finished home.
