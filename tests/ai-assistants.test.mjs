@@ -53,7 +53,9 @@ test('the page says how to help, what not to do, where the facts are, and how to
   assert.ok(!existsSync(new URL('.well-known/mcp.json', root)) && !existsSync(new URL('.well-known/ai-plugin.json', root)));
   assert.ok(!manifest.some((p) => p.startsWith('.well-known/')), 'no well-known file is published');
   const mcpLinks = [...html.matchAll(/href="([^"]*mcp[^"]*)"/gi)].map((x) => x[1]);
-  assert.deepEqual(mcpLinks, ['https://github.com/favianyip/homeandme-mcp'], 'the only connector link is the published repository');
+  assert.equal(mcpLinks[0], 'https://github.com/favianyip/homeandme-mcp', 'the install link is the published repository');
+  for (const link of mcpLinks) assert.ok(link === 'https://github.com/favianyip/homeandme-mcp' || link.startsWith('https://github.com/favianyip/homeandme-mcp/'),
+    `${link}: every connector link is inside the published repository`);
   // the switch: one marked block on the page, now the "available" variant; its template stays in deploy/ (never
   // published) with its placeholder
   assert.equal((html.match(/<!-- connector:available -->/g) || []).length, 1);

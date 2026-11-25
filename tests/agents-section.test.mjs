@@ -32,8 +32,8 @@ test('the #agents section: heading, three real tabs and panels, the note, the li
   assert.match(section, /<h2>Use Home&nbsp;&amp;&nbsp;Me with your AI assistant\.<\/h2>/);
   assert.match(section, /role="tablist"/);
   const tabs = [...section.matchAll(/<button class="agents__tab" type="button" role="tab" id="(at\d)" aria-controls="(ap\d)" aria-selected="(true|false)"[^>]*>([^<]+)<\/button>/g)];
-  assert.deepEqual(tabs.map((m) => m[4]), ['Claude Code', 'Other assistants', 'No install']);
-  assert.deepEqual(tabs.map((m) => m[3]), ['true', 'false', 'false']);
+  assert.deepEqual(tabs.map((m) => m[4]), ['The plugin', 'Claude Code', 'Other assistants', 'No install']);
+  assert.deepEqual(tabs.map((m) => m[3]), ['true', 'false', 'false', 'false']);
   for (const [, tab, panel] of tabs) {
     assert.match(section, new RegExp(`role="tabpanel" id="${panel}" aria-labelledby="${tab}"`), `${panel} is labelled by ${tab}`);
   }
@@ -69,4 +69,32 @@ test('every public page with a top bar links the assistants', () => {
   assert.match(legal, /@media \(max-width: 560px\) \{ \.legal-label \{ display: none !important; \} \}/, 'the bar fits a phone');
   // known-bad: a bar without the link fails the check
   assert.doesNotMatch('<header style="position: sticky"><a href="./">BACK TO HOME</a></header>', /href="ai-assistants\.html"/);
+});
+
+// 25 Nov 2026, owner: "one more tab under agents ... with the links in the mcp just like how a typical github repo looks
+// like, but with proper design matches our web flow". The same card is on the AI page.
+const REPO = 'https://github.com/favianyip/homeandme-mcp';
+const EXPECTED_LINKS = [REPO, `${REPO}/tree/main/.claude-plugin`, `${REPO}/tree/main/src`, `${REPO}/tree/main/test`,
+  `${REPO}/blob/main/dist/server.mjs`, `${REPO}/blob/main/README.md`, REPO, `${REPO}/blob/main/README.md`];
+const cardOf = (html) => (html.match(/<div class="repo">[\s\S]*?\n\s*<\/div>/) || [''])[0];
+
+test('"The plugin" tab: a repository card with its files, its four tools and two links, on the home page and the AI page', () => {
+  for (const [page, html] of [['index.html', section], ['ai-assistants.html', read('ai-assistants.html')]]) {
+    const card = cardOf(html);
+    assert.ok(card, `${page}: the card is there`);
+    assert.match(card, /favianyip\/homeandme-mcp<\/a> <span class="repo__tag">Public<\/span> <span class="repo__tag">v0\.1\.0<\/span>/);
+    assert.match(card, /Home &amp; Me plugin for AI assistants \(MCP\)\. Read-only\./);
+    const links = [...card.matchAll(/<a [^>]*href="([^"]+)"[^>]*>/g)].map((m) => m[1]);
+    assert.deepEqual(links, EXPECTED_LINKS, `${page}: the card links only to the repository's own files`);
+    for (const m of card.matchAll(/<a [^>]*>/g)) assert.match(m[0], /target="_blank" rel="noopener"/, `${page}: ${m[0]}`);
+    const tools = [...card.matchAll(/<dt><code>([a-z_]+)<\/code><\/dt><dd>[^<]+<\/dd>/g)].map((m) => m[1]);
+    assert.deepEqual(tools, ['about_home_and_me', 'how_to_get_a_design', 'enquiry_link', 'check_design_status']);
+    assert.match(card, />Open the repository<\/a>/);
+    assert.match(card, />Read the README<\/a>/);
+    assert.doesNotMatch(card, /\$|price|—/i, `${page}: no price, no em dash`);
+  }
+  assert.match(section, /id="ap0" aria-labelledby="at0"[^>]*>\s*<h3>The plugin<\/h3>\s*<div class="repo">/);
+  // the card is our paper: hairlines, the page's own colours, no new font
+  assert.match(css, /\.repo \{ border: 1px solid var\(--color-rule\); background: var\(--color-card\); \}/);
+  assert.doesNotMatch(css.slice(css.indexOf('.repo {')), /#[0-9a-f]{3,6}\b|font-family/i);
 });

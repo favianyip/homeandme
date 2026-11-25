@@ -374,9 +374,32 @@
       </div>
       <div class="split__proof">
         <div class="agents__tabs" role="tablist" aria-label="Ways to use Home&nbsp;&amp;&nbsp;Me with an assistant">
-          <button class="agents__tab" type="button" role="tab" id="at1" aria-controls="ap1" aria-selected="true">Claude Code</button>
+          <button class="agents__tab" type="button" role="tab" id="at0" aria-controls="ap0" aria-selected="true">The plugin</button>
+          <button class="agents__tab" type="button" role="tab" id="at1" aria-controls="ap1" aria-selected="false" tabindex="-1">Claude Code</button>
           <button class="agents__tab" type="button" role="tab" id="at2" aria-controls="ap2" aria-selected="false" tabindex="-1">Other assistants</button>
           <button class="agents__tab" type="button" role="tab" id="at3" aria-controls="ap3" aria-selected="false" tabindex="-1">No install</button>
+        </div>
+        <div class="agents__panel" role="tabpanel" id="ap0" aria-labelledby="at0" tabindex="0">
+          <h3>The plugin</h3>
+          <div class="repo">
+            <p class="repo__head"><a class="repo__name" href="https://github.com/favianyip/homeandme-mcp" target="_blank" rel="noopener">favianyip/homeandme-mcp</a> <span class="repo__tag">Public</span> <span class="repo__tag">v0.1.0</span></p>
+            <p class="repo__desc">Home &amp; Me plugin for AI assistants (MCP). Read-only.</p>
+            <ul class="repo__files" aria-label="What is inside">
+              <li><code><a href="https://github.com/favianyip/homeandme-mcp/tree/main/.claude-plugin" target="_blank" rel="noopener">.claude-plugin/</a></code><span>The Claude Code plugin</span></li>
+              <li><code><a href="https://github.com/favianyip/homeandme-mcp/tree/main/src" target="_blank" rel="noopener">src/</a></code><span>The source</span></li>
+              <li><code><a href="https://github.com/favianyip/homeandme-mcp/tree/main/test" target="_blank" rel="noopener">test/</a></code><span>Its tests</span></li>
+              <li><code><a href="https://github.com/favianyip/homeandme-mcp/blob/main/dist/server.mjs" target="_blank" rel="noopener">dist/server.mjs</a></code><span>The one file an assistant runs</span></li>
+              <li><code><a href="https://github.com/favianyip/homeandme-mcp/blob/main/README.md" target="_blank" rel="noopener">README.md</a></code><span>How to install it and what it does</span></li>
+            </ul>
+            <p class="repo__label">Tools</p>
+            <dl class="repo__tools">
+              <div><dt><code>about_home_and_me</code></dt><dd>The service facts, read from homeandme.sg/llms.txt.</dd></div>
+              <div><dt><code>how_to_get_a_design</code></dt><dd>The steps to a free design and what to have ready.</dd></div>
+              <div><dt><code>enquiry_link</code></dt><dd>The link to the design request, for you to fill in yourself.</dd></div>
+              <div><dt><code>check_design_status</code></dt><dd>Where your design stands, from your own private link.</dd></div>
+            </dl>
+            <p class="repo__links"><a class="textlink" href="https://github.com/favianyip/homeandme-mcp" target="_blank" rel="noopener">Open the repository</a> <a class="textlink" href="https://github.com/favianyip/homeandme-mcp/blob/main/README.md" target="_blank" rel="noopener">Read the README</a></p>
+          </div>
         </div>
         <div class="agents__panel" role="tabpanel" id="ap1" aria-labelledby="at1" tabindex="0">
           <h3>Claude Code</h3>
