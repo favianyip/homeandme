@@ -85,6 +85,7 @@
   var POLL_MS = 60000;
   var rows = document.querySelectorAll('#steps li');
   var words = document.getElementById('liveWords'), note = document.getElementById('waitNote');
+  var NOTE_WAIT = note.textContent, NOTE_CHECKING = 'This page updates by itself, so keep its link.';
   var bar = document.getElementById('readyBar'), btn = document.getElementById('readyBtn'), foot = document.getElementById('foot');
   var h1 = document.getElementById('h1');
   var fromLink = (location.search.match(/[?&]plan=([0-9a-f]{16})(?:&|$)/) || [])[1];
@@ -225,6 +226,9 @@
       return;
     }
     tick(stage, false);                        // received, preparing, checking, waitlist, duplicate
+    // 26 Nov 2026 (lead): at "checking" the service's own line says who checks; the note keeps only the link advice,
+    // so the page does not say "a person checks it before it reaches you" twice
+    note.textContent = state === 'checking' ? NOTE_CHECKING : NOTE_WAIT;
     var ahead = doc.queue && parseInt(doc.queue.ahead, 10);
     say(doc.words || (ahead > 0 ? 'About ' + ahead + (ahead === 1 ? ' home is' : ' homes are') + ' ahead of yours. Yours starts after them.' : ''));
   }
