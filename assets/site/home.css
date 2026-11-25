@@ -299,6 +299,8 @@ h3 { font-weight: var(--serif-small); letter-spacing: -0.012em; }
 .repo__tools > div { padding: var(--space-xs) 0; border-top: 1px solid var(--color-rule); }
 .repo__tools dt { margin: 0; color: var(--color-ink); overflow-wrap: anywhere; }
 .repo__tools dd { margin: var(--space-3xs, 2px) 0 0; font-size: var(--text-sm); color: var(--color-ink-2); }
+span.repo__name { text-decoration: none; }
+.repo__moving { padding: var(--space-sm) var(--space-md); border-top: 1px solid var(--color-rule); color: var(--color-ink-2); }
 .repo__links { display: flex; flex-wrap: wrap; column-gap: var(--space-lg); padding: var(--space-xs) var(--space-md) var(--space-sm); border-top: 1px solid var(--color-rule); }
 .agents__panel .repo .textlink { min-height: 44px; margin: 0; }
 .agents__panel .repo p { margin: 0; }

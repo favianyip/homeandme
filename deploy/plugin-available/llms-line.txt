@@ -1,0 +1,2 @@
+# NOT DEPLOYED. The llms.txt line for the published plugin, to restore (replace __REPO_OWNER__).
+- A Home & Me plugin for AI assistants (an MCP connector) is published at https://github.com/__REPO_OWNER__/homeandme-mcp (read-only: it sends nothing about the person, and the person sends the request themselves). The page above says how to install it.

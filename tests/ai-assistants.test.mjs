@@ -1,7 +1,8 @@
 // 25 Nov 2026, owner: "the website live doesnt show any ai agent integration instruction like link mcp plugins etc".
 // A visible "For AI assistants" page, honest about what exists: how an assistant can help a homeowner today, what it
 // must not do, where the machine-readable facts are, and the connector (MCP).
-// 25 Nov 2026: the owner published the plugin (github.com/favianyip/homeandme-mcp); the page shows it as available.
+// 25 Nov 2026: the plugin was published, then moves to a Home & Me account (the owner's name comes off the site);
+// until then the page says it is moving.
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
@@ -35,30 +36,26 @@ test('every public page links to it with the words "For AI assistants"', () => {
   assert.doesNotMatch('<a href="ContactUs.dc.html">Contact</a>', /href="(?:\.\.\/|\/)?ai-assistants\.html"/);
 });
 
-test('the page says how to help, what not to do, where the facts are, and how to install the published connector', () => {
+test('the page says how to help, what not to do, where the facts are, and that the connector is moving', () => {
   const html = read(PAGE);
   for (const words of ['How an assistant can help today', 'What an assistant must not do', 'Machine-readable facts',
     'Connector for assistants (MCP)', 'href="llms.txt"', 'href="journey/upload.html"', 'href="ContactUs.dc.html"',
     'the unit number as printed on the plan', 'the PDF floor plan of their HDB flat',
     'Do not fill in or send the request for the person', 'Do not promise a price, a quote or a timeline',
-    'Do not present the paid extras as available', 'is available: <a href="https://github.com/favianyip/homeandme-mcp" rel="noopener">install it from here</a>',
-    'It sends nothing about you anywhere: you send your request yourself.',
-    '<code>/plugin marketplace add favianyip/homeandme-mcp</code>', '<code>/plugin install homeandme@homeandme</code>',
-    '<code>dist/server.mjs</code> with Node.js 18 or newer']) {
+    'Do not present the paid extras as available',
+    'has been built. The plugin is moving to the Home &amp; Me account. The install lines come back here soon.',
+    'It sends nothing about you anywhere: you send your request yourself.']) {
     assert.ok(html.includes(words), `missing: ${words}`);
   }
-  // no price, no fake endpoint, no manifest; the one install link is the published repository
+  // no price, no fake endpoint, no manifest, no repository link while the plugin moves
   assert.doesNotMatch(html, /S\$\s?\d/, 'no price on the page');
   assert.doesNotMatch(html, /\/mcp\b|\.well-known|ai-plugin|mcp\.json|npx |claude mcp add|"url":/i);
   assert.ok(!existsSync(new URL('.well-known/mcp.json', root)) && !existsSync(new URL('.well-known/ai-plugin.json', root)));
   assert.ok(!manifest.some((p) => p.startsWith('.well-known/')), 'no well-known file is published');
-  const mcpLinks = [...html.matchAll(/href="([^"]*mcp[^"]*)"/gi)].map((x) => x[1]);
-  assert.equal(mcpLinks[0], 'https://github.com/favianyip/homeandme-mcp', 'the install link is the published repository');
-  for (const link of mcpLinks) assert.ok(link === 'https://github.com/favianyip/homeandme-mcp' || link.startsWith('https://github.com/favianyip/homeandme-mcp/'),
-    `${link}: every connector link is inside the published repository`);
-  // the switch: one marked block on the page, now the "available" variant; its template stays in deploy/ (never
-  // published) with its placeholder
-  assert.equal((html.match(/<!-- connector:available -->/g) || []).length, 1);
+  assert.deepEqual([...html.matchAll(/href="([^"]*mcp[^"]*)"/gi)].map((x) => x[1]), []);
+  // the switch: one marked block on the page, the "moving" variant; the available markup waits in deploy/
+  assert.equal((html.match(/<!-- connector:moving -->/g) || []).length, 1);
+  assert.ok(!html.includes('connector:available'));
   assert.equal((html.match(/<!-- \/connector -->/g) || []).length, 1);
   assert.ok(!html.includes('INSTALL_LINK_PLACEHOLDER') && !html.includes('connector:soon') && !html.includes('there is no install link today'));
   const available = read('deploy/connector-available.html');
@@ -73,7 +70,8 @@ test('llms.txt points to the page with the same do and do-not list', () => {
   assert.match(llms, /https:\/\/homeandme\.sg\/ai-assistants\.html/);
   assert.match(llms, /- Do: explain the service/);
   assert.match(llms, /- Do not: fill in or send the request/);
-  assert.match(llms, /plugin for AI assistants \(an MCP connector\) is published at https:\/\/github\.com\/favianyip\/homeandme-mcp \(read-only/);
+  assert.match(llms, /plugin for AI assistants \(an MCP connector\) has been built and is moving to the Home & Me account; the install link comes back here soon\./);
+  assert.doesNotMatch(llms, /github\.com|favianyip/i);
   assert.match(llms, /it sends nothing about the person, and the person sends the request themselves/);
   assert.doesNotMatch(llms, /not published yet|no install link today/);
   assert.match(llms, /Paid extras \(a walkthrough video, carpentry drawings\) are not on sale yet/);

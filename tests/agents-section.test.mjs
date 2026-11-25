@@ -33,7 +33,8 @@ test('the #agents section: heading, three real tabs and panels, the note, the li
   assert.match(section, /role="tablist"/);
   const tabs = [...section.matchAll(/<button class="agents__tab" type="button" role="tab" id="(at\d)" aria-controls="(ap\d)" aria-selected="(true|false)"[^>]*>([^<]+)<\/button>/g)];
   assert.deepEqual(tabs.map((m) => m[4]), ['The plugin', 'Claude Code', 'Other assistants', 'No install']);
-  assert.deepEqual(tabs.map((m) => m[3]), ['true', 'false', 'false', 'false']);
+  // 25 Nov 2026: "No install" opens first while the plugin moves to the Home & Me account
+  assert.deepEqual(tabs.map((m) => m[3]), ['false', 'false', 'false', 'true']);
   for (const [, tab, panel] of tabs) {
     assert.match(section, new RegExp(`role="tabpanel" id="${panel}" aria-labelledby="${tab}"`), `${panel} is labelled by ${tab}`);
   }
@@ -41,12 +42,13 @@ test('the #agents section: heading, three real tabs and panels, the note, the li
   assert.doesNotMatch(section, /role="tabpanel"[^>]*hidden/);
   assert.match(css, /\.agents__tabs \{ display: none;[^}]*\}\n\.js \.agents__tabs \{ display: flex; \}/);
   assert.match(css, /\.js \.agents__panel h3 \{ display: none; \}/);
-  for (const words of ['/plugin marketplace add favianyip/homeandme-mcp', '/plugin install homeandme@homeandme',
-    '<code>dist/server.mjs</code> with Node 18 or newer', 'href="https://github.com/favianyip/homeandme-mcp"',
-    'href="llms.txt">homeandme.sg/llms.txt</a>', 'It never sends anything about you. You send your own request.',
+  for (const words of ['href="llms.txt">homeandme.sg/llms.txt</a>', 'It never sends anything about you. You send your own request.',
     '<a class="textlink" href="ai-assistants.html">Read the full page for assistants</a>']) {
     assert.ok(section.includes(words), `missing: ${words}`);
   }
+  // the card and the two install tabs say the plugin is moving; no install line, no repository link
+  assert.equal(section.split('The plugin is moving to the Home &amp; Me account. The install lines come back here soon.').length - 1, 3);
+  assert.doesNotMatch(section, /\/plugin marketplace add|github\.com/);
   assert.doesNotMatch(section, /\$|S\$|price/i, 'no price in the section');
   assert.doesNotMatch(section, /\u2014/, 'no em dash in the new copy');
 });
@@ -54,7 +56,7 @@ test('the #agents section: heading, three real tabs and panels, the note, the li
 test('the tabs work from the keyboard and settle without motion when asked', () => {
   assert.match(js, /document\.querySelectorAll\('\.agents \[role="tab"\]'\)/);
   assert.match(js, /ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1/);
-  assert.match(js, /if \(aTabs\.length\) aChoose\(aTabs\[0\], false\);/);
+  assert.match(js, /if \(aTabs\.length\) aChoose\(aTabs\.find\(\(t\) => t\.getAttribute\('aria-selected'\) === 'true'\) \|\| aTabs\[0\], false\);/);
   assert.match(css, /\.agents__tab:focus-visible \{ outline: 2px solid var\(--color-focus\)/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\.agents__panel\.is-in \{ animation: none; \}/);
 });
@@ -71,30 +73,46 @@ test('every public page with a top bar links the assistants', () => {
   assert.doesNotMatch('<header style="position: sticky"><a href="./">BACK TO HOME</a></header>', /href="ai-assistants\.html"/);
 });
 
-// 25 Nov 2026, owner: "one more tab under agents ... with the links in the mcp just like how a typical github repo looks
-// like, but with proper design matches our web flow". The same card is on the AI page.
-const REPO = 'https://github.com/favianyip/homeandme-mcp';
-const EXPECTED_LINKS = [REPO, `${REPO}/tree/main/.claude-plugin`, `${REPO}/tree/main/src`, `${REPO}/tree/main/test`,
-  `${REPO}/blob/main/dist/server.mjs`, `${REPO}/blob/main/README.md`, REPO, `${REPO}/blob/main/README.md`];
+// 25 Nov 2026, owner: "repo leaked my name ... can remove my name". The repository moves to a Home & Me account; until
+// then the card keeps the plugin's name without its owner, its description and its tools, and says it is moving. The
+// full "available" markup waits, never deployed, in deploy/plugin-available/ with the owner as one placeholder.
 const cardOf = (html) => (html.match(/<div class="repo">[\s\S]*?\n\s*<\/div>/) || [''])[0];
 
-test('"The plugin" tab: a repository card with its files, its four tools and two links, on the home page and the AI page', () => {
+test('"The plugin" tab and the AI page card: the name without its owner, the tools, and that it is moving', () => {
   for (const [page, html] of [['index.html', section], ['ai-assistants.html', read('ai-assistants.html')]]) {
     const card = cardOf(html);
     assert.ok(card, `${page}: the card is there`);
-    assert.match(card, /favianyip\/homeandme-mcp<\/a> <span class="repo__tag">Public<\/span> <span class="repo__tag">v0\.1\.0<\/span>/);
+    assert.match(card, /<span class="repo__name">homeandme-mcp<\/span> <span class="repo__tag">v0\.1\.0<\/span>/);
     assert.match(card, /Home &amp; Me plugin for AI assistants \(MCP\)\. Read-only\./);
-    const links = [...card.matchAll(/<a [^>]*href="([^"]+)"[^>]*>/g)].map((m) => m[1]);
-    assert.deepEqual(links, EXPECTED_LINKS, `${page}: the card links only to the repository's own files`);
-    for (const m of card.matchAll(/<a [^>]*>/g)) assert.match(m[0], /target="_blank" rel="noopener"/, `${page}: ${m[0]}`);
     const tools = [...card.matchAll(/<dt><code>([a-z_]+)<\/code><\/dt><dd>[^<]+<\/dd>/g)].map((m) => m[1]);
     assert.deepEqual(tools, ['about_home_and_me', 'how_to_get_a_design', 'enquiry_link', 'check_design_status']);
-    assert.match(card, />Open the repository<\/a>/);
-    assert.match(card, />Read the README<\/a>/);
-    assert.doesNotMatch(card, /\$|price|—/i, `${page}: no price, no em dash`);
+    assert.ok(card.includes('<p class="repo__moving">The plugin is moving to the Home &amp; Me account. The install lines come back here soon.</p>'), `${page}: says the plugin is moving`);
+    assert.doesNotMatch(card, /<a |repo__files|Open the repository|Read the README/, `${page}: no link while it moves`);
+    assert.doesNotMatch(card, /\$|price|\u2014/i, `${page}: no price, no em dash`);
   }
   assert.match(section, /id="ap0" aria-labelledby="at0"[^>]*>\s*<h3>The plugin<\/h3>\s*<div class="repo">/);
   // the card is our paper: hairlines, the page's own colours, no new font
   assert.match(css, /\.repo \{ border: 1px solid var\(--color-rule\); background: var\(--color-card\); \}/);
   assert.doesNotMatch(css.slice(css.indexOf('.repo {')), /#[0-9a-f]{3,6}\b|font-family/i);
+});
+
+test('the return is one small change: the full "available" markup waits in deploy/, never published', () => {
+  const manifest = read('deploy/public-pages.txt').split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+  for (const file of ['home-agents-section.html', 'ai-connector.html', 'llms-line.txt']) {
+    const path = `deploy/plugin-available/${file}`;
+    const text = read(path);
+    assert.ok(!manifest.includes(path), `${path} is not public`);
+    assert.match(text, /__REPO_OWNER__\/homeandme-mcp/, `${path} names the repository by a placeholder owner`);
+    assert.doesNotMatch(text, /favianyip/i, `${path} carries no owner name`);
+  }
+  assert.match(read('deploy/plugin-available/home-agents-section.html'), /\/plugin marketplace add __REPO_OWNER__\/homeandme-mcp/);
+});
+
+test('no public file carries the repository owner\'s personal account name', () => {
+  // every file on the public list is exactly what the build copies into the site (scripts/build-public-pages.mjs)
+  const manifest = read('deploy/public-pages.txt').split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+  const carriers = manifest.filter((p) => readFileSync(new URL(p, root)).toString('latin1').toLowerCase().includes('favianyip'));
+  assert.deepEqual(carriers, []);
+  // known-bad: the check finds it in any case
+  assert.ok('Https://GitHub.com/FavianYip/x'.toLowerCase().includes('favianyip'));
 });

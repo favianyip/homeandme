@@ -57,7 +57,8 @@
       if (e.key === 'End') { e.preventDefault(); aChoose(aTabs[aTabs.length - 1], true); }
     });
   });
-  if (aTabs.length) aChoose(aTabs[0], false);
+  // the tab the page marks as selected opens first (25 Nov 2026: "No install" while the plugin moves)
+  if (aTabs.length) aChoose(aTabs.find((t) => t.getAttribute('aria-selected') === 'true') || aTabs[0], false);
 
   /* each style's rooms: a small picture puts its room in the frame above it */
   document.querySelectorAll('.style').forEach((style) => {
