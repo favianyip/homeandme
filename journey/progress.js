@@ -31,7 +31,8 @@ window.HNM_PROGRESS = (function () {
       ? 'About ' + Math.round(mins) + (Math.round(mins) === 1 ? ' minute' : ' minutes') + ' left' : '';
     var s = step(doc);
     if (s === 'Waiting for your theme choice') left = 'It goes on as soon as you pick.';
-    if (s === 'A person is checking your design') left = 'The work is done. A person checks it before it reaches you.';
+    // 26 Nov 2026: the service's own line under the bar says who checks; this one only says the machine work is done
+    if (s === 'A person is checking your design') left = 'The work is done.';
     return { hidden: false, percent: pct, step: s, left: left };
   }
   // keep the highest percent this page has shown: a late or repeated answer never moves the bar back

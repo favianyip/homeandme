@@ -27,7 +27,7 @@ test('every state of the service reads as a step, a percent and honest minutes',
   assert.deepEqual(v({ state: 'preparing', progress: { stage: 4, percent: 86, minutesLeft: 2 }, theme: { chosen: 2 } }),
     [false, 86, 'Making your pictures', 'About 2 minutes left']);
   assert.deepEqual(v({ state: 'checking', progress: { stage: 5, percent: 99, minutesLeft: null } }),
-    [false, 99, 'A person is checking your design', 'The work is done. A person checks it before it reaches you.']);
+    [false, 99, 'A person is checking your design', 'The work is done.']);
   assert.deepEqual(v({ state: 'ready' }), [false, 100, 'Your design is ready', '']);
   // a designer prepares it (no progress) and final answers: no bar, never a made-up number
   assert.equal(view({ state: 'checking', words: 'A designer is preparing this design for you.' }).hidden, true);
