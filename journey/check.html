@@ -48,7 +48,7 @@
 
     <div class="field" id="replan" hidden>
       <label for="planAgain">Add your floor plan again</label>
-      <input type="file" id="planAgain" accept="image/png,image/jpeg,image/webp,application/pdf">
+      <input type="file" id="planAgain" accept="application/pdf,.pdf">
       <p class="field-err" id="planErr" role="alert" hidden></p>
     </div>
     <input type="text" id="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" hidden>
@@ -70,6 +70,7 @@
   </div>
 
   <p class="footline" id="foot">Your floor plan and details are sent to Home &amp; Me only when you tap Send.</p>
+  <p class="footlinks"><a href="../ai-assistants.html">For AI assistants</a></p>
 </div></main>
 
 <script src="products.js"></script>
@@ -84,7 +85,7 @@
   put('vPlan', s.planName); put('vName', s.name); put('vWa', s.wa); put('vEmail', s.email);
   var style = J.styleById(s.style || 'minimalist');
   put('vStyle', style.name);
-  var set = J.themesFor(style.id), i = (typeof s.theme === 'number') ? s.theme : 0;
+  var set = J.themesFor(style.id), i = (typeof s.theme === 'number' && set.items[s.theme]) ? s.theme : 0;
   put('vTheme', 'Theme ' + (i + 1) + ', ' + set.items[i].n);
 
   var box = document.getElementById('consent'), go = document.getElementById('go');
@@ -116,8 +117,9 @@
       '<li>Floor plan upload opens soon. We ask for your floor plan then.</li>';
     document.getElementById('foot').textContent = 'Your details are sent to Home & Me only when you tap Send.';
   }
+  // after Send: the waiting page when the floor plan came through (it follows the design), else "request received"
   go.setAttribute('href', 'sent.html');
-  if (s.sent && s.ref) { location.replace('sent.html'); return; }
+  if (s.sent && s.ref) { location.replace(/^[0-9a-f]{16}$/.test(s.planId || '') ? 'preparing.html?plan=' + s.planId : 'sent.html'); return; }
   if (HNM_SEND.nameProblem(s.name) || HNM_SEND.phoneProblem(s.wa) || HNM_SEND.emailProblem(s.email)) { location.replace('upload.html'); return; }
 
   var planFile = null, sending = false;
@@ -135,8 +137,8 @@
   });
 
   var details = {
-    name: s.name, wa: s.wa, email: s.email, planName: s.planName,
-    styleName: style.name, themeNo: i + 1, themeName: set.items[i].n
+    name: s.name, wa: s.wa, email: s.email, planName: s.planName, planUnit: s.planUnit || '',
+    styleId: style.id, styleName: style.name, themeNo: i + 1, themeName: set.items[i].n
   };
   go.addEventListener('click', function (e) {
     e.preventDefault();
@@ -154,9 +156,9 @@
     HNM_FLOW.patch({ ref: details.ref });      // a retry keeps the same reference
     HNM_SEND.send(details, PLAN ? planFile : null).then(function (r) {
       if (r.ok) {
-        HNM_FLOW.patch({ sent: true, ref: r.ref, planAttached: r.planAttached });
+        HNM_FLOW.patch({ sent: true, ref: r.ref, planAttached: r.planAttached, planId: r.planId || '' });
         HNM_FLOW.clearPlan();
-        location.href = 'sent.html';
+        location.href = r.planId ? 'preparing.html?plan=' + encodeURIComponent(r.planId) : 'sent.html';
         return;
       }
       sending = false;

@@ -19,7 +19,7 @@ The request has four steps and takes a few minutes. Start at https://homeandme.s
 
 1. Your details: name, WhatsApp number and email.
 2. Design: choose one of seven designs (Modern Classic, Muji, Scandinavian, Minimalist, Contemporary, Industrial, Modern Oriental).
-3. Theme: choose one of the design's four themes.
+3. Theme: choose a theme. Minimalist and Industrial come in four themes; the other designs come in one theme for now.
 4. Check and send: tick the consent box, then send. Nothing is sent until you tap Send.
 
 After you send, a designer looks at your design and theme, and Home & Me messages you on WhatsApp to confirm the details. The design pictures are free. The pictures on the site are Home & Me design visuals, not photos of a finished home.
@@ -28,6 +28,14 @@ After you send, a designer looks at your design and theme, and Home & Me message
 
 - Floor plan upload is closed. The site says it opens soon, and that your floor plan is asked for then.
 - Paid extras (a walkthrough video, carpentry drawings) are not on sale yet. The site says they are priced on your private page after the photos.
+
+## For assistants
+
+A page for people who use an AI assistant, and for the assistant: https://homeandme.sg/ai-assistants.html
+
+- Do: explain the service from this file; send the person to https://homeandme.sg/journey/upload.html, and help them have ready a choice of design and theme, and, once floor plan upload is open, the PDF floor plan of their HDB flat (and the unit number as printed on the plan if the PDF shows several flats).
+- Do not: fill in or send the request, or the person's name, phone number, email or floor plan, on their behalf (the person ticks the consent box and taps Send); promise a price, a quote or a timeline; present the paid extras as available.
+- A Home & Me plugin for AI assistants (an MCP connector) has been built but is not published yet: there is no install link today. The page above will link it once it is published.
 
 ## Contact
 
@@ -41,4 +49,5 @@ After you send, a designer looks at your design and theme, and Home & Me message
 - [Home](https://homeandme.sg/): what Home & Me does, the seven designs, common questions
 - [Start your design request](https://homeandme.sg/journey/upload.html)
 - [Contact](https://homeandme.sg/ContactUs.dc.html)
+- [For AI assistants](https://homeandme.sg/ai-assistants.html): how an assistant can help, and what it must not do
 - [Terms and privacy](https://homeandme.sg/Legal.dc.html): how enquiry details are used, terms and cookies

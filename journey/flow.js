@@ -8,8 +8,19 @@
   var KEY = 'hnm_journey_v1';
   // live site: four steps, then "request received". Preview: the later sample screens too.
   var LIVE = window.HNM_LIVE === true;
-  // floor plan upload: always part of the preview; on the live site only when the switch is on
-  var PLAN = LIVE ? window.HNM_PLAN_UPLOAD === true : true;
+  // A tester link (#tester=<key>): the key is kept on this device for the visit and taken out of the address bar.
+  (function () {
+    var m = /(?:^#|&)tester=([A-Za-z0-9_-]{16,128})(?:&|$)/.exec(location.hash || '');
+    if (!m) return;
+    try { sessionStorage.setItem('hnm_tester', m[1]); } catch (e) { /* private mode: no key kept */ }
+    if (history.replaceState) history.replaceState(null, '', location.pathname + location.search);
+  })();
+  function hasTesterKey() {
+    try { return /^[A-Za-z0-9_-]{16,128}$/.test(sessionStorage.getItem('hnm_tester') || ''); } catch (e) { return false; }
+  }
+  // floor plan upload: always part of the preview; on the live site when the switch is on, or, with the switch set
+  // to 'testers', only for a visit that came from a tester link (everyone else sees the page without the upload box)
+  var PLAN = LIVE ? (window.HNM_PLAN_UPLOAD === true || (window.HNM_PLAN_UPLOAD === 'testers' && hasTesterKey())) : true;
 
   function load() {
     try { return JSON.parse(sessionStorage.getItem(KEY)) || {}; }
