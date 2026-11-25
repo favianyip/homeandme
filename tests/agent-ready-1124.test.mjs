@@ -96,10 +96,10 @@ test('the home page JSON-LD parses and matches the visible pages', () => {
   assert.equal(svc.offers.priceCurrency, 'SGD');
   assert.doesNotMatch(blocks[0][1], /"price": "(?!0")/);
   assert.doesNotMatch(blocks[0][1], /S\$|drawing pack|video/i);
-  // 25 Nov 2026 release: the floor plan upload stays closed, and the description says so (the upload-open copy is
-  // the follow-up branch site/upload-open-1125)
-  assert.match(home, /opens soon/);
-  assert.match(svc.description, /upload is not open yet/);  // not the words "opens soon": an older test counts those on the page
+  // 24 Nov 2026: the floor plan upload is open, and the description says what it asks for
+  assert.doesNotMatch(home, /opens soon/);
+  assert.match(svc.description, /your HDB floor plan \(the PDF\)/);
+  assert.doesNotMatch(svc.description, /not open/);
   assert.equal(pathOf(svc.url), 'journey/upload.html');
 });
 
@@ -107,8 +107,8 @@ test('llms.txt: plain, no price, contact matches the Contact page, every link is
   const txt = read('llms.txt');
   assert.match(txt, /^# Home & Me$/m);
   assert.doesNotMatch(txt, /S\$|\$\d/, 'no price is stated');
-  assert.match(txt, /opens soon/);
-  assert.match(txt, /Floor plan upload is closed\./);
+  assert.doesNotMatch(txt, /opens soon|upload is closed/);
+  assert.match(txt, /the PDF floor plan of your HDB flat/);
   const contact = decode(read('ContactUs.dc.html'));
   for (const fact of ['+65 8837 6196', 'homeandme2017@gmail.com', '21 Toh Guan Road East, #03-02 Toh Guan Centre, Singapore 608609']) {
     assert.ok(contact.includes(fact), `${fact} is on the Contact page`);
