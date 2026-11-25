@@ -71,11 +71,11 @@ window.HNM_JOURNEY = (function () {
   // room), Spa Stone and Bohemian (he rejected both pictures), Home Study (same plain grade as Spa Stone). ---
   var CONCEPT_LOOKS = [
     ['contemporary-luxe', 'Contemporary Luxe', 'Full-height stone, dark joinery, layered light.'],
-    ['mid-century', 'Mid-century Modern', 'Walnut, tapered legs, organic shapes, retro colour.'],
-    ['rustic-wood', 'Rustic Wood', 'Solid timber, visible grain, earthy tones.'],
-    ['warm-concrete', 'Warm Concrete', 'Greige plaster, concrete-look stone, oak table.'],
+    ['mid-century', 'Mid-century Modern', 'Walnut, tapered legs, organic shapes, retro colour.', 'refs/mid-century-2.webp'],
+    ['rustic-wood', 'Rustic Wood', 'Solid timber, visible grain, earthy tones.', 'refs/rustic-wood-2.webp'],
+    ['warm-concrete', 'Warm Concrete', 'Greige plaster, concrete-look stone, oak table.', 'refs/warm-concrete-2.webp'],
     ['coastal', 'Coastal', 'Chalk white, lightened wood, linen and rope.'],
-    ['tropical', 'Tropical Resort', 'Rattan and teak, deep green, planting indoors.'],
+    ['tropical', 'Tropical Resort', 'Rattan and teak, deep green, planting indoors.', 'refs/tropical-3.webp'],
     ['cottagecore', 'Cottagecore', 'Cream cabinets, soft florals, vintage brass.'],
     ['biophilic', 'Biophilic Green', 'Planting, daylight, raw stone and wood.'],
     ['mediterranean', 'Mediterranean', 'Lime plaster, arches, hand-painted tile, wrought iron.'],
@@ -84,7 +84,7 @@ window.HNM_JOURNEY = (function () {
     ['marble-luxe', 'Marble Luxe', 'Book-matched slabs, gold trim, polished finish.'],
     ['peranakan', 'Peranakan Straits', 'Encaustic patterned tile, turquoise and crimson, carved teak.'],
     ['heritage-blue', 'Heritage Blue', 'Deep blue fronts, brass pulls, speckled stone tile.'],
-    ['art-deco', 'Art Deco', 'Geometry and symmetry, lacquer, brass, velvet.'],
+    ['art-deco', 'Art Deco', 'Geometry and symmetry, lacquer, brass, velvet.', 'refs/art-deco-2.webp'],
     ['victorian', 'Victorian Heritage', 'Wainscot panelling, deep green, ornate cornice.'],
     ['retro-terrazzo', 'Retro Terrazzo', 'Speckled stone, mint and clay, resale charm kept.'],
     ['family-warm', 'Family Warm', 'Soft seating, durable finishes, warm light.'],
@@ -92,8 +92,7 @@ window.HNM_JOURNEY = (function () {
   ];
   CONCEPT_LOOKS.forEach(function (c) {
     STYLES.push({ id: c[0], name: c[1], line: c[2], note: 'Four themes ready', ready: true, concept: true,
-      // owner, 25 Nov 2026: the main photo is the design's own theme 1 (the first theme shown on the theme step)
-      rooms: [{ src: 'journey/assets/themes/' + c[0] + '-1-living.jpg', name: 'Living' }] });
+      rooms: [{ src: 'assets/concepts/' + (c[3] || (c[0] + '-hdb-design.webp')), name: 'Living' }] });
   });
   var styleById = function (id) { for (var i = 0; i < STYLES.length; i++) { if (STYLES[i].id === id) return STYLES[i]; } return STYLES[0]; };
 
