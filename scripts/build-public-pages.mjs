@@ -6,11 +6,13 @@ import {
   readdir,
   realpath,
   rm,
+  writeFile,
 } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { dirname, extname, isAbsolute, posix, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveLocalTarget } from './public-references.mjs';
+import { fillAssetVersion, shortHash, stampCss, stampHtml } from './asset-versions.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const manifestPath = resolve(root, 'deploy/public-pages.txt');
@@ -150,6 +152,49 @@ for (const entry of manifest) {
   if (!inside(canonicalRoot, canonicalSource)) fail(`source resolves outside repository: ${entry}`);
   await mkdir(dirname(destination), { recursive: true });
   await copyFile(source, destination);
+}
+
+// Versioned asset URLs (scripts/asset-versions.mjs): a published change shows on a normal refresh.
+{
+  const pictureFolders = ['journey/assets/themes/', 'assets/concepts/', 'assets/portfolio/'];
+  if (manifest.includes('journey/products.js')) {
+    const pictures = createHash('sha256');
+    for (const entry of manifest.filter((e) => pictureFolders.some((folder) => e.startsWith(folder))).sort()) {
+      pictures.update(entry);
+      pictures.update(await readFile(resolve(outputRoot, entry)));
+    }
+    const products = resolve(outputRoot, 'journey/products.js');
+    await writeFile(products, fillAssetVersion(await readFile(products, 'utf8'), pictures.digest('hex').slice(0, 10)));
+  }
+  const hashes = new Map();
+  for (const entry of manifest) hashes.set(entry, shortHash(await readFile(resolve(outputRoot, entry))));
+  const hashOf = (from) => (url) => {
+    const ref = localReference(url);
+    const target = ref === null ? null : resolveLocalTarget(from, ref);
+    return target && hashes.has(target) ? hashes.get(target) : null;
+  };
+  // stylesheets first (an imported stylesheet's hash feeds the one that imports it), then the pages
+  const sheets = manifest.filter((e) => e.endsWith('.css'));
+  for (let round = 0; round < 4; round += 1) {
+    let changed = false;
+    for (const entry of sheets) {
+      const file = resolve(outputRoot, entry);
+      const before = await readFile(file, 'utf8');
+      const after = stampCss(before, hashOf(entry));
+      if (after !== before) {
+        await writeFile(file, after);
+        hashes.set(entry, shortHash(Buffer.from(after)));
+        changed = true;
+      }
+    }
+    if (!changed) break;
+  }
+  for (const entry of manifest.filter((e) => e.endsWith('.html'))) {
+    const file = resolve(outputRoot, entry);
+    const before = await readFile(file, 'utf8');
+    const after = stampHtml(before, hashOf(entry));
+    if (after !== before) await writeFile(file, after);
+  }
 }
 
 const artifactFiles = await walk(outputRoot);
