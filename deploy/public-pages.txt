@@ -21,6 +21,7 @@ journey/sent.html
 journey/preparing.html
 journey/result.html
 journey/flow.js
+journey/progress.js
 journey/send.js
 journey/config.js
 journey/products.js
