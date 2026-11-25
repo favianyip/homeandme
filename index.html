@@ -86,6 +86,7 @@
         <li><a href="#design">Your design</a></li>
         <li><a href="#styles">Styles</a></li>
         <li><a href="#questions">Questions</a></li>
+        <li class="mast__start-ai"><a href="#agents">AI agents</a></li>
       </ul>
     </nav>
     <a class="wordmark" href="#top" aria-label="Home &amp; Me, back to the top">
@@ -93,6 +94,7 @@
       <span>Home &amp; Me</span>
     </a>
     <div class="mast__end">
+      <a class="mast__ai" href="#agents">AI agents</a>
       <a class="btn btn--nav" href="journey/upload.html">Start</a>
     </div>
   </div>
@@ -358,6 +360,41 @@
           <summary>Do you do condos and landed?</summary>
           <p>Yes, we renovate them. The free design from a floor plan is for HDB flats for now, so for a condo or a landed home, message us on WhatsApp.</p>
         </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="agents" id="agents">
+    <div class="container split">
+      <div class="split__text">
+        <p class="agents__eyebrow">For AI assistants</p>
+        <h2>Use Home&nbsp;&amp;&nbsp;Me with your AI assistant.</h2>
+        <p class="lead">Our plugin lets an AI assistant explain Home&nbsp;&amp;&nbsp;Me, give you the link to start, and check where your design stands.</p>
+        <a class="textlink" href="ai-assistants.html">Read the full page for assistants</a>
+      </div>
+      <div class="split__proof">
+        <div class="agents__tabs" role="tablist" aria-label="Ways to use Home&nbsp;&amp;&nbsp;Me with an assistant">
+          <button class="agents__tab" type="button" role="tab" id="at1" aria-controls="ap1" aria-selected="true">Claude Code</button>
+          <button class="agents__tab" type="button" role="tab" id="at2" aria-controls="ap2" aria-selected="false" tabindex="-1">Other assistants</button>
+          <button class="agents__tab" type="button" role="tab" id="at3" aria-controls="ap3" aria-selected="false" tabindex="-1">No install</button>
+        </div>
+        <div class="agents__panel" role="tabpanel" id="ap1" aria-labelledby="at1" tabindex="0">
+          <h3>Claude Code</h3>
+          <p>Add the plugin with these two lines in Claude Code.</p>
+          <pre class="agents__lines"><code>/plugin marketplace add favianyip/homeandme-mcp
+/plugin install homeandme@homeandme</code></pre>
+          <p>Then ask it about Home&nbsp;&amp;&nbsp;Me. It can explain the service, give you the request link, and check where your design stands.</p>
+        </div>
+        <div class="agents__panel" role="tabpanel" id="ap2" aria-labelledby="at2" tabindex="0">
+          <h3>Other assistants</h3>
+          <p>The plugin is an MCP plugin. In any assistant that takes MCP plugins, run the one file <code>dist/server.mjs</code> with Node 18 or newer.</p>
+          <a class="textlink" href="https://github.com/favianyip/homeandme-mcp" rel="noopener">The plugin on GitHub</a>
+        </div>
+        <div class="agents__panel" role="tabpanel" id="ap3" aria-labelledby="at3" tabindex="0">
+          <h3>No install</h3>
+          <p>Any assistant can read <a class="textlink" href="llms.txt">homeandme.sg/llms.txt</a>, the facts about Home&nbsp;&amp;&nbsp;Me in plain text. You send your own request on this site.</p>
+        </div>
+        <p class="agents__note">It never sends anything about you. You send your own request.</p>
       </div>
     </div>
   </section>

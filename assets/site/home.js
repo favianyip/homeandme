@@ -35,6 +35,30 @@
   });
   if (tabs.length) choose(tabs[0], false);
 
+  /* AI assistants: three ways in, as tabs (arrow keys move between them) */
+  const aTabs = [...document.querySelectorAll('.agents [role="tab"]')];
+  const aChoose = (tab, focus) => {
+    aTabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      const p = panel(t);
+      if (on && p.hidden) { p.hidden = false; p.classList.remove('is-in'); void p.offsetWidth; p.classList.add('is-in'); }
+      else if (!on) p.hidden = true;
+    });
+    if (focus) tab.focus();
+  };
+  aTabs.forEach((t, i) => {
+    t.addEventListener('click', () => aChoose(t, false));
+    t.addEventListener('keydown', (e) => {
+      const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (step) { e.preventDefault(); aChoose(aTabs[(i + step + aTabs.length) % aTabs.length], true); }
+      if (e.key === 'Home') { e.preventDefault(); aChoose(aTabs[0], true); }
+      if (e.key === 'End') { e.preventDefault(); aChoose(aTabs[aTabs.length - 1], true); }
+    });
+  });
+  if (aTabs.length) aChoose(aTabs[0], false);
+
   /* each style's rooms: a small picture puts its room in the frame above it */
   document.querySelectorAll('.style').forEach((style) => {
     const lead = style.querySelector('.style__photo img');

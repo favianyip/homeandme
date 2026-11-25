@@ -59,13 +59,17 @@ h3 { font-weight: var(--serif-small); letter-spacing: -0.012em; }
 .mast { position: relative; z-index: var(--z-raised); height: var(--nav-h); border-bottom: var(--rule-hair) solid rgb(var(--ink-rgb) / 0.14); }
 .mast__in { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--space-lg); height: 100%; }
 .mast ul { display: flex; gap: var(--space-xl); margin: 0; padding: 0; list-style: none; }
-.mast__end { justify-self: end; }
+.mast__end { justify-self: end; display: flex; align-items: center; gap: var(--space-md); }
 .wordmark { display: inline-flex; align-items: center; gap: var(--space-sm); min-height: 44px; font: var(--serif-small) var(--text-xl)/1 var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); text-decoration: none; white-space: nowrap; }
 .wordmark img { width: 30px; height: 30px; flex-shrink: 0; }
 .wordmark:hover { color: var(--color-ink-2); }
 .mast__start a { display: inline-flex; align-items: center; min-height: 44px; font: 400 var(--text-sm)/1 var(--font-body); color: var(--color-ink-2); text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 0.3em; white-space: nowrap; transition: color var(--dur-short) var(--ease-out), text-decoration-color var(--dur-short) var(--ease-out); }
 .mast__start a:hover { color: var(--color-ink); text-decoration-color: var(--color-accent); }
 .mast__start a:active { color: var(--color-ink); }
+/* the phone keeps one quiet link beside Start: the in-page links are hidden at 60rem and below */
+.mast__ai { display: none; align-items: center; min-height: 44px; font: 400 var(--text-sm)/1 var(--font-body); color: var(--color-ink-2); text-decoration: underline; text-decoration-color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.24em; white-space: nowrap; }
+.mast__ai:hover { color: var(--color-ink); }
+.mast__ai:focus-visible, .mast__start a:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
 /* Controls: one hairline control in ink with a lit top edge, one teal-underlined link */
 .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 var(--space-lg); border: var(--rule-hair) solid var(--color-ink); border-radius: var(--radius-pill); background: transparent; color: var(--color-ink); font: 400 var(--text-md)/1 var(--font-body); text-decoration: none; white-space: nowrap; cursor: pointer;
@@ -257,8 +261,34 @@ h3 { font-weight: var(--serif-small); letter-spacing: -0.012em; }
 .foot a:focus-visible { outline: 2px solid var(--color-paper); outline-offset: 2px; }
 .foot .legal { grid-column: 9 / -1; max-width: 34ch; justify-self: end; padding-top: var(--space-sm); font-size: var(--text-sm); line-height: 1.5; color: color-mix(in oklab, var(--color-paper) 72%, var(--color-ink)); }
 
+/* AI assistants: three ways in, as tabs; without script all three show in order */
+.agents { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+.agents__eyebrow { margin-bottom: var(--space-md); font: 400 var(--text-sm)/1.4 var(--font-body); color: var(--color-muted); }
+.agents__tabs { display: none; flex-wrap: wrap; column-gap: var(--space-lg); border-top: var(--rule-head) solid var(--color-ink); }
+.js .agents__tabs { display: flex; }
+.agents__tab { display: inline-flex; align-items: center; min-height: 48px; margin: 0; padding: 0; border: 0; background: none; font: 400 var(--text-md)/1 var(--font-body); color: var(--color-ink-2); text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 0.4em; cursor: pointer; transition: color var(--dur-short) var(--ease-out), text-decoration-color var(--dur-short) var(--ease-out); }
+.agents__tab:hover { color: var(--color-ink); text-decoration-color: var(--color-rule); }
+.agents__tab[aria-selected="true"] { color: var(--color-ink); text-decoration-color: var(--color-accent); }
+.agents__tab:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.agents__panel { padding-block: var(--space-lg); border-bottom: var(--rule-hair) solid var(--color-rule); }
+.agents__panel:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.agents__panel h3 { margin-bottom: var(--space-sm); font: var(--serif-small) var(--text-title)/1.2 var(--font-display); }
+.js .agents__panel h3 { display: none; }
+.agents__panel p { max-width: 58ch; color: var(--color-ink-2); }
+.agents__panel p + p, .agents__panel .agents__lines + p { margin-top: var(--space-md); }
+.agents__panel .textlink { margin-top: var(--space-xs); }
+.agents__panel p .textlink { display: inline; min-height: 0; margin: 0; }
+.agents__lines { margin: var(--space-md) 0 0; padding: var(--space-md); overflow-x: auto; border: var(--rule-hair) solid var(--color-rule); background: var(--color-card); font: 400 var(--text-sm)/1.7 var(--font-body); color: var(--color-ink); white-space: pre-wrap; overflow-wrap: anywhere; }
+.agents__lines code, .agents__panel code { font: inherit; }
+.agents__panel.is-in { animation: settle-in 360ms var(--ease-air) both; }
+.agents__note { margin-top: var(--space-lg); font-size: var(--text-sm); color: var(--color-ink-2); }
+
+/* five items need the room: a tighter row below 82rem, and below 75rem the fifth hands over to the link beside Start */
+@media (max-width: 82rem) { .mast ul { gap: var(--space-lg); } }
+@media (max-width: 75rem) { .mast__start-ai { display: none; } .mast__ai { display: inline-flex; } }
 @media (max-width: 60rem) {
   .mast__start { display: none; }
+  .mast__ai { display: inline-flex; }
   .mast__in { grid-template-columns: auto minmax(0, 1fr); }
   .hero { align-items: start; min-height: 0; padding-block: var(--space-xl) var(--space-2xl); }
   .hero__grid { row-gap: var(--space-xl); }
@@ -280,6 +310,7 @@ h3 { font-weight: var(--serif-small); letter-spacing: -0.012em; }
 }
 @media (max-width: 40rem) {
   :root { --nav-h: 64px; --feather: 3.5rem; }
+  .mast__end { gap: var(--space-sm); }
   .hero .lead { margin-top: var(--space-md); }
   .actions { margin-top: var(--space-lg); }
   .routes { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-2xl); }
@@ -300,4 +331,6 @@ h3 { font-weight: var(--serif-small); letter-spacing: -0.012em; }
   .btn, .mast__start a, .textlink, .blotter, .blotter::before, .blotter::after, .blotter__stain, .faq summary::after, .foot a { transition: none; }
   .style.is-in, .style__photo > img.is-in { animation: none; }
   .room__photo > img { transition: none; }
+  .agents__tab, .mast__ai { transition: none; }
+  .agents__panel.is-in { animation: none; }
 }

@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>For AI assistants, Home &amp; Me</title>
+<title>For AI agents and assistants, Home &amp; Me</title>
 <meta name="description" content="How an AI assistant can help a homeowner with Home &amp; Me today: what the service does, what to have ready, what an assistant must not do, and where the machine-readable facts are.">
 <link rel="canonical" href="https://homeandme.sg/ai-assistants.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Home &amp; Me">
-<meta property="og:title" content="For AI assistants, Home &amp; Me">
+<meta property="og:title" content="For AI agents and assistants, Home &amp; Me">
 <meta property="og:description" content="How an AI assistant can help a homeowner with Home &amp; Me today, and what it must not do.">
 <meta property="og:url" content="https://homeandme.sg/ai-assistants.html">
 <meta property="og:image" content="https://homeandme.sg/assets/images/og-home.png">
@@ -69,7 +69,7 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size:
   <a class="wordmark" href="./" aria-label="Home &amp; Me, home page"><img src="assets/images/hnm-logo.png" alt="" width="30" height="30"><span>Home &amp; Me</span></a>
 </header>
 <main id="main">
-  <p class="eyebrow">For AI assistants</p>
+  <p class="eyebrow">For AI agents and assistants</p>
   <h1>Helping someone with Home &amp; Me?</h1>
   <p class="lead">This page is for people who use an AI assistant, and for the assistant reading on their behalf. It says what Home &amp; Me does, how an assistant can help today, and what it must leave to the person.</p>
 
@@ -123,8 +123,12 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size:
 
   <section aria-labelledby="mcp">
     <h2 id="mcp">Connector for assistants (MCP)</h2>
-    <!-- connector:soon -->
-    <p class="note">A Home &amp; Me plugin for AI assistants (an MCP connector) has been built and is being checked. It is not published yet, so there is no install link today, and anything that claims to be a Home &amp; Me connector before this page links it is not ours. When it is published, the install link will be here.</p>
+    <!-- connector:available -->
+    <p class="note">A Home &amp; Me plugin for AI assistants (an MCP connector) is available: <a href="https://github.com/favianyip/homeandme-mcp" rel="noopener">install it from here</a>. It reads the public facts on this site, gives the link where you start your own design request, and reads where your design stands from your own private status link. It sends nothing about you anywhere: you send your request yourself.</p>
+    <ul>
+      <li>Claude Code: <code>/plugin marketplace add favianyip/homeandme-mcp</code>, then <code>/plugin install homeandme@homeandme</code>.</li>
+      <li>Claude Desktop and other MCP clients: run the one file <code>dist/server.mjs</code> with Node.js 18 or newer, over stdio.</li>
+    </ul>
     <!-- /connector -->
   </section>
 
