@@ -72,6 +72,12 @@
   var set = J.themesFor(styleId), items = set.items;
 
   document.getElementById('h1').textContent = 'Four ' + styleName + ' themes.';
+  if (items.length === 1) {   // one theme for now (products.js ENGINE_THEMES): no four options that cannot be made
+    document.getElementById('h1').textContent = 'Your ' + styleName + ' design.';
+    document.getElementById('lead').textContent = 'This design comes in one theme for now. The pictures show it in '
+      + 'the living room, main bedroom, kitchen and toilet of a sample flat. More themes are on the way.';
+    document.getElementById('themeSeg').hidden = true;
+  }
   if (!set.own) {
     var fb = document.getElementById('fallback'); fb.hidden = false;
     fb.textContent = 'Sample pictures: the Minimalist set is shown until the ' + styleName + ' set is ready.';
