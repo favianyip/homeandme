@@ -44,9 +44,9 @@ test('the home page starts the journey from every Start button and design card',
   const home = read('index.html');
   assert.ok((home.match(/href="journey\/upload\.html"/g) || []).length >= 4);
   assert.equal((home.match(/href="journey\/upload\.html#style=[a-z-]+"/g) || []).length, 7);
-  // the journey and the floor plan upload are open (24 Nov 2026): nothing on the home page says "opens soon"
+  // the journey is open; only the floor plan upload "opens soon" (see the upload switch test below)
   assert.doesNotMatch(home, /coming soon/i);
-  assert.doesNotMatch(home, /opens soon/i);
+  assert.equal((home.match(/opens soon/gi) || []).length, 2, 'only the two floor plan upload lines say "opens soon"');
 });
 
 test('the journey is live: four steps, then request received', () => {
@@ -203,10 +203,12 @@ test('floor plan upload sits behind one switch, closed in this release, and swit
   const check = read('journey/check.html');
   assert.match(check, /HNM_SEND\.send\(details, PLAN \? planFile : null\)/, 'no file is handed to Send while the switch is off');
   assert.match(check, /if \(PLAN\) HNM_FLOW\.loadPlan\(\)/);
-  assert.match(read('index.html'), /Upload a floor plan/);
-  assert.match(read('index.html'), /Upload your HDB floor plan/);
-  assert.match(read('ContactUs.dc.html'), /Start with your floor plan/);
-  assert.doesNotMatch(read('index.html'), /Floor plan upload opens soon|upload opens soon/);
+  // closed: no public page invites an upload (the upload-open copy is the follow-up branch site/upload-open-1125)
+  for (const page of ['index.html', 'ContactUs.dc.html']) {
+    const html = read(page);
+    assert.doesNotMatch(html, /Upload a floor plan|Upload your HDB floor plan|Start with your floor plan|Upload the plan/, `${page} still invites an upload`);
+  }
+  assert.match(read('index.html'), /Floor plan upload opens soon\./);
   assert.match(read('journey/upload.html'), /accept="application\/pdf,\.pdf"/);
   assert.match(read('journey/upload.html'), /Use the PDF floor plan of your flat from HDB\./);
   assert.doesNotMatch(read('journey/upload.html'), /a JPG|a PNG|photo or scan/);
