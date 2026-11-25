@@ -175,8 +175,10 @@ test('what is sent: the checks on the floor plan step and the enquiry itself', a
 
 // Owner, 24 Nov 2026: the floor plan upload opens with the engine. The switch stays one line, and switched
 // off the pages still work without a plan (the 20 Nov behaviour), so the off path is pinned too.
-test('floor plan upload is open behind one switch, and switched off the request still goes', async () => {
-  assert.match(read('journey/config.js'), /^window\.HNM_PLAN_UPLOAD = true;$/m);
+// 25 Nov 2026 (lead): the release keeps the switch closed, the value live has today; opening it is a one-line
+// follow-up after the owner's word (this pin and config.js change together).
+test('floor plan upload sits behind one switch, closed in this release, and switched off the request still goes', async () => {
+  assert.match(read('journey/config.js'), /^window\.HNM_PLAN_UPLOAD = false;$/m);
   assert.match(read('journey/flow.js'), /var PLAN = LIVE \? \(window\.HNM_PLAN_UPLOAD === true \|\| \(window\.HNM_PLAN_UPLOAD === 'testers' && hasTesterKey\(\)\)\) : true;/);
   // the three switch values, run for real: open, closed, testers (with and without a key from the link)
   const planFor = (value, stored, hash) => {

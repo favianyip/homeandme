@@ -1,7 +1,7 @@
 # Exact GitHub Pages artifact. Source files not listed here are not public.
 # 20 Nov 2026: the new home page, the journey (floor plan, design, theme, send, request received),
 # Contact and Legal. Every older page left this list on the owner's word; the files stay in the repo.
-# 24 Nov 2026: floor plan upload open; Designing and Your design (both noindex) are public.
+# 24 Nov 2026: Designing and Your design (both noindex) are public; the floor plan upload stays behind journey/config.js (closed in the 25 Nov release).
 # 25 Nov 2026: For AI assistants (how an assistant can help a homeowner today; no connector yet).
 CNAME
 favicon.svg
