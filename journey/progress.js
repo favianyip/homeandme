@@ -51,5 +51,29 @@ window.HNM_PROGRESS = (function () {
     els.left.hidden = !v.left;
     return v;
   }
-  return { view: view, render: render, step: step };
+  // The theme block's words (26 Nov 2026, lead). The line under "Your theme" follows the state: making the photos,
+  // being checked, ready. The options are the engine's own packages, so they read "Theme 1" to "Theme 4" with the
+  // service's one line of what each changes (status.json option.description), never the site's layout names.
+  function themeWords(doc) {
+    doc = doc || {};
+    var th = doc.theme || null, state = String(doc.state || '');
+    if (!th) return null;
+    if (th.chosen) {
+      var hint = state === 'ready' ? 'The photos of this theme are ready.'
+        : state === 'checking' ? 'The photos of this theme are being checked by our designer.'
+        : (state === 'designer' || state === 'resubmit') ? ''
+        : 'We are making the photos of this theme.';
+      return { head: 'Your theme: theme ' + th.chosen + '.', hint: hint };
+    }
+    if (!th.canPick) {
+      return { head: 'Laying out your themes.', hint: (th.optionsReady || 0) + ' of ' + (th.optionsTotal || 4) + ' themes laid out so far.' };
+    }
+    return { head: 'Pick your theme.', hint: null };          // null: the page keeps its own explanation
+  }
+  function optionLabel(o) { return 'Theme ' + (parseInt(o && o.theme, 10) || ''); }
+  function optionLine(o) {
+    var d = o && o.description;
+    return (typeof d === 'string' && d.length > 0 && d.length <= 200) ? d : '';
+  }
+  return { view: view, render: render, step: step, themeWords: themeWords, optionLabel: optionLabel, optionLine: optionLine };
 })();

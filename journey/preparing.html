@@ -138,7 +138,7 @@
   // the theme step (status.json `theme`): the customer picks one of the laid-out themes
   var pick = document.getElementById('themePick'), plist = document.getElementById('themeList');
   var said = document.getElementById('themeSaid'), sending = false, shownKey = '';
-  var NAMES = (J.THEMES || []).map(function (t) { return t.n; });
+  var PR = window.HNM_PROGRESS;
   var MINE = PAGES + planId + '/';
   function choose(n, button) {
     if (sending) return;
@@ -153,32 +153,38 @@
       })
       .catch(function () { sending = false; button.disabled = false; said.textContent = 'We could not save that. Please try again.'; });
   }
-  function themes(th) {
+  function themes(doc) {
+    var th = doc.theme;
     if (!th || !th.options) { pick.hidden = true; return; }
-    var key = JSON.stringify([th.state, th.canPick, th.chosen, th.options.map(function (o) { return o.state + (o.picture ? 1 : 0); })]);
+    // the page's state is in the key: the line under "Your theme" follows it (making, being checked, ready)
+    var key = JSON.stringify([doc.state, th.state, th.canPick, th.chosen, th.options.map(function (o) { return o.state + (o.picture ? 1 : 0) + PR.optionLine(o); })]);
     if (key === shownKey) return;
     shownKey = key;
     pick.hidden = false;
     var head = document.getElementById('themeHead'), hint = document.getElementById('themeHint');
-    if (th.chosen) { head.textContent = 'Your theme: theme ' + th.chosen + (NAMES[th.chosen - 1] ? ', ' + NAMES[th.chosen - 1] : '') + '.'; hint.textContent = 'We are making the photos of this theme.'; }
-    else if (!th.canPick) { head.textContent = 'Laying out your themes.'; hint.textContent = (th.optionsReady || 0) + ' of ' + (th.optionsTotal || 4) + ' themes laid out so far.'; }
-    else { head.textContent = 'Pick your theme.'; }
+    var w = PR.themeWords(doc);
+    head.textContent = w.head;
+    if (w.hint !== null) { hint.textContent = w.hint; hint.hidden = !w.hint; }
     plist.textContent = '';
     th.options.forEach(function (o) {
       var card = document.createElement('div'); card.className = 'extra'; card.setAttribute('data-theme', o.theme);
       var top = document.createElement('div'); top.className = 'extra__top';
       var nm = document.createElement('span'); nm.className = 'extra__name';
-      nm.textContent = 'Theme ' + o.theme + (NAMES[o.theme - 1] ? ': ' + NAMES[o.theme - 1] : '');
+      nm.textContent = PR.optionLabel(o);
       top.appendChild(nm); card.appendChild(top);
+      if (PR.optionLine(o)) {
+        var said1 = document.createElement('p'); said1.className = 'extra__desc'; said1.textContent = PR.optionLine(o);
+        card.appendChild(said1);
+      }
       if (o.state === 'ready' && typeof o.picture === 'string' && o.picture.indexOf(MINE + 'themes/') === 0) {
         var img = document.createElement('img'); img.src = o.picture; img.alt = 'Layout drawing of theme ' + o.theme;
         img.loading = 'lazy'; img.style.cssText = 'width:100%;height:auto;background:#fff;border:1px solid #ddd;border-radius:3px';
         card.appendChild(img);
       }
       var d = document.createElement('p'); d.className = 'extra__desc';
-      d.textContent = o.state === 'ready' ? (o.placeholder ? 'Layout drawing (the photos come after you pick).' : '')
+      d.textContent = o.state === 'ready' ? (o.placeholder && !th.chosen ? 'Layout drawing (the photos come after you pick).' : '')
                     : (o.state === 'failed' ? 'This theme does not fit your plan.' : 'Being laid out...');
-      card.appendChild(d);
+      if (d.textContent) card.appendChild(d);
       if (th.canPick && o.state === 'ready') {
         var b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn--fill';
         b.textContent = (th.suggested === o.theme ? 'Use this theme (your pick)' : 'Use this theme');
@@ -196,7 +202,7 @@
     track: document.getElementById('pTrack'), left: document.getElementById('pLeft') };
   function show(doc) {
     window.HNM_PROGRESS.render(doc, pEls);
-    themes(doc.theme);
+    themes(doc);
     showExtras(doc.options);
     var state = String(doc.state || doc.step || '');
     var p = doc.progress || {};
