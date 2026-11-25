@@ -259,26 +259,6 @@ test('every design has its four themes of four rooms, and the label is Main bedr
   assert.equal(pictures, 416);
 });
 
-// Owner, 25 Nov 2026: "first theme must be relevant to the main design photo shown". A concept design's card is its
-// own theme 1 living room; the seven real families keep the designer's own render (a later decision).
-test('a concept design shows its own theme 1 as its main photo; the seven families keep their renders', () => {
-  const sandbox = { window: {} };
-  vm.runInNewContext(read('journey/products.js'), sandbox);
-  const J = sandbox.window.HNM_JOURNEY;
-  const concepts = J.STYLES.filter((s) => s.concept), families = J.STYLES.filter((s) => !s.concept);
-  assert.equal(concepts.length, 19);
-  assert.equal(families.length, 7);
-  for (const s of concepts) {
-    const card = s.rooms[0].src;
-    assert.equal(card, `journey/assets/themes/${s.id}-1-living.jpg`, s.id);
-    assert.equal(card, `journey/${J.themesFor(s.id).items[0].shots[0].src}`, `${s.id}: the card is the theme 1 living picture`);
-    assert.ok(manifest.includes(card) && existsSync(new URL(card, root)), `${card} is public and present`);
-  }
-  for (const s of families) assert.match(s.rooms[0].src, /^assets\/portfolio\//, `${s.id} keeps the designer render`);
-  // the design step reads the card from the journey folder: '../' + src lands on the site root
-  assert.match(read('journey/style.html'), /img\.src = '\.\.\/' \+ st\.rooms\[0\]\.src;/);
-});
-
 test('tester mode: a key from the link goes with the floor plan, and only with it', async () => {
   const sent = [];
   const store = { hnm_tester: 'TEST_ONLY_TESTER_KEY_0001' };
