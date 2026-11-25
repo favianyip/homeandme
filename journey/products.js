@@ -8,11 +8,6 @@ window.HNM_JOURNEY = (function () {
   var CURRENCY = '';
   var money = function (n) { return String(n); };
 
-  // The themes the design engine makes today (25 Nov 2026): four for these designs, one (theme 1) for every
-  // other design. A design gets its four themes here once the engine makes them.
-  var ENGINE_THEMES = ['minimalist', 'industrial'];
-  var themeCount = function (styleId) { return ENGINE_THEMES.indexOf(styleId) >= 0 ? 4 : 1; };
-
   // --- the 7 real style families (same set as the home page) ---
   var P = 'assets/portfolio/';
   var STYLES = [
@@ -30,35 +25,35 @@ window.HNM_JOURNEY = (function () {
         { src: P + 'industrial-4-room-hdb-design-01-master-bedroom-view-i.jpg', name: 'Bedroom' },
         { src: P + 'industrial-4-room-hdb-design-01-master-bathroom.jpg', name: 'Bathroom' }
       ] },
-    { id: 'modern-classic', name: 'Modern Classic', line: 'Panelling, cornice, brass and marble accents.', note: 'One theme for now', ready: true,
+    { id: 'modern-classic', name: 'Modern Classic', line: 'Panelling, cornice, brass and marble accents.', note: 'Four themes ready', ready: true,
       rooms: [
         { src: P + 'modern-classic-4-room-hdb-design-01-living-hall.jpg', name: 'Living' },
         { src: P + 'modern-classic-4-room-hdb-design-01-dining.jpg', name: 'Dining' },
         { src: P + 'modern-classic-4-room-hdb-design-01-kitchen.jpg', name: 'Kitchen' },
         { src: P + 'modern-classic-4-room-hdb-design-01-master-bedroom.jpg', name: 'Bedroom' }
       ] },
-    { id: 'muji', name: 'Muji', line: 'Weathered timber, clay and plaster, imperfect by design.', note: 'One theme for now', ready: true,
+    { id: 'muji', name: 'Muji', line: 'Weathered timber, clay and plaster, imperfect by design.', note: 'Four themes ready', ready: true,
       rooms: [
         { src: P + 'muji-5-room-hdb-design-02-living-hall.jpg', name: 'Living' },
         { src: P + 'muji-3-room-hdb-design-01-kitchen.jpg', name: 'Kitchen' },
         { src: P + 'muji-5-room-hdb-design-01-master-bedroom.jpg', name: 'Bedroom' },
         { src: P + 'muji-5-room-hdb-design-01-master-bathroom.jpg', name: 'Bathroom' }
       ] },
-    { id: 'scandinavian', name: 'Scandinavian', line: 'Pale oak, white walls, daylight kept open.', note: 'One theme for now', ready: true,
+    { id: 'scandinavian', name: 'Scandinavian', line: 'Pale oak, white walls, daylight kept open.', note: 'Four themes ready', ready: true,
       rooms: [
         { src: P + 'scandinavian-4-room-hdb-design-01-living-hall.jpg', name: 'Living' },
         { src: P + 'scandinavian-4-room-hdb-design-01-dining.jpg', name: 'Dining' },
         { src: P + 'scandinavian-4-room-hdb-design-01-kitchen.jpg', name: 'Kitchen' },
         { src: P + 'scandinavian-4-room-hdb-design-01-master-bedroom.jpg', name: 'Bedroom' }
       ] },
-    { id: 'contemporary', name: 'Contemporary', line: 'Clean lines, neutral tones, bright and open.', note: 'One theme for now', ready: true,
+    { id: 'contemporary', name: 'Contemporary', line: 'Clean lines, neutral tones, bright and open.', note: 'Four themes ready', ready: true,
       rooms: [
         { src: P + 'contemporary-3-room-hdb-design-01-living-hall.jpg', name: 'Living' },
         { src: P + 'contemporary-3-room-hdb-design-01-kitchen.jpg', name: 'Kitchen' },
         { src: P + 'contemporary-3-room-hdb-design-01-master-bedroom.jpg', name: 'Bedroom' },
         { src: P + 'contemporary-3-room-hdb-design-01-master-bathroom.jpg', name: 'Bathroom' }
       ] },
-    { id: 'modern-oriental', name: 'Modern Oriental', line: 'Dark timber, lattice screens, restrained colour.', note: 'One theme for now', ready: true,
+    { id: 'modern-oriental', name: 'Modern Oriental', line: 'Dark timber, lattice screens, restrained colour.', note: 'Four themes ready', ready: true,
       rooms: [
         { src: P + 'modern-oriental-5-room-hdb-design-01-living-hall.jpg', name: 'Living' },
         { src: P + 'modern-oriental-3-room-hdb-design-01-kitchen.jpg', name: 'Kitchen' },
@@ -96,7 +91,7 @@ window.HNM_JOURNEY = (function () {
     ['hotel-suite', 'Hotel Suite', 'Marble, vanity lighting, strict symmetry.'],
   ];
   CONCEPT_LOOKS.forEach(function (c) {
-    STYLES.push({ id: c[0], name: c[1], line: c[2], note: themeCount(c[0]) === 4 ? 'Four themes ready' : 'One theme for now', ready: true, concept: true,
+    STYLES.push({ id: c[0], name: c[1], line: c[2], note: 'Four themes ready', ready: true, concept: true,
       rooms: [{ src: 'assets/concepts/' + (c[3] || (c[0] + '-hdb-design.webp')), name: 'Living' }] });
   });
   var styleById = function (id) { for (var i = 0; i < STYLES.length; i++) { if (STYLES[i].id === id) return STYLES[i]; } return STYLES[0]; };
@@ -132,8 +127,7 @@ window.HNM_JOURNEY = (function () {
     var own = false;
     for (var k = 0; k < STYLES.length; k++) { if (STYLES[k].id === styleId) own = true; }
     var id = own ? styleId : 'minimalist';
-    var count = themeCount(styleId);
-    return { own: own, count: count, rooms: THEME_ROOMS, items: THEMES.slice(0, count).map(function (t, i) {
+    return { own: own, rooms: THEME_ROOMS, items: THEMES.map(function (t, i) {
       return { n: t.n, d: t.placement, placement: t.placement, carpentry: t.carpentry, setup: t.setup,
         shots: THEME_ROOMS.map(function (r) { return { key: r[0], name: r[1], src: TM + id + '-' + (i + 1) + '-' + r[0] + '.jpg' }; }) };
     }) };
@@ -141,7 +135,6 @@ window.HNM_JOURNEY = (function () {
 
   return {
     PRODUCTS: PRODUCTS, PRODUCT_ORDER: PRODUCT_ORDER, CURRENCY: CURRENCY, money: money,
-    STYLES: STYLES, styleById: styleById, THEMES: THEMES, themesFor: themesFor, themeCount: themeCount,
-    ENGINE_THEMES: ENGINE_THEMES
+    STYLES: STYLES, styleById: styleById, THEMES: THEMES, themesFor: themesFor
   };
 })();
