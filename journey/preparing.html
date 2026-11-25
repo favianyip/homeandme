@@ -28,6 +28,12 @@
     <p class="lead" id="lead">We prepare photos of your home in this design, our designer checks them, and we send you a private link. Free, usually within 1 working day.</p>
   </div>
 
+  <!-- the progress bar (owner, 25 Nov 2026): percent, the current step in words, minutes left when known -->
+  <div class="pbar" id="pbar" hidden>
+    <div class="pbar__top" aria-live="polite"><span class="pbar__step" id="pStep">Plan received</span><span class="pbar__pct" id="pPct">1%</span></div>
+    <div class="pbar__track" id="pTrack" role="progressbar" aria-label="Design progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="1"><div class="pbar__fill" id="pFill"></div></div>
+    <p class="pbar__left" id="pLeft" hidden></p>
+  </div>
   <!-- the five rows follow status.json: progress.stage 1 to 5 -->
   <ol class="steps" id="steps" aria-label="Progress" aria-live="polite">
     <li class="now">Plan received <span class="state">Now</span></li>
@@ -64,6 +70,7 @@
 <script src="products.js"></script>
 <script src="config.js"></script>
 <script src="flow.js"></script>
+<script src="progress.js"></script>
 <script>
 (function () {
   // the rail has the journey's four steps, all done once the request is sent
@@ -184,7 +191,11 @@
     });
   }
 
+  var pEls = { box: document.getElementById('pbar'), fill: document.getElementById('pFill'),
+    pct: document.getElementById('pPct'), step: document.getElementById('pStep'),
+    track: document.getElementById('pTrack'), left: document.getElementById('pLeft') };
   function show(doc) {
+    window.HNM_PROGRESS.render(doc, pEls);
     themes(doc.theme);
     showExtras(doc.options);
     var state = String(doc.state || doc.step || '');
