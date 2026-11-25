@@ -244,12 +244,10 @@ test('every design has its four themes of four rooms, and the label is Main bedr
     const set = J.themesFor(style.id);
     assert.equal(set.own, true, style.id);
     assert.deepEqual(Array.from(set.rooms, (r) => r[1]), ['Living room', 'Main bedroom', 'Kitchen', 'Toilet']);
-    // 25 Nov 2026: the step offers the themes the engine makes today (products.js ENGINE_THEMES); the pictures of
-    // all four themes stay published for every design
-    assert.equal(set.items.length, J.themeCount(style.id), style.id);
-    for (let i = 0; i < J.THEMES.length; i += 1) {
-      for (const [key] of set.rooms) {
-        const path = `journey/assets/themes/${style.id}-${i + 1}-${key}.jpg`;
+    assert.equal(set.items.length, 4);
+    for (const theme of set.items) {
+      for (const shot of theme.shots) {
+        const path = `journey/${shot.src}`;
         assert.ok(manifest.includes(path), `${path} is not public`);
         assert.ok(existsSync(new URL(path, root)), `${path} is missing`);
         pictures += 1;
