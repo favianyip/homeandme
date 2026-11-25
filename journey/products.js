@@ -9,6 +9,10 @@ window.HNM_JOURNEY = (function () {
   var money = function (n) { return String(n); };
 
   // --- the 7 real style families (same set as the home page) ---
+  // 26 Nov 2026: the build fills ASSET_V with one short hash of the pictures below, so a published change shows on a
+  // normal refresh (the site's files are cached for 10 minutes). Empty in the source: the URLs are the plain paths.
+  var ASSET_V = '';
+  var versioned = function (url) { return ASSET_V ? url + '?v=' + ASSET_V : url; };
   var P = 'assets/portfolio/';
   var STYLES = [
     { id: 'minimalist', name: 'Minimalist', line: 'Flat fronts, hidden handles, one material.', note: 'Four themes ready', ready: true,
@@ -94,6 +98,7 @@ window.HNM_JOURNEY = (function () {
     STYLES.push({ id: c[0], name: c[1], line: c[2], note: 'Four themes ready', ready: true, concept: true,
       rooms: [{ src: 'assets/concepts/' + (c[3] || (c[0] + '-hdb-design.webp')), name: 'Living' }] });
   });
+  STYLES.forEach(function (s) { s.rooms.forEach(function (r) { r.src = versioned(r.src); }); });
   var styleById = function (id) { for (var i = 0; i < STYLES.length; i++) { if (STYLES[i].id === id) return STYLES[i]; } return STYLES[0]; };
 
   // --- the 4 themes of a design. Owner, 19 Nov 2026: a theme is the SAME floor plan and the SAME
@@ -129,7 +134,7 @@ window.HNM_JOURNEY = (function () {
     var id = own ? styleId : 'minimalist';
     return { own: own, rooms: THEME_ROOMS, items: THEMES.map(function (t, i) {
       return { n: t.n, d: t.placement, placement: t.placement, carpentry: t.carpentry, setup: t.setup,
-        shots: THEME_ROOMS.map(function (r) { return { key: r[0], name: r[1], src: TM + id + '-' + (i + 1) + '-' + r[0] + '.jpg' }; }) };
+        shots: THEME_ROOMS.map(function (r) { return { key: r[0], name: r[1], src: versioned(TM + id + '-' + (i + 1) + '-' + r[0] + '.jpg') }; }) };
     }) };
   };
 
