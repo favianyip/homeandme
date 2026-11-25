@@ -19,7 +19,7 @@ const FRONT = 'https://spark-792d.tail223b04.ts.net/hnm';
 
 test('the public pages are exactly the new home, the journey, Contact and Legal', () => {
   assert.deepEqual(publicPages, [
-    '404.html', 'ContactUs.dc.html', 'Legal.dc.html', 'index.html',
+    '404.html', 'ContactUs.dc.html', 'Legal.dc.html', 'ai-assistants.html', 'index.html',
     'journey/check.html', 'journey/preparing.html', 'journey/result.html', 'journey/sent.html', 'journey/style.html',
     'journey/themes.html', 'journey/upload.html',
   ]);

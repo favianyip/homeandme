@@ -28,6 +28,14 @@ After you send, a page shows how your design is going. A designer checks every d
 
 - Paid extras (a walkthrough video, carpentry drawings) are not on sale yet. The site says they are priced on your private page after the photos.
 
+## For assistants
+
+A page for people who use an AI assistant, and for the assistant: https://homeandme.sg/ai-assistants.html
+
+- Do: explain the service from this file; send the person to https://homeandme.sg/journey/upload.html, and help them have ready the PDF floor plan of their HDB flat, the unit number as printed on the plan if the PDF shows several flats, and a choice of design and theme.
+- Do not: fill in or send the request, or the person's name, phone number, email or floor plan, on their behalf (the person ticks the consent box and taps Send); promise a price, a quote or a timeline; present the paid extras as available.
+- A Home & Me plugin for AI assistants (an MCP connector) has been built but is not published yet: there is no install link today. The page above will link it once it is published.
+
 ## Contact
 
 - WhatsApp and phone: +65 8837 6196
@@ -40,4 +48,5 @@ After you send, a page shows how your design is going. A designer checks every d
 - [Home](https://homeandme.sg/): what Home & Me does, the seven designs, common questions
 - [Start your design request](https://homeandme.sg/journey/upload.html)
 - [Contact](https://homeandme.sg/ContactUs.dc.html)
+- [For AI assistants](https://homeandme.sg/ai-assistants.html): how an assistant can help, and what it must not do
 - [Terms and privacy](https://homeandme.sg/Legal.dc.html): how enquiry details are used, terms and cookies
